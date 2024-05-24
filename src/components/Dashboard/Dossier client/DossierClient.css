@@ -1,0 +1,8 @@
+@import "//netdna.bootstrapcdn.com/font-awesome/3.0/css/font-awesome.css";
+.formsearch{
+    font-family:sans-serif, FontAwesome;
+    padding-left: 2%;
+}
+.bouttonadd{
+    background-color: #4763E4;
+}

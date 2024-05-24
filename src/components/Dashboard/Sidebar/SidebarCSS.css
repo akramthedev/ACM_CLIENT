@@ -1,0 +1,26 @@
+.logo{
+   text-align: center;
+       
+}
+
+.sidebar{
+    background-image:linear-gradient(0deg, rgba(19,28,85,0.50) 0%, rgba(19,28,85,1) 100%) ,url("../../Assets/pattern.png");
+    background-size: contain;
+    
+}
+ .sidebar ul li:hover{
+    background-color: #18226d;
+    border-radius: 10px;
+    cursor: pointer;
+ }
+.active{
+    background-color: #18226d;
+    
+    /* padding-top: 5px;
+    padding-bottom: 6px;
+    padding-left: 10px; */
+
+
+    border-radius: 10px;
+    color: black;
+}
