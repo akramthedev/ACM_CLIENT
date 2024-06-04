@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header">
+        <h4>Collapse accordion</h4>
+        <p class="f-m-light mt-1">you can also use a link with the href attribute<code>(and a role="button").</code>In
+            both cases, the <code>data-bs-toggle="collapse"</code> is required.</p>
+    </div>
+    <div class="card-body collapse-accordion" ngbAccordion #accordion="ngbAccordion">
+        <div ngbAccordionItem="first">
+            <p class="common-flex">
+                <a class="btn btn-sm btn-outline-primary me-2" (click)="accordion.toggle('first')">Link with href</a>
+                <button class="btn btn-sm btn-outline-primary me-2" type="button" (click)="accordion.toggle('first')">Button with data-bs-target</button>
+            </p>
+            <div  id="collapseExample" ngbAccordionCollapse>
+                <div  ngbAccordionBody>Some placeholder content for the collapse 
+                    component. This panel is hidden by default but revealed when the user activates the relevant trigger.</div>
+            </div>
+        </div>
+    </div>
+</div>

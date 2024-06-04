@@ -1,0 +1,45 @@
+<ng-template #addClient let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+    <button class="btn-close" type="button" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form #ClientFrom="ngForm" class="form-bookmark needs-validation" id="bookmark-form" novalidate="" (submit)="OnSave(ClientFrom.value)">
+      <div class="row">
+        <div class="form-group mb-3 col-md-12">
+          <label for="con-name">Name</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" ngModel>
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" ngModel>
+            </div>
+          </div>
+        </div>
+        <div class="form-group mb-3 col-md-12">
+          <label for="con-mail">Email Address</label>
+          <input class="form-control" id="con-mail" type="text" required="" autocomplete="off" name="Email" ngModel>
+        </div>
+        <div class="form-group mb-3 col-md-12 my-0">
+          <label for="con-phone">Phone</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <input class="form-control" id="con-phone" type="number" required="" autocomplete="off">
+            </div>
+            <div class="col-sm-6">
+              <select class="form-control" id="con-select">
+                <option>Mobile</option>
+                <option>Work</option>
+                <option>Others</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input id="index_var" type="hidden" value="5">
+      <button class="btn btn-secondary me-1" type="submit">Save</button>
+      <button class="btn btn-primary  me-1" type="button" (click)="modal.dismiss('Cross click')">Cancel</button>
+    </form>
+  </div>
+</ng-template>
