@@ -1,45 +1,191 @@
 <ng-template #addClient let-modal>
+  
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+    <h5 class="modal-title" id="exampleModalLabel">Nouveau Client</h5>
     <button class="btn-close" type="button" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    <form #ClientFrom="ngForm" class="form-bookmark needs-validation" id="bookmark-form" novalidate="" (submit)="OnSave(ClientFrom.value)">
-      <div class="row">
-        <div class="form-group mb-3 col-md-12">
-          <label for="con-name">Name</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" ngModel>
+    <div class="progress mb-3">
+      <div class="progress-bar " role="progressbar" [style.width.%]="currentStep * 33.33" aria-valuenow="{{ currentStep * 33.33 }}" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+      <div [class.active]="currentStep === 1">Étape 1: Vous et votre conjoint</div>
+      <div [class.active]="currentStep === 2">Étape 2: Régime matrimoniale</div>
+      <div [class.active]="currentStep === 3">Étape 3: Nombres d'enfants</div>
+    </div>
+    <form #ClientForm="ngForm" class="form-bookmark needs-validation " id="bookmark-form" novalidate="">
+      <ng-container [ngSwitch]="currentStep">
+        <!-- Step 1 -->
+        <div *ngSwitchCase="1" class="row scrollable-block">
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-name">Nom</label>
+            <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" [(ngModel)]="clientData.Nom">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-last">Prénom</label>
+            <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" [(ngModel)]="clientData.Prenom">
+          </div>
+          <!-- <div class="form-group mb-3 col-md-6">
+            <label for="con-name">Nom</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" [(ngModel)]="clientData.Nom">
+              </div>
+              <div class="col-sm-6">
+                <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" [(ngModel)]="clientData.Prenom">
+              </div>
             </div>
-            <div class="col-sm-6">
-              <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" ngModel>
+          </div> -->
+          <div class="form-group mb-3 col-md-6">
+            <label for="dob">Date de naissance</label>
+            <input class="form-control" id="dob" type="date" required="" name="DateNaissance" [(ngModel)]="clientData.DateNaissance">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="situation">Situation familiale</label>
+            <select class="form-control" id="situation" required="" name="SituationFamiliale" [(ngModel)]="clientData.SituationFamiliale">
+              <option value="Marié">Marié</option>
+              <option value="Célibataire">Célibataire</option>
+              <option value="Divorcé">Divorcé</option>
+              <option value="Veuf">Veuf</option>
+              <option value="Union libre">Union libre</option>
+              <option value="PACS">PACS</option>
+            </select>
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="profession">Profession</label>
+            <input class="form-control" id="profession" type="text" required="" placeholder="Profession" name="Profession" [(ngModel)]="clientData.Profession">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="retirement">Date de départ en retraite</label>
+            <input class="form-control" id="retirement" type="date" required="" name="DateRetraite" [(ngModel)]="clientData.DateRetraite">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="ssn">Numéro SS</label>
+            <input class="form-control" id="ssn" type="text" required="" placeholder="Numéro SS" name="NumeroSS" [(ngModel)]="clientData.NumeroSS">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="address">Adresse</label>
+            <input class="form-control" id="address" type="text" required="" placeholder="Adresse" name="Adresse" [(ngModel)]="clientData.Adresse">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-mail">Email</label>
+            <input class="form-control" id="con-mail" type="email" required="" placeholder="Email" autocomplete="off" name="Email" [(ngModel)]="clientData.Email">
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-phone">Téléphone</label>
+            <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone" autocomplete="off" name="Tel" [(ngModel)]="clientData.Tel">
+          </div>
+          <div class="form-group mb-3 col-md-6 row">
+            <label>Avez-vous un conjoint?</label>
+            <div class="form-check col">
+              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointYes" value="yes" [(ngModel)]="clientData.hasConjoint" (change)="onConjointChange()">
+              <label class="form-check-label" for="hasConjointYes">
+                Oui
+              </label>
+            </div>
+            <div class="form-check col">
+              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointNo" value="no" [(ngModel)]="clientData.hasConjoint" (change)="onConjointChange()">
+              <label class="form-check-label" for="hasConjointNo">
+                Non
+              </label>
+            </div>
+          </div>
+          <div class="row" *ngIf="clientData.hasConjoint === 'yes'">
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-nom">Nom du conjoint</label>
+              <input class="form-control" id="conjoint-nom" type="text" placeholder="Nom du conjoint" name="ConjointName" [(ngModel)]="clientData.ConjointName">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-prenom">Prénom du conjoint</label>
+              <input class="form-control" id="conjoint-prenom" type="text" placeholder="Prénom du conjoint" name="ConjointPrenom" [(ngModel)]="clientData.ConjointPrenom">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-dob">Date de naissance du conjoint</label>
+              <input class="form-control" id="conjoint-dob" type="date" name="ConjointDateNaissance" [(ngModel)]="clientData.ConjointDateNaissance">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-profession">Profession du conjoint</label>
+              <input class="form-control" id="conjoint-profession" type="text" placeholder="Profession du conjoint" name="ConjointProfession" [(ngModel)]="clientData.ConjointProfession">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-retirement">Date de départ en retraite du conjoint</label>
+              <input class="form-control" id="conjoint-retirement" type="date" name="ConjointDateRetraite" [(ngModel)]="clientData.ConjointDateRetraite">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-ssn">Numéro SS du conjoint</label>
+              <input class="form-control" id="conjoint-ssn" type="text" placeholder="Numéro SS du conjoint" name="ConjointNumeroSS" [(ngModel)]="clientData.ConjointNumeroSS">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="marriage-date">Date de mariage</label>
+              <input class="form-control" id="marriage-date" type="date" name="DateMariage" [(ngModel)]="clientData.DateMariage">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="matrimonial-regime">Régime matrimonial</label>
+              <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial" [(ngModel)]="clientData.RegimeMatrimonial">
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="donation-epoux">Donation entre époux</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxYes" value="yes" [(ngModel)]="clientData.DonationEpoux">
+                <label class="form-check-label" for="donationEpouxYes">
+                  Oui
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxNo" value="no" [(ngModel)]="clientData.DonationEpoux">
+                <label class="form-check-label" for="donationEpouxNo">
+                  Non
+                </label>
+              </div>
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="modif-regime">Si Modification du régime et date</label>
+              <textarea class="form-control" id="modif-regime" type="text" placeholder="Si modifi Régime matrimonial" name="modifregimedate" [(ngModel)]="clientData.ModifRegimeDate"></textarea>
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="quest-comp">Question complémentaires</label>
+              <p>S’il y a eu des mariages précédents : quelle est la date du mariage ? Quelle est la durée des mariages précédents ? Quelles est la situation du premier conjoint ? Quelles conséquences financières du jugement de divorce ?</p>
+              <textarea class="form-control" id="quest-comp" type="text" placeholder="Réponse ..." name="questcomp" [(ngModel)]="clientData.QuestComp"></textarea>
             </div>
           </div>
         </div>
-        <div class="form-group mb-3 col-md-12">
-          <label for="con-mail">Email Address</label>
-          <input class="form-control" id="con-mail" type="text" required="" autocomplete="off" name="Email" ngModel>
+        <!-- Step 2 -->
+        <div *ngSwitchCase="2" class="row scrollable-block">
+          <div class="form-group mb-3 col-md-12">
+            <label for="con-mail">Adresse Email</label>
+            <input class="form-control" id="con-mail" type="email" required="" autocomplete="off" name="Email" [(ngModel)]="clientData.Email">
+          </div>
         </div>
-        <div class="form-group mb-3 col-md-12 my-0">
-          <label for="con-phone">Phone</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <input class="form-control" id="con-phone" type="number" required="" autocomplete="off">
-            </div>
-            <div class="col-sm-6">
-              <select class="form-control" id="con-select">
-                <option>Mobile</option>
-                <option>Work</option>
-                <option>Others</option>
-              </select>
+        <!-- Step 3 -->
+        <div *ngSwitchCase="3">
+          <div class="form-group mb-3 col-md-12 my-0">
+            <label for="con-phone">Téléphone</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <input class="form-control" id="con-phone" type="text" required="" autocomplete="off" name="Tel" [(ngModel)]="clientData.Tel">
+              </div>
+              <div class="col-sm-6">
+                <select class="form-control" id="con-select" [(ngModel)]="clientData.TelType" name="TelType">
+                  <option>Mobile</option>
+                  <option>Travail</option>
+                  <option>Autre</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
+      </ng-container>
+      <div class="d-flex justify-content-between mt-3">
+        <button *ngIf="currentStep > 1" class="btn btn-secondary" type="button" (click)="previousStep()">Précédent</button>
+        <button class="btn btn-primary mt-3" type="button" (click)="modal.dismiss('Cross click')">Annuler</button>
+
+        <button *ngIf="currentStep < 3" class="btn btn-secondary" type="button" (click)="nextStep()">Suivant</button>
+        <button *ngIf="currentStep === 3" class="btn btn-success" type="button" (click)="onSave()">Enregistrer</button>
+
       </div>
-      <input id="index_var" type="hidden" value="5">
-      <button class="btn btn-secondary me-1" type="submit">Save</button>
-      <button class="btn btn-primary  me-1" type="button" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <!-- <button class="btn btn-primary mt-3" type="button" (click)="modal.dismiss('Cross click')">Annuler</button> -->
     </form>
   </div>
+  
+  
 </ng-template>

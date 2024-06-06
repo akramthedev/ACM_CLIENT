@@ -21,24 +21,24 @@
                       <i class="me-2" data-feather="users"></i> Ajouter client
                     </button>
                   </li>
-                  <li class="nav-item"><span class="main-title">Views</span></li>
+                  <li class="nav-item"><span class="main-title">Prestation</span></li>
                   <li>
                     <a id="pills-personal-tab" data-bs-toggle="pill" href="#pills-personal" role="tab" aria-controls="pills-personal" aria-selected="true">
-                      <span class="title">Personal</span>
+                      <span class="title">Tous</span>
                     </a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <button class="btn btn-category" type="button" (click)="AddCategory.openModal()"><span class="title"> + Add Category</span></button>
-                  </li>
+                  </li> -->
                   <li><a class="show" id="pills-organization-tab" data-bs-toggle="pill" href="#pills-organization" role="tab" aria-controls="pills-organization"
                       aria-selected="false"><span class="title">
-                        Organization</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Follow up</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Favorites</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Ideas</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Important</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Business</span></a></li>
-                  <li><a href="javascript:void(0)"><span class="title">Holidays</span></a></li>
+                        Installation maroc</span></a></li>
+                  <li><a href="javascript:void(0)"><span class="title">Installation france</span></a></li>
+                  <!-- <li><a href="javascript:void(0)"><span class="title">Favorites</span></a></li> -->
+                  <!-- <li><a href="javascript:void(0)"><span class="title">Ideas</span></a></li> -->
+                  <!-- <li><a href="javascript:void(0)"><span class="title">Important</span></a></li> -->
+                  <!-- <li><a href="javascript:void(0)"><span class="title">Business</span></a></li> -->
+                  <!-- <li><a href="javascript:void(0)"><span class="title">Holidays</span></a></li> -->
                 </ul>
               </div>
             </div>
@@ -53,7 +53,7 @@
                 <div class="tab-pane fade active show" id="pills-personal" role="tabpanel" aria-labelledby="pills-personal-tab">
                   <div class="card mb-0">
                     <div class="card-header d-flex">
-                      <h5>Personal</h5><span class="f-14 pull-right mt-0">{{ Clients.length }} Clients</span>
+                      <h5>Par prestation</h5><span class="f-14 pull-right mt-0">{{ Clients.length }} Clients</span>
                     </div>
                     <div class="card-body p-0">
                       <div class="row list-persons" id="addcon">
@@ -87,25 +87,25 @@
                                     <p class="email_add_0">{{ CurrentClient.Email }}</p>
                                     <ul>
                                       <li><a href="javascript:void(0)" (click)="editContact = true">Modifier</a></li>
-                                      <li><a href="javascript:void(0)" (click)="DeleteClient(CurrentClient.ClientId)">Supprimer</a></li>
+                                      <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
                                       <li><a href="javascript:void(0)" (click)="showHistory()">Historique</a></li>
                                       <li><a href="javascript:void(0)" (click)="Print.openModal()">Imprimer</a></li>
                                     </ul>
                                   </div>
                                 </div>
                                 <div class="email-general">
-                                  <h6 class="mb-3">General</h6>
+                                  <h6 class="mb-3">Information Générale</h6>
                                   <ul>
-                                    <li>Name <span class="font-primary first_name_0">Bucky</span></li>
-                                    <li>Gender <span class="font-primary">Male</span></li>
-                                    <li>Birthday<span class="font-primary"> <span class="birth_day_0">18</span><span class="birth_month_0 ms-1">May</span><span
-                                          class="birth_year_0 ms-1">1994</span></span></li>
-                                    <li>Personality<span class="font-primary personality_0">Cool</span></li>
-                                    <li>City<span class="font-primary city_0">moline acres</span></li>
-                                    <li>Mobile No<span class="font-primary mobile_num_0">+0 1800 76855</span></li>
-                                    <li>Email Addr <span class="font-primary email_add_0">barnes&#64;gmail.com</span></li>
-                                    <li>Website<span class="font-primary url_add_0">www.test.com</span></li>
-                                    <li>Interest<span class="font-primary interest_0">photography</span></li>
+                                    <li>Nom <span class="font-primary first_name_0">{{CurrentClient.Nom}}</span></li>
+                                    <li>Prénom <span class="font-primary last_name_0">{{CurrentClient.Prenom}}</span></li>
+                                    <!-- <li>Gender <span class="font-primary">Male</span></li> -->
+                                    <li>Date De Naissance <span class="font-primary">{{CurrentClient.DateNaissance}} </span></li>
+                                    <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
+                                    <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
+                                    <li>Téléphone <span class="font-primary mobile_num_0">{{CurrentClient.Tel}}</span></li>
+                                    <li>Email <span class="font-primary email_add_0">{{CurrentClient.Email}}</span></li>
+                                    <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
+                                    <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->
                                   </ul>
                                 </div>
                               </div>
@@ -117,25 +117,25 @@
                             <form>
                               <div class="row g-2">
                                 <div class="mt-0 mb-3 col-md-12">
-                                  <label>Name</label>
+                                  <label>Nom et Prénom</label>
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="first_name" type="text" required="" placeholder="First Name" value="first_name">
+                                      <input class="form-control" id="first_name" type="text" required="" placeholder="First Name" value="{{CurrentClient.Nom}}">
                                     </div>
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="last_name" type="text" required="" placeholder="Last Name" value="last_name">
+                                      <input class="form-control" id="last_name" type="text" required="" placeholder="Last Name" value="{{CurrentClient.Prenom}}">
                                     </div>
                                   </div>
                                 </div>
                                 <div class="mt-0 mb-3 col-md-12">
-                                  <label>Email Address</label>
-                                  <input class="form-control" id="email_add" type="text" required="" autocomplete="off">
+                                  <label>Email</label>
+                                  <input class="form-control" id="email_add" type="text" required="" autocomplete="off"value="{{CurrentClient.Email}}">
                                 </div>
                                 <div class="mt-0 mb-3 col-md-12">
-                                  <label>Phone</label>
+                                  <label>Téléphone</label>
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="mobile_num" type="text" required="" autocomplete="off">
+                                      <input class="form-control" id="mobile_num" type="text" required="" autocomplete="off" value="{{CurrentClient.Tel}}">
                                     </div>
                                     <div class="col-sm-6">
                                       <select class="form-control">
@@ -147,7 +147,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row more-data">
+                              <!-- <div class="row more-data">
                                 <div class="form-group mb-3 col-md-12">
                                   <label>URLS</label>
                                   <div class="row">
@@ -277,7 +277,7 @@
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
                               <button class="btn btn-secondary update-contact" type="button">Save</button>
                               <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
                             </form>

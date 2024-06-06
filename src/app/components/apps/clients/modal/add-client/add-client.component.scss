@@ -1,0 +1,8 @@
+.active {
+    font-weight: bold;
+  }
+ .scrollable-block{
+  overflow-y: auto; /* permet le défilement vertical si le contenu dépasse la hauteur disponible */
+  max-height: 275px; /* définissez une hauteur maximale pour limiter la zone scrollable si nécessaire */
+
+ }
