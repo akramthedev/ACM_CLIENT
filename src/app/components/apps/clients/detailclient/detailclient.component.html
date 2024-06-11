@@ -21,7 +21,7 @@
                 <div ngbAccordionItem>
                   <h2 ngbAccordionHeader>
                     <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-building-alt fs-3"></i> Votre
+                      <i class="icofont icofont-building-alt fs-3 px-2"></i> Votre
                       patrimoine
                     </button>
                   </h2>
@@ -57,23 +57,26 @@
                             <label class="form-check-label" for="hasUsageNo">
                               Non
                             </label>
+                            
                           </div>
                         </div>
                         <div class="row" *ngIf="clientData.hasUsage === 'oui'">
                           <!-- Fields for usage goods -->
                           <!-- Button trigger modal Bien d'usage -->
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                           <button
                             type="button"
-                            class="btn btn-primary"
+                            class="btn btn-primary me-md-2"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop"
                           >
-                            Insérer les biens d'usages
+                            <i class="fa fa-plus"></i>
                           </button>
+                          </div>
   
-                          <div *ngIf="clientData.Usages.length > 0" class="mt-3">
-                            <table class="table table-bordered">
-                              <thead>
+                          <div *ngIf="clientData.Usages.length > 0" class="mb-4 mt-3">
+                            <table class="table table-bordered ">
+                              <thead >
                                 <tr>
                                   <th>Désignation</th>
                                   <th>Valeur</th>
@@ -99,10 +102,10 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Usages.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
-                              <thead>
-                                <tr>
+                              <thead >
+                                <tr >
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -122,6 +125,7 @@
                               </tbody>
                             </table>
                           </div>
+                          
                         </div>
                         <div class="form-group mb-3 col-md-6 row">
                           <label>Immobilier de rapport?</label>
@@ -161,19 +165,22 @@
                           class="row"
                           *ngIf="clientData.hasImmobilier === 'oui'"
                         >
-                          <!-- Fields for immobilier goods -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                           <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropImmobilier"
                           >
-                            Insérer les immobiliers de rapport
+                          <i class="fa fa-plus"></i>
                           </button>
+                          </div>
+                          <!-- Fields for immobilier goods -->
+                          
   
                           <div
                             *ngIf="clientData.Immobiliers.length > 0"
-                            class="mt-3"
+                            class="mt-3 mb-4"
                           >
                             <table class="table table-bordered">
                               <thead>
@@ -210,7 +217,7 @@
                           </div>
                           <div
                             *ngIf="clientData.Immobiliers.length == 0"
-                            class="mt-3"
+                            class="mt-3 mb-4"
                           >
                             <table class="table table-bordered">
                               <thead>
@@ -267,17 +274,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasProf === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropProf"
                           >
-                            Insérer les immobiliers de rapport
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Profs.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Profs.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -299,7 +309,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Profs.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Profs.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -345,9 +355,9 @@
   
                 <div ngbAccordionItem class="mt-3">
                   <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white">
+                    <button ngbAccordionButton class="bg-primary text-white ">
                       <span
-                        ><i class="icofont icofont-bank-alt fs-3"></i> Vos
+                        ><i class="icofont icofont-bank-alt fs-3 px-2"></i> Vos
                         passifs</span
                       >
                     </button>
@@ -390,17 +400,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasDette === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropPassif"
                           >
-                            Insérer les Passifs
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Dettes.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Dettes.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -424,7 +437,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Dettes.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Dettes.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -477,17 +490,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasAssur === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropAssur"
                           >
-                            Insérer les assurances
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Assurs.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Assurs.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -511,7 +527,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Assurs.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Assurs.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -564,17 +580,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasEpar === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropEpar"
                           >
-                            Insérer les Epargnes
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Epars.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Epars.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -598,7 +617,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Epars.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Epars.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -651,17 +670,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasMobil === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropMobil"
                           >
-                            Insérer les valeurs mobilières
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Mobils.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Mobils.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -685,7 +707,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Mobils.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Mobils.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -738,17 +760,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasDispo === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropDispo"
                           >
-                            Insérer les Disponibilités
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Dispos.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Dispos.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -768,7 +793,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div *ngIf="clientData.Dispos.length == 0" class="mt-3">
+                          <div *ngIf="clientData.Dispos.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -792,8 +817,8 @@
                 </div>
                 <div ngbAccordionItem class="mt-3">
                   <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-money-bag fs-3"></i> Votre budget
+                    <button ngbAccordionButton class="bg-primary text-white ">
+                      <i class="icofont icofont-money-bag fs-3 px-2"></i> Votre budget
                     </button>
                   </h2>
                   <div ngbAccordionCollapse>
@@ -832,17 +857,20 @@
                         </div>
                         <div class="row" *ngIf="clientData.hasBudget === 'oui'">
                           <!-- Fields for usage goods -->
-  
-                          <button
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
                             type="button"
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#staticBackdropBudget"
                           >
-                            Ajouter les budgets
+                          <i class="fa fa-plus"></i>
                           </button>
+                            </div>
   
-                          <div *ngIf="clientData.Budgets.length > 0" class="mt-3">
+                          
+  
+                          <div *ngIf="clientData.Budgets.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -860,7 +888,7 @@
                           </div>
                           <div
                             *ngIf="clientData.Budgets.length == 0"
-                            class="mt-3"
+                            class="mb-4 mt-3"
                           >
                             <table class="table table-bordered">
                               <thead>
@@ -883,8 +911,8 @@
                 </div>
                 <div ngbAccordionItem class="mt-3">
                   <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-law-document fs-3"></i>
+                    <button ngbAccordionButton class="bg-primary text-white ">
+                      <i class="icofont icofont-law-document fs-3 px-2"></i>
                       Particularités fiscales
                     </button>
                   </h2>
@@ -907,9 +935,11 @@
                             />
                           </div>
   
-                          <button class="btn btn-primary" (click)="addPartic()">
+                          <div class="d-grid gap-2 d-md-flex justify-content-center">
+                          <button class="btn btn-primary " (click)="addPartic()">
                             Ajouter la particularités fiscales
                           </button>
+                        </div>
                         </div>
                       </ng-template>
                     </div>
@@ -918,7 +948,7 @@
                 <div ngbAccordionItem class="mt-3">
                   <h2 ngbAccordionHeader>
                     <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-briefcase-alt-1 fs-2"></i>
+                      <i class="icofont icofont-briefcase-alt-1 fs-2 px-2"></i>
                       Situation administrative
                     </button>
                   </h2>
@@ -927,7 +957,7 @@
                       <ng-template>
                         <div class="row">
                           <!-- Fields for usage goods -->
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>CFE :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -956,7 +986,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Passeport Scanné :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -985,7 +1015,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Avez-vous 15 ans de cotisation :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1014,7 +1044,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Carte de séjour scanée :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1046,7 +1076,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-8 mb-3">
                             <label
                               >Pension de Réversion 15 ans de cotisation :</label
                             >
@@ -1077,7 +1107,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Permis de conduire marocain:</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1106,7 +1136,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>CNSS :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1135,7 +1165,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Assurance Auto:</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1164,7 +1194,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>CNAREFE :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1193,7 +1223,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Assurance Habitation:</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1222,7 +1252,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Capitone :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1251,7 +1281,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Inscription consulat:</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1286,7 +1316,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Assurance Rapatriement :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1321,7 +1351,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>UFE :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1350,7 +1380,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>Mutuelle Française :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1379,7 +1409,7 @@
                               </label>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 mb-3">
                             <label>CSG / CRDS :</label>
                             <div class="form-check form-check-inline">
                               <input
@@ -1409,12 +1439,14 @@
                             </div>
                           </div>
   
+                          <div class="d-grid gap-2 d-md-flex justify-content-center">
                           <button
                             class="btn btn-primary"
                             (click)="addSituationAdmin()"
                           >
                             Ajouter la situation administrative
                           </button>
+                        </div>
                         </div>
                       </ng-template>
                     </div>
@@ -1609,7 +1641,7 @@
 
     <!-- Modal for Bien d'usage-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdrop"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -1621,7 +1653,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">
-              Modal title
+              Biens d'usage
             </h1>
             <button
               type="button"
@@ -1630,7 +1662,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="usage-designation">Désignation</label>
               <input
@@ -1732,7 +1764,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Understood</button>
+            
           </div>
         </div>
       </div>
@@ -1741,7 +1773,7 @@
 
     <!-- Modal for Immobilier-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropImmobilier"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -1753,7 +1785,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelImmobilier">
-              Modal title
+              Immobilier de rapport
             </h1>
             <button
               type="button"
@@ -1762,7 +1794,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-designation">Désignation</label>
               <input
@@ -1877,7 +1909,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Understood</button>
+           
           </div>
         </div>
       </div>
@@ -1886,7 +1918,7 @@
 
     <!-- Modal for Biens professionnel-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropProf"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -1898,7 +1930,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelProf">
-              Modal title
+              Biens professionnels
             </h1>
             <button
               type="button"
@@ -1907,7 +1939,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="prof-designation">Désignation</label>
               <input
@@ -1987,7 +2019,6 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Understood</button>
           </div>
         </div>
       </div>
@@ -1996,7 +2027,7 @@
 
     <!-- Modal for Passif-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropPassif"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2008,7 +2039,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelPassif">
-              Modal title
+              Vos passifs
             </h1>
             <button
               type="button"
@@ -2017,7 +2048,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="dette-designation">Désignation</label>
               <input
@@ -2097,7 +2128,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Understood</button>
+            
           </div>
         </div>
       </div>
@@ -2106,7 +2137,7 @@
 
     <!-- Modal for Assurance-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropAssur"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2118,7 +2149,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelPassif">
-              Modal title
+              Assurances
             </h1>
             <button
               type="button"
@@ -2127,7 +2158,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="assur-designation">Désignation</label>
               <input
@@ -2209,7 +2240,6 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary">Understood</button>
           </div>
         </div>
       </div>
@@ -2217,7 +2247,7 @@
     <!-- fin Modal Assurance-->
     <!-- Modal for Epargne-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropEpar"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2229,7 +2259,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelEpar">
-              Modal title
+              Épargne et dépôt à moyen et long terme
             </h1>
             <button
               type="button"
@@ -2238,7 +2268,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="epar-designation">Désignation</label>
               <input
@@ -2326,7 +2356,7 @@
 
     <!-- Modal for Mobiliere-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropMobil"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2338,7 +2368,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelMobil">
-              Modal title
+              Valeurs mobilières
             </h1>
             <button
               type="button"
@@ -2435,7 +2465,7 @@
 
     <!-- Modal for Dispo-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropDispo"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2447,7 +2477,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelDispo">
-              Modal title
+              Disponibilités
             </h1>
             <button
               type="button"
@@ -2456,7 +2486,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="dispo-designation">Désignation</label>
               <input
@@ -2522,7 +2552,7 @@
 
     <!-- Modal for Budget-->
     <div
-      class="modal fade"
+      class="modal modal-lg"
       id="staticBackdropBudget"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -2534,7 +2564,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelBudget">
-              Modal title
+              Votre budget
             </h1>
             <button
               type="button"
@@ -2543,7 +2573,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="budget-designation">Désignation</label>
               <input
