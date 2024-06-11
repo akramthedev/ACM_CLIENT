@@ -4,6 +4,7 @@ import { AddCategoryComponent } from "./modal/add-category/add-category.componen
 import { PrintContactComponent } from "./modal/print-contact/print-contact.component";
 import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -29,7 +30,7 @@ export class ClientsComponent implements OnInit {
     { ClientId: "06", Nom: "Barton", Prenom: "Clint", DateNaissance: "24/06/1989", Email: "Clint@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/avtar/16.jpg", IsSelected: false },
   ];
 
-  constructor(private title: Title) {
+  constructor(private title: Title,private router:Router) {
     this.title.setTitle("Clients | CRM");
     this.titre=this.title.getTitle();
   }
@@ -38,6 +39,9 @@ export class ClientsComponent implements OnInit {
   ngOnInit() {
   }
 
+  navigateToDetails() {
+    this.router.navigate(['/clients/details']);
+  }
   showHistory() {
     this.history = !this.history;
   }

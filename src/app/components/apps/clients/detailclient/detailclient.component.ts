@@ -1,0 +1,491 @@
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
+
+interface Usage {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  Charge: string;
+  Capital: string;
+  Duree: string;
+  Taux: string;
+  Deces: string;
+}
+
+interface Immobilier {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  Revenue: string;
+  Charge: string;
+  Capital: string;
+  Duree: string;
+  Taux: string;
+  Deces: string;
+}
+interface Professionnel {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  Charge: string;
+  Partic: string;
+   
+}
+interface Dette {
+  Designation: string;
+  Capital: string;
+  Duree: string;
+  Taux: string;
+  Deces:string;
+  Partic: string;
+   
+}
+interface Assur {
+  Designation: string;
+  Capital: string;
+  Date: string;
+  Assur: string;
+  Benef:string;
+  Partic: string;
+   
+}
+interface Epar {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  Date:string;
+  Epar:string;
+  Partic: string;
+   
+}
+interface Mobiliere {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  RevenuDis:string;
+  Fisca:string;
+  Taux: string;
+   
+}
+interface Disponibilite {
+  Designation: string;
+  Valeur: string;
+  Detenteur: string;
+  Partic:string;
+  
+   
+}
+interface Budget {
+  Designation: string;
+  Montant: string;
+  
+   
+}
+
+interface SituationAdmin{
+  CFE:string;
+  Cotisation:string;
+  Reversion:string;
+  CNSS:string;
+  CNAREFE:string;
+  Capitone:string;
+  Rapatriement:string;
+  Mutuelle:string;
+  Passeport:string;
+  CarteSejour:string;
+  Permis:string;
+  AssurAuto:string;
+  AssurHabi:string;
+  InscriConsulat:string;
+  UFE:string;
+  CSG:string;
+ 
+
+}
+@Component({
+  selector: 'app-detailclient',
+  
+  templateUrl: './detailclient.component.html',
+  styleUrl: './detailclient.component.scss'
+})
+export class DetailclientComponent {
+  clientData: {
+    hasUsage: string;
+    Usages: Usage[];
+    hasImmobilier: string;
+    Immobiliers: Immobilier[];
+    hasProf:string;
+    Profs:Professionnel[];
+    hasDette:string;
+    Dettes:Dette[];
+    hasAssur:string;
+    Assurs:Assur[];
+    hasEpar:string;
+    Epars:Epar[];
+    hasMobil:string;
+    Mobils:Mobiliere[];
+    hasDispo:string;
+    Dispos:Disponibilite[];
+    hasBudget:string;
+    Budgets:Budget[];
+    Partic:string;
+    SituationAdministrative:SituationAdmin;
+  } = {
+    hasUsage: '',
+    Usages: [],
+    hasImmobilier: '',
+    Immobiliers: [],
+    hasProf:'',
+    Profs:[],
+    hasDette:'',
+    Dettes:[],
+    hasAssur:'',
+    Assurs:[],
+    hasEpar:'',
+    Epars:[],
+    hasMobil:'',
+    Mobils:[],
+    hasDispo:'',
+    Dispos:[],
+    hasBudget:'',
+    Budgets:[],
+    Partic:'',
+    SituationAdministrative:{
+      CFE: '',
+      Cotisation: '',
+      Reversion: '',
+      CNSS: '',
+      CNAREFE: '',
+      Capitone: '',
+      Rapatriement: '',
+      Mutuelle: '',
+      Passeport: '',
+      CarteSejour: '',
+      Permis: '',
+      AssurAuto: '',
+      AssurHabi: '',
+      InscriConsulat: '',
+      UFE: '',
+      CSG: '',
+
+    } ,
+  };
+
+  newUsage: Usage = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Charge: '',
+    Capital: '',
+    Duree: '',
+    Taux: '',
+    Deces: ''
+  };
+
+  newImmobilier: Immobilier = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Revenue: '',
+    Charge: '',
+    Capital: '',
+    Duree: '',
+    Taux: '',
+    Deces: ''
+  };
+  newProf: Professionnel = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Charge: '',
+    Partic: '',
+
+  };
+  newDette: Dette = {
+    Designation: '',
+    Capital: '',
+    Duree: '',
+    Taux:'',
+    Deces: '',
+    Partic: '',
+
+  };
+  newAssur: Assur = {
+    Designation: '',
+    Capital: '',
+    Date: '',
+    Assur:'',
+    Benef: '',
+    Partic: '',
+
+  };
+  newEpar: Epar = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Date:'',
+    Epar: '',
+    Partic: '',
+
+  };
+  newMobil: Mobiliere = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    RevenuDis:'',
+    Fisca: '',
+    Taux: '',
+
+  };
+  newDispo: Disponibilite = {
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Partic:'',
+    
+
+  };
+  newBudget: Budget = {
+    Designation: '',
+    Montant: '',
+    
+
+  };
+  newPartic: '';
+
+  newSituationAdmin: SituationAdmin={
+    CFE:'',
+    Cotisation:'',
+    Reversion:'',
+    CNSS:'',
+    CNAREFE:'',
+    Capitone:'',
+    Rapatriement:'',
+    Mutuelle:'',
+    Passeport:'',
+    CarteSejour:'',
+    Permis:'',
+    AssurAuto:'',
+    AssurHabi:'',
+    InscriConsulat:'',
+    UFE:'',
+    CSG:'',
+
+  };
+
+
+  onUsageChange() {
+    if (this.clientData.hasUsage === 'non') {
+      this.clientData.Usages = [];
+    }
+  }
+
+  addUsage() {
+    this.clientData.Usages.push({ ...this.newUsage });
+    console.log(this.newUsage)
+    this.newUsage = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Charge: '',
+      Capital: '',
+      Duree: '',
+      Taux: '',
+      Deces: ''
+    };
+    
+  }
+
+  onImmobilierChange() {
+    if (this.clientData.hasImmobilier === 'non') {
+      this.clientData.Immobiliers = [];
+    }
+  }
+
+  addImmobilier() {
+    this.clientData.Immobiliers.push({ ...this.newImmobilier });
+    this.newImmobilier = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Revenue: '',
+      Charge: '',
+      Capital: '',
+      Duree: '',
+      Taux: '',
+      Deces: ''
+    };
+  }
+
+  onProfChange() {
+    if (this.clientData.hasProf === 'non') {
+      this.clientData.Profs = [];
+    }
+  }
+
+  addProf() {
+    this.clientData.Profs.push({ ...this.newProf });
+    console.log(this.newProf)
+    this.newProf = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Charge: '',
+      Partic: '',
+      
+      
+    };
+  }
+
+  onDetteChange() {
+    if (this.clientData.hasDette === 'non') {
+      this.clientData.Dettes = [];
+    }
+  }
+
+  addDette() {
+    this.clientData.Dettes.push({ ...this.newDette });
+    console.log(this.newDette)
+    this.newDette = {
+      Designation: '',
+      Capital: '',
+      Duree: '',
+      Taux:'',
+      Deces: '',      
+      Partic: '',
+      
+      
+    };
+  }
+  onAssurChange() {
+    if (this.clientData.hasAssur === 'non') {
+      this.clientData.Assurs = [];
+    }
+  }
+
+  addAssur() {
+    this.clientData.Assurs.push({ ...this.newAssur });
+    console.log(this.newAssur)
+    this.newAssur = {
+      Designation: '',
+      Capital: '',
+      Date: '',
+      Assur:'',
+      Benef: '',      
+      Partic: '',
+      
+      
+    };
+  }
+  onEparChange() {
+    if (this.clientData.hasEpar === 'non') {
+      this.clientData.Epars = [];
+    }
+  }
+
+  addEpar() {
+    this.clientData.Epars.push({ ...this.newEpar });
+    console.log(this.newEpar)
+    this.newEpar = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Date:'',
+      Epar: '',      
+      Partic: '',
+      
+      
+    };
+  }
+
+  onMobilChange() {
+    if (this.clientData.hasMobil === 'non') {
+      this.clientData.Mobils = [];
+    }
+  }
+
+  addMobil() {
+    this.clientData.Mobils.push({ ...this.newMobil });
+    console.log(this.newMobil)
+    this.newMobil = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      RevenuDis:'',
+      Fisca: '',
+      Taux: '',
+      
+      
+    };
+  }
+  onDispoChange() {
+    if (this.clientData.hasDispo === 'non') {
+      this.clientData.Dispos = [];
+    }
+  }
+
+  addDispo() {
+    this.clientData.Dispos.push({ ...this.newDispo });
+    console.log(this.newDispo)
+    this.newDispo = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Partic:'',
+      
+      
+      
+    };
+  }
+
+  onBudgetChange() {
+    if (this.clientData.hasBudget === 'non') {
+      this.clientData.Budgets = [];
+    }
+  }
+
+  addBudget() {
+    this.clientData.Budgets.push({ ...this.newBudget });
+    console.log(this.newBudget)
+    this.newBudget = {
+      Designation: '',
+      Montant: '',
+    
+    };
+  }
+
+  addPartic() {
+    this.clientData.Partic=this.newPartic;
+    console.log(this.newPartic)
+    this.newPartic = '';
+  }
+
+  addSituationAdmin() {
+    this.clientData.SituationAdministrative={...this.newSituationAdmin};
+    console.log(this.newSituationAdmin)
+    this.newSituationAdmin = {
+      CFE:'',
+    Cotisation:'',
+    Reversion:'',
+    CNSS:'',
+    CNAREFE:'',
+    Capitone:'',
+    Rapatriement:'',
+    Mutuelle:'',
+    Passeport:'',
+    CarteSejour:'',
+    Permis:'',
+    AssurAuto:'',
+    AssurHabi:'',
+    InscriConsulat:'',
+    UFE:'',
+    CSG:'',
+
+    }
+  }
+}
+  
+
+  
+ 
+

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inje
 import { isPlatformBrowser } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-add-client',
   templateUrl: './add-client.component.html',
@@ -12,33 +13,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output('btnSaveEmitter') btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  clientData: {
-    ClientId: string,
-    Nom: string,
-    Prenom: string,
-    DateNaissance: string,
-    SituationFamiliale: string,
-    Profession: string,
-    DateRetraite: string,
-    NumeroSS: string,
-    Adresse: string,
-    Email: string,
-    Tel: string,
-    TelType: string,
-    ImgSrc: string,
-    hasConjoint: string,
-    ConjointName: string,
-    ConjointPrenom: string,
-    ConjointDateNaissance: string,
-    ConjointProfession:string,
-    ConjointDateRetraite: string,
-    ConjointNumeroSS: string,
-    DateMariage: string,
-    RegimeMatrimonial: string,
-    DonationEpoux: string,
-    ModifRegimeDate:string,
-    QuestComp:string
-  } = {
+  clientData = {
     ClientId: '',
     Nom: '',
     Prenom: '',
@@ -63,7 +38,44 @@ export class AddClientComponent implements OnInit, OnDestroy {
     RegimeMatrimonial: '',
     DonationEpoux: '',
     ModifRegimeDate:'',
-    QuestComp:''
+    QuestComp:'',
+    Children: [],
+    hasUsage:'',
+    Usages: [] , // New array for usage goods
+    hasImmobilier:'',
+    Immobiliers:[]
+  };
+
+  newChild = {
+    Nom: '',
+    Prenom: '',
+    Date: '',
+    Parent: '',
+    Charge: '',
+    Particularite: '',
+    Nchild: '',
+    Comment: ''
+  };
+  newUsage = {  // New object for a single usage good
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Charge: '',
+    Capital:'',
+    Duree:'',
+    Taux:'',
+    Deces:''
+  };
+  newImmobilier = {  // New object for a single immobilier good
+    Designation: '',
+    Valeur: '',
+    Detenteur: '',
+    Revenue:'',
+    Charge: '',
+    Capital:'',
+    Duree:'',
+    Taux:'',
+    Deces:''
   };
 
   public closeResult: string;
@@ -82,7 +94,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
       this.modalService.open(this.AddClient, {
-        size: 'xl',
+        size: 'lg',
         ariaLabelledBy: 'modal',
         centered: true,
         windowClass: 'modal-bookmark'
@@ -131,6 +143,47 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+  addChild() {
+    this.clientData.Children.push({ ...this.newChild });
+    this.newChild = {
+      Nom: '',
+      Prenom: '',
+      Date: '',
+      Parent: '',
+      Charge: '',
+      Particularite: '',
+      Nchild: '',
+      Comment: ''
+    };
+  }
+  addUsage() {
+    this.clientData.Usages.push({ ...this.newUsage });
+    this.newUsage = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Charge: '',
+      Capital:'',
+      Duree:'',
+      Taux:'',
+      Deces:''
+    };
+  }
+  addImmobilier() {
+    this.clientData.Immobiliers.push({ ...this.newImmobilier });
+    this.newImmobilier = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Revenue:'',
+      Charge: '',
+      Capital:'',
+      Duree:'',
+      Taux:'',
+      Deces:''
+    };
+  }
+
   onSave() {
     if (this.isFormValid()) {
       console.log("addClient.OnSave: ", this.clientData);
@@ -161,7 +214,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       confirmButtonText: "Enregistrer",
       denyButtonText: `Ne pas enregistrer`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire("Enregistré !", "", "success");
       } else if (result.isDenied) {
@@ -198,7 +250,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Tel: '',
       TelType: '',
       ImgSrc: "assets/images/user/8.jpg",
-      hasConjoint: 'no',
+      hasConjoint: 'non',
       ConjointName: '',
       ConjointPrenom: '',
       ConjointDateNaissance: '',
@@ -209,13 +261,49 @@ export class AddClientComponent implements OnInit, OnDestroy {
       RegimeMatrimonial: '',
       DonationEpoux: '',
       ModifRegimeDate:'',
-      QuestComp:''
+      QuestComp:'',
+      Children: [],
+      hasUsage:'',
+      Usages: [],  // Reset the usage goods array
+      hasImmobilier:'',
+      Immobiliers:[]
+    };
+    this.newChild = {
+      Nom: '',
+      Prenom: '',
+      Date: '',
+      Parent: '',
+      Charge: '',
+      Particularite: '',
+      Nchild: '',
+      Comment: ''
+    };
+    this.newUsage = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Charge: '',
+      Capital:'',
+      Duree:'',
+      Taux:'',
+      Deces:''
+    };
+    this.newImmobilier = {
+      Designation: '',
+      Valeur: '',
+      Detenteur: '',
+      Revenue:'',
+      Charge: '',
+      Capital:'',
+      Duree:'',
+      Taux:'',
+      Deces:''
     };
     this.currentStep = 1;
   }
 
   onConjointChange() {
-    if (this.clientData.hasConjoint === 'no') {
+    if (this.clientData.hasConjoint === 'non') {
       this.clientData.ConjointName='',
       this.clientData.ConjointPrenom = '';
       this.clientData.ConjointDateNaissance = '';
@@ -227,6 +315,19 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData.DonationEpoux = '';
       this.clientData.ModifRegimeDate="";
       this.clientData.QuestComp="";
+      this.clientData.Children = [];
+    }
+  }
+  onUsageChange() {
+    if (this.clientData.hasUsage === 'non') {
+      this.clientData.Usages=[];
+      
+    }
+  }
+  onImmobilierChange() {
+    if (this.clientData.hasImmobilier === 'non') {
+      this.clientData.Immobiliers=[];
+      
     }
   }
 }

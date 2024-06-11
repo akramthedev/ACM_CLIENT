@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ClientsComponent } from './clients.component';
-
+import { DetailclientComponent } from './detailclient/detailclient.component';
 const routes: Routes = [{
   path: '',
   children: [
-    { path: '', component: ClientsComponent, }
+    { path: '', component: ClientsComponent, },
+    { path: 'details', component: DetailclientComponent, },
   ]
 }];
 
