@@ -1491,127 +1491,25 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr *ngFor="let task of tasks">
                     <td class="task-column">
-                      <a class="text-inherit"  href="javascript:void(0)"
-                        >Préparer la liste des pieces du dossier de la carte de sejour
+                      <a class="text-inherit" href="javascript:void(0)">
+                        {{ task.title }}
                       </a>
                     </td>
-                    <td>28 May 2023</td>
+                    <td>{{ task.date }}</td>
                     <td>
-                      <span class="status-icon bg-success"></span> Terminé
+                      <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
                     </td>
-                    <td>900 DH</td>
-                    <td class="text-end">
-                      <a class="icon" href="javascript:void(0)"></a
-                      ><a
-                        class="btn btn-primary btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Modifier</a
-                      >
-                      <a
-                        class="btn btn-danger btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Supprimer</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="task-column">
-                      <a class="text-inherit"  href="javascript:void(0)"
-                        >Remettre la liste des pieces  du dossier carte sejour</a
-                      >
-                    </td>
-                    <td>12 June 2023</td>
-                    <td>
-                      <span class="status-icon bg-danger"></span> Terminé
-                    </td>
-                    <td>200 DH</td>
-                    <td class="text-end">
-                      <a class="icon" href="javascript:void(0)"></a
-                      ><a
-                        class="btn btn-primary btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Modifier</a
-                      >
-                      <a
-                        class="btn btn-danger btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Supprimer</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="task-column">
-                      <a class="text-inherit"  href="javascript:void(0)"
-                        >Receptionner les pieces du depot de la carte de sejour</a
-                      >
-                    </td>
-                    <td>12 July 2023</td>
-                    <td>
-                      <span class="status-icon bg-warning"></span> En cours
-                    </td>
-                    <td>300 DH</td>
-                    <td class="text-end">
-                      <a class="icon" href="javascript:void(0)"></a
-                      ><a
-                        class="btn btn-primary btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Modifier</a
-                      >
-                      <a
-                        class="btn btn-danger btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Supprimer</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="task-column">
-                      <a class="text-inherit" style=" word-wrap: break-word;" href="javascript:void(0)"
-                        >Scanner et enregistrer le passeport + cachet d'entrée</a
-                      >
-                    </td>
-                    <td>14 June 2023</td>
-                    <td>
-                      <span class="status-icon bg-warning"></span> En cours
-                    </td>
-                    <td>400 DH</td>
-                    <td class="text-end">
-                      <a class="icon" href="javascript:void(0)"></a
-                      ><a
-                        class="btn btn-primary btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Modifier</a
-                      ><a
-                        class="btn btn-danger btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Supprimer</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="task-column">
-                      <a class="text-inherit" style=" word-wrap: break-word;" href="javascript:void(0)"
-                        >Valider le dossier de la carte de sejour</a
-                      >
-                    </td>
-                    <td>25 June 2023</td>
-                    <td>
-                      <span class="status-icon bg-success"></span> En cours
-                    </td>
-                    <td>300 DH</td>
-                    <td class="text-end">
-                      <a class="icon" href="javascript:void(0)"></a
-                      ><a
-                        class="btn btn-primary btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Modifier</a
-                      ><a
-                        class="btn btn-danger btn-sm"
-                        href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Supprimer</a
-                      >
+                    <td>{{ task.price }}</td>
+                    <td class="text-start">
+                      <div class="d-flex justify-content-around">
+                      <a class="fs-2 text-warning" href="javascript:void(0)">
+                        <i class="fa fa-pencil"></i></a>
+                      <a class="fs-2 text-danger" href="javascript:void(0)">
+                        <i class="fa fa-trash"></i> 
+                      </a>
+                    </div>
                     </td>
                   </tr>
                 </tbody>
