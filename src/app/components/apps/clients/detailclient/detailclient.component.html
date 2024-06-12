@@ -77,7 +77,7 @@
                           <div *ngIf="clientData.Usages.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered ">
                               <thead >
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -103,21 +103,21 @@
                             </table>
                           </div>
                           <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered ">
                               <thead >
-                                <tr >
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Charges associées/Date d'achat</th>
-                                  <th>Capital emprunté</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Décès</th>
+                                <tr class="bg-primary-subtle">
+                                  <th >Désignation</th>
+                                  <th >Valeur</th>
+                                  <th >Détenteur</th>
+                                  <th >Charges associées/Date d'achat</th>
+                                  <th >Capital emprunté</th>
+                                  <th >Durée</th>
+                                  <th >Taux</th>
+                                  <th >Décès</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
+                                <tr >
                                   <td colspan="8" align="center">
                                     <i>Aucun bien enregistré</i>
                                   </td>
@@ -184,7 +184,7 @@
                           >
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -201,7 +201,7 @@
                                   *ngFor="
                                     let immobilier of clientData.Immobiliers
                                   "
-                                >
+                                  >
                                   <td>{{ immobilier.Designation }}</td>
                                   <td>{{ immobilier.Valeur }}</td>
                                   <td>{{ immobilier.Detenteur }}</td>
@@ -221,7 +221,7 @@
                           >
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -290,7 +290,7 @@
                           <div *ngIf="clientData.Profs.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -312,7 +312,7 @@
                           <div *ngIf="clientData.Profs.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -416,7 +416,7 @@
                           <div *ngIf="clientData.Dettes.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Capital</th>
                                   <th>Durée</th>
@@ -440,7 +440,7 @@
                           <div *ngIf="clientData.Dettes.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Capital</th>
                                   <th>Durée</th>
@@ -506,7 +506,7 @@
                           <div *ngIf="clientData.Assurs.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur de rachat ou capital assuré</th>
                                   <th>Date</th>
@@ -530,7 +530,7 @@
                           <div *ngIf="clientData.Assurs.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur de rachat ou capital assuré</th>
                                   <th>Date</th>
@@ -596,7 +596,7 @@
                           <div *ngIf="clientData.Epars.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -620,7 +620,7 @@
                           <div *ngIf="clientData.Epars.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -686,7 +686,7 @@
                           <div *ngIf="clientData.Mobils.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -710,7 +710,7 @@
                           <div *ngIf="clientData.Mobils.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -776,7 +776,7 @@
                           <div *ngIf="clientData.Dispos.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -796,7 +796,7 @@
                           <div *ngIf="clientData.Dispos.length == 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Valeur</th>
                                   <th>Détenteur</th>
@@ -873,7 +873,7 @@
                           <div *ngIf="clientData.Budgets.length > 0" class="mb-4 mt-3">
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Montant</th>
                                 </tr>
@@ -892,7 +892,7 @@
                           >
                             <table class="table table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="bg-primary-subtle">
                                   <th>Désignation</th>
                                   <th>Montant</th>
                                 </tr>
@@ -1483,151 +1483,134 @@
               <table class="table card-table table-vcenter text-nowrap">
                 <thead>
                   <tr>
-                    <th>Project Name</th>
+                    <th class="task-column">Tache</th>
                     <th>Date</th>
                     <th>Status</th>
-                    <th>Price</th>
+                    <th>Prix</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
-                      <a class="text-inherit" href="javascript:void(0)"
-                        >Untrammelled prevents
+                    <td class="task-column">
+                      <a class="text-inherit"  href="javascript:void(0)"
+                        >Préparer la liste des pieces du dossier de la carte de sejour
                       </a>
                     </td>
                     <td>28 May 2023</td>
                     <td>
-                      <span class="status-icon bg-success"></span> Completed
+                      <span class="status-icon bg-success"></span> Terminé
                     </td>
-                    <td>$56,908</td>
+                    <td>900 DH</td>
                     <td class="text-end">
                       <a class="icon" href="javascript:void(0)"></a
                       ><a
                         class="btn btn-primary btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Edit</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a class="btn btn-light btn-sm" href="javascript:void(0)"
-                        ><i class="fa fa-link"></i> Update</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a
+                        ><i class="fa fa-pencil"></i> Modifier</a
+                      >
+                      <a
                         class="btn btn-danger btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Delete</a
+                        ><i class="fa fa-trash"></i> Supprimer</a
                       >
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <a class="text-inherit" href="javascript:void(0)"
-                        >Untrammelled prevents</a
+                    <td class="task-column">
+                      <a class="text-inherit"  href="javascript:void(0)"
+                        >Remettre la liste des pieces  du dossier carte sejour</a
                       >
                     </td>
                     <td>12 June 2023</td>
                     <td>
-                      <span class="status-icon bg-danger"></span> On going
+                      <span class="status-icon bg-danger"></span> Terminé
                     </td>
-                    <td>$45,087</td>
+                    <td>200 DH</td>
                     <td class="text-end">
                       <a class="icon" href="javascript:void(0)"></a
                       ><a
                         class="btn btn-primary btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Edit</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a class="btn btn-light btn-sm" href="javascript:void(0)"
-                        ><i class="fa fa-link"></i> Update</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a
+                        ><i class="fa fa-pencil"></i> Modifier</a
+                      >
+                      <a
                         class="btn btn-danger btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Delete</a
+                        ><i class="fa fa-trash"></i> Supprimer</a
                       >
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <a class="text-inherit" href="javascript:void(0)"
-                        >Untrammelled prevents</a
+                    <td class="task-column">
+                      <a class="text-inherit"  href="javascript:void(0)"
+                        >Receptionner les pieces du depot de la carte de sejour</a
                       >
                     </td>
                     <td>12 July 2023</td>
                     <td>
-                      <span class="status-icon bg-warning"></span> Pending
+                      <span class="status-icon bg-warning"></span> En cours
                     </td>
-                    <td>$60,123</td>
+                    <td>300 DH</td>
                     <td class="text-end">
                       <a class="icon" href="javascript:void(0)"></a
                       ><a
                         class="btn btn-primary btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Edit</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a class="btn btn-light btn-sm" href="javascript:void(0)"
-                        ><i class="fa fa-link"></i> Update</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a
+                        ><i class="fa fa-pencil"></i> Modifier</a
+                      >
+                      <a
                         class="btn btn-danger btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Delete</a
+                        ><i class="fa fa-trash"></i> Supprimer</a
                       >
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <a class="text-inherit" href="javascript:void(0)"
-                        >Untrammelled prevents</a
+                    <td class="task-column">
+                      <a class="text-inherit" style=" word-wrap: break-word;" href="javascript:void(0)"
+                        >Scanner et enregistrer le passeport + cachet d'entrée</a
                       >
                     </td>
                     <td>14 June 2023</td>
                     <td>
-                      <span class="status-icon bg-warning"></span> Pending
+                      <span class="status-icon bg-warning"></span> En cours
                     </td>
-                    <td>$70,435</td>
+                    <td>400 DH</td>
                     <td class="text-end">
                       <a class="icon" href="javascript:void(0)"></a
                       ><a
                         class="btn btn-primary btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Edit</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a class="btn btn-light btn-sm" href="javascript:void(0)"
-                        ><i class="fa fa-link"></i> Update</a
-                      ><a class="icon" href="javascript:void(0)"></a
+                        ><i class="fa fa-pencil"></i> Modifier</a
                       ><a
                         class="btn btn-danger btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Delete</a
+                        ><i class="fa fa-trash"></i> Supprimer</a
                       >
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <a class="text-inherit" href="javascript:void(0)"
-                        >Untrammelled prevents</a
+                    <td class="task-column">
+                      <a class="text-inherit" style=" word-wrap: break-word;" href="javascript:void(0)"
+                        >Valider le dossier de la carte de sejour</a
                       >
                     </td>
                     <td>25 June 2023</td>
                     <td>
-                      <span class="status-icon bg-success"></span> Completed
+                      <span class="status-icon bg-success"></span> En cours
                     </td>
-                    <td>$15,987</td>
+                    <td>300 DH</td>
                     <td class="text-end">
                       <a class="icon" href="javascript:void(0)"></a
                       ><a
                         class="btn btn-primary btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-pencil"></i> Edit</a
-                      ><a class="icon" href="javascript:void(0)"></a
-                      ><a class="btn btn-light btn-sm" href="javascript:void(0)"
-                        ><i class="fa fa-link"></i> Update</a
-                      ><a class="icon" href="javascript:void(0)"></a
+                        ><i class="fa fa-pencil"></i> Modifier</a
                       ><a
                         class="btn btn-danger btn-sm"
                         href="javascript:void(0)"
-                        ><i class="fa fa-trash"></i> Delete</a
+                        ><i class="fa fa-trash"></i> Supprimer</a
                       >
                     </td>
                   </tr>

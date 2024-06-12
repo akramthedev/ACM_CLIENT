@@ -8,3 +8,8 @@ label{
     font-weight: bold;
     margin-right: 10px;
 }
+.task-column {
+    max-width: 300px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+    word-wrap: break-word;
+    white-space: normal;
+  }
