@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inje
 import { isPlatformBrowser } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { ClientService } from '../../../../../client.service'; // Adjust path as per your project structure
 
 @Component({
   selector: 'app-add-client',
@@ -12,7 +13,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output('btnSaveEmitter') btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
-
+  Clients: any[] = [];
   clientData = {
     ClientId: '',
     Nom: '',
@@ -84,12 +85,23 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal, private clientService: ClientService) { }
 
   ngOnInit(): void {
     console.log("addClient.ngOnInit");
+    this.getClients();
   }
-
+  getClients() {
+    this.clientService.getClients().subscribe(
+      (response) => {
+        this.Clients = response;
+        console.log(response);
+      },
+      (error) => {
+        console.error('Error fetching clients: ', error);
+      }
+    );
+  }
   openModal() {
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();

@@ -5,6 +5,7 @@ import { PrintContactComponent } from "./modal/print-contact/print-contact.compo
 import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ClientService } from 'src/app/client.service';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -21,6 +22,7 @@ export class ClientsComponent implements OnInit {
 
   CurrentClient: any = null;
   titre:String;
+  Client: any[] = [];
   Clients: any[] = [
     { ClientId: "01", Nom: "Barnes", Prenom: "Bucky", DateNaissance: "01/03/1903", Email: "bucky@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/8.jpg", IsSelected: true },
     { ClientId: "02", Nom: "Fury", Prenom: "Nick", DateNaissance: "02/12/1960", Email: "Nick@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/1.jpg", IsSelected: false },
@@ -29,16 +31,28 @@ export class ClientsComponent implements OnInit {
     { ClientId: "05", Nom: "Parker", Prenom: "Peter", DateNaissance: "13/07/1999", Email: "Peter@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/avtar/11.jpg", IsSelected: false },
     { ClientId: "06", Nom: "Barton", Prenom: "Clint", DateNaissance: "24/06/1989", Email: "Clint@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/avtar/16.jpg", IsSelected: false },
   ];
+  
 
-  constructor(private title: Title,private router:Router) {
+  constructor(private title: Title,private router:Router, private clientService: ClientService) {
     this.title.setTitle("Clients | CRM");
     this.titre=this.title.getTitle();
   }
  
   
   ngOnInit() {
+    this.getClients();
   }
-
+  getClients() {
+    this.clientService.getClients().subscribe(
+      (response) => {
+        this.Client = response;
+        console.log(response);
+      },
+      (error) => {
+        console.error('Error fetching clients: ', error);
+      }
+    );
+  }
   navigateToDetails() {
     this.router.navigate(['/clients/details']);
   }

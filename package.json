@@ -76,6 +76,7 @@
     "rxjs": "~7.8.1",
     "sweetalert2": "^11.4.29",
     "typescipt": "^1.0.0",
+    "uuid": "^10.0.0",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
