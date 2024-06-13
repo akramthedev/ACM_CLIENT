@@ -21,37 +21,37 @@ export class ClientsComponent implements OnInit {
   public editContact: boolean = false;
 
   CurrentClient: any = null;
-  titre:String;
-  Client: any[] = [];
-  Clients: any[] = [
-    { ClientId: "01", Nom: "Barnes", Prenom: "Bucky", DateNaissance: "01/03/1903", Email: "bucky@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/8.jpg", IsSelected: true },
-    { ClientId: "02", Nom: "Fury", Prenom: "Nick", DateNaissance: "02/12/1960", Email: "Nick@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/1.jpg", IsSelected: false },
-    { ClientId: "03", Nom: "Stark", Prenom: "Tony", DateNaissance: "05/08/1979", Email: "Tony@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/14.png", IsSelected: false },
-    { ClientId: "04", Nom: "Banner", Prenom: "Bruce", DateNaissance: "09/10/1975", Email: "Bruce@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/user/5.jpg", IsSelected: false },
-    { ClientId: "05", Nom: "Parker", Prenom: "Peter", DateNaissance: "13/07/1999", Email: "Peter@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/avtar/11.jpg", IsSelected: false },
-    { ClientId: "06", Nom: "Barton", Prenom: "Clint", DateNaissance: "24/06/1989", Email: "Clint@gmail.com",Tel:"06 25 00 25 04", ImgSrc: "assets/images/avtar/16.jpg", IsSelected: false },
-  ];
-  
+  titre: String;
+  Clients: any[] = [];
+  // Clients: any[] = [
+  //   { ClientId: "01", Nom: "Barnes", Prenom: "Bucky", DateNaissance: "01/03/1903", Email: "bucky@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/8.jpg", IsSelected: true },
+  //   { ClientId: "02", Nom: "Fury", Prenom: "Nick", DateNaissance: "02/12/1960", Email: "Nick@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/1.jpg", IsSelected: false },
+  //   { ClientId: "03", Nom: "Stark", Prenom: "Tony", DateNaissance: "05/08/1979", Email: "Tony@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/14.png", IsSelected: false },
+  //   { ClientId: "04", Nom: "Banner", Prenom: "Bruce", DateNaissance: "09/10/1975", Email: "Bruce@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/5.jpg", IsSelected: false },
+  //   { ClientId: "05", Nom: "Parker", Prenom: "Peter", DateNaissance: "13/07/1999", Email: "Peter@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/avtar/11.jpg", IsSelected: false },
+  //   { ClientId: "06", Nom: "Barton", Prenom: "Clint", DateNaissance: "24/06/1989", Email: "Clint@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/avtar/16.jpg", IsSelected: false },
+  // ];
 
-  constructor(private title: Title,private router:Router, private clientService: ClientService) {
+
+  constructor(private title: Title, private router: Router, private clientService: ClientService) {
     this.title.setTitle("Clients | CRM");
-    this.titre=this.title.getTitle();
+    this.titre = this.title.getTitle();
   }
- 
-  
+
+
   ngOnInit() {
     this.getClients();
   }
+
   getClients() {
-    this.clientService.getClients().subscribe(
-      (response) => {
-        this.Client = response;
-        console.log(response);
-      },
-      (error) => {
+    this.clientService.getClients()
+      .subscribe((response) => {
+        console.log("response getClients: ", response);
+
+        this.Clients = response;
+      }, (error) => {
         console.error('Error fetching clients: ', error);
-      }
-    );
+      });
   }
   navigateToDetails() {
     this.router.navigate(['/clients/details']);
@@ -71,7 +71,7 @@ export class ClientsComponent implements OnInit {
     })
   }
 
-  sweetAlertDelete(id: string){
+  sweetAlertDelete(id: string) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
