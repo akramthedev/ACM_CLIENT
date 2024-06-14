@@ -5,8 +5,9 @@ import { PrintContactComponent } from "./modal/print-contact/print-contact.compo
 import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { ClientService } from 'src/app/client.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { ClientService } from 'src/app/shared/services/client.service';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -32,6 +33,7 @@ export class ClientsComponent implements OnInit {
     private router: Router,
     private clientService: ClientService,
     private loader: NgxSpinnerService,
+    private toastr: ToastrService,
   ) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
@@ -62,16 +64,14 @@ export class ClientsComponent implements OnInit {
   }
 
   OnClientSelected(id: string) {
-    // this.Clients = this.Clients.map((item) => {
-    //   item.IsSelected = false;
-    //   if (item.ClientId == id) {
-    //     item.IsSelected = true;
-    //     this.CurrentClient = item;
-    //   }
-    //   return item;
-    // })
-    this.CurrentClient = this.Clients.find(client => client.ClientId === id);
-    console.log("selected client : ", this.CurrentClient)
+    this.Clients = this.Clients.map((item) => {
+      item.IsSelected = false;
+      if (item.ClientId == id) {
+        item.IsSelected = true;
+        this.CurrentClient = item;
+      }
+      return item;
+    })
   }
 
   // sweetAlertDelete(id: string) {
@@ -129,28 +129,19 @@ export class ClientsComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        this.clientService.deleteClient(id).subscribe(() => {
-          this.CurrentClient = null;
-          this.Clients = this.Clients.filter(x => x.ClientId != id);
-          swalWithBootstrapButtons.fire(
-            'Supprimé !',
-            'Le client est supprimé.',
-            'success'
-          );
-        }, error => {
-          console.error('Error deleting client: ', error);
-          swalWithBootstrapButtons.fire(
-            'Erreur',
-            'Erreur lors de la suppression du client.',
-            'error'
-          );
-        });
+        this.clientService.deleteClient(id)
+          .subscribe(() => {
+            this.CurrentClient = null;
+            this.Clients = this.Clients.filter(x => x.ClientId != id);
+            this.toastr.success("Client supprimé");
+            // swalWithBootstrapButtons.fire('Supprimé !', 'Le client est supprimé.', 'success');
+          }, error => {
+            console.error('Error deleting client: ', error);
+            this.toastr.error("Erreur de suppression du client");
+            // swalWithBootstrapButtons.fire('Erreur', 'Erreur lors de la suppression du client.', 'error');
+          });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithBootstrapButtons.fire(
-          'Annulé',
-          'Le client est en sécurité :)',
-          'error'
-        );
+        // swalWithBootstrapButtons.fire('Annulé', 'Le client est en sécurité :)', 'error');
       }
     });
   }

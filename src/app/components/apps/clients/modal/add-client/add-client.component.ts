@@ -1,19 +1,10 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  TemplateRef,
-  PLATFORM_ID,
-  Inject,
-  EventEmitter,
-  Output,
-} from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output, } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import Swal from "sweetalert2";
-import { ClientService } from "../../../../../client.service";
 import { v4 as uuidv4 } from "uuid";
+import { ToastrService } from "ngx-toastr";
+import { ClientService } from "src/app/shared/services/client.service";
 
 @Component({
   selector: "app-add-client",
@@ -99,8 +90,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private modalService: NgbModal,
-    private clientService: ClientService
-  ) {}
+    private clientService: ClientService,
+    private toastr: ToastrService,
+  ) { }
 
   ngOnInit(): void {
     console.log("addClient.ngOnInit");
@@ -123,7 +115,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.resetForm();
       this.clientData.ClientId = uuidv4();
       console.log("this.clientData: ", this.clientData);
-      
+
       this.modalService
         .open(this.AddClient, {
           size: "lg",
@@ -134,7 +126,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         .result.then(
           (result) => {
             this.modalOpen = true;
-            
+
             `Result ${result}`;
           },
           (reason) => {
@@ -233,7 +225,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log("Client ajouté avec succès", response);
-          Swal.fire("Succès", "Client ajouté avec succès", "success");
+          this.toastr.success("Client ajouté avec succès");
+          // Swal.fire("Succès", "Client ajouté avec succès", "success");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
