@@ -6,1518 +6,1510 @@
 <div class="container-fluid">
   <div class="edit-profile">
     <div class="row">
-      <div class="col-xl-12">
-        <div class="card">
-          <div class="card-header">
-            <h5>Etude patrimoniale</h5>
-          </div>
-          
-          <!-- [formGroup]="editProfile" -->
-          <form class="card">
-            
-            <div class="card-body default-accordion">
-              <div ngbAccordion>
-                <!-- [collapsed]="false" -->
-                <div ngbAccordionItem>
-                  <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-building-alt fs-3 px-2"></i> Votre
-                      patrimoine
-                    </button>
-                  </h2>
-                  <div ngbAccordionCollapse>
-                    <div ngbAccordionBody>
-                      <ng-template>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Bien d'usage ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasUsage"
-                              id="hasUsageYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasUsage"
-                              (change)="onUsageChange()"
-                            />
-                            <label class="form-check-label" for="hasUsageYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasUsage"
-                              id="hasUsageNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasUsage"
-                              (change)="onUsageChange()"
-                            />
-                            <label class="form-check-label" for="hasUsageNo">
-                              Non
-                            </label>
-                            
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasUsage === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <!-- Button trigger modal Bien d'usage -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                          <button
-                            type="button"
-                            class="btn btn-primary me-md-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop"
-                          >
-                            <i class="fa fa-plus"></i>
-                          </button>
-                          </div>
-  
-                          <div *ngIf="clientData.Usages.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered ">
-                              <thead >
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Charges associées/Date d'achat</th>
-                                  <th>Capital emprunté</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Décès</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Usages">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Valeur }}</td>
-                                  <td>{{ usage.Detenteur }}</td>
-                                  <td>{{ usage.Charge }}</td>
-                                  <td>{{ usage.Capital }}</td>
-                                  <td>{{ usage.Duree }}</td>
-                                  <td>{{ usage.Taux }}</td>
-                                  <td>{{ usage.Deces }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered ">
-                              <thead >
-                                <tr class="bg-primary-subtle">
-                                  <th >Désignation</th>
-                                  <th >Valeur</th>
-                                  <th >Détenteur</th>
-                                  <th >Charges associées/Date d'achat</th>
-                                  <th >Capital emprunté</th>
-                                  <th >Durée</th>
-                                  <th >Taux</th>
-                                  <th >Décès</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr >
-                                  <td colspan="8" align="center">
-                                    <i>Aucun bien enregistré</i>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Immobilier de rapport?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasImmobilier"
-                              id="hasImmobilierYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasImmobilier"
-                              (change)="onImmobilierChange()"
-                            />
-                            <label
-                              class="form-check-label"
-                              for="hasImmobilierYes"
+      <div class="card">
+        <!-- <div class="card-header">
+          <h5>Détails client</h5>
+        </div> -->
+        <div class="card-body">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active3" (navChange)="onNavChange1($event)" class="nav-tabs">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>BP</a>
+              <ng-template ngbNavContent>
+                <div class="card-body default-accordion">
+                  <div ngbAccordion>
+                    <!-- [collapsed]="false" -->
+                    <div ngbAccordionItem>
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white">
+                          <i class="icofont icofont-building-alt fs-3 px-2"></i> Votre
+                          patrimoine
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Bien d'usage ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasUsage"
+                                  id="hasUsageYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasUsage"
+                                  (change)="onUsageChange()"
+                                />
+                                <label class="form-check-label" for="hasUsageYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasUsage"
+                                  id="hasUsageNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasUsage"
+                                  (change)="onUsageChange()"
+                                />
+                                <label class="form-check-label" for="hasUsageNo">
+                                  Non
+                                </label>
+                                
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasUsage === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <!-- Button trigger modal Bien d'usage -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                              <button
+                                type="button"
+                                class="btn btn-primary me-md-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop"
+                              >
+                                <i class="fa fa-plus"></i>
+                              </button>
+                              </div>
+      
+                              <div *ngIf="clientData.Usages.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered ">
+                                  <thead >
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Capital emprunté</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Décès</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Usages">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.Detenteur }}</td>
+                                      <td>{{ usage.Charge }}</td>
+                                      <td>{{ usage.Capital }}</td>
+                                      <td>{{ usage.Duree }}</td>
+                                      <td>{{ usage.Taux }}</td>
+                                      <td>{{ usage.Deces }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered ">
+                                  <thead >
+                                    <tr class="bg-primary-subtle">
+                                      <th >Désignation</th>
+                                      <th >Valeur</th>
+                                      <th >Détenteur</th>
+                                      <th >Charges associées/Date d'achat</th>
+                                      <th >Capital emprunté</th>
+                                      <th >Durée</th>
+                                      <th >Taux</th>
+                                      <th >Décès</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr >
+                                      <td colspan="8" align="center">
+                                        <i>Aucun bien enregistré</i>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Immobilier de rapport?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasImmobilier"
+                                  id="hasImmobilierYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasImmobilier"
+                                  (change)="onImmobilierChange()"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="hasImmobilierYes"
+                                >
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasImmobilier"
+                                  id="hasImmobilierNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasImmobilier"
+                                  (change)="onImmobilierChange()"
+                                />
+                                <label class="form-check-label" for="hasImmobilierNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div
+                              class="row"
+                              *ngIf="clientData.hasImmobilier === 'oui'"
                             >
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasImmobilier"
-                              id="hasImmobilierNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasImmobilier"
-                              (change)="onImmobilierChange()"
-                            />
-                            <label class="form-check-label" for="hasImmobilierNo">
-                              Non
-                            </label>
-                          </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                              <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropImmobilier"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                              </div>
+                              <!-- Fields for immobilier goods -->
+                              
+      
+                              <div
+                                *ngIf="clientData.Immobiliers.length > 0"
+                                class="mt-3 mb-4"
+                              >
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Revenue et fiscalité</th>
+                                      <th>Charges</th>
+                                      <th>Capital emprunté</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Décès</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      *ngFor="
+                                        let immobilier of clientData.Immobiliers
+                                      "
+                                      >
+                                      <td>{{ immobilier.Designation }}</td>
+                                      <td>{{ immobilier.Valeur }}</td>
+                                      <td>{{ immobilier.Detenteur }}</td>
+                                      <td>{{ immobilier.Revenue }}</td>
+                                      <td>{{ immobilier.Charge }}</td>
+                                      <td>{{ immobilier.Capital }}</td>
+                                      <td>{{ immobilier.Duree }}</td>
+                                      <td>{{ immobilier.Taux }}</td>
+                                      <td>{{ immobilier.Deces }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div
+                                *ngIf="clientData.Immobiliers.length == 0"
+                                class="mt-3 mb-4"
+                              >
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Revenue et fiscalité</th>
+                                      <th>Charges</th>
+                                      <th>Capital emprunté</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Décès</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="9" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Bien professionnels ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasProf"
+                                  id="hasProfYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasProf"
+                                  (change)="onProfChange()"
+                                />
+                                <label class="form-check-label" for="hasProfYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasProf"
+                                  id="hasProfNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasProf"
+                                  (change)="onProfChange()"
+                                />
+                                <label class="form-check-label" for="hasProfNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasProf === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropProf"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Profs.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Profs">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.Detenteur }}</td>
+                                      <td>{{ usage.Charge }}</td>
+                                      <td>{{ usage.Partic }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Profs.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="5" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+      
+                              <div class="form-group mb-3 col-md-6">
+                                <label for="prof-commentaire"
+                                  >Questions complémentaires :
+                                </label>
+                                <p>
+                                  quelle répartition du capital et des pouvoirs dans
+                                  l'entreprise ? Quelles participations ? Comment est
+                                  détenue l'immobilier professionnel ? Un pacte
+                                  d'actionnaires a-t-il été signé ?
+                                </p>
+                                <input
+                                  class="form-control"
+                                  id="prof-commentaire"
+                                  type="text"
+                                  placeholder="Réponse"
+                                  name="ProfCommentaire"
+                                  [(ngModel)]="newProf.Commentaire"
+                                />
+                              </div>
+                            </div>
+                          </ng-template>
                         </div>
-                        <div
-                          class="row"
-                          *ngIf="clientData.hasImmobilier === 'oui'"
-                        >
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropImmobilier"
+                      </div>
+                    </div>
+      
+                    <div ngbAccordionItem class="mt-3">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white ">
+                          <span
+                            ><i class="icofont icofont-bank-alt fs-3 px-2"></i> Vos
+                            passifs</span
                           >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                          </div>
-                          <!-- Fields for immobilier goods -->
-                          
-  
-                          <div
-                            *ngIf="clientData.Immobiliers.length > 0"
-                            class="mt-3 mb-4"
-                          >
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Revenue et fiscalité</th>
-                                  <th>Charges</th>
-                                  <th>Capital emprunté</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Décès</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr
-                                  *ngFor="
-                                    let immobilier of clientData.Immobiliers
-                                  "
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse >
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label
+                                >Dettes familiales ? crédit consommation, etc</label
+                              >
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasDette"
+                                  id="hasDetteYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasDette"
+                                  (change)="onDetteChange()"
+                                />
+                                <label class="form-check-label" for="hasDetteYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasDette"
+                                  id="hasDetteNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasDette"
+                                  (change)="onDetteChange()"
+                                />
+                                <label class="form-check-label" for="hasDetteNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasDette === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropPassif"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Dettes.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Capital</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Ass.** Décès</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Dettes">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Capital }}</td>
+                                      <td>{{ usage.Duree }}</td>
+                                      <td>{{ usage.Taux }}</td>
+                                      <td>{{ usage.Deces }}</td>
+                                      <td>{{ usage.Partic }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Dettes.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Capital</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Ass.** Décès</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="6" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Assurances ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasAssur"
+                                  id="hasAssurYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasAssur"
+                                  (change)="onAssurChange()"
+                                />
+                                <label class="form-check-label" for="hasAssurYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasAssur"
+                                  id="hasAssurNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasAssur"
+                                  (change)="onAssurChange()"
+                                />
+                                <label class="form-check-label" for="hasAssurNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasAssur === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropAssur"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Assurs.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur de rachat ou capital assuré</th>
+                                      <th>Date</th>
+                                      <th>Assuré</th>
+                                      <th>Bénéficiares</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Assurs">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Capital }}</td>
+                                      <td>{{ usage.Date }}</td>
+                                      <td>{{ usage.Assur }}</td>
+                                      <td>{{ usage.Benef }}</td>
+                                      <td>{{ usage.Partic }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Assurs.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur de rachat ou capital assuré</th>
+                                      <th>Date</th>
+                                      <th>Assuré</th>
+                                      <th>Bénéficiares</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="6" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Epargne et dépot à moyen et long terme ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasEpar"
+                                  id="hasEparYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasEpar"
+                                  (change)="onEparChange()"
+                                />
+                                <label class="form-check-label" for="hasEparYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasEpar"
+                                  id="hasEparNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasEpar"
+                                  (change)="onEparChange()"
+                                />
+                                <label class="form-check-label" for="hasEparNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasEpar === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropEpar"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Epars.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Date d'ouverture</th>
+                                      <th>Epargne associée</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Epars">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.Detenteur }}</td>
+                                      <td>{{ usage.Date }}</td>
+                                      <td>{{ usage.Epar }}</td>
+                                      <td>{{ usage.Partic }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Epars.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Date d'ouverture</th>
+                                      <th>Epargne associée</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="6" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Valeur mobilières ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasMobil"
+                                  id="hasMobilYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasMobil"
+                                  (change)="onMobilChange()"
+                                />
+                                <label class="form-check-label" for="hasMobilYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasMobil"
+                                  id="hasMobilNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasMobil"
+                                  (change)="onMobilChange()"
+                                />
+                                <label class="form-check-label" for="hasMobilNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasMobil === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropMobil"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Mobils.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Revenus distribués</th>
+                                      <th>Fiscalité ou revenu</th>
+                                      <th>Taux de revalorisation</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Mobils">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.Detenteur }}</td>
+                                      <td>{{ usage.RevenuDis }}</td>
+                                      <td>{{ usage.Fisca }}</td>
+                                      <td>{{ usage.Taux }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Mobils.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Revenus distribués</th>
+                                      <th>Fiscalité ou revenu</th>
+                                      <th>Taux de revalorisation</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="6" align="center">
+                                      Aucun bien enregistré
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Disponibilités ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasDispo"
+                                  id="hasDispoYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasDispo"
+                                  (change)="onDispoChange()"
+                                />
+                                <label class="form-check-label" for="hasDispoYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasDispo"
+                                  id="hasDispoNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasDispo"
+                                  (change)="onDispoChange()"
+                                />
+                                <label class="form-check-label" for="hasDispoNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasDispo === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropDispo"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Dispos.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Dispos">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.Detenteur }}</td>
+                                      <td>{{ usage.Partic }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div *ngIf="clientData.Dispos.length == 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Particularités</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="4" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                    <div ngbAccordionItem class="mt-3">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white ">
+                          <i class="icofont icofont-money-bag fs-3 px-2"></i> Votre budget
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="form-group mb-3 col-md-6 row">
+                              <label>Budget ?</label>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasBudget"
+                                  id="hasBudgetYes"
+                                  value="oui"
+                                  [(ngModel)]="clientData.hasBudget"
+                                  (change)="onBudgetChange()"
+                                />
+                                <label class="form-check-label" for="hasBudgetYes">
+                                  Oui
+                                </label>
+                              </div>
+                              <div class="form-check col">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="hasBudget"
+                                  id="hasBudgetNo"
+                                  value="non"
+                                  [(ngModel)]="clientData.hasBudget"
+                                  (change)="onBudgetChange()"
+                                />
+                                <label class="form-check-label" for="hasBudgetNo">
+                                  Non
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="clientData.hasBudget === 'oui'">
+                              <!-- Fields for usage goods -->
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdropBudget"
+                              >
+                              <i class="fa fa-plus"></i>
+                              </button>
+                                </div>
+      
+                              
+      
+                              <div *ngIf="clientData.Budgets.length > 0" class="mb-4 mt-3">
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Montant</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let usage of clientData.Budgets">
+                                      <td>{{ usage.Designation }}</td>
+                                      <td>{{ usage.Montant }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div
+                                *ngIf="clientData.Budgets.length == 0"
+                                class="mb-4 mt-3"
+                              >
+                                <table class="table table-bordered">
+                                  <thead>
+                                    <tr class="bg-primary-subtle">
+                                      <th>Désignation</th>
+                                      <th>Montant</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <td colspan="2" align="center">
+                                      <i>Aucun bien enregistré</i>
+                                    </td>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                    <div ngbAccordionItem class="mt-3">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white ">
+                          <i class="icofont icofont-law-document fs-3 px-2"></i>
+                          Particularités fiscales
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="row">
+                              <!-- Fields for usage goods -->
+                              <div class="form-group mb-3 col-md-6">
+                                <label for="partic-fisca"
+                                  >Particularités fiscales</label
+                                >
+                                <input
+                                  class="form-control"
+                                  id="partic-fisca"
+                                  type="text"
+                                  placeholder="Particularités fiscales"
+                                  name="ParticFisca"
+                                  [(ngModel)]="newPartic"
+                                />
+                              </div>
+      
+                              <div class="d-grid gap-2 d-md-flex justify-content-center">
+                              <button class="btn btn-primary " (click)="addPartic()">
+                                Ajouter la particularités fiscales
+                              </button>
+                            </div>
+                            </div>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                    <div ngbAccordionItem class="mt-3">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white">
+                          <i class="icofont icofont-briefcase-alt-1 fs-2 px-2"></i>
+                          Situation administrative
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="row">
+                              <!-- Fields for usage goods -->
+                              <div class="col-6 mb-3">
+                                <label>CFE :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CFE"
+                                    id="CFEYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.CFE"
+                                  />
+                                  <label class="form-check-label" for="CFEYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CFE"
+                                    id="CFENo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.CFE"
+                                  />
+                                  <label class="form-check-label" for="CFENo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Passeport Scanné :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Passeport"
+                                    id="PasseportYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Passeport"
+                                  />
+                                  <label class="form-check-label" for="PasseportYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Passeport"
+                                    id="PasseportNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Passeport"
+                                  />
+                                  <label class="form-check-label" for="PasseportNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Avez-vous 15 ans de cotisation :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Cotisation"
+                                    id="CotisationYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Cotisation"
+                                  />
+                                  <label class="form-check-label" for="CotisationYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Cotisation"
+                                    id="CotisationNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Cotisation"
+                                  />
+                                  <label class="form-check-label" for="CotisationNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Carte de séjour scanée :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CarteSejour"
+                                    id="CarteSejourYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.CarteSejour"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="CarteSejourYes"
                                   >
-                                  <td>{{ immobilier.Designation }}</td>
-                                  <td>{{ immobilier.Valeur }}</td>
-                                  <td>{{ immobilier.Detenteur }}</td>
-                                  <td>{{ immobilier.Revenue }}</td>
-                                  <td>{{ immobilier.Charge }}</td>
-                                  <td>{{ immobilier.Capital }}</td>
-                                  <td>{{ immobilier.Duree }}</td>
-                                  <td>{{ immobilier.Taux }}</td>
-                                  <td>{{ immobilier.Deces }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div
-                            *ngIf="clientData.Immobiliers.length == 0"
-                            class="mt-3 mb-4"
-                          >
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Revenue et fiscalité</th>
-                                  <th>Charges</th>
-                                  <th>Capital emprunté</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Décès</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="9" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Bien professionnels ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasProf"
-                              id="hasProfYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasProf"
-                              (change)="onProfChange()"
-                            />
-                            <label class="form-check-label" for="hasProfYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasProf"
-                              id="hasProfNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasProf"
-                              (change)="onProfChange()"
-                            />
-                            <label class="form-check-label" for="hasProfNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasProf === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropProf"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CarteSejour"
+                                    id="CarteSejourNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.CarteSejour"
+                                  />
+                                  <label class="form-check-label" for="CarteSejourNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-8 mb-3">
+                                <label
+                                  >Pension de Réversion 15 ans de cotisation :</label
+                                >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Reversion"
+                                    id="ReversionYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Reversion"
+                                  />
+                                  <label class="form-check-label" for="ReversionYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Reversion"
+                                    id="ReversionNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Reversion"
+                                  />
+                                  <label class="form-check-label" for="ReversionNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Permis de conduire marocain:</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Permis"
+                                    id="PermisYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Permis"
+                                  />
+                                  <label class="form-check-label" for="PermisYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Permis"
+                                    id="PermisNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Permis"
+                                  />
+                                  <label class="form-check-label" for="PermisNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>CNSS :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CNSS"
+                                    id="CNSSYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.CNSS"
+                                  />
+                                  <label class="form-check-label" for="CNSSYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CNSS"
+                                    id="CNSSNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.CNSS"
+                                  />
+                                  <label class="form-check-label" for="CNSSNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Assurance Auto:</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.AssurAuto"
+                                    id="AssurAutoYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.AssurAuto"
+                                  />
+                                  <label class="form-check-label" for="AssurAutoYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.AssurAuto"
+                                    id="AssurAutoNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.AssurAuto"
+                                  />
+                                  <label class="form-check-label" for="AssurAutoNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>CNAREFE :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CNAREFE"
+                                    id="CNAREFEYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.CNAREFE"
+                                  />
+                                  <label class="form-check-label" for="CNAREFEYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CNAREFE"
+                                    id="CNAREFENo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.CNAREFE"
+                                  />
+                                  <label class="form-check-label" for="CNAREFENo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Assurance Habitation:</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.AssurHabi"
+                                    id="AssurHabiYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.AssurHabi"
+                                  />
+                                  <label class="form-check-label" for="AssurHabiYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.AssurHabi"
+                                    id="AssurHabiNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.AssurHabi"
+                                  />
+                                  <label class="form-check-label" for="AssurHabiNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Capitone :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Capitone"
+                                    id="CapitoneYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Capitone"
+                                  />
+                                  <label class="form-check-label" for="CapitoneYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Capitone"
+                                    id="CapitoneNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Capitone"
+                                  />
+                                  <label class="form-check-label" for="CapitoneNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Inscription consulat:</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.InscriConsulat"
+                                    id="InscriConsulatYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.InscriConsulat"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="InscriConsulatYes"
+                                  >
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.InscriConsulat"
+                                    id="InscriConsulatNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.InscriConsulat"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="InscriConsulatNo"
+                                  >
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Assurance Rapatriement :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Rapatriement"
+                                    id="RapatriementYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Rapatriement"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="RapatriementYes"
+                                  >
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Rapatriement"
+                                    id="RapatriementNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Rapatriement"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="RapatriementNo"
+                                  >
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>UFE :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.UFE"
+                                    id="UFEYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.UFE"
+                                  />
+                                  <label class="form-check-label" for="UFEYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.UFE"
+                                    id="UFENo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.UFE"
+                                  />
+                                  <label class="form-check-label" for="UFENo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>Mutuelle Française :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Mutuelle"
+                                    id="MutuelleYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.Mutuelle"
+                                  />
+                                  <label class="form-check-label" for="MutuelleYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.Mutuelle"
+                                    id="MutuelleNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.Mutuelle"
+                                  />
+                                  <label class="form-check-label" for="MutuelleNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-3">
+                                <label>CSG / CRDS :</label>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CSG"
+                                    id="CSGYes"
+                                    value="oui"
+                                    [(ngModel)]="newSituationAdmin.CSG"
+                                  />
+                                  <label class="form-check-label" for="CSGYes">
+                                    Oui
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="SituationAdministrative.CSG"
+                                    id="CSGNo"
+                                    value="non"
+                                    [(ngModel)]="newSituationAdmin.CSG"
+                                  />
+                                  <label class="form-check-label" for="CSGNo">
+                                    Non
+                                  </label>
+                                </div>
+                              </div>
+      
+                              <div class="d-grid gap-2 d-md-flex justify-content-center">
+                              <button
+                                class="btn btn-primary"
+                                (click)="addSituationAdmin()"
+                              >
+                                Ajouter la situation administrative
+                              </button>
                             </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Profs.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Charges associées/Date d'achat</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Profs">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Valeur }}</td>
-                                  <td>{{ usage.Detenteur }}</td>
-                                  <td>{{ usage.Charge }}</td>
-                                  <td>{{ usage.Partic }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Profs.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Charges associées/Date d'achat</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="5" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-  
-                          <div class="form-group mb-3 col-md-6">
-                            <label for="prof-commentaire"
-                              >Questions complémentaires :
-                            </label>
-                            <p>
-                              quelle répartition du capital et des pouvoirs dans
-                              l'entreprise ? Quelles participations ? Comment est
-                              détenue l'immobilier professionnel ? Un pacte
-                              d'actionnaires a-t-il été signé ?
-                            </p>
-                            <input
-                              class="form-control"
-                              id="prof-commentaire"
-                              type="text"
-                              placeholder="Réponse"
-                              name="ProfCommentaire"
-                              [(ngModel)]="newProf.Commentaire"
-                            />
-                          </div>
+                            </div>
+                          </ng-template>
                         </div>
-                      </ng-template>
+                      </div>
                     </div>
                   </div>
-                </div>
-  
-                <div ngbAccordionItem class="mt-3">
-                  <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white ">
-                      <span
-                        ><i class="icofont icofont-bank-alt fs-3 px-2"></i> Vos
-                        passifs</span
-                      >
+                  <div class="mt-3">
+                    <button class="btn btn-primary" type="submit">
+                      Enregistrer le dossier
                     </button>
-                  </h2>
-                  <div ngbAccordionCollapse >
-                    <div ngbAccordionBody>
-                      <ng-template>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label
-                            >Dettes familiales ? crédit consommation, etc</label
-                          >
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasDette"
-                              id="hasDetteYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasDette"
-                              (change)="onDetteChange()"
-                            />
-                            <label class="form-check-label" for="hasDetteYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasDette"
-                              id="hasDetteNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasDette"
-                              (change)="onDetteChange()"
-                            />
-                            <label class="form-check-label" for="hasDetteNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasDette === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropPassif"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Dettes.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Capital</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Ass.** Décès</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Dettes">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Capital }}</td>
-                                  <td>{{ usage.Duree }}</td>
-                                  <td>{{ usage.Taux }}</td>
-                                  <td>{{ usage.Deces }}</td>
-                                  <td>{{ usage.Partic }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Dettes.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Capital</th>
-                                  <th>Durée</th>
-                                  <th>Taux</th>
-                                  <th>Ass.** Décès</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="6" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Assurances ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasAssur"
-                              id="hasAssurYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasAssur"
-                              (change)="onAssurChange()"
-                            />
-                            <label class="form-check-label" for="hasAssurYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasAssur"
-                              id="hasAssurNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasAssur"
-                              (change)="onAssurChange()"
-                            />
-                            <label class="form-check-label" for="hasAssurNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasAssur === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropAssur"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Assurs.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur de rachat ou capital assuré</th>
-                                  <th>Date</th>
-                                  <th>Assuré</th>
-                                  <th>Bénéficiares</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Assurs">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Capital }}</td>
-                                  <td>{{ usage.Date }}</td>
-                                  <td>{{ usage.Assur }}</td>
-                                  <td>{{ usage.Benef }}</td>
-                                  <td>{{ usage.Partic }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Assurs.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur de rachat ou capital assuré</th>
-                                  <th>Date</th>
-                                  <th>Assuré</th>
-                                  <th>Bénéficiares</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="6" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Epargne et dépot à moyen et long terme ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasEpar"
-                              id="hasEparYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasEpar"
-                              (change)="onEparChange()"
-                            />
-                            <label class="form-check-label" for="hasEparYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasEpar"
-                              id="hasEparNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasEpar"
-                              (change)="onEparChange()"
-                            />
-                            <label class="form-check-label" for="hasEparNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasEpar === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropEpar"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Epars.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Date d'ouverture</th>
-                                  <th>Epargne associée</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Epars">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Valeur }}</td>
-                                  <td>{{ usage.Detenteur }}</td>
-                                  <td>{{ usage.Date }}</td>
-                                  <td>{{ usage.Epar }}</td>
-                                  <td>{{ usage.Partic }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Epars.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Date d'ouverture</th>
-                                  <th>Epargne associée</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="6" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Valeur mobilières ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasMobil"
-                              id="hasMobilYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasMobil"
-                              (change)="onMobilChange()"
-                            />
-                            <label class="form-check-label" for="hasMobilYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasMobil"
-                              id="hasMobilNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasMobil"
-                              (change)="onMobilChange()"
-                            />
-                            <label class="form-check-label" for="hasMobilNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasMobil === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropMobil"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Mobils.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Revenus distribués</th>
-                                  <th>Fiscalité ou revenu</th>
-                                  <th>Taux de revalorisation</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Mobils">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Valeur }}</td>
-                                  <td>{{ usage.Detenteur }}</td>
-                                  <td>{{ usage.RevenuDis }}</td>
-                                  <td>{{ usage.Fisca }}</td>
-                                  <td>{{ usage.Taux }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Mobils.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Revenus distribués</th>
-                                  <th>Fiscalité ou revenu</th>
-                                  <th>Taux de revalorisation</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="6" align="center">
-                                  Aucun bien enregistré
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Disponibilités ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasDispo"
-                              id="hasDispoYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasDispo"
-                              (change)="onDispoChange()"
-                            />
-                            <label class="form-check-label" for="hasDispoYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasDispo"
-                              id="hasDispoNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasDispo"
-                              (change)="onDispoChange()"
-                            />
-                            <label class="form-check-label" for="hasDispoNo">
-                              Non
-                            </label>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="clientData.hasDispo === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropDispo"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Dispos.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Dispos">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Valeur }}</td>
-                                  <td>{{ usage.Detenteur }}</td>
-                                  <td>{{ usage.Partic }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div *ngIf="clientData.Dispos.length == 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Valeur</th>
-                                  <th>Détenteur</th>
-                                  <th>Particularités</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="4" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </div>
                   </div>
+                  
                 </div>
-                <div ngbAccordionItem class="mt-3">
-                  <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white ">
-                      <i class="icofont icofont-money-bag fs-3 px-2"></i> Votre budget
-                    </button>
-                  </h2>
-                  <div ngbAccordionCollapse>
-                    <div ngbAccordionBody>
-                      <ng-template>
-                        <div class="form-group mb-3 col-md-6 row">
-                          <label>Budget ?</label>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasBudget"
-                              id="hasBudgetYes"
-                              value="oui"
-                              [(ngModel)]="clientData.hasBudget"
-                              (change)="onBudgetChange()"
-                            />
-                            <label class="form-check-label" for="hasBudgetYes">
-                              Oui
-                            </label>
-                          </div>
-                          <div class="form-check col">
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              name="hasBudget"
-                              id="hasBudgetNo"
-                              value="non"
-                              [(ngModel)]="clientData.hasBudget"
-                              (change)="onBudgetChange()"
-                            />
-                            <label class="form-check-label" for="hasBudgetNo">
-                              Non
-                            </label>
-                          </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>Taches</a>
+              <ng-template ngbNavContent>
+                <div class="table-responsive edit-table">
+                  <table class="table card-table table-vcenter text-nowrap">
+                    <thead>
+                      <tr>
+                        <th class="task-column">Tache</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Prix</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let task of tasks">
+                        <td class="task-column">
+                          <a class="text-inherit" href="javascript:void(0)">
+                            {{ task.title }}
+                          </a>
+                        </td>
+                        <td>{{ task.date }}</td>
+                        <td>
+                          <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
+                        </td>
+                        <td>{{ task.price }}</td>
+                        <td class="text-start">
+                          <div class="d-flex justify-content-around">
+                          <a class="fs-2 text-warning" href="javascript:void(0)">
+                            <i class="fa fa-pencil"></i></a>
+                          <a class="fs-2 text-danger" href="javascript:void(0)">
+                            <i class="fa fa-trash"></i> 
+                          </a>
                         </div>
-                        <div class="row" *ngIf="clientData.hasBudget === 'oui'">
-                          <!-- Fields for usage goods -->
-                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdropBudget"
-                          >
-                          <i class="fa fa-plus"></i>
-                          </button>
-                            </div>
-  
-                          
-  
-                          <div *ngIf="clientData.Budgets.length > 0" class="mb-4 mt-3">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Montant</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let usage of clientData.Budgets">
-                                  <td>{{ usage.Designation }}</td>
-                                  <td>{{ usage.Montant }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div
-                            *ngIf="clientData.Budgets.length == 0"
-                            class="mb-4 mt-3"
-                          >
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr class="bg-primary-subtle">
-                                  <th>Désignation</th>
-                                  <th>Montant</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <td colspan="2" align="center">
-                                  <i>Aucun bien enregistré</i>
-                                </td>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </ng-template>
-                    </div>
-                  </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div ngbAccordionItem class="mt-3">
-                  <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white ">
-                      <i class="icofont icofont-law-document fs-3 px-2"></i>
-                      Particularités fiscales
-                    </button>
-                  </h2>
-                  <div ngbAccordionCollapse>
-                    <div ngbAccordionBody>
-                      <ng-template>
-                        <div class="row">
-                          <!-- Fields for usage goods -->
-                          <div class="form-group mb-3 col-md-6">
-                            <label for="partic-fisca"
-                              >Particularités fiscales</label
-                            >
-                            <input
-                              class="form-control"
-                              id="partic-fisca"
-                              type="text"
-                              placeholder="Particularités fiscales"
-                              name="ParticFisca"
-                              [(ngModel)]="newPartic"
-                            />
-                          </div>
-  
-                          <div class="d-grid gap-2 d-md-flex justify-content-center">
-                          <button class="btn btn-primary " (click)="addPartic()">
-                            Ajouter la particularités fiscales
-                          </button>
-                        </div>
-                        </div>
-                      </ng-template>
-                    </div>
-                  </div>
-                </div>
-                <div ngbAccordionItem class="mt-3">
-                  <h2 ngbAccordionHeader>
-                    <button ngbAccordionButton class="bg-primary text-white">
-                      <i class="icofont icofont-briefcase-alt-1 fs-2 px-2"></i>
-                      Situation administrative
-                    </button>
-                  </h2>
-                  <div ngbAccordionCollapse>
-                    <div ngbAccordionBody>
-                      <ng-template>
-                        <div class="row">
-                          <!-- Fields for usage goods -->
-                          <div class="col-6 mb-3">
-                            <label>CFE :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CFE"
-                                id="CFEYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.CFE"
-                              />
-                              <label class="form-check-label" for="CFEYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CFE"
-                                id="CFENo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.CFE"
-                              />
-                              <label class="form-check-label" for="CFENo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Passeport Scanné :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Passeport"
-                                id="PasseportYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Passeport"
-                              />
-                              <label class="form-check-label" for="PasseportYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Passeport"
-                                id="PasseportNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Passeport"
-                              />
-                              <label class="form-check-label" for="PasseportNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Avez-vous 15 ans de cotisation :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Cotisation"
-                                id="CotisationYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Cotisation"
-                              />
-                              <label class="form-check-label" for="CotisationYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Cotisation"
-                                id="CotisationNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Cotisation"
-                              />
-                              <label class="form-check-label" for="CotisationNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Carte de séjour scanée :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CarteSejour"
-                                id="CarteSejourYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.CarteSejour"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="CarteSejourYes"
-                              >
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CarteSejour"
-                                id="CarteSejourNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.CarteSejour"
-                              />
-                              <label class="form-check-label" for="CarteSejourNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-8 mb-3">
-                            <label
-                              >Pension de Réversion 15 ans de cotisation :</label
-                            >
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Reversion"
-                                id="ReversionYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Reversion"
-                              />
-                              <label class="form-check-label" for="ReversionYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Reversion"
-                                id="ReversionNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Reversion"
-                              />
-                              <label class="form-check-label" for="ReversionNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Permis de conduire marocain:</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Permis"
-                                id="PermisYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Permis"
-                              />
-                              <label class="form-check-label" for="PermisYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Permis"
-                                id="PermisNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Permis"
-                              />
-                              <label class="form-check-label" for="PermisNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>CNSS :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CNSS"
-                                id="CNSSYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.CNSS"
-                              />
-                              <label class="form-check-label" for="CNSSYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CNSS"
-                                id="CNSSNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.CNSS"
-                              />
-                              <label class="form-check-label" for="CNSSNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Assurance Auto:</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.AssurAuto"
-                                id="AssurAutoYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.AssurAuto"
-                              />
-                              <label class="form-check-label" for="AssurAutoYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.AssurAuto"
-                                id="AssurAutoNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.AssurAuto"
-                              />
-                              <label class="form-check-label" for="AssurAutoNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>CNAREFE :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CNAREFE"
-                                id="CNAREFEYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.CNAREFE"
-                              />
-                              <label class="form-check-label" for="CNAREFEYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CNAREFE"
-                                id="CNAREFENo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.CNAREFE"
-                              />
-                              <label class="form-check-label" for="CNAREFENo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Assurance Habitation:</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.AssurHabi"
-                                id="AssurHabiYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.AssurHabi"
-                              />
-                              <label class="form-check-label" for="AssurHabiYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.AssurHabi"
-                                id="AssurHabiNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.AssurHabi"
-                              />
-                              <label class="form-check-label" for="AssurHabiNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Capitone :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Capitone"
-                                id="CapitoneYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Capitone"
-                              />
-                              <label class="form-check-label" for="CapitoneYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Capitone"
-                                id="CapitoneNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Capitone"
-                              />
-                              <label class="form-check-label" for="CapitoneNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Inscription consulat:</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.InscriConsulat"
-                                id="InscriConsulatYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.InscriConsulat"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="InscriConsulatYes"
-                              >
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.InscriConsulat"
-                                id="InscriConsulatNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.InscriConsulat"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="InscriConsulatNo"
-                              >
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Assurance Rapatriement :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Rapatriement"
-                                id="RapatriementYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Rapatriement"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="RapatriementYes"
-                              >
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Rapatriement"
-                                id="RapatriementNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Rapatriement"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="RapatriementNo"
-                              >
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>UFE :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.UFE"
-                                id="UFEYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.UFE"
-                              />
-                              <label class="form-check-label" for="UFEYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.UFE"
-                                id="UFENo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.UFE"
-                              />
-                              <label class="form-check-label" for="UFENo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>Mutuelle Française :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Mutuelle"
-                                id="MutuelleYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.Mutuelle"
-                              />
-                              <label class="form-check-label" for="MutuelleYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.Mutuelle"
-                                id="MutuelleNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.Mutuelle"
-                              />
-                              <label class="form-check-label" for="MutuelleNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-6 mb-3">
-                            <label>CSG / CRDS :</label>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CSG"
-                                id="CSGYes"
-                                value="oui"
-                                [(ngModel)]="newSituationAdmin.CSG"
-                              />
-                              <label class="form-check-label" for="CSGYes">
-                                Oui
-                              </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="SituationAdministrative.CSG"
-                                id="CSGNo"
-                                value="non"
-                                [(ngModel)]="newSituationAdmin.CSG"
-                              />
-                              <label class="form-check-label" for="CSGNo">
-                                Non
-                              </label>
-                            </div>
-                          </div>
-  
-                          <div class="d-grid gap-2 d-md-flex justify-content-center">
-                          <button
-                            class="btn btn-primary"
-                            (click)="addSituationAdmin()"
-                          >
-                            Ajouter la situation administrative
-                          </button>
-                        </div>
-                        </div>
-                      </ng-template>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer text-end">
-              <button class="btn btn-primary" type="submit">
-                Enregistrer le dossier
-              </button>
-            </div>
-          </form>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          
         </div>
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title mb-0">Taches à effectuer</h4>
-              <div class="card-options">
-                <a
-                  class="card-options-collapse"
-                  href="javascript:void(0)"
-                  data-bs-toggle="card-collapse"
-                  ><i class="fe fe-chevron-up"></i></a
-                ><a
-                  class="card-options-remove"
-                  href="javascript:void(0)"
-                  data-bs-toggle="card-remove"
-                  ><i class="fe fe-x"></i
-                ></a>
-              </div>
-            </div>
-            <div class="table-responsive edit-table">
-              <table class="table card-table table-vcenter text-nowrap">
-                <thead>
-                  <tr>
-                    <th class="task-column">Tache</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Prix</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let task of tasks">
-                    <td class="task-column">
-                      <a class="text-inherit" href="javascript:void(0)">
-                        {{ task.title }}
-                      </a>
-                    </td>
-                    <td>{{ task.date }}</td>
-                    <td>
-                      <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
-                    </td>
-                    <td>{{ task.price }}</td>
-                    <td class="text-start">
-                      <div class="d-flex justify-content-around">
-                      <a class="fs-2 text-warning" href="javascript:void(0)">
-                        <i class="fa fa-pencil"></i></a>
-                      <a class="fs-2 text-danger" href="javascript:void(0)">
-                        <i class="fa fa-trash"></i> 
-                      </a>
-                    </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      
       </div>
+      
     </div>
 
     <!-- Modal for Bien d'usage-->

@@ -74,8 +74,8 @@ export class ClientsComponent implements OnInit {
   sweetAlertDelete(id: string) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-light me-2'
       },
       buttonsStyling: false,
     })
@@ -84,8 +84,8 @@ export class ClientsComponent implements OnInit {
       text: "Vous ne pourrez pas revenir en arrière !",
       //type: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Oui, Supprimer !',
-      cancelButtonText: 'Non, Annuler !',
+      confirmButtonText: 'Supprimer',
+      cancelButtonText: 'Annuler',
       reverseButtons: true
     }).then((result) => {
       if (result.value) {

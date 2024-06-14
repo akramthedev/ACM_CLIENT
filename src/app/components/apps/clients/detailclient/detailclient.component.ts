@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 interface Task {
   title: string;
@@ -117,6 +118,22 @@ interface SituationAdmin{
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
+  public active1 = 1;
+  public active2 = 1;
+  public active3 = 1;
+  public active4 = 1;
+  disabled = true;
+  onNavChange1(changeEvent: NgbNavChangeEvent) {
+    if (changeEvent.nextId === 3) {
+      changeEvent.preventDefault();
+    }
+  }
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (changeEvent.nextId === 3) {
+      changeEvent.preventDefault();
+    }
+  }
   tasks: Task[] = [
     {
       title: 'Préparer la liste des pieces du dossier de la carte de sejour',
