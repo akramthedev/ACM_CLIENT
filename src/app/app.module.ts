@@ -25,6 +25,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 
 import { OverlayModule } from '@angular/cdk/overlay';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -60,7 +61,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     // for Router use:
     LoadingBarRouterModule,
     // for Core use:
-    LoadingBarModule
+    LoadingBarModule,
+
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
   ],
   providers: [AdminGuard, CookieService],
   bootstrap: [AppComponent]
