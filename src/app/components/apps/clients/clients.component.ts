@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ClientService } from 'src/app/client.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -23,10 +24,15 @@ export class ClientsComponent implements OnInit {
   CurrentClient: any = null;
   titre: String;
   Clients: any[] = [];
- 
 
 
-  constructor(private title: Title, private router: Router, private clientService: ClientService) {
+
+  constructor(
+    private title: Title,
+    private router: Router,
+    private clientService: ClientService,
+    private loader: NgxSpinnerService,
+  ) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
   }
@@ -37,13 +43,15 @@ export class ClientsComponent implements OnInit {
   }
 
   getClients() {
+    this.loader.show();
     this.clientService.getClients()
       .subscribe((response) => {
         console.log("response getClients: ", response);
-
+        this.loader.hide();
         this.Clients = response;
       }, (error) => {
         console.error('Error fetching clients: ', error);
+        this.loader.hide();
       });
   }
   navigateToDetails(clientId: string) {
@@ -63,7 +71,7 @@ export class ClientsComponent implements OnInit {
     //   return item;
     // })
     this.CurrentClient = this.Clients.find(client => client.ClientId === id);
-    console.log("selected client : ",this.CurrentClient)
+    console.log("selected client : ", this.CurrentClient)
   }
 
   // sweetAlertDelete(id: string) {
