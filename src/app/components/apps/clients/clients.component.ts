@@ -23,14 +23,7 @@ export class ClientsComponent implements OnInit {
   CurrentClient: any = null;
   titre: String;
   Clients: any[] = [];
-  // Clients: any[] = [
-  //   { ClientId: "01", Nom: "Barnes", Prenom: "Bucky", DateNaissance: "01/03/1903", Email: "bucky@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/8.jpg", IsSelected: true },
-  //   { ClientId: "02", Nom: "Fury", Prenom: "Nick", DateNaissance: "02/12/1960", Email: "Nick@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/1.jpg", IsSelected: false },
-  //   { ClientId: "03", Nom: "Stark", Prenom: "Tony", DateNaissance: "05/08/1979", Email: "Tony@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/14.png", IsSelected: false },
-  //   { ClientId: "04", Nom: "Banner", Prenom: "Bruce", DateNaissance: "09/10/1975", Email: "Bruce@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/user/5.jpg", IsSelected: false },
-  //   { ClientId: "05", Nom: "Parker", Prenom: "Peter", DateNaissance: "13/07/1999", Email: "Peter@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/avtar/11.jpg", IsSelected: false },
-  //   { ClientId: "06", Nom: "Barton", Prenom: "Clint", DateNaissance: "24/06/1989", Email: "Clint@gmail.com", Tel: "06 25 00 25 04", ImgSrc: "assets/images/avtar/16.jpg", IsSelected: false },
-  // ];
+ 
 
 
   constructor(private title: Title, private router: Router, private clientService: ClientService) {
@@ -61,15 +54,55 @@ export class ClientsComponent implements OnInit {
   }
 
   OnClientSelected(id: string) {
-    this.Clients = this.Clients.map((item) => {
-      item.IsSelected = false;
-      if (item.ClientId == id) {
-        item.IsSelected = true;
-        this.CurrentClient = item;
-      }
-      return item;
-    })
+    // this.Clients = this.Clients.map((item) => {
+    //   item.IsSelected = false;
+    //   if (item.ClientId == id) {
+    //     item.IsSelected = true;
+    //     this.CurrentClient = item;
+    //   }
+    //   return item;
+    // })
+    this.CurrentClient = this.Clients.find(client => client.ClientId === id);
+    console.log("selected client : ",this.CurrentClient)
   }
+
+  // sweetAlertDelete(id: string) {
+  //   const swalWithBootstrapButtons = Swal.mixin({
+  //     customClass: {
+  //       confirmButton: 'btn btn-danger',
+  //       cancelButton: 'btn btn-light me-2'
+  //     },
+  //     buttonsStyling: false,
+  //   })
+  //   swalWithBootstrapButtons.fire({
+  //     title: 'Tu es sûr ?',
+  //     text: "Vous ne pourrez pas revenir en arrière !",
+  //     //type: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Supprimer',
+  //     cancelButtonText: 'Annuler',
+  //     reverseButtons: true
+  //   }).then((result) => {
+  //     if (result.value) {
+  //       this.CurrentClient = null;
+  //       this.Clients = this.Clients.filter(x => x.ClientId != id);
+  //       swalWithBootstrapButtons.fire(
+  //         'Supprimer !',
+  //         'Le client est supprimé .',
+  //         'success'
+  //       )
+  //     } else if (
+  //       // Read more about handling dismissals
+  //       result.dismiss === Swal.DismissReason.cancel
+  //     ) {
+  //       swalWithBootstrapButtons.fire(
+  //         'Annuler',
+  //         'Le client est safe :)',
+  //         'error'
+  //       )
+  //     }
+  //   })
+  // }
 
   sweetAlertDelete(id: string) {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -78,36 +111,43 @@ export class ClientsComponent implements OnInit {
         cancelButton: 'btn btn-light me-2'
       },
       buttonsStyling: false,
-    })
+    });
     swalWithBootstrapButtons.fire({
       title: 'Tu es sûr ?',
       text: "Vous ne pourrez pas revenir en arrière !",
-      //type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Supprimer',
       cancelButtonText: 'Annuler',
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        this.CurrentClient = null;
-        this.Clients = this.Clients.filter(x => x.ClientId != id);
+        this.clientService.deleteClient(id).subscribe(() => {
+          this.CurrentClient = null;
+          this.Clients = this.Clients.filter(x => x.ClientId != id);
+          swalWithBootstrapButtons.fire(
+            'Supprimé !',
+            'Le client est supprimé.',
+            'success'
+          );
+        }, error => {
+          console.error('Error deleting client: ', error);
+          swalWithBootstrapButtons.fire(
+            'Erreur',
+            'Erreur lors de la suppression du client.',
+            'error'
+          );
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire(
-          'Supprimer !',
-          'Le client est supprimé .',
-          'success'
-        )
-      } else if (
-        // Read more about handling dismissals
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Annuler',
-          'Le client est safe :)',
+          'Annulé',
+          'Le client est en sécurité :)',
           'error'
-        )
+        );
       }
-    })
+    });
   }
+
+
   DeleteClient(id: string) {
     this.CurrentClient = null;
     this.Clients = this.Clients.filter(x => x.ClientId != id);

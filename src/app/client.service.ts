@@ -23,7 +23,7 @@ export class ClientService {
 
   deleteClient(clientId: string): Observable<any> {
     return this.http.delete<any>(
-      `${environment.url}/clients/delete/${clientId}`
+      `${environment.url}/DeleteClient/${clientId}`
     );
   }
 }
