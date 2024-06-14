@@ -1,8 +1,9 @@
 <!-- Page Sidebar Start-->
 <div class="logo-wrapper">
   <a routerLink="/">
-    <img class="img-fluid for-light" src="assets/images/logo/logo.png" alt="" />
-    <img class="img-fluid for-dark" src="assets/images/logo/logo_dark.png" alt="" />
+    <h2>ACM</h2>
+    <!-- <img class="img-fluid for-light" src="assets/images/logo/logo.png" alt="" />
+    <img class="img-fluid for-dark" src="assets/images/logo/logo_dark.png" alt="" /> -->
   </a>
   <div class="back-btn" (click)="sidebarToggle()">
     <i class="fa fa-angle-left"></i>
@@ -13,7 +14,8 @@
 </div>
 <div class="logo-icon-wrapper">
   <a href="javascript:void(0)">
-    <img class="img-fluid" src="assets/images/logo/logo-icon.png" alt="" />
+    ACM
+    <!-- <img class="img-fluid" src="assets/images/logo/logo-icon.png" alt="" /> -->
   </a>
 </div>
 <nav class="sidebar-main">
@@ -44,7 +46,8 @@
 
                   <label class="badge badge-{{ menuItem.badgeType }}" *ngIf="menuItem.badgeType && menuItem.badgeValue">{{ menuItem.badgeValue }}</label>
                   <!-- Sub -->
-                  <a href="javascript:void(0)" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children" [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'sub'" (click)="toggletNavActive(menuItem)">
+                  <a href="javascript:void(0)" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children" [ngClass]="{ active: menuItem.active }"
+                    *ngIf="menuItem.type === 'sub'" (click)="toggletNavActive(menuItem)">
                     <app-svg-icon [icon]="menuItem.icon"></app-svg-icon>
                     <span>{{ menuItem.title | translate }}</span>
                     <div class="according-menu">
@@ -52,7 +55,8 @@
                     </div>
                   </a>
                   <!-- Link -->
-                  <a [routerLink]="!menuItem.type ? null : [menuItem.path]" routerLinkActive="active" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children" [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'link'">
+                  <a [routerLink]="!menuItem.type ? null : [menuItem.path]" routerLinkActive="active" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children"
+                    [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'link'">
                     <app-svg-icon [icon]="menuItem.icon"></app-svg-icon>
                     <span>{{ menuItem.title | translate }}</span>
                     <div class="according-menu">
@@ -60,14 +64,16 @@
                     </div>
                   </a>
                   <!-- External Link -->
-                  <a href="{{ !menuItem.type ? null : menuItem.path }}" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children" [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'extLink'">
+                  <a href="{{ !menuItem.type ? null : menuItem.path }}" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children"
+                    [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'extLink'">
                     <app-svg-icon [icon]="menuItem.icon"></app-svg-icon><span>{{ menuItem.title | translate }}</span>
                     <div class="according-menu">
                       <i class="fa fa-angle-{{ menuItem.active ? 'down' : 'right' }} pull-right" *ngIf="menuItem.children"></i>
                     </div>
                   </a>
                   <!-- External Tab Link -->
-                  <a href="{{ !menuItem.type ? null : menuItem.path }}" target="_blank" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children" [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'extTabLink'">
+                  <a href="{{ !menuItem.type ? null : menuItem.path }}" target="_blank" class="sidebar-link sidebar-title" [class.link-nav]="!menuItem.children"
+                    [ngClass]="{ active: menuItem.active }" *ngIf="menuItem.type === 'extTabLink'">
                     <app-svg-icon [icon]="menuItem.icon"></app-svg-icon>
                     <span>{{ menuItem.title }}</span>
                     <div class="according-menu">
@@ -75,7 +81,8 @@
                     </div>
                   </a>
                   <!-- 2nd Level Menu -->
-                  <ul class="sidebar-submenu" [ngClass]="{ active: menuItem.active }" [ngClass]="{ 'menu-open': menuItem.active, 'menu-close': !menuItem.active }" *ngIf="menuItem.children" [style.display]="menuItem.active ? 'block' : 'none'">
+                  <ul class="sidebar-submenu" [ngClass]="{ active: menuItem.active }" [ngClass]="{ 'menu-open': menuItem.active, 'menu-close': !menuItem.active }"
+                    *ngIf="menuItem.children" [style.display]="menuItem.active ? 'block' : 'none'">
                     <li *ngFor="let childrenItem of menuItem.children" [ngClass]="{ active: childrenItem.active }">
                       <!-- Sub -->
                       <a class="submenu-title" href="javascript:void(0)" *ngIf="childrenItem.type === 'sub'" (click)="toggletNavActive(childrenItem)">
@@ -85,12 +92,14 @@
                         </div>
                       </a>
                       <!-- Link -->
-                      <a class="submenu-title" [routerLink]="!childrenItem.type ? null : [childrenItem.path]" *ngIf="childrenItem.type === 'link'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      <a class="submenu-title" [routerLink]="!childrenItem.type ? null : [childrenItem.path]" *ngIf="childrenItem.type === 'link'" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }">
                         {{ childrenItem.title | translate }}
                         <i class="fa fa-angle-down pull-right" *ngIf="childrenItem.children"></i>
                       </a>
                       <!-- External Link -->
-                      <a class="submenu-title" href="{{ !childrenItem.type ? null : childrenItem.path }}" *ngIf="childrenItem.type === 'extLink'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      <a class="submenu-title" href="{{ !childrenItem.type ? null : childrenItem.path }}" *ngIf="childrenItem.type === 'extLink'" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }">
                         {{ childrenItem.title | translate }}
                         <i class="fa fa-angle-down pull-right" *ngIf="childrenItem.children"></i>
                       </a>
@@ -100,14 +109,17 @@
                         <i class="fa fa-angle-down pull-right" *ngIf="childrenItem.children"></i>
                       </a>
                       <!-- 3rd Level Menu -->
-                      <ul class="nav-sub-childmenu submenu-content" *ngIf="childrenItem.children" [ngClass]="{ active: childrenItem.active }" [ngClass]="{ 'menu-open': childrenItem.active, 'menu-close': !childrenItem.active }" [style.display]="childrenItem.active ? 'block' : 'none'">
+                      <ul class="nav-sub-childmenu submenu-content" *ngIf="childrenItem.children" [ngClass]="{ active: childrenItem.active }"
+                        [ngClass]="{ 'menu-open': childrenItem.active, 'menu-close': !childrenItem.active }" [style.display]="childrenItem.active ? 'block' : 'none'">
                         <li *ngFor="let childrenSubItem of childrenItem.children" [ngClass]="{ active: childrenSubItem.active }">
                           <!-- Link -->
-                          <a [routerLink]="!childrenSubItem.type ? null : [childrenSubItem.path]" *ngIf="childrenSubItem.type === 'link'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                          <a [routerLink]="!childrenSubItem.type ? null : [childrenSubItem.path]" *ngIf="childrenSubItem.type === 'link'" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }">
                             {{ childrenSubItem.title | translate }}
                           </a>
                           <!-- External Link -->
-                          <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" *ngIf="childrenSubItem.type === 'extLink'" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                          <a href="{{ !childrenSubItem.type ? null : childrenSubItem.path }}" *ngIf="childrenSubItem.type === 'extLink'" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }">
                             {{ childrenSubItem.title | translate }}
                           </a>
                           <!-- External Tab Link -->
