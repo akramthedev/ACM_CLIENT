@@ -56,8 +56,8 @@ export class ClientsComponent implements OnInit {
         this.loader.hide();
       });
   }
-  navigateToDetails() {
-    this.router.navigate(['/clients/details']);
+  navigateToDetails(clientId: string) {
+    this.router.navigate(['/clients/details/',clientId]);
   }
   showHistory() {
     this.history = !this.history;

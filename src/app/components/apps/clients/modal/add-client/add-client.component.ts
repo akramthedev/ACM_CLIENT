@@ -95,7 +95,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log("addClient.ngOnInit");
+    console.log("addClient.ngOnInit......");
     this.getClients();
   }
   getClients() {

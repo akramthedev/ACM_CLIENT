@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute  } from '@angular/router';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 interface Task {
@@ -118,11 +118,16 @@ interface SituationAdmin{
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
+  clientId:number;
   public active1 = 1;
   public active2 = 1;
   public active3 = 1;
   public active4 = 1;
   disabled = true;
+
+  constructor(private route: ActivatedRoute){
+
+  }
   onNavChange1(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 3) {
       changeEvent.preventDefault();
@@ -133,6 +138,20 @@ export class DetailclientComponent {
     if (changeEvent.nextId === 3) {
       changeEvent.preventDefault();
     }
+  }
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.clientId = +params['id'];
+      //this.loadClientDetails();
+    });
+  }
+
+  loadClientDetails() {
+    // Logique pour charger les détails du client avec this.clientId
+    // Exemple :
+    // this.clientService.getClientDetails(this.clientId).subscribe(data => {
+    //   this.clientData = data;
+    // });
   }
   tasks: Task[] = [
     {
