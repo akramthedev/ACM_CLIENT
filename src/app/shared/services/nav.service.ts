@@ -80,7 +80,7 @@ export class NavService implements OnDestroy {
   }
 
   MENUITEMS: Menu[] = [
-    { path: "/clients", title: "Clients", icon: "user", type: "link", bookmark: true },
+    { path: "/clients", title: "Clients", icon: "user", type: "link", bookmark: true, active: false, },
 
     {
       headTitle1: "General",
@@ -91,7 +91,7 @@ export class NavService implements OnDestroy {
       type: "sub",
       badgeType: "light-primary",
       badgeValue: "5",
-      active: true,
+      active: false,
       children: [
         { path: "/dashboard/default", title: "Default", type: "link" },
         { path: "/dashboard/ecommerce", title: "Ecommerce", type: "link" },

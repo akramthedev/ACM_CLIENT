@@ -1,4 +1,4 @@
-export interface Client {
+export class Client {
     ClientId: string;
     CabinetId: string;
     Nom: string;
@@ -16,5 +16,11 @@ export interface Client {
     Telephone2?: string;
     HasConjoint: boolean;
 
-    SituationFamiliale: string;
+    SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
+
+    Proches?: Proche[];
+}
+
+export interface Proche {
+    ProcheId: string;
 }
