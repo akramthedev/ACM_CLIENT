@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="col-xl-8 xl-50 col-md-7" *ngIf="CurrentClient != null">
-                          <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ 'display': editContact ? 'none' : ''}">
+                          <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ 'display': IsEditingClient ? 'none' : ''}">
                             <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
                               <div class="profile-mail">
                                 <div class="media">
@@ -88,7 +88,7 @@
                                     <h5><span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span></h5>
                                     <p class="email_add_0">{{ CurrentClient.Email }}</p>
                                     <ul>
-                                      <li><a href="javascript:void(0)" (click)="editContact = true">Modifier</a></li>
+                                      <li><a href="javascript:void(0)" (click)="StartUpdateClient()">Modifier</a></li>
                                       <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
                                       <li><a href="javascript:void(0)" (click)="showHistory()">Historique</a></li>
                                       <li><a href="javascript:void(0)" (click)="Print.openModal()">Imprimer</a></li>
@@ -120,44 +120,49 @@
                           </div>
 
                           <!-- #region EditClient -->
-                          <div class="contact-editform ps-0" [ngStyle]="{ 'display': !editContact ? 'none' : ''}">
-                            <form>
+                          <div class="contact-editform ps-0" [ngStyle]="{ 'display': !IsEditingClient ? 'none' : ''}">
+                            <div *ngIf="ClientToUpdate != null">
                               <div class="row g-2">
                                 <div class="mt-0 mb-3 col-md-12">
-                                  <label>Nom et Prénom</label>
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="first_name" type="text" required="" placeholder="First Name" value="{{CurrentClient.Nom}}">
+                                      <label>Nom</label>
+                                      <input class="form-control" id="Nom" type="text" required="" placeholder="Nom" [(ngModel)]="ClientToUpdate.Nom">
                                     </div>
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="last_name" type="text" required="" placeholder="Last Name" value="{{CurrentClient.Prenom}}">
+                                      <label>Prénom</label>
+                                      <input class="form-control" id="Prenom" type="text" required="" placeholder="Prénom" [(ngModel)]="ClientToUpdate.Prenom">
                                     </div>
                                   </div>
                                 </div>
                                 <div class="mt-0 mb-3 col-md-12">
-                                  <label>Email</label>
-                                  <input class="form-control" id="email_add" type="text" required="" autocomplete="off" value="{{CurrentClient.Email}}">
+                                  <label>Date de naissance</label>
+                                  <input class="form-control" id="DateNaissance" type="date" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.DateNaissance">
+                                </div>
+                                <div class="mt-0 mb-3 col-md-12">
+                                  <label>Email 1</label>
+                                  <input class="form-control" id="Email1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email1">
+                                </div>
+                                <div class="mt-0 mb-3 col-md-12">
+                                  <label>Email 2</label>
+                                  <input class="form-control" id="Email2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email2">
                                 </div>
                                 <div class="mt-0 mb-3 col-md-12">
                                   <label>Téléphone</label>
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <input class="form-control" id="mobile_num" type="text" required="" autocomplete="off" value="{{CurrentClient.Tel}}">
+                                      <input class="form-control" id="Telephone1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone1">
                                     </div>
                                     <div class="col-sm-6">
-                                      <select class="form-control">
-                                        <option>Mobile</option>
-                                        <option>Work</option>
-                                        <option>Others</option>
-                                      </select>
+                                      <input class="form-control" id="Telephone2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone2">
                                     </div>
+                                    <!-- <div class="col-sm-6"><select class="form-control"><option>Mobile</option><option>Work</option><option>Others</option></select></div> -->
                                   </div>
                                 </div>
                               </div>
-
-                              <button class="btn btn-secondary update-contact" type="button">Save</button>
-                              <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-                            </form>
+                              <button class="btn btn-secondary update-contact" type="button" (click)="SubmitUpdateClient()">Modifier</button>
+                              <button class="btn btn-primary" type="button" (click)="CancelUpdateClient()">Annuler</button>
+                            </div>
                           </div>
                           <!-- #endregion EditClient -->
 
