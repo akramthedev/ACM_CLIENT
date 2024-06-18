@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client } from '../../../../../shared/model/dto.model'
+import { Client, Proche } from '../../../../../shared/model/dto.model'
 @Component({
   selector: "app-add-client",
   templateUrl: "./add-client.component.html",
@@ -15,51 +15,20 @@ export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  Clients: any[] = [];
+  // Clients: any[] = [];
   clientData: Client = null;
-  // {
-  //   ClientId: "",
+  newProche: Proche = null;
+
+  // newChild = {
   //   Nom: "",
   //   Prenom: "",
-  //   DateNaissance: "",
-  //   SituationFamiliale: "",
-  //   Profession: "",
-  //   DateRetraite: "",
-  //   NumeroSS: "",
-  //   Adresse: "",
-  //   Email: "",
-  //   Tel: "",
-  //   TelType: "",
-  //   ImgSrc: "assets/images/user/8.jpg",
-  //   hasConjoint: "",
-  //   ConjointName: "",
-  //   ConjointPrenom: "",
-  //   ConjointDateNaissance: "",
-  //   ConjointProfession: "",
-  //   ConjointDateRetraite: "",
-  //   ConjointNumeroSS: "",
-  //   DateMariage: "",
-  //   RegimeMatrimonial: "",
-  //   DonationEpoux: "",
-  //   ModifRegimeDate: "",
-  //   QuestComp: "",
-  //   Children: [],
-  //   hasUsage: "",
-  //   Usages: [], // New array for usage goods
-  //   hasImmobilier: "",
-  //   Immobiliers: [],
+  //   Date: "",
+  //   Parent: "",
+  //   Charge: "",
+  //   Particularite: "",
+  //   Nchild: "",
+  //   Comment: "",
   // };
-
-  newChild = {
-    Nom: "",
-    Prenom: "",
-    Date: "",
-    Parent: "",
-    Charge: "",
-    Particularite: "",
-    Nchild: "",
-    Comment: "",
-  };
   newUsage = {
     // New object for a single usage good
     Designation: "",
@@ -116,6 +85,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.resetForm();
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
+      this.clientData.Proches = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -169,18 +139,37 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
-  addChild() {
-    // this.clientData.Proches.push({ ...this.newChild });
-    // this.newChild = {
-    //   Nom: "",
-    //   Prenom: "",
-    //   Date: "",
-    //   Parent: "",
-    //   Charge: "",
-    //   Particularite: "",
-    //   Nchild: "",
-    //   Comment: "",
-    // };
+  startAddProche() {
+    this.newProche = {
+      ProcheId: uuidv4(),
+      ClientId: this.clientData.ClientId,
+      Nom: null,
+      Prenom: null,
+      DateNaissance: null,
+      Telephone1: null,
+      Telephone2: null,
+      Email1: null,
+      Email2: null,
+      Adresse: null,
+      Charge: null,
+      LienParente: null,
+      Particularite: null,
+      NombreEnfant: null,
+      Commentaire: null,
+    }
+  }
+  submitAddProche() {
+    if (this.newProche.Nom == null || this.newProche.Nom == "" ||
+      this.newProche.Prenom == null || this.newProche.Prenom == ""
+    ) {
+      this.toastr.warning("Veuillez saisir le nom et prénom du proche");
+      return;
+    }
+    this.clientData.Proches.push(this.newProche);
+    this.newProche = null;
+  }
+  cancelAddProche() {
+    this.newProche = null;
   }
   addUsage() {
     // this.clientData.Usages.push({ ...this.newUsage });

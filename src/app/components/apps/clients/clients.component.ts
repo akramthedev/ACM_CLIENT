@@ -167,7 +167,6 @@ export class ClientsComponent implements OnInit {
     this.IsEditingClient = true;
   }
   SubmitUpdateClient() {
-    console.log("SubmitUpdateClient: ", this.ClientToUpdate)
     if (this.ClientToUpdate.Nom == null || this.ClientToUpdate.Nom == "" ||
       this.ClientToUpdate.Prenom == null || this.ClientToUpdate.Prenom == ""
     ) {
