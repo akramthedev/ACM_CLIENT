@@ -14,7 +14,7 @@
       <div class="line"></div>
       <div class="step" [class.active]="currentStep === 2">
         <div class="circle">2</div>
-        <div class="label">Nombres d'enfants</div>
+        <div class="label">Proches</div>
       </div>
     </div>
 
@@ -162,52 +162,52 @@
 
         <!-- #region Step 2 -->
         <div *ngSwitchCase="2" class="row scrollable-block">
-          <div class="col-lg-12" *ngIf="newProche != null">
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-nom">Nom</label>
-              <input class="form-control" id="child-nom" type="text" placeholder="Nom" name="ChildNom" [(ngModel)]="newProche.Nom" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-prenom">Prénom</label>
-              <input class="form-control" id="child-prenom" type="text" placeholder="Prénom" name="ChildPrenom" [(ngModel)]="newProche.Prenom" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-date">Date de naissance</label>
-              <input class="form-control" id="child-date" type="text" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.Date" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-parent">Lien de parenté</label>
-              <input class="form-control" id="child-parent" type="text" placeholder="Enfant / petit enfant / parent" name="ChildParent" [(ngModel)]="newProche.Parent" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-charge">A charge fiscalement</label>
-              <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-particularite">Particularités</label>
-              <input class="form-control" id="child-particularite" type="text" placeholder="Adoption / invalidité / etc ..." name="ChildParticularite"
-                [(ngModel)]="newProche.Particularite" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-nchild">Nombres d'enfants</label>
-              <input class="form-control" type="text" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-comment">Commentaire</label>
-              <textarea class="form-control" id="child-comment" type="text" placeholder="votre commentaire" name="ChildComment" [(ngModel)]="newProche.Commentaire"></textarea>
+          <div class="row" *ngIf="newProche != null">
+
+            <div class="row">
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-nom">Nom *</label>
+                <input class="form-control" id="child-nom" type="text" placeholder="Nom" name="ChildNom" [(ngModel)]="newProche.Nom" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-prenom">Prénom *</label>
+                <input class="form-control" id="child-prenom" type="text" placeholder="Prénom" name="ChildPrenom" [(ngModel)]="newProche.Prenom" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-date">Date de naissance</label>
+                <input class="form-control" id="child-date" type="date" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.Date" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-parent">Lien de parenté *</label>
+                <input class="form-control" id="child-parent" type="text" placeholder="Enfant / petit enfant / parent" name="ChildParent" [(ngModel)]="newProche.LienParente" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-charge">A charge fiscalement</label>
+                <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-particularite">Particularités *</label>
+                <input class="form-control" id="child-particularite" type="text" placeholder="Adoption / invalidité / etc ..." name="ChildParticularite"
+                  [(ngModel)]="newProche.Particularite" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-nchild">Nombres d'enfants</label>
+                <input class="form-control" type="number" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-comment">Commentaire</label>
+                <textarea class="form-control" id="child-comment" type="text" placeholder="votre commentaire" name="ChildComment" [(ngModel)]="newProche.Commentaire"></textarea>
+              </div>
             </div>
 
-            <div class="col-md-6">
-              <button class="btn btn-primary" (click)="submitAddProche()">
-                Ajouter
-              </button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="btn btn-primary" (click)="submitAddProche()">Ajouter</button>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-secondary" (click)="cancelAddProche()">Annuler</button>
+              </div>
             </div>
-            <div class="col-md-6">
-              <button class="btn btn-primary" (click)="cancelAddProche()">
-                Annuler
-              </button>
-            </div>
-
 
           </div>
 
@@ -215,7 +215,7 @@
 
           <div *ngIf="newProche == null">
             <!-- <div *ngIf="clientData.Proches.length > 0" > -->
-            <h3>Proches :</h3>
+            <!-- <h3>Proches :</h3> -->
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -226,22 +226,22 @@
                   <th>A charge fiscalement</th>
                   <th>Particularités</th>
                   <th>Nombres d'enfants</th>
-                  <th>Commentaire</th>
+                  <!-- <th>Commentaire</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr *ngIf="clientData.Proches.length == 0">
-                  <td colspan="8"><i>Aucun proche</i></td>
+                  <td colspan="7" align="center"><i>Aucun proche</i></td>
                 </tr>
-                <tr *ngFor="let child of clientData.Proches">
-                  <td>{{ child.Nom }}</td>
-                  <td>{{ child.Prenom }}</td>
-                  <td>{{ child.DateNaissance }}</td>
-                  <td>{{ child.Parent }}</td>
-                  <td>{{ child.Charge }}</td>
-                  <td>{{ child.Particularite }}</td>
-                  <td>{{ child.Nchild }}</td>
-                  <td>{{ child.Comment }}</td>
+                <tr *ngFor="let proche of clientData.Proches">
+                  <td>{{ proche.Nom }}</td>
+                  <td>{{ proche.Prenom }}</td>
+                  <td>{{ proche.DateNaissance | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ proche.Parent }}</td>
+                  <td>{{ proche.Charge == true ? 'Oui' : 'Non' }}</td>
+                  <td>{{ proche.Particularite }}</td>
+                  <td>{{ proche.NombreEnfant }}</td>
+                  <!-- <td>{{ proche.Commentaire }}</td> -->
                 </tr>
               </tbody>
             </table>
@@ -260,7 +260,7 @@
         <!-- #endregion Step 2 -->
 
       </ng-container>
-      <div class="d-flex justify-content-between mt-3">
+      <div class="d-flex justify-content-between mt-3" *ngIf="newProche == null">
         <button *ngIf="currentStep > 1" class="btn btn-secondary" type="button" (click)="previousStep()">
           Précédent
         </button>

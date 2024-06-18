@@ -160,9 +160,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   submitAddProche() {
     if (this.newProche.Nom == null || this.newProche.Nom == "" ||
-      this.newProche.Prenom == null || this.newProche.Prenom == ""
+      this.newProche.Prenom == null || this.newProche.Prenom == "" ||
+      this.newProche.LienParente == null || this.newProche.LienParente == "" ||
+      this.newProche.Particularite == null || this.newProche.Particularite == ""
     ) {
-      this.toastr.warning("Veuillez saisir le nom et prénom du proche");
+      this.toastr.warning("Veuillez saisir le nom, prénom, lien parenté et particularité du proche");
       return;
     }
     this.clientData.Proches.push(this.newProche);
