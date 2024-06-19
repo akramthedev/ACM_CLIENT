@@ -24,6 +24,7 @@ export class ClientsComponent implements OnInit {
   CurrentClient: any = null;
   titre: String;
   Clients: any[] = [];
+  Client:any
 
 
 
@@ -62,16 +63,25 @@ export class ClientsComponent implements OnInit {
   }
 
   OnClientSelected(id: string) {
-    // this.Clients = this.Clients.map((item) => {
-    //   item.IsSelected = false;
-    //   if (item.ClientId == id) {
-    //     item.IsSelected = true;
-    //     this.CurrentClient = item;
-    //   }
-    //   return item;
-    // })
-    this.CurrentClient = this.Clients.find(client => client.ClientId === id);
-    console.log("selected client : ", this.CurrentClient)
+    this.Clients = this.Clients.map((item) => {
+      item.IsSelected = false;
+      if (item.ClientId == id) {
+        item.IsSelected = true;
+        this.CurrentClient = item;
+        // this.clientService.GetClient(item.ClientId).subscribe((response)=>{
+        //   console.log("response getClient ",response)
+        //   this.loader.hide();
+        //   this.Client=response
+
+        // },(error)=>{
+        //   console.error('Error fetching clients: ', error);
+        //   this.loader.hide();
+        // });
+      }
+      return item;
+    })
+    // this.CurrentClient = this.Clients.find(client => client.ClientId === id);
+    // console.log("selected client : ", this.CurrentClient)
   }
 
   // sweetAlertDelete(id: string) {

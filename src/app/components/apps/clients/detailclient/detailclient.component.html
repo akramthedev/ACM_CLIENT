@@ -1503,6 +1503,48 @@
                 </div>
               </ng-template>
             </li>
+            <li [ngbNavItem]="3">
+              <a ngbNavLink>Détails</a>
+              <ng-template ngbNavContent>
+                <form>
+                  <div class="row g-2">
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Nom et Prénom</label>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <input class="form-control" id="first_name" type="text" required="" placeholder="First Name" value="{{client.Nom}}">
+                        </div>
+                        <div class="col-sm-6">
+                          <input class="form-control" id="last_name" type="text" required="" placeholder="Last Name" value="{{client.Prenom}}">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Email</label>
+                      <input class="form-control" id="email_add" type="text" required="" autocomplete="off"value="{{client.Email}}">
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Téléphone</label>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <input class="form-control" id="mobile_num" type="text" required="" autocomplete="off" value="{{client.Tel}}">
+                        </div>
+                        <div class="col-sm-6">
+                          <select class="form-control">
+                            <option>Mobile</option>
+                            <option>Work</option>
+                            <option>Others</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button class="btn btn-secondary update-contact" type="button">Save</button>
+                  <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </form>
+              </ng-template>
+            </li>
           </ul>
           <div [ngbNavOutlet]="nav" class="mt-2"></div>
           

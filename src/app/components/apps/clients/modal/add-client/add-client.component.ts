@@ -230,6 +230,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   onSave() {
     if (this.isFormValid()) {
+      console.log("clientData",this.clientData)
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log("Client ajouté avec succès", response);

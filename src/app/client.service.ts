@@ -14,6 +14,12 @@ export class ClientService {
     return this.http.get<any[]>(url);
   }
 
+  // GetClient(clientId: string): Observable<any> {
+  //   return this.http.get<any>(
+  //     `${environment.url}/GetClient/${clientId}`
+  //   );
+  // }
+
   CreateClient(clientData: any): Observable<any> {
     console.log("CreateClient.clientData: ", clientData);
     let url = `${environment.url}/CreateClient?`;
@@ -26,4 +32,5 @@ export class ClientService {
       `${environment.url}/DeleteClient/${clientId}`
     );
   }
+  
 }

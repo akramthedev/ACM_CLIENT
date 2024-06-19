@@ -129,13 +129,13 @@ export class DetailclientComponent {
 
   }
   onNavChange1(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 3) {
+    if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 3) {
+    if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
@@ -197,6 +197,31 @@ export class DetailclientComponent {
       statusClass: 'text-bg-warning'
     }
   ];
+  client:{
+    ClientId: string;
+    Nom: string;
+    Prenom: string;
+    DateNaissance: string;
+    SituationFamiliale: string;
+    Profession: string;
+    DateRetraite: string;
+    NumeroSS: string;
+    Adresse: string;
+    Email: string;
+    Tel: string;
+  }={
+    ClientId: "",
+    Nom: "Amadou",
+    Prenom: "Mboup",
+    DateNaissance: "12/12/2024",
+    SituationFamiliale: "Marié",
+    Profession: "CEO",
+    DateRetraite: "12/12/2024",
+    NumeroSS: "123456",
+    Adresse: "NETWACIILA",
+    Email: "Amadou.mboup@gmail.com",
+    Tel: "0625002504",
+  }
   clientData: {
     hasUsage: string;
     Usages: Usage[];
