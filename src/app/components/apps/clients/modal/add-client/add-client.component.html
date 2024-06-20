@@ -349,158 +349,60 @@
         </div>
         <!-- Step 2 -->
         <div *ngSwitchCase="2" class="row scrollable-block">
-<<<<<<< HEAD
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-nom">Nom</label>
-            <input
-              class="form-control"
-              id="child-nom"
-              type="text"
-              placeholder="Nom"
-              name="ChildNom"
-              [(ngModel)]="newChild.Nom"
-            />
-=======
-          <div class="col-lg-12" *ngIf="newProche != null">
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-nom">Nom</label>
-              <input class="form-control" id="child-nom" type="text" placeholder="Nom" name="ChildNom" [(ngModel)]="newProche.Nom" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-prenom">Prénom</label>
-              <input class="form-control" id="child-prenom" type="text" placeholder="Prénom" name="ChildPrenom" [(ngModel)]="newProche.Prenom" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-date">Date de naissance</label>
-              <input class="form-control" id="child-date" type="text" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.Date" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-parent">Lien de parenté</label>
-              <input class="form-control" id="child-parent" type="text" placeholder="Enfant / petit enfant / parent" name="ChildParent" [(ngModel)]="newProche.Parent" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-charge">A charge fiscalement</label>
-              <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-particularite">Particularités</label>
-              <input class="form-control" id="child-particularite" type="text" placeholder="Adoption / invalidité / etc ..." name="ChildParticularite"
-                [(ngModel)]="newProche.Particularite" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-nchild">Nombres d'enfants</label>
-              <input class="form-control" type="text" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" />
-            </div>
-            <div class="form-group mb-3 col-md-6">
-              <label for="child-comment">Commentaire</label>
-              <textarea class="form-control" id="child-comment" type="text" placeholder="votre commentaire" name="ChildComment" [(ngModel)]="newProche.Commentaire"></textarea>
+          <div class="row" *ngIf="newProche != null">
+
+            <div class="row">
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-nom">Nom *</label>
+                <input class="form-control" id="child-nom" type="text" placeholder="Nom" name="ChildNom" [(ngModel)]="newProche.Nom" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-prenom">Prénom *</label>
+                <input class="form-control" id="child-prenom" type="text" placeholder="Prénom" name="ChildPrenom" [(ngModel)]="newProche.Prenom" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-date">Date de naissance</label>
+                <input class="form-control" id="child-date" type="date" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.Date" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-parent">Lien de parenté *</label>
+                <input class="form-control" id="child-parent" type="text" placeholder="Enfant / petit enfant / parent" name="ChildParent" [(ngModel)]="newProche.LienParente" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-charge">A charge fiscalement</label>
+                <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-particularite">Particularités *</label>
+                <input class="form-control" id="child-particularite" type="text" placeholder="Adoption / invalidité / etc ..." name="ChildParticularite"
+                  [(ngModel)]="newProche.Particularite" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-nchild">Nombres d'enfants</label>
+                <input class="form-control" type="number" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-comment">Commentaire</label>
+                <textarea class="form-control" id="child-comment" type="text" placeholder="votre commentaire" name="ChildComment" [(ngModel)]="newProche.Commentaire"></textarea>
+              </div>
             </div>
 
-            <div class="col-md-6">
-              <button class="btn btn-primary" (click)="submitAddProche()">
-                Ajouter
-              </button>
-            </div>
-            <div class="col-md-6">
-              <button class="btn btn-primary" (click)="cancelAddProche()">
-                Annuler
-              </button>
+            <div class="row">
+              <div class="col-md-2">
+                <button class="btn btn-primary" (click)="submitAddProche()">Ajouter</button>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-secondary" (click)="cancelAddProche()">Annuler</button>
+              </div>
             </div>
 
+          </div>
 
->>>>>>> parent of 093adff (Ajout de client avec proches)
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-prenom">Prénom</label>
-            <input
-              class="form-control"
-              id="child-prenom"
-              type="text"
-              placeholder="Prénom"
-              name="ChildPrenom"
-              [(ngModel)]="newChild.Prenom"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-date">Date de naissance</label>
-            <input
-              class="form-control"
-              id="child-date"
-              type="text"
-              placeholder="Date de naissance"
-              name="ChildDate"
-              [(ngModel)]="newChild.Date"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-parent">Lien de parenté</label>
-            <input
-              class="form-control"
-              id="child-parent"
-              type="text"
-              placeholder="Enfant / petit enfant / parent"
-              name="ChildParent"
-              [(ngModel)]="newChild.Parent"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-charge">A charge fiscalement</label>
-            <input
-              class="form-control"
-              id="child-charge"
-              type="text"
-              placeholder="Oui / Non"
-              name="ChildCharge"
-              [(ngModel)]="newChild.Charge"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-particularite">Particularités</label>
-            <input
-              class="form-control"
-              id="child-particularite"
-              type="text"
-              placeholder="Adoption / invalidité / etc ..."
-              name="ChildParticularite"
-              [(ngModel)]="newChild.Particularite"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-nchild">Nombres d'enfants</label>
-            <input
-              class="form-control"
-              id="child-nchild"
-              type="text"
-              placeholder="Nombres d'enfants"
-              name="ChildNchild"
-              [(ngModel)]="newChild.Nchild"
-            />
-          </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="child-comment">Commentaire</label>
-            <textarea
-              class="form-control"
-              id="child-comment"
-              type="text"
-              placeholder="votre commentaire"
-              name="ChildComment"
-              [(ngModel)]="newChild.Comment"
-            ></textarea>
-          </div>
-          <button class="btn btn-primary" (click)="addChild()">
-            Ajouter l'enfant
-          </button>
-
-<<<<<<< HEAD
-          <div *ngIf="clientData.Children.length > 0">
-            <h3>Enfants :</h3>
-=======
 
 
           <div *ngIf="newProche == null">
             <!-- <div *ngIf="clientData.Proches.length > 0" > -->
-            <h3>Proches :</h3>
->>>>>>> parent of 093adff (Ajout de client avec proches)
+            <!-- <h3>Proches :</h3> -->
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -515,25 +417,18 @@
                 </tr>
               </thead>
               <tbody>
-<<<<<<< HEAD
-                <tr *ngFor="let child of clientData.Children">
-                  <td>{{ child.Nom }}</td>
-                  <td>{{ child.Prenom }}</td>
-                  <td>{{ child.Date }}</td>
-=======
                 <tr *ngIf="clientData.Proches.length == 0">
-                  <td colspan="8"><i>Aucun proche</i></td>
+                  <td colspan="7" align="center"><i>Aucun proche</i></td>
                 </tr>
-                <tr *ngFor="let child of clientData.Proches">
-                  <td>{{ child.Nom }}</td>
-                  <td>{{ child.Prenom }}</td>
-                  <td>{{ child.DateNaissance }}</td>
->>>>>>> parent of 093adff (Ajout de client avec proches)
-                  <td>{{ child.Parent }}</td>
-                  <td>{{ child.Charge }}</td>
-                  <td>{{ child.Particularite }}</td>
-                  <td>{{ child.Nchild }}</td>
-                  <td>{{ child.Comment }}</td>
+                <tr *ngFor="let proche of clientData.Proches">
+                  <td>{{ proche.Nom }}</td>
+                  <td>{{ proche.Prenom }}</td>
+                  <td>{{ proche.DateNaissance | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ proche.Parent }}</td>
+                  <td>{{ proche.Charge == true ? 'Oui' : 'Non' }}</td>
+                  <td>{{ proche.Particularite }}</td>
+                  <td>{{ proche.NombreEnfant }}</td>
+                  <!-- <td>{{ proche.Commentaire }}</td> -->
                 </tr>
               </tbody>
             </table>
@@ -548,17 +443,8 @@
         <!-- Step 3 -->
         
       </ng-container>
-      <div class="d-flex justify-content-between mt-3">
-<<<<<<< HEAD
-        <button
-          *ngIf="currentStep > 1"
-          class="btn btn-secondary"
-          type="button"
-          (click)="previousStep()"
-        >
-=======
+      <div class="d-flex justify-content-between mt-3" *ngIf="newProche == null">
         <button *ngIf="currentStep > 1" class="btn btn-secondary" type="button" (click)="previousStep()">
->>>>>>> parent of 093adff (Ajout de client avec proches)
           Précédent
         </button>
         <button

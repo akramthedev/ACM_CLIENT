@@ -176,20 +176,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
-<<<<<<< HEAD
-  addChild() {
-    this.clientData.Children.push({ ...this.newChild });
-    this.newChild = {
-      Nom: "",
-      Prenom: "",
-      Date: "",
-      Parent: "",
-      Charge: "",
-      Particularite: "",
-      Nchild: "",
-      Comment: "",
-    };
-=======
   startAddProche() {
     this.newProche = {
       ProcheId: uuidv4(),
@@ -211,9 +197,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   submitAddProche() {
     if (this.newProche.Nom == null || this.newProche.Nom == "" ||
-      this.newProche.Prenom == null || this.newProche.Prenom == ""
+      this.newProche.Prenom == null || this.newProche.Prenom == "" ||
+      this.newProche.LienParente == null || this.newProche.LienParente == "" ||
+      this.newProche.Particularite == null || this.newProche.Particularite == ""
     ) {
-      this.toastr.warning("Veuillez saisir le nom et prénom du proche");
+      this.toastr.warning("Veuillez saisir le nom, prénom, lien parenté et particularité du proche");
       return;
     }
     this.clientData.Proches.push(this.newProche);
@@ -221,7 +209,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   cancelAddProche() {
     this.newProche = null;
->>>>>>> parent of 093adff (Ajout de client avec proches)
   }
   addUsage() {
     this.clientData.Usages.push({ ...this.newUsage });
