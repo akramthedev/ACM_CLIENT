@@ -65,19 +65,11 @@ export class ClientsComponent implements OnInit {
   }
 
   OnClientSelected(id: string) {
-<<<<<<< HEAD
-=======
-    if (this.IsEditingClient == true) {
-      this.toastr.warning("Veuillez completer la modification");
-      return;
-    }
->>>>>>> 093adff3420b9dc741dbc3cca81a71d68717e894
     this.Clients = this.Clients.map((item) => {
       item.IsSelected = false;
       if (item.ClientId == id) {
         item.IsSelected = true;
         this.CurrentClient = item;
-<<<<<<< HEAD
         // this.clientService.GetClient(item.ClientId).subscribe((response)=>{
         //   console.log("response getClient ",response)
         //   this.loader.hide();
@@ -92,11 +84,6 @@ export class ClientsComponent implements OnInit {
     })
     // this.CurrentClient = this.Clients.find(client => client.ClientId === id);
     // console.log("selected client : ", this.CurrentClient)
-=======
-      }
-      return item;
-    })
->>>>>>> 093adff3420b9dc741dbc3cca81a71d68717e894
   }
 
   // sweetAlertDelete(id: string) {
