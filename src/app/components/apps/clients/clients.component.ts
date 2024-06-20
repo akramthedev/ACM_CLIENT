@@ -5,10 +5,8 @@ import { PrintContactComponent } from "./modal/print-contact/print-contact.compo
 import { Title } from '@angular/platform-browser';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ClientService } from 'src/app/client.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import { ClientService } from 'src/app/shared/services/client.service';
-import { Client } from 'src/app/shared/model/dto.model';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -21,6 +19,7 @@ export class ClientsComponent implements OnInit {
   @ViewChild("print") Print: PrintContactComponent;
 
   public history: boolean = false;
+  public editContact: boolean = false;
 
   CurrentClient: any = null;
   titre: String;
@@ -34,7 +33,6 @@ export class ClientsComponent implements OnInit {
     private router: Router,
     private clientService: ClientService,
     private loader: NgxSpinnerService,
-    private toastr: ToastrService,
   ) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
@@ -58,7 +56,7 @@ export class ClientsComponent implements OnInit {
       });
   }
   navigateToDetails(clientId: string) {
-    this.router.navigate(['/clients/details/', clientId]);
+    this.router.navigate(['/clients/details/',clientId]);
   }
   showHistory() {
     this.history = !this.history;
@@ -141,19 +139,28 @@ export class ClientsComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        this.clientService.deleteClient(id)
-          .subscribe(() => {
-            this.CurrentClient = null;
-            this.Clients = this.Clients.filter(x => x.ClientId != id);
-            this.toastr.success("Client supprimé");
-            // swalWithBootstrapButtons.fire('Supprimé !', 'Le client est supprimé.', 'success');
-          }, error => {
-            console.error('Error deleting client: ', error);
-            this.toastr.error("Erreur de suppression du client");
-            // swalWithBootstrapButtons.fire('Erreur', 'Erreur lors de la suppression du client.', 'error');
-          });
+        this.clientService.deleteClient(id).subscribe(() => {
+          this.CurrentClient = null;
+          this.Clients = this.Clients.filter(x => x.ClientId != id);
+          swalWithBootstrapButtons.fire(
+            'Supprimé !',
+            'Le client est supprimé.',
+            'success'
+          );
+        }, error => {
+          console.error('Error deleting client: ', error);
+          swalWithBootstrapButtons.fire(
+            'Erreur',
+            'Erreur lors de la suppression du client.',
+            'error'
+          );
+        });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        // swalWithBootstrapButtons.fire('Annulé', 'Le client est en sécurité :)', 'error');
+        swalWithBootstrapButtons.fire(
+          'Annulé',
+          'Le client est en sécurité :)',
+          'error'
+        );
       }
     });
   }
@@ -163,63 +170,6 @@ export class ClientsComponent implements OnInit {
     this.CurrentClient = null;
     this.Clients = this.Clients.filter(x => x.ClientId != id);
   }
-
-
-  //#region UpdateClient
-  public IsEditingClient: boolean = false;
-  ClientToUpdate: Client = null;
-  StartUpdateClient() {
-    this.ClientToUpdate = structuredClone(this.CurrentClient);
-    console.log("ClientToUpdate: ", this.ClientToUpdate);
-
-    this.IsEditingClient = true;
-  }
-  SubmitUpdateClient() {
-    if (this.ClientToUpdate.Nom == null || this.ClientToUpdate.Nom == "" ||
-      this.ClientToUpdate.Prenom == null || this.ClientToUpdate.Prenom == ""
-    ) {
-      this.toastr.warning("Veuillez saisir le nom et prénom du client.");
-      return;
-    }
-
-    this.loader.show();
-    this.clientService.UpdateClient(this.ClientToUpdate)
-      .subscribe((response) => {
-        console.log("response UpdateClient: ", response);
-        this.loader.hide();
-
-        if (response == null || response == false) {
-          this.toastr.error("Erreur de modification du client");
-        } else {
-          this.toastr.success("Enregistrement réussi");
-
-          this.CurrentClient = structuredClone(this.ClientToUpdate);
-          this.Clients = this.Clients.map((item) => {
-            if (item.ClientId == this.ClientToUpdate.ClientId) {
-              item.Nom = this.ClientToUpdate.Nom;
-              item.Prenom = this.ClientToUpdate.Prenom;
-              item.Telephone1 = this.ClientToUpdate.Telephone1;
-              item.Telephone2 = this.ClientToUpdate.Telephone2;
-              item.Email1 = this.ClientToUpdate.Email1;
-              item.Email2 = this.ClientToUpdate.Email2;
-            }
-            return item;
-          })
-          this.IsEditingClient = false;
-          this.ClientToUpdate = null;
-        }
-      }, (error: any) => {
-        console.log("Error UpdateClient: ", error)
-        this.toastr.error(`Erreur de modification du client. ${error?.error}`);
-        this.loader.hide();
-      })
-
-  }
-  CancelUpdateClient() {
-    this.IsEditingClient = false;
-    this.ClientToUpdate = null;
-  }
-  //#endregion UpdateClient
 
   OnSaveAddClient(newClientData) {
     console.log("OnSaveAddClient: ", newClientData)

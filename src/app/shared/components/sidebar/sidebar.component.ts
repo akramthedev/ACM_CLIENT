@@ -21,12 +21,9 @@ export class SidebarComponent {
   public leftArrowNone: boolean = true;
   public rightArrowNone: boolean = false;
 
-  constructor(
-    private router: Router,
-    public navServices: NavService,
+  constructor(private router: Router, public navServices: NavService,
     public layout: LayoutService) {
-
-    this.navServices.items.subscribe((menuItems) => {
+    this.navServices.items.subscribe(menuItems => {
       this.menuItems = menuItems;
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {

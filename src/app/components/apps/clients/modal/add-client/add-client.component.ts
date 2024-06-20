@@ -1,11 +1,20 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output, } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  TemplateRef,
+  PLATFORM_ID,
+  Inject,
+  EventEmitter,
+  Output,
+} from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import Swal from "sweetalert2";
+import { ClientService } from "../../../../../client.service";
 import { v4 as uuidv4 } from "uuid";
-import { ToastrService } from "ngx-toastr";
-import { ClientService } from "src/app/shared/services/client.service";
-import { Client, Proche } from '../../../../../shared/model/dto.model'
+
 @Component({
   selector: "app-add-client",
   templateUrl: "./add-client.component.html",
@@ -13,22 +22,52 @@ import { Client, Proche } from '../../../../../shared/model/dto.model'
 })
 export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
-  @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> =
+    new EventEmitter<any>();
+  Clients: any[] = [];
+  clientData = {
+    ClientId: "",
+    Nom: "",
+    Prenom: "",
+    DateNaissance: "",
+    SituationFamiliale: "",
+    Profession: "",
+    DateRetraite: "",
+    NumeroSS: "",
+    Adresse: "",
+    Email: "",
+    Tel: "",
+    TelType: "",
+    ImgSrc: "assets/images/user/8.jpg",
+    hasConjoint: "",
+    ConjointName: "",
+    ConjointPrenom: "",
+    ConjointDateNaissance: "",
+    ConjointProfession: "",
+    ConjointDateRetraite: "",
+    ConjointNumeroSS: "",
+    DateMariage: "",
+    RegimeMatrimonial: "",
+    DonationEpoux: "",
+    ModifRegimeDate: "",
+    QuestComp: "",
+    Children: [],
+    hasUsage: "",
+    Usages: [], // New array for usage goods
+    hasImmobilier: "",
+    Immobiliers: [],
+  };
 
-  // Clients: any[] = [];
-  clientData: Client = null;
-  newProche: Proche = null;
-
-  // newChild = {
-  //   Nom: "",
-  //   Prenom: "",
-  //   Date: "",
-  //   Parent: "",
-  //   Charge: "",
-  //   Particularite: "",
-  //   Nchild: "",
-  //   Comment: "",
-  // };
+  newChild = {
+    Nom: "",
+    Prenom: "",
+    Date: "",
+    Parent: "",
+    Charge: "",
+    Particularite: "",
+    Nchild: "",
+    Comment: "",
+  };
   newUsage = {
     // New object for a single usage good
     Designation: "",
@@ -60,37 +99,34 @@ export class AddClientComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private modalService: NgbModal,
-    private clientService: ClientService,
-    private toastr: ToastrService,
-  ) { }
+    private clientService: ClientService
+  ) {}
 
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
-    // this.getClients();
+    this.getClients();
   }
-  // getClients() {
-  //   this.clientService.getClients().subscribe(
-  //     (response) => {
-  //       this.Clients = response;
-  //       console.log(response);
-  //     },
-  //     (error) => {
-  //       console.error("Error fetching clients: ", error);
-  //     }
-  //   );
-  // }
+  getClients() {
+    this.clientService.getClients().subscribe(
+      (response) => {
+        this.Clients = response;
+        console.log(response);
+      },
+      (error) => {
+        console.error("Error fetching clients: ", error);
+      }
+    );
+  }
   openModal() {
     console.log("openModal: ")
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
-      this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
-      this.clientData.Proches = [];
       console.log("this.clientData: ", this.clientData);
-
+      
       this.modalService
         .open(this.AddClient, {
-          size: "xl",
+          size: "lg",
           ariaLabelledBy: "modal",
           centered: true,
           windowClass: "modal-bookmark",
@@ -98,6 +134,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         .result.then(
           (result) => {
             this.modalOpen = true;
+            
             `Result ${result}`;
           },
           (reason) => {
@@ -110,7 +147,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
-      console.log("getDismissReason: ", reason);
+      console.log(reason);
       return "by pressing ESC";
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       console.log(reason);
@@ -139,66 +176,45 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
-  startAddProche() {
-    this.newProche = {
-      ProcheId: uuidv4(),
-      ClientId: this.clientData.ClientId,
-      Nom: null,
-      Prenom: null,
-      DateNaissance: null,
-      Telephone1: null,
-      Telephone2: null,
-      Email1: null,
-      Email2: null,
-      Adresse: null,
-      Charge: null,
-      LienParente: null,
-      Particularite: null,
-      NombreEnfant: null,
-      Commentaire: null,
-    }
-  }
-  submitAddProche() {
-    if (this.newProche.Nom == null || this.newProche.Nom == "" ||
-      this.newProche.Prenom == null || this.newProche.Prenom == "" ||
-      this.newProche.LienParente == null || this.newProche.LienParente == "" ||
-      this.newProche.Particularite == null || this.newProche.Particularite == ""
-    ) {
-      this.toastr.warning("Veuillez saisir le nom, prénom, lien parenté et particularité du proche");
-      return;
-    }
-    this.clientData.Proches.push(this.newProche);
-    this.newProche = null;
-  }
-  cancelAddProche() {
-    this.newProche = null;
+  addChild() {
+    this.clientData.Children.push({ ...this.newChild });
+    this.newChild = {
+      Nom: "",
+      Prenom: "",
+      Date: "",
+      Parent: "",
+      Charge: "",
+      Particularite: "",
+      Nchild: "",
+      Comment: "",
+    };
   }
   addUsage() {
-    // this.clientData.Usages.push({ ...this.newUsage });
-    // this.newUsage = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
+    this.clientData.Usages.push({ ...this.newUsage });
+    this.newUsage = {
+      Designation: "",
+      Valeur: "",
+      Detenteur: "",
+      Charge: "",
+      Capital: "",
+      Duree: "",
+      Taux: "",
+      Deces: "",
+    };
   }
   addImmobilier() {
-    // this.clientData.Immobiliers.push({ ...this.newImmobilier });
-    // this.newImmobilier = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Revenue: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
+    this.clientData.Immobiliers.push({ ...this.newImmobilier });
+    this.newImmobilier = {
+      Designation: "",
+      Valeur: "",
+      Detenteur: "",
+      Revenue: "",
+      Charge: "",
+      Capital: "",
+      Duree: "",
+      Taux: "",
+      Deces: "",
+    };
   }
 
   // onSave() {
@@ -218,8 +234,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log("Client ajouté avec succès", response);
-          this.toastr.success("Client ajouté avec succès");
-          // Swal.fire("Succès", "Client ajouté avec succès", "success");
+          Swal.fire("Succès", "Client ajouté avec succès", "success");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
@@ -288,96 +303,96 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
 
   private resetForm() {
-    // this.clientData = {
-    //   ClientId: "",
-    //   Nom: "",
-    //   Prenom: "",
-    //   DateNaissance: null,
-    //   SituationFamiliale: "",
-    //   Profession: "",
-    //   DateRetraite: null,
-    //   NumeroSS: "",
-    //   Adresse: "",
-    //   Email1: "",
-    //   Telephone1: "",
-    //   TelType: "",
-    //   ImgSrc: "assets/images/user/8.jpg",
-    //   hasConjoint: "non",
-    //   ConjointName: "",
-    //   ConjointPrenom: "",
-    //   ConjointDateNaissance: "",
-    //   ConjointProfession: "",
-    //   ConjointDateRetraite: "",
-    //   ConjointNumeroSS: "",
-    //   DateMariage: "",
-    //   RegimeMatrimonial: "",
-    //   DonationEpoux: "",
-    //   ModifRegimeDate: "",
-    //   QuestComp: "",
-    //   Children: [],
-    //   hasUsage: "",
-    //   Usages: [], // Reset the usage goods array
-    //   hasImmobilier: "",
-    //   Immobiliers: [],
-    // };
-    // this.newChild = {
-    //   Nom: "",
-    //   Prenom: "",
-    //   Date: "",
-    //   Parent: "",
-    //   Charge: "",
-    //   Particularite: "",
-    //   Nchild: "",
-    //   Comment: "",
-    // };
-    // this.newUsage = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
-    // this.newImmobilier = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Revenue: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
+    this.clientData = {
+      ClientId: "",
+      Nom: "",
+      Prenom: "",
+      DateNaissance: "",
+      SituationFamiliale: "",
+      Profession: "",
+      DateRetraite: "",
+      NumeroSS: "",
+      Adresse: "",
+      Email: "",
+      Tel: "",
+      TelType: "",
+      ImgSrc: "assets/images/user/8.jpg",
+      hasConjoint: "non",
+      ConjointName: "",
+      ConjointPrenom: "",
+      ConjointDateNaissance: "",
+      ConjointProfession: "",
+      ConjointDateRetraite: "",
+      ConjointNumeroSS: "",
+      DateMariage: "",
+      RegimeMatrimonial: "",
+      DonationEpoux: "",
+      ModifRegimeDate: "",
+      QuestComp: "",
+      Children: [],
+      hasUsage: "",
+      Usages: [], // Reset the usage goods array
+      hasImmobilier: "",
+      Immobiliers: [],
+    };
+    this.newChild = {
+      Nom: "",
+      Prenom: "",
+      Date: "",
+      Parent: "",
+      Charge: "",
+      Particularite: "",
+      Nchild: "",
+      Comment: "",
+    };
+    this.newUsage = {
+      Designation: "",
+      Valeur: "",
+      Detenteur: "",
+      Charge: "",
+      Capital: "",
+      Duree: "",
+      Taux: "",
+      Deces: "",
+    };
+    this.newImmobilier = {
+      Designation: "",
+      Valeur: "",
+      Detenteur: "",
+      Revenue: "",
+      Charge: "",
+      Capital: "",
+      Duree: "",
+      Taux: "",
+      Deces: "",
+    };
     this.currentStep = 1;
   }
 
   onConjointChange() {
-    // if (this.clientData.hasConjoint === "non") {
-    //   (this.clientData.ConjointName = ""),
-    //     (this.clientData.ConjointPrenom = "");
-    //   this.clientData.ConjointDateNaissance = "";
-    //   this.clientData.ConjointProfession = "";
-    //   this.clientData.ConjointDateRetraite = "";
-    //   this.clientData.ConjointNumeroSS = "";
-    //   this.clientData.DateMariage = "";
-    //   this.clientData.RegimeMatrimonial = "";
-    //   this.clientData.DonationEpoux = "";
-    //   this.clientData.ModifRegimeDate = "";
-    //   this.clientData.QuestComp = "";
-    //   this.clientData.Children = [];
-    // }
+    if (this.clientData.hasConjoint === "non") {
+      (this.clientData.ConjointName = ""),
+        (this.clientData.ConjointPrenom = "");
+      this.clientData.ConjointDateNaissance = "";
+      this.clientData.ConjointProfession = "";
+      this.clientData.ConjointDateRetraite = "";
+      this.clientData.ConjointNumeroSS = "";
+      this.clientData.DateMariage = "";
+      this.clientData.RegimeMatrimonial = "";
+      this.clientData.DonationEpoux = "";
+      this.clientData.ModifRegimeDate = "";
+      this.clientData.QuestComp = "";
+      this.clientData.Children = [];
+    }
   }
   onUsageChange() {
-    // if (this.clientData.hasUsage === "non") {
-    //   this.clientData.Usages = [];
-    // }
+    if (this.clientData.hasUsage === "non") {
+      this.clientData.Usages = [];
+    }
   }
   onImmobilierChange() {
-    // if (this.clientData.hasImmobilier === "non") {
-    //   this.clientData.Immobiliers = [];
-    // }
+    if (this.clientData.hasImmobilier === "non") {
+      this.clientData.Immobiliers = [];
+    }
   }
 }
