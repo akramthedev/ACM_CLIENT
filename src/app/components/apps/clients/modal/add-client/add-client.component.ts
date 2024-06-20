@@ -176,6 +176,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+<<<<<<< HEAD
   addChild() {
     this.clientData.Children.push({ ...this.newChild });
     this.newChild = {
@@ -188,6 +189,39 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Nchild: "",
       Comment: "",
     };
+=======
+  startAddProche() {
+    this.newProche = {
+      ProcheId: uuidv4(),
+      ClientId: this.clientData.ClientId,
+      Nom: null,
+      Prenom: null,
+      DateNaissance: null,
+      Telephone1: null,
+      Telephone2: null,
+      Email1: null,
+      Email2: null,
+      Adresse: null,
+      Charge: null,
+      LienParente: null,
+      Particularite: null,
+      NombreEnfant: null,
+      Commentaire: null,
+    }
+  }
+  submitAddProche() {
+    if (this.newProche.Nom == null || this.newProche.Nom == "" ||
+      this.newProche.Prenom == null || this.newProche.Prenom == ""
+    ) {
+      this.toastr.warning("Veuillez saisir le nom et prénom du proche");
+      return;
+    }
+    this.clientData.Proches.push(this.newProche);
+    this.newProche = null;
+  }
+  cancelAddProche() {
+    this.newProche = null;
+>>>>>>> parent of 093adff (Ajout de client avec proches)
   }
   addUsage() {
     this.clientData.Usages.push({ ...this.newUsage });
