@@ -81,7 +81,7 @@ export class NavService implements OnDestroy {
 
   MENUITEMS: Menu[] = [
     { path: "/clients", title: "Clients", icon: "user", type: "link", bookmark: true, active: false, },
-    { path: "/taches", title: "Taches", icon: "user", type: "link", bookmark: true, active: false, },
+    { path: "/taches", title: "Tâches", icon: "task", type: "link", bookmark: true, active: false, },
 
     {
       headTitle1: "General",
