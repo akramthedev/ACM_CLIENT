@@ -3,6 +3,7 @@ import { Routes } from "@angular/router";
 export const content: Routes = [
 
   { path: "clients", loadChildren: () => import("../../components/apps/clients/clients.module").then((m) => m.ClientsModule), },
+  { path: "taches", loadChildren: () => import("../../components/apps/taches/taches.module").then((m) => m.TachesModule), },
 
   { path: "dashboard", loadChildren: () => import("../../components/dashboard/dashboard.module").then((m) => m.DashboardModule), },
   { path: "widgets", loadChildren: () => import("../../components/widgets/widgets.module").then((m) => m.WidgetsModule), },

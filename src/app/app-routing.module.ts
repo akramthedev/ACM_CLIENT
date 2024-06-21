@@ -6,12 +6,13 @@ import { ContentComponent } from "./shared/components/layout/content/content.com
 import { FullComponent } from "./shared/components/layout/full/full.component";
 import { full } from "./shared/routes/full.routes";
 import { content } from "./shared/routes/routes";
-
+import { TachesComponent } from './components/apps/taches/taches.component';
 import { AdminGuard } from './shared/guard/admin.guard';
 import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'clients', pathMatch: 'full' },
+  { path: '/taches', redirectTo: 'taches', pathMatch: 'full' },
   // { path: '', redirectTo: 'dashboard/default', pathMatch: 'full' },
 
   { path: 'auth/login', component: LoginComponent },
