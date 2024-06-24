@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute  } from '@angular/router';
 import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { ClientService } from 'src/app/shared/services/client.service';
 
 interface Task {
   title: string;
@@ -118,40 +119,45 @@ interface SituationAdmin{
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
-  clientId:number;
+  // clientId:number;
+  clientId:string;
   public active1 = 1;
   public active2 = 1;
   public active3 = 1;
   public active4 = 1;
   disabled = true;
+  currentClient:any;
 
-  constructor(private route: ActivatedRoute){
+  constructor(private route: ActivatedRoute,private clientService:ClientService){
 
   }
   onNavChange1(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 3) {
+    if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 3) {
+    if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.clientId = +params['id'];
-      //this.loadClientDetails();
+      // this.clientId = +params['id'];
+      this.clientId= params['id'];
+      console.log("clientId : ",this.clientId)
+      this.loadClientDetails();
     });
   }
 
   loadClientDetails() {
     // Logique pour charger les détails du client avec this.clientId
     // Exemple :
-    // this.clientService.getClientDetails(this.clientId).subscribe(data => {
-    //   this.clientData = data;
-    // });
+    this.clientService.getClientDetails(this.clientId).subscribe(data => {
+      this.currentClient = data;
+      console.log("currentClient : ",this.currentClient)
+    });
   }
   tasks: Task[] = [
     {
@@ -197,6 +203,7 @@ export class DetailclientComponent {
       statusClass: 'text-bg-warning'
     }
   ];
+  
   clientData: {
     hasUsage: string;
     Usages: Usage[];
