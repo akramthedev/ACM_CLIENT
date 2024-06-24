@@ -1471,7 +1471,6 @@
                       <tr>
                         <th class="task-column">Tâche</th>
                         <th>Date</th>
-                        <th>Client</th>
                         <th>Status</th>
                         <th>Prix</th>
                         <th></th>
@@ -1484,8 +1483,7 @@
                             {{ task.title }}
                           </a>
                         </td>
-                        <td>{{ task.date }}</td>
-                        <td>{{ task.client }}</td>
+                        <td>{{ task.date }}</td>                      
                         <td>
                           <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
                         </td>

@@ -28,6 +28,7 @@ export class TachesComponent implements OnInit {
 
   public objToAdd: object = {
     text: "",
+    client:"",
     objToAdd: "",
     Date: this.myDate,
     completed: "",

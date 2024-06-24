@@ -94,6 +94,7 @@
                     >
                       <div class="task-container">
                         <h4 class="task-label">{{ todo.text }}</h4>
+                        <h5 class="assign-name">{{ todo.client }}</h5>
                         <div class="d-flex align-items-center gap-4">
                           <div>
                             <span class="task-priority badge {{ todo.badgeClass }}">{{ todo.priority }}</span>
@@ -122,6 +123,7 @@
                       (click)="
                         addTask({
                           text: text,
+                          client:'Amine Laghlabi',
                           Date: myDate,
                           priority: 'Pending',
                           badgeClass: 'badge-light-danger',

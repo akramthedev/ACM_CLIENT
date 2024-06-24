@@ -6,7 +6,6 @@ import { ClientService } from 'src/app/shared/services/client.service';
 interface Task {
   title: string;
   date: string;
-  client:string;
   status: string;
   price: string;
   statusClass: string;
@@ -157,60 +156,53 @@ export class DetailclientComponent {
     // Exemple :
     this.clientService.getClientDetails(this.clientId).subscribe(data => {
       this.currentClient = data;
-      this.tasks=[
-        {
-          title: 'Préparer la liste des pieces du dossier de la carte de sejour',
-          date: '28 May 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'Terminé',
-          price: '900 DH',
-          statusClass: 'text-bg-success'
-        },
-        {
-          title: 'Remettre la liste des pieces  du dossier carte sejour',
-          date: '12 June 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'Terminé',
-          price: '200 DH',
-          statusClass: 'text-bg-success'
-        },
-        {
-          title: 'Receptionner les pieces du depot de la carte de sejour',
-          date: '12 July 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'En cours',
-          price: '300 DH',
-          statusClass: 'text-bg-warning'
-        },
-        {
-          title: 'Scanner et enregistrer le passeport + cachet d\'entrée',
-          date: '14 June 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'En cours',
-          price: '400 DH',
-          statusClass: 'text-bg-warning'
-        },
-        {
-          title: 'Valider le dossier de la carte de sejour',
-          date: '25 June 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'En cours',
-          price: '300 DH',
-          statusClass: 'text-bg-warning'
-        },
-        {
-          title: 'Déposer le dossier de la carte sejour/prefecture',
-          date: '25 June 2023',
-          client:this.currentClient.Nom + ' '+this.currentClient.Prenom,
-          status: 'En cours',
-          price: '300 DH',
-          statusClass: 'text-bg-warning'
-        }
-      ]
           console.log("currentClient : ",this.currentClient)
     });
   }
-  tasks: Task[] ;
+  tasks: Task[] =[
+    {
+      title: 'Préparer la liste des pieces du dossier de la carte de sejour',
+      date: '28 Mai 2023',
+      status: 'Terminé',
+      price: '900 DH',
+      statusClass: 'text-bg-success'
+    },
+    {
+      title: 'Remettre la liste des pieces  du dossier carte sejour',
+      date: '12 Juin 2023',
+      status: 'Terminé',
+      price: '200 DH',
+      statusClass: 'text-bg-success'
+    },
+    {
+      title: 'Receptionner les pieces du depot de la carte de sejour',
+      date: '12 Juillet 2023',
+      status: 'En cours',
+      price: '300 DH',
+      statusClass: 'text-bg-warning'
+    },
+    {
+      title: 'Scanner et enregistrer le passeport + cachet d\'entrée',
+      date: '14 Juin 2023',
+      status: 'En cours',
+      price: '400 DH',
+      statusClass: 'text-bg-warning'
+    },
+    {
+      title: 'Valider le dossier de la carte de sejour',
+      date: '25 Juin 2023',
+      status: 'En cours',
+      price: '300 DH',
+      statusClass: 'text-bg-warning'
+    },
+    {
+      title: 'Déposer le dossier de la carte sejour/prefecture',
+      date: '25 Juin 2023',
+      status: 'En cours',
+      price: '300 DH',
+      statusClass: 'text-bg-warning'
+    }
+  ] ;
   
   clientData: {
     hasUsage: string;
