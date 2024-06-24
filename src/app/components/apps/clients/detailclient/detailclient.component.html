@@ -1463,14 +1463,15 @@
               </ng-template>
             </li>
             <li [ngbNavItem]="2">
-              <a ngbNavLink>Taches</a>
+              <a ngbNavLink>Tâches</a>
               <ng-template ngbNavContent>
                 <div class="table-responsive edit-table">
                   <table class="table card-table table-vcenter text-nowrap">
                     <thead>
                       <tr>
-                        <th class="task-column">Tache</th>
+                        <th class="task-column">Tâche</th>
                         <th>Date</th>
+                        <th>Client</th>
                         <th>Status</th>
                         <th>Prix</th>
                         <th></th>
@@ -1484,6 +1485,7 @@
                           </a>
                         </td>
                         <td>{{ task.date }}</td>
+                        <td>{{ task.client }}</td>
                         <td>
                           <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
                         </td>
