@@ -16,9 +16,10 @@ export class MyAccountComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   logoutFunc() {
+    localStorage.clear();
     this.router.navigateByUrl('auth/login');
   }
 }

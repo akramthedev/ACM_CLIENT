@@ -21,7 +21,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("--> ", localStorage)
+    if (localStorage.getItem("user") != null) {
+      this.router.navigate(["/home"]);
+    }
+  }
 
   login() {
     if (this.loginForm.value["email"] == "Test@gmail.com" && this.loginForm.value["password"] == "test123") {
@@ -31,7 +36,7 @@ export class LoginComponent implements OnInit {
         name: "test user",
       };
       localStorage.setItem("user", JSON.stringify(user));
-      this.router.navigate(["/dashboard/default"]);
+      this.router.navigate(["/home"]);
     }
   }
 

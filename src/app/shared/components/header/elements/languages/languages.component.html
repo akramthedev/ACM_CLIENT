@@ -1,8 +1,7 @@
 <div class="translate_wrapper" [class.active]="navServices.language">
   <div class="current_lang">
-    <div class="lang">
-      <i class="flag-icon flag-icon-{{selectedLanguage.icon}}"></i><span
-        class="lang-txt">{{selectedLanguage.code}}</span>
+    <div class="lang" *ngIf="selectedLanguage != null">
+      <i class="flag-icon flag-icon-{{selectedLanguage.icon}}"></i><span class="lang-txt">{{selectedLanguage.code}}</span>
     </div>
   </div>
   <div class="more_lang" [class.active]="navServices.language">
