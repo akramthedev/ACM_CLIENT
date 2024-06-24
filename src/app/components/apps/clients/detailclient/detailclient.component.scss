@@ -1,15 +1,18 @@
 // .accordion{
 //     --bs-accordion-btn-bg:#7366ff;
 // }
-.form-check-label{
+.form-check-label {
     font-weight: initial;
 }
-label{
+
+label {
     font-weight: bold;
     margin-right: 10px;
 }
+
 .task-column {
-    max-width: 300px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+    max-width: 300px;
+    /* Vous pouvez ajuster cette valeur selon vos besoins */
     word-wrap: break-word;
     white-space: normal;
-  }
+}

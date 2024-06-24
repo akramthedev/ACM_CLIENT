@@ -38,3 +38,9 @@ export class Proche {
     NombreEnfant?: string;
     Commentaire?: string;
 }
+
+export class Piece {
+    PieceId: string;
+    Libelle: string;
+    Description?: string;
+}

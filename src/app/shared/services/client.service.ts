@@ -14,7 +14,7 @@ export class ClientService {
     return this.http.get<any[]>(url);
   }
 
-  getClientDetails(clientId:string): Observable<any> {
+  GetClient(clientId:string): Observable<any> {
     let url = `${environment.url}/GetClient?ClientId=${clientId}`;
     return this.http.get(url);
   }

@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute  } from '@angular/router';
-import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { Piece, } from 'src/app/shared/model/dto.model';
 import { ClientService } from 'src/app/shared/services/client.service';
+import { EnumService } from 'src/app/shared/services/enum.service';
 
 interface Task {
   title: string;
@@ -39,97 +44,107 @@ interface Professionnel {
   Detenteur: string;
   Charge: string;
   Partic: string;
-   
+
 }
 interface Dette {
   Designation: string;
   Capital: string;
   Duree: string;
   Taux: string;
-  Deces:string;
+  Deces: string;
   Partic: string;
-   
+
 }
 interface Assur {
   Designation: string;
   Capital: string;
   Date: string;
   Assur: string;
-  Benef:string;
+  Benef: string;
   Partic: string;
-   
+
 }
 interface Epar {
   Designation: string;
   Valeur: string;
   Detenteur: string;
-  Date:string;
-  Epar:string;
+  Date: string;
+  Epar: string;
   Partic: string;
-   
+
 }
 interface Mobiliere {
   Designation: string;
   Valeur: string;
   Detenteur: string;
-  RevenuDis:string;
-  Fisca:string;
+  RevenuDis: string;
+  Fisca: string;
   Taux: string;
-   
+
 }
 interface Disponibilite {
   Designation: string;
   Valeur: string;
   Detenteur: string;
-  Partic:string;
-  
-   
+  Partic: string;
+
+
 }
 interface Budget {
   Designation: string;
   Montant: string;
-  
-   
-}
 
-interface SituationAdmin{
-  CFE:string;
-  Cotisation:string;
-  Reversion:string;
-  CNSS:string;
-  CNAREFE:string;
-  Capitone:string;
-  Rapatriement:string;
-  Mutuelle:string;
-  Passeport:string;
-  CarteSejour:string;
-  Permis:string;
-  AssurAuto:string;
-  AssurHabi:string;
-  InscriConsulat:string;
-  UFE:string;
-  CSG:string;
- 
 
 }
+
+interface SituationAdmin {
+  CFE: string;
+  Cotisation: string;
+  Reversion: string;
+  CNSS: string;
+  CNAREFE: string;
+  Capitone: string;
+  Rapatriement: string;
+  Mutuelle: string;
+  Passeport: string;
+  CarteSejour: string;
+  Permis: string;
+  AssurAuto: string;
+  AssurHabi: string;
+  InscriConsulat: string;
+  UFE: string;
+  CSG: string;
+}
+
 @Component({
   selector: 'app-detailclient',
-  
   templateUrl: './detailclient.component.html',
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
   // clientId:number;
-  clientId:string;
-  public active1 = 1;
-  public active2 = 1;
-  public active3 = 1;
-  public active4 = 1;
+  clientId: string;
+  // public active1 = 1;
+  // public active2 = 1;
+  // public active3 = 1;
+  // public active4 = 1;
+
+  activeTabId: number = 1;
   disabled = true;
-  currentClient:any;
+  currentClient: any;
 
-  constructor(private route: ActivatedRoute,private clientService:ClientService){
+  Pieces: Piece[] = [];
 
+  constructor(
+    private route: ActivatedRoute,
+    private clientService: ClientService,
+    private enumService: EnumService,
+    private loader: NgxSpinnerService,
+    private toastr: ToastrService,
+    private router: Router,
+    private title: Title,
+    private modalService: NgbModal,
+  ) {
   }
   onNavChange1(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 4) {
@@ -143,23 +158,57 @@ export class DetailclientComponent {
     }
   }
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      // this.clientId = +params['id'];
-      this.clientId= params['id'];
-      console.log("clientId : ",this.clientId)
-      this.loadClientDetails();
+    this.activeTabId = 1;
+
+    this.route.params.subscribe((params) => {
+      this.clientId = params['id'];
+
+      this.loader.show();
+      this.clientService.GetClient(this.clientId)
+        .subscribe((response) => {
+          console.log("response GetClient: ", response)
+          this.loader.hide();
+
+          if (response == null) {
+            this.toastr.error("Erreur de récuperation du client");
+            setTimeout(() => {
+              this.router.navigate(["/clients"]);
+            }, 2000);
+          }
+          this.currentClient = response;
+          this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
+
+          this.loader.show();
+          this.enumService.GetPieces()
+            .subscribe((responsePieces) => {
+              console.log("responsePieces: ", responsePieces);
+              this.loader.hide();
+              this.Pieces = responsePieces;
+            }, (errorPieces) => {
+              this.loader.hide();
+            })
+
+        }, (error) => {
+          console.error("Error GetClient: ", error)
+          this.loader.hide();
+          this.toastr.error("Erreur de récuperation du client");
+          setTimeout(() => {
+            this.router.navigate(["/clients"]);
+          }, 2000);
+        });
     });
   }
 
-  loadClientDetails() {
-    // Logique pour charger les détails du client avec this.clientId
-    // Exemple :
-    this.clientService.getClientDetails(this.clientId).subscribe(data => {
-      this.currentClient = data;
-          console.log("currentClient : ",this.currentClient)
-    });
+  dialogImportPiece: any = {
+    Open: (content) => {
+      this.modalService.open(content, { centered: true, backdrop: true, });
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+    }
   }
-  tasks: Task[] =[
+
+  tasks: Task[] = [
     {
       title: 'Préparer la liste des pieces du dossier de la carte de sejour',
       date: '28 Mai 2023',
@@ -202,69 +251,69 @@ export class DetailclientComponent {
       price: '300 DH',
       statusClass: 'text-bg-warning'
     }
-  ] ;
-  
+  ];
+
   clientData: {
     hasUsage: string;
     Usages: Usage[];
     hasImmobilier: string;
     Immobiliers: Immobilier[];
-    hasProf:string;
-    Profs:Professionnel[];
-    hasDette:string;
-    Dettes:Dette[];
-    hasAssur:string;
-    Assurs:Assur[];
-    hasEpar:string;
-    Epars:Epar[];
-    hasMobil:string;
-    Mobils:Mobiliere[];
-    hasDispo:string;
-    Dispos:Disponibilite[];
-    hasBudget:string;
-    Budgets:Budget[];
-    Partic:string;
-    SituationAdministrative:SituationAdmin;
+    hasProf: string;
+    Profs: Professionnel[];
+    hasDette: string;
+    Dettes: Dette[];
+    hasAssur: string;
+    Assurs: Assur[];
+    hasEpar: string;
+    Epars: Epar[];
+    hasMobil: string;
+    Mobils: Mobiliere[];
+    hasDispo: string;
+    Dispos: Disponibilite[];
+    hasBudget: string;
+    Budgets: Budget[];
+    Partic: string;
+    SituationAdministrative: SituationAdmin;
   } = {
-    hasUsage: '',
-    Usages: [],
-    hasImmobilier: '',
-    Immobiliers: [],
-    hasProf:'',
-    Profs:[],
-    hasDette:'',
-    Dettes:[],
-    hasAssur:'',
-    Assurs:[],
-    hasEpar:'',
-    Epars:[],
-    hasMobil:'',
-    Mobils:[],
-    hasDispo:'',
-    Dispos:[],
-    hasBudget:'',
-    Budgets:[],
-    Partic:'',
-    SituationAdministrative:{
-      CFE: '',
-      Cotisation: '',
-      Reversion: '',
-      CNSS: '',
-      CNAREFE: '',
-      Capitone: '',
-      Rapatriement: '',
-      Mutuelle: '',
-      Passeport: '',
-      CarteSejour: '',
-      Permis: '',
-      AssurAuto: '',
-      AssurHabi: '',
-      InscriConsulat: '',
-      UFE: '',
-      CSG: '',
+      hasUsage: '',
+      Usages: [],
+      hasImmobilier: '',
+      Immobiliers: [],
+      hasProf: '',
+      Profs: [],
+      hasDette: '',
+      Dettes: [],
+      hasAssur: '',
+      Assurs: [],
+      hasEpar: '',
+      Epars: [],
+      hasMobil: '',
+      Mobils: [],
+      hasDispo: '',
+      Dispos: [],
+      hasBudget: '',
+      Budgets: [],
+      Partic: '',
+      SituationAdministrative: {
+        CFE: '',
+        Cotisation: '',
+        Reversion: '',
+        CNSS: '',
+        CNAREFE: '',
+        Capitone: '',
+        Rapatriement: '',
+        Mutuelle: '',
+        Passeport: '',
+        CarteSejour: '',
+        Permis: '',
+        AssurAuto: '',
+        AssurHabi: '',
+        InscriConsulat: '',
+        UFE: '',
+        CSG: '',
 
-    } ,
-  };
+      },
+    };
 
   newUsage: Usage = {
     Designation: '',
@@ -300,7 +349,7 @@ export class DetailclientComponent {
     Designation: '',
     Capital: '',
     Duree: '',
-    Taux:'',
+    Taux: '',
     Deces: '',
     Partic: '',
 
@@ -309,7 +358,7 @@ export class DetailclientComponent {
     Designation: '',
     Capital: '',
     Date: '',
-    Assur:'',
+    Assur: '',
     Benef: '',
     Partic: '',
 
@@ -318,7 +367,7 @@ export class DetailclientComponent {
     Designation: '',
     Valeur: '',
     Detenteur: '',
-    Date:'',
+    Date: '',
     Epar: '',
     Partic: '',
 
@@ -327,7 +376,7 @@ export class DetailclientComponent {
     Designation: '',
     Valeur: '',
     Detenteur: '',
-    RevenuDis:'',
+    RevenuDis: '',
     Fisca: '',
     Taux: '',
 
@@ -336,35 +385,35 @@ export class DetailclientComponent {
     Designation: '',
     Valeur: '',
     Detenteur: '',
-    Partic:'',
-    
+    Partic: '',
+
 
   };
   newBudget: Budget = {
     Designation: '',
     Montant: '',
-    
+
 
   };
   newPartic: '';
 
-  newSituationAdmin: SituationAdmin={
-    CFE:'',
-    Cotisation:'',
-    Reversion:'',
-    CNSS:'',
-    CNAREFE:'',
-    Capitone:'',
-    Rapatriement:'',
-    Mutuelle:'',
-    Passeport:'',
-    CarteSejour:'',
-    Permis:'',
-    AssurAuto:'',
-    AssurHabi:'',
-    InscriConsulat:'',
-    UFE:'',
-    CSG:'',
+  newSituationAdmin: SituationAdmin = {
+    CFE: '',
+    Cotisation: '',
+    Reversion: '',
+    CNSS: '',
+    CNAREFE: '',
+    Capitone: '',
+    Rapatriement: '',
+    Mutuelle: '',
+    Passeport: '',
+    CarteSejour: '',
+    Permis: '',
+    AssurAuto: '',
+    AssurHabi: '',
+    InscriConsulat: '',
+    UFE: '',
+    CSG: '',
 
   };
 
@@ -388,7 +437,7 @@ export class DetailclientComponent {
       Taux: '',
       Deces: ''
     };
-    
+
   }
 
   onImmobilierChange() {
@@ -427,8 +476,8 @@ export class DetailclientComponent {
       Detenteur: '',
       Charge: '',
       Partic: '',
-      
-      
+
+
     };
   }
 
@@ -445,11 +494,11 @@ export class DetailclientComponent {
       Designation: '',
       Capital: '',
       Duree: '',
-      Taux:'',
-      Deces: '',      
+      Taux: '',
+      Deces: '',
       Partic: '',
-      
-      
+
+
     };
   }
   onAssurChange() {
@@ -465,11 +514,11 @@ export class DetailclientComponent {
       Designation: '',
       Capital: '',
       Date: '',
-      Assur:'',
-      Benef: '',      
+      Assur: '',
+      Benef: '',
       Partic: '',
-      
-      
+
+
     };
   }
   onEparChange() {
@@ -485,11 +534,11 @@ export class DetailclientComponent {
       Designation: '',
       Valeur: '',
       Detenteur: '',
-      Date:'',
-      Epar: '',      
+      Date: '',
+      Epar: '',
       Partic: '',
-      
-      
+
+
     };
   }
 
@@ -506,11 +555,11 @@ export class DetailclientComponent {
       Designation: '',
       Valeur: '',
       Detenteur: '',
-      RevenuDis:'',
+      RevenuDis: '',
       Fisca: '',
       Taux: '',
-      
-      
+
+
     };
   }
   onDispoChange() {
@@ -526,10 +575,10 @@ export class DetailclientComponent {
       Designation: '',
       Valeur: '',
       Detenteur: '',
-      Partic:'',
-      
-      
-      
+      Partic: '',
+
+
+
     };
   }
 
@@ -545,42 +594,42 @@ export class DetailclientComponent {
     this.newBudget = {
       Designation: '',
       Montant: '',
-    
+
     };
   }
 
   addPartic() {
-    this.clientData.Partic=this.newPartic;
+    this.clientData.Partic = this.newPartic;
     console.log(this.newPartic)
     this.newPartic = '';
   }
 
   addSituationAdmin() {
-    this.clientData.SituationAdministrative={...this.newSituationAdmin};
+    this.clientData.SituationAdministrative = { ...this.newSituationAdmin };
     console.log(this.newSituationAdmin)
     this.newSituationAdmin = {
-      CFE:'',
-    Cotisation:'',
-    Reversion:'',
-    CNSS:'',
-    CNAREFE:'',
-    Capitone:'',
-    Rapatriement:'',
-    Mutuelle:'',
-    Passeport:'',
-    CarteSejour:'',
-    Permis:'',
-    AssurAuto:'',
-    AssurHabi:'',
-    InscriConsulat:'',
-    UFE:'',
-    CSG:'',
+      CFE: '',
+      Cotisation: '',
+      Reversion: '',
+      CNSS: '',
+      CNAREFE: '',
+      Capitone: '',
+      Rapatriement: '',
+      Mutuelle: '',
+      Passeport: '',
+      CarteSejour: '',
+      Permis: '',
+      AssurAuto: '',
+      AssurHabi: '',
+      InscriConsulat: '',
+      UFE: '',
+      CSG: '',
 
     }
   }
 }
-  
 
-  
- 
+
+
+
 

@@ -1,8 +1,5 @@
-<app-breadcrumb *ngIf="currentClient != null"
-  [title]="currentClient.Nom+' '+currentClient.Prenom"
-  [items]="['Client', 'Détail Client']"
-  [active_item]="currentClient.Nom+' '+currentClient.Prenom"
-></app-breadcrumb>
+<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom+' '+currentClient?.Prenom" [items]="['Clients']"
+  [active_item]="currentClient?.Nom+' '+currentClient?.Prenom"></app-breadcrumb>
 <div class="container-fluid">
   <div class="edit-profile">
     <div class="row">
@@ -11,7 +8,7 @@
           <h5>Détails client</h5>
         </div> -->
         <div class="card-body">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="active3" (navChange)="onNavChange1($event)" class="nav-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTabId" (navChange)="onNavChange1($event)" class="nav-tabs">
             <li [ngbNavItem]="1">
               <a ngbNavLink>BP</a>
               <ng-template ngbNavContent>
@@ -21,8 +18,7 @@
                     <div ngbAccordionItem>
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white">
-                          <i class="icofont icofont-building-alt fs-3 px-2"></i> Votre
-                          patrimoine
+                          <i class="icofont icofont-building-alt fs-3 px-2"></i> Votre patrimoine
                         </button>
                       </h2>
                       <div ngbAccordionCollapse>
@@ -31,52 +27,33 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Bien d'usage ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasUsage"
-                                  id="hasUsageYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasUsage"
-                                  (change)="onUsageChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasUsage" id="hasUsageYes" value="oui" [(ngModel)]="clientData.hasUsage"
+                                  (change)="onUsageChange()" />
                                 <label class="form-check-label" for="hasUsageYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasUsage"
-                                  id="hasUsageNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasUsage"
-                                  (change)="onUsageChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasUsage" id="hasUsageNo" value="non" [(ngModel)]="clientData.hasUsage"
+                                  (change)="onUsageChange()" />
                                 <label class="form-check-label" for="hasUsageNo">
                                   Non
                                 </label>
-                                
+
                               </div>
                             </div>
                             <div class="row" *ngIf="clientData.hasUsage === 'oui'">
                               <!-- Fields for usage goods -->
                               <!-- Button trigger modal Bien d'usage -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                              <button
-                                type="button"
-                                class="btn btn-primary me-md-2"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                              >
-                                <i class="fa fa-plus"></i>
-                              </button>
+                                <button type="button" class="btn btn-primary me-md-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                  <i class="fa fa-plus"></i>
+                                </button>
                               </div>
-      
+
                               <div *ngIf="clientData.Usages.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered ">
-                                  <thead >
+                                  <thead>
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
                                       <th>Valeur</th>
@@ -104,20 +81,20 @@
                               </div>
                               <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
                                 <table class="table table-bordered ">
-                                  <thead >
+                                  <thead>
                                     <tr class="bg-primary-subtle">
-                                      <th >Désignation</th>
-                                      <th >Valeur</th>
-                                      <th >Détenteur</th>
-                                      <th >Charges associées/Date d'achat</th>
-                                      <th >Capital emprunté</th>
-                                      <th >Durée</th>
-                                      <th >Taux</th>
-                                      <th >Décès</th>
+                                      <th>Désignation</th>
+                                      <th>Valeur</th>
+                                      <th>Détenteur</th>
+                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Capital emprunté</th>
+                                      <th>Durée</th>
+                                      <th>Taux</th>
+                                      <th>Décès</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr >
+                                    <tr>
                                       <td colspan="8" align="center">
                                         <i>Aucun bien enregistré</i>
                                       </td>
@@ -125,63 +102,35 @@
                                   </tbody>
                                 </table>
                               </div>
-                              
+
                             </div>
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Immobilier de rapport?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasImmobilier"
-                                  id="hasImmobilierYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasImmobilier"
-                                  (change)="onImmobilierChange()"
-                                />
-                                <label
-                                  class="form-check-label"
-                                  for="hasImmobilierYes"
-                                >
+                                <input class="form-check-input" type="radio" name="hasImmobilier" id="hasImmobilierYes" value="oui" [(ngModel)]="clientData.hasImmobilier"
+                                  (change)="onImmobilierChange()" />
+                                <label class="form-check-label" for="hasImmobilierYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasImmobilier"
-                                  id="hasImmobilierNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasImmobilier"
-                                  (change)="onImmobilierChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasImmobilier" id="hasImmobilierNo" value="non" [(ngModel)]="clientData.hasImmobilier"
+                                  (change)="onImmobilierChange()" />
                                 <label class="form-check-label" for="hasImmobilierNo">
                                   Non
                                 </label>
                               </div>
                             </div>
-                            <div
-                              class="row"
-                              *ngIf="clientData.hasImmobilier === 'oui'"
-                            >
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                              <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropImmobilier"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
+                            <div class="row" *ngIf="clientData.hasImmobilier === 'oui'">
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropImmobilier">
+                                  <i class="fa fa-plus"></i>
+                                </button>
                               </div>
                               <!-- Fields for immobilier goods -->
-                              
-      
-                              <div
-                                *ngIf="clientData.Immobiliers.length > 0"
-                                class="mt-3 mb-4"
-                              >
+
+
+                              <div *ngIf="clientData.Immobiliers.length > 0" class="mt-3 mb-4">
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr class="bg-primary-subtle">
@@ -197,11 +146,9 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr
-                                      *ngFor="
+                                    <tr *ngFor="
                                         let immobilier of clientData.Immobiliers
-                                      "
-                                      >
+                                      ">
                                       <td>{{ immobilier.Designation }}</td>
                                       <td>{{ immobilier.Valeur }}</td>
                                       <td>{{ immobilier.Detenteur }}</td>
@@ -215,10 +162,7 @@
                                   </tbody>
                                 </table>
                               </div>
-                              <div
-                                *ngIf="clientData.Immobiliers.length == 0"
-                                class="mt-3 mb-4"
-                              >
+                              <div *ngIf="clientData.Immobiliers.length == 0" class="mt-3 mb-4">
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr class="bg-primary-subtle">
@@ -244,29 +188,14 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Bien professionnels ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasProf"
-                                  id="hasProfYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasProf"
-                                  (change)="onProfChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasProf" id="hasProfYes" value="oui" [(ngModel)]="clientData.hasProf"
+                                  (change)="onProfChange()" />
                                 <label class="form-check-label" for="hasProfYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasProf"
-                                  id="hasProfNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasProf"
-                                  (change)="onProfChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasProf" id="hasProfNo" value="non" [(ngModel)]="clientData.hasProf" (change)="onProfChange()" />
                                 <label class="form-check-label" for="hasProfNo">
                                   Non
                                 </label>
@@ -275,18 +204,13 @@
                             <div class="row" *ngIf="clientData.hasProf === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropProf"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropProf">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Profs.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -327,10 +251,9 @@
                                   </tbody>
                                 </table>
                               </div>
-      
+
                               <div class="form-group mb-3 col-md-6">
-                                <label for="prof-commentaire"
-                                  >Questions complémentaires :
+                                <label for="prof-commentaire">Questions complémentaires :
                                 </label>
                                 <p>
                                   quelle répartition du capital et des pouvoirs dans
@@ -338,61 +261,36 @@
                                   détenue l'immobilier professionnel ? Un pacte
                                   d'actionnaires a-t-il été signé ?
                                 </p>
-                                <input
-                                  class="form-control"
-                                  id="prof-commentaire"
-                                  type="text"
-                                  placeholder="Réponse"
-                                  name="ProfCommentaire"
-                                  [(ngModel)]="newProf.Commentaire"
-                                />
+                                <input class="form-control" id="prof-commentaire" type="text" placeholder="Réponse" name="ProfCommentaire" [(ngModel)]="newProf.Commentaire" />
                               </div>
                             </div>
                           </ng-template>
                         </div>
                       </div>
                     </div>
-      
+
                     <div ngbAccordionItem class="mt-3">
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white ">
-                          <span
-                            ><i class="icofont icofont-bank-alt fs-3 px-2"></i> Vos
-                            passifs</span
-                          >
+                          <span><i class="icofont icofont-bank-alt fs-3 px-2"></i> Vos
+                            passifs</span>
                         </button>
                       </h2>
-                      <div ngbAccordionCollapse >
+                      <div ngbAccordionCollapse>
                         <div ngbAccordionBody>
                           <ng-template>
                             <div class="form-group mb-3 col-md-6 row">
-                              <label
-                                >Dettes familiales ? crédit consommation, etc</label
-                              >
+                              <label>Dettes familiales ? crédit consommation, etc</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasDette"
-                                  id="hasDetteYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasDette"
-                                  (change)="onDetteChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasDette" id="hasDetteYes" value="oui" [(ngModel)]="clientData.hasDette"
+                                  (change)="onDetteChange()" />
                                 <label class="form-check-label" for="hasDetteYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasDette"
-                                  id="hasDetteNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasDette"
-                                  (change)="onDetteChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasDette" id="hasDetteNo" value="non" [(ngModel)]="clientData.hasDette"
+                                  (change)="onDetteChange()" />
                                 <label class="form-check-label" for="hasDetteNo">
                                   Non
                                 </label>
@@ -401,18 +299,13 @@
                             <div class="row" *ngIf="clientData.hasDette === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropPassif"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropPassif">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Dettes.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -460,29 +353,15 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Assurances ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasAssur"
-                                  id="hasAssurYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasAssur"
-                                  (change)="onAssurChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasAssur" id="hasAssurYes" value="oui" [(ngModel)]="clientData.hasAssur"
+                                  (change)="onAssurChange()" />
                                 <label class="form-check-label" for="hasAssurYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasAssur"
-                                  id="hasAssurNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasAssur"
-                                  (change)="onAssurChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasAssur" id="hasAssurNo" value="non" [(ngModel)]="clientData.hasAssur"
+                                  (change)="onAssurChange()" />
                                 <label class="form-check-label" for="hasAssurNo">
                                   Non
                                 </label>
@@ -491,18 +370,13 @@
                             <div class="row" *ngIf="clientData.hasAssur === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropAssur"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropAssur">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Assurs.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -550,29 +424,14 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Epargne et dépot à moyen et long terme ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasEpar"
-                                  id="hasEparYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasEpar"
-                                  (change)="onEparChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasEpar" id="hasEparYes" value="oui" [(ngModel)]="clientData.hasEpar"
+                                  (change)="onEparChange()" />
                                 <label class="form-check-label" for="hasEparYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasEpar"
-                                  id="hasEparNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasEpar"
-                                  (change)="onEparChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasEpar" id="hasEparNo" value="non" [(ngModel)]="clientData.hasEpar" (change)="onEparChange()" />
                                 <label class="form-check-label" for="hasEparNo">
                                   Non
                                 </label>
@@ -581,18 +440,13 @@
                             <div class="row" *ngIf="clientData.hasEpar === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropEpar"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropEpar">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Epars.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -640,29 +494,15 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Valeur mobilières ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasMobil"
-                                  id="hasMobilYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasMobil"
-                                  (change)="onMobilChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasMobil" id="hasMobilYes" value="oui" [(ngModel)]="clientData.hasMobil"
+                                  (change)="onMobilChange()" />
                                 <label class="form-check-label" for="hasMobilYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasMobil"
-                                  id="hasMobilNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasMobil"
-                                  (change)="onMobilChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasMobil" id="hasMobilNo" value="non" [(ngModel)]="clientData.hasMobil"
+                                  (change)="onMobilChange()" />
                                 <label class="form-check-label" for="hasMobilNo">
                                   Non
                                 </label>
@@ -671,18 +511,13 @@
                             <div class="row" *ngIf="clientData.hasMobil === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropMobil"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropMobil">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Mobils.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -730,29 +565,15 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Disponibilités ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasDispo"
-                                  id="hasDispoYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasDispo"
-                                  (change)="onDispoChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasDispo" id="hasDispoYes" value="oui" [(ngModel)]="clientData.hasDispo"
+                                  (change)="onDispoChange()" />
                                 <label class="form-check-label" for="hasDispoYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasDispo"
-                                  id="hasDispoNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasDispo"
-                                  (change)="onDispoChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasDispo" id="hasDispoNo" value="non" [(ngModel)]="clientData.hasDispo"
+                                  (change)="onDispoChange()" />
                                 <label class="form-check-label" for="hasDispoNo">
                                   Non
                                 </label>
@@ -761,18 +582,13 @@
                             <div class="row" *ngIf="clientData.hasDispo === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropDispo"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropDispo">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Dispos.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -827,29 +643,15 @@
                             <div class="form-group mb-3 col-md-6 row">
                               <label>Budget ?</label>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasBudget"
-                                  id="hasBudgetYes"
-                                  value="oui"
-                                  [(ngModel)]="clientData.hasBudget"
-                                  (change)="onBudgetChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasBudget" id="hasBudgetYes" value="oui" [(ngModel)]="clientData.hasBudget"
+                                  (change)="onBudgetChange()" />
                                 <label class="form-check-label" for="hasBudgetYes">
                                   Oui
                                 </label>
                               </div>
                               <div class="form-check col">
-                                <input
-                                  class="form-check-input"
-                                  type="radio"
-                                  name="hasBudget"
-                                  id="hasBudgetNo"
-                                  value="non"
-                                  [(ngModel)]="clientData.hasBudget"
-                                  (change)="onBudgetChange()"
-                                />
+                                <input class="form-check-input" type="radio" name="hasBudget" id="hasBudgetNo" value="non" [(ngModel)]="clientData.hasBudget"
+                                  (change)="onBudgetChange()" />
                                 <label class="form-check-label" for="hasBudgetNo">
                                   Non
                                 </label>
@@ -858,18 +660,13 @@
                             <div class="row" *ngIf="clientData.hasBudget === 'oui'">
                               <!-- Fields for usage goods -->
                               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdropBudget"
-                              >
-                              <i class="fa fa-plus"></i>
-                              </button>
-                                </div>
-      
-                              
-      
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropBudget">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
                               <div *ngIf="clientData.Budgets.length > 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
@@ -886,10 +683,7 @@
                                   </tbody>
                                 </table>
                               </div>
-                              <div
-                                *ngIf="clientData.Budgets.length == 0"
-                                class="mb-4 mt-3"
-                              >
+                              <div *ngIf="clientData.Budgets.length == 0" class="mb-4 mt-3">
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr class="bg-primary-subtle">
@@ -922,24 +716,15 @@
                             <div class="row">
                               <!-- Fields for usage goods -->
                               <div class="form-group mb-3 col-md-6">
-                                <label for="partic-fisca"
-                                  >Particularités fiscales</label
-                                >
-                                <input
-                                  class="form-control"
-                                  id="partic-fisca"
-                                  type="text"
-                                  placeholder="Particularités fiscales"
-                                  name="ParticFisca"
-                                  [(ngModel)]="newPartic"
-                                />
+                                <label for="partic-fisca">Particularités fiscales</label>
+                                <input class="form-control" id="partic-fisca" type="text" placeholder="Particularités fiscales" name="ParticFisca" [(ngModel)]="newPartic" />
                               </div>
-      
+
                               <div class="d-grid gap-2 d-md-flex justify-content-center">
-                              <button class="btn btn-primary " (click)="addPartic()">
-                                Ajouter la particularités fiscales
-                              </button>
-                            </div>
+                                <button class="btn btn-primary " (click)="addPartic()">
+                                  Ajouter la particularités fiscales
+                                </button>
+                              </div>
                             </div>
                           </ng-template>
                         </div>
@@ -960,27 +745,13 @@
                               <div class="col-6 mb-3">
                                 <label>CFE :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CFE"
-                                    id="CFEYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.CFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CFE" id="CFEYes" value="oui" [(ngModel)]="newSituationAdmin.CFE" />
                                   <label class="form-check-label" for="CFEYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CFE"
-                                    id="CFENo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.CFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CFE" id="CFENo" value="non" [(ngModel)]="newSituationAdmin.CFE" />
                                   <label class="form-check-label" for="CFENo">
                                     Non
                                   </label>
@@ -989,27 +760,15 @@
                               <div class="col-6 mb-3">
                                 <label>Passeport Scanné :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Passeport"
-                                    id="PasseportYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Passeport"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Passeport" id="PasseportYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Passeport" />
                                   <label class="form-check-label" for="PasseportYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Passeport"
-                                    id="PasseportNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Passeport"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Passeport" id="PasseportNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Passeport" />
                                   <label class="form-check-label" for="PasseportNo">
                                     Non
                                   </label>
@@ -1018,27 +777,15 @@
                               <div class="col-6 mb-3">
                                 <label>Avez-vous 15 ans de cotisation :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Cotisation"
-                                    id="CotisationYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Cotisation"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Cotisation" id="CotisationYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Cotisation" />
                                   <label class="form-check-label" for="CotisationYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Cotisation"
-                                    id="CotisationNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Cotisation"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Cotisation" id="CotisationNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Cotisation" />
                                   <label class="form-check-label" for="CotisationNo">
                                     Non
                                   </label>
@@ -1047,61 +794,32 @@
                               <div class="col-6 mb-3">
                                 <label>Carte de séjour scanée :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CarteSejour"
-                                    id="CarteSejourYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.CarteSejour"
-                                  />
-                                  <label
-                                    class="form-check-label"
-                                    for="CarteSejourYes"
-                                  >
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CarteSejour" id="CarteSejourYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.CarteSejour" />
+                                  <label class="form-check-label" for="CarteSejourYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CarteSejour"
-                                    id="CarteSejourNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.CarteSejour"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CarteSejour" id="CarteSejourNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.CarteSejour" />
                                   <label class="form-check-label" for="CarteSejourNo">
                                     Non
                                   </label>
                                 </div>
                               </div>
                               <div class="col-8 mb-3">
-                                <label
-                                  >Pension de Réversion 15 ans de cotisation :</label
-                                >
+                                <label>Pension de Réversion 15 ans de cotisation :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Reversion"
-                                    id="ReversionYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Reversion"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Reversion" id="ReversionYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Reversion" />
                                   <label class="form-check-label" for="ReversionYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Reversion"
-                                    id="ReversionNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Reversion"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Reversion" id="ReversionNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Reversion" />
                                   <label class="form-check-label" for="ReversionNo">
                                     Non
                                   </label>
@@ -1110,27 +828,15 @@
                               <div class="col-6 mb-3">
                                 <label>Permis de conduire marocain:</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Permis"
-                                    id="PermisYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Permis"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Permis" id="PermisYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Permis" />
                                   <label class="form-check-label" for="PermisYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Permis"
-                                    id="PermisNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Permis"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Permis" id="PermisNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Permis" />
                                   <label class="form-check-label" for="PermisNo">
                                     Non
                                   </label>
@@ -1139,27 +845,13 @@
                               <div class="col-6 mb-3">
                                 <label>CNSS :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CNSS"
-                                    id="CNSSYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.CNSS"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNSS" id="CNSSYes" value="oui" [(ngModel)]="newSituationAdmin.CNSS" />
                                   <label class="form-check-label" for="CNSSYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CNSS"
-                                    id="CNSSNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.CNSS"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNSS" id="CNSSNo" value="non" [(ngModel)]="newSituationAdmin.CNSS" />
                                   <label class="form-check-label" for="CNSSNo">
                                     Non
                                   </label>
@@ -1168,27 +860,15 @@
                               <div class="col-6 mb-3">
                                 <label>Assurance Auto:</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.AssurAuto"
-                                    id="AssurAutoYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.AssurAuto"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurAuto" id="AssurAutoYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.AssurAuto" />
                                   <label class="form-check-label" for="AssurAutoYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.AssurAuto"
-                                    id="AssurAutoNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.AssurAuto"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurAuto" id="AssurAutoNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.AssurAuto" />
                                   <label class="form-check-label" for="AssurAutoNo">
                                     Non
                                   </label>
@@ -1197,27 +877,15 @@
                               <div class="col-6 mb-3">
                                 <label>CNAREFE :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CNAREFE"
-                                    id="CNAREFEYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.CNAREFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNAREFE" id="CNAREFEYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.CNAREFE" />
                                   <label class="form-check-label" for="CNAREFEYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CNAREFE"
-                                    id="CNAREFENo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.CNAREFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNAREFE" id="CNAREFENo" value="non"
+                                    [(ngModel)]="newSituationAdmin.CNAREFE" />
                                   <label class="form-check-label" for="CNAREFENo">
                                     Non
                                   </label>
@@ -1226,27 +894,15 @@
                               <div class="col-6 mb-3">
                                 <label>Assurance Habitation:</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.AssurHabi"
-                                    id="AssurHabiYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.AssurHabi"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurHabi" id="AssurHabiYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.AssurHabi" />
                                   <label class="form-check-label" for="AssurHabiYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.AssurHabi"
-                                    id="AssurHabiNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.AssurHabi"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurHabi" id="AssurHabiNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.AssurHabi" />
                                   <label class="form-check-label" for="AssurHabiNo">
                                     Non
                                   </label>
@@ -1255,27 +911,15 @@
                               <div class="col-6 mb-3">
                                 <label>Capitone :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Capitone"
-                                    id="CapitoneYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Capitone"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Capitone" id="CapitoneYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Capitone" />
                                   <label class="form-check-label" for="CapitoneYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Capitone"
-                                    id="CapitoneNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Capitone"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Capitone" id="CapitoneNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Capitone" />
                                   <label class="form-check-label" for="CapitoneNo">
                                     Non
                                   </label>
@@ -1284,34 +928,16 @@
                               <div class="col-6 mb-3">
                                 <label>Inscription consulat:</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.InscriConsulat"
-                                    id="InscriConsulatYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.InscriConsulat"
-                                  />
-                                  <label
-                                    class="form-check-label"
-                                    for="InscriConsulatYes"
-                                  >
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.InscriConsulat" id="InscriConsulatYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.InscriConsulat" />
+                                  <label class="form-check-label" for="InscriConsulatYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.InscriConsulat"
-                                    id="InscriConsulatNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.InscriConsulat"
-                                  />
-                                  <label
-                                    class="form-check-label"
-                                    for="InscriConsulatNo"
-                                  >
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.InscriConsulat" id="InscriConsulatNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.InscriConsulat" />
+                                  <label class="form-check-label" for="InscriConsulatNo">
                                     Non
                                   </label>
                                 </div>
@@ -1319,34 +945,16 @@
                               <div class="col-6 mb-3">
                                 <label>Assurance Rapatriement :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Rapatriement"
-                                    id="RapatriementYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Rapatriement"
-                                  />
-                                  <label
-                                    class="form-check-label"
-                                    for="RapatriementYes"
-                                  >
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Rapatriement" id="RapatriementYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Rapatriement" />
+                                  <label class="form-check-label" for="RapatriementYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Rapatriement"
-                                    id="RapatriementNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Rapatriement"
-                                  />
-                                  <label
-                                    class="form-check-label"
-                                    for="RapatriementNo"
-                                  >
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Rapatriement" id="RapatriementNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Rapatriement" />
+                                  <label class="form-check-label" for="RapatriementNo">
                                     Non
                                   </label>
                                 </div>
@@ -1354,27 +962,13 @@
                               <div class="col-6 mb-3">
                                 <label>UFE :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.UFE"
-                                    id="UFEYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.UFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.UFE" id="UFEYes" value="oui" [(ngModel)]="newSituationAdmin.UFE" />
                                   <label class="form-check-label" for="UFEYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.UFE"
-                                    id="UFENo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.UFE"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.UFE" id="UFENo" value="non" [(ngModel)]="newSituationAdmin.UFE" />
                                   <label class="form-check-label" for="UFENo">
                                     Non
                                   </label>
@@ -1383,27 +977,15 @@
                               <div class="col-6 mb-3">
                                 <label>Mutuelle Française :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Mutuelle"
-                                    id="MutuelleYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.Mutuelle"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Mutuelle" id="MutuelleYes" value="oui"
+                                    [(ngModel)]="newSituationAdmin.Mutuelle" />
                                   <label class="form-check-label" for="MutuelleYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.Mutuelle"
-                                    id="MutuelleNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.Mutuelle"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Mutuelle" id="MutuelleNo" value="non"
+                                    [(ngModel)]="newSituationAdmin.Mutuelle" />
                                   <label class="form-check-label" for="MutuelleNo">
                                     Non
                                   </label>
@@ -1412,41 +994,24 @@
                               <div class="col-6 mb-3">
                                 <label>CSG / CRDS :</label>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CSG"
-                                    id="CSGYes"
-                                    value="oui"
-                                    [(ngModel)]="newSituationAdmin.CSG"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CSG" id="CSGYes" value="oui" [(ngModel)]="newSituationAdmin.CSG" />
                                   <label class="form-check-label" for="CSGYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="SituationAdministrative.CSG"
-                                    id="CSGNo"
-                                    value="non"
-                                    [(ngModel)]="newSituationAdmin.CSG"
-                                  />
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CSG" id="CSGNo" value="non" [(ngModel)]="newSituationAdmin.CSG" />
                                   <label class="form-check-label" for="CSGNo">
                                     Non
                                   </label>
                                 </div>
                               </div>
-      
+
                               <div class="d-grid gap-2 d-md-flex justify-content-center">
-                              <button
-                                class="btn btn-primary"
-                                (click)="addSituationAdmin()"
-                              >
-                                Ajouter la situation administrative
-                              </button>
-                            </div>
+                                <button class="btn btn-primary" (click)="addSituationAdmin()">
+                                  Ajouter la situation administrative
+                                </button>
+                              </div>
                             </div>
                           </ng-template>
                         </div>
@@ -1458,7 +1023,7 @@
                       Enregistrer le dossier
                     </button>
                   </div>
-                  
+
                 </div>
               </ng-template>
             </li>
@@ -1483,19 +1048,19 @@
                             {{ task.title }}
                           </a>
                         </td>
-                        <td>{{ task.date }}</td>                      
+                        <td>{{ task.date }}</td>
                         <td>
-                          <span [class]="'badge ' + task.statusClass">{{ task.status }}</span> 
+                          <span [class]="'badge ' + task.statusClass">{{ task.status }}</span>
                         </td>
                         <td>{{ task.price }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
-                          <a class="fs-2 text-warning" href="javascript:void(0)">
-                            <i class="fa fa-pencil"></i></a>
-                          <a class="fs-2 text-danger" href="javascript:void(0)">
-                            <i class="fa fa-trash"></i> 
-                          </a>
-                        </div>
+                            <a class="fs-2 text-warning" href="javascript:void(0)">
+                              <i class="fa fa-pencil"></i></a>
+                            <a class="fs-2 text-danger" href="javascript:void(0)">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -1524,20 +1089,41 @@
                                 <input id="upfile" type="file" onchange="sub(this)" />
                               </div>
                             </form> -->
-                            <div class="btn btn-outline-primary"><app-feather-icons [icon]="'upload'"> </app-feather-icons>Importer</div>
+                            <div class="btn btn-outline-primary" (click)="dialogImportPiece.Open(modalUploadClientPiece)"><app-feather-icons [icon]="'upload'">
+                              </app-feather-icons>Importer</div>
                           </div>
                         </div>
                       </div>
                       <div class="card-body file-manager">
                         <h4 class="mb-3">Toutes les pièces</h4>
-                        <h6 >Pièces de {{currentClient.Nom + ' '+currentClient.Prenom}}</h6>
+                        <!-- <h6>Pièces de {{currentClient.Nom + ' '+currentClient.Prenom}}</h6> -->
                         <ul class="files">
-                          <li class="file-box me-1">
+                          <li class="file-box me-1" *ngFor="let clientPiece of currentClient.ClientPieces;let index=index">
+                            <div class="file-top">
+                              <i *ngIf="['png','jpg','jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
+                              <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
+
+                              <!-- class="d-inline-block" -->
+                              <span ngbDropdown placement="bottom">
+                                <i [id]="'dropdownBasic'+index" class="fa fa-ellipsis-v f-14 ellips" ngbDropdownToggle></i>
+                                <div ngbDropdownMenu [aria-labelledby]="'dropdownBasic'+index">
+                                  <button class="dropdown-item">Telecharger</button>
+                                  <button class="dropdown-item">Supprimer</button>
+                                </div>
+                              </span>
+
+                            </div>
+                            <div class="file-bottom">
+                              <h6>{{ clientPiece.Libelle }}</h6>
+                              <p class="mb-1">{{ clientPiece.Extension }}</p>
+                              <!-- <p class="mb-1">2.0 MB</p> -->
+                            </div>
+                          </li>
+                          <!-- <li class="file-box me-1">
                             <div class="file-top"><i class="fa fa-file-image-o txt-primary"></i><i class="fa fa-ellipsis-v f-14 ellips"></i></div>
                             <div class="file-bottom">
                               <h6>Carte de séjour.png</h6>
                               <p class="mb-1">2.0 MB</p>
-                              
                             </div>
                           </li>
                           <li class="file-box me-1">
@@ -1545,7 +1131,7 @@
                             <div class="file-bottom">
                               <h6>Carte d'identitée.pdf</h6>
                               <p class="mb-1">1.00 MB</p>
-                             
+
                             </div>
                           </li>
                           <li class="file-box me-1">
@@ -1553,7 +1139,7 @@
                             <div class="file-bottom">
                               <h6>Passeport.png</h6>
                               <p class="mb-1">1.00 MB</p>
-                              
+
                             </div>
                           </li>
                           <li class="file-box me-1">
@@ -1561,9 +1147,9 @@
                             <div class="file-bottom">
                               <h6>relevé d'identité bancaire.pdf</h6>
                               <p class="mb-1">0.90 KB</p>
-                             
+
                             </div>
-                          </li>
+                          </li> -->
                         </ul>
                         <!-- <h6 class="mt-4">Folders</h6>
                         <ul class="folder">
@@ -1647,139 +1233,85 @@
             </li>
           </ul>
           <div [ngbNavOutlet]="nav" class="mt-2"></div>
-          
+
         </div>
-      
+
       </div>
-      
+
     </div>
 
+    <ng-template #modalUploadClientPiece let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">Modal title</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-12">
+          <div class="row">
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+      </div>
+    </ng-template>
+
+
+
     <!-- Modal for Bien d'usage-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">
               Biens d'usage
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="usage-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="usage-designation"
-                type="text"
-                placeholder="Désignation"
-                name="UsageDesignation"
-                [(ngModel)]="newUsage.Designation"
-              />
+              <input class="form-control" id="usage-designation" type="text" placeholder="Désignation" name="UsageDesignation" [(ngModel)]="newUsage.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="usage-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="UsageValeur"
-                [(ngModel)]="newUsage.Valeur"
-              />
+              <input class="form-control" id="usage-valeur" type="text" placeholder="Valeur" name="UsageValeur" [(ngModel)]="newUsage.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="usage-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="UsageDetenteur"
-                [(ngModel)]="newUsage.Detenteur"
-              />
+              <input class="form-control" id="usage-detenteur" type="text" placeholder="Détenteur" name="UsageDetenteur" [(ngModel)]="newUsage.Detenteur" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="usage-charge">Charges associées / Date d'achat</label>
-              <input
-                class="form-control"
-                id="usage-charge"
-                type="text"
-                placeholder="Charges associées / Date d'achat"
-                name="UsageCharge"
-                [(ngModel)]="newUsage.Charge"
-              />
+              <input class="form-control" id="usage-charge" type="text" placeholder="Charges associées / Date d'achat" name="UsageCharge" [(ngModel)]="newUsage.Charge" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-capital">Capital emprunté ou restant du</label>
-              <input
-                class="form-control"
-                id="usage-capital"
-                type="text"
-                placeholder="Capital emprunté ou restant du"
-                name="UsageCapital"
-                [(ngModel)]="newUsage.Capital"
-              />
+              <input class="form-control" id="usage-capital" type="text" placeholder="Capital emprunté ou restant du" name="UsageCapital" [(ngModel)]="newUsage.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-duree">Durée</label>
-              <input
-                class="form-control"
-                id="usage-duree"
-                type="text"
-                placeholder="Durée"
-                name="UsageDuree"
-                [(ngModel)]="newUsage.Duree"
-              />
+              <input class="form-control" id="usage-duree" type="text" placeholder="Durée" name="UsageDuree" [(ngModel)]="newUsage.Duree" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-taux">Taux</label>
-              <input
-                class="form-control"
-                id="usage-taux"
-                type="text"
-                placeholder="Taux"
-                name="UsageTaux"
-                [(ngModel)]="newUsage.Taux"
-              />
+              <input class="form-control" id="usage-taux" type="text" placeholder="Taux" name="UsageTaux" [(ngModel)]="newUsage.Taux" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-deces">Décès</label>
-              <input
-                class="form-control"
-                id="usage-deces"
-                type="text"
-                placeholder="Décès"
-                name="UsageDeces"
-                [(ngModel)]="newUsage.Deces"
-              />
+              <input class="form-control" id="usage-deces" type="text" placeholder="Décès" name="UsageDeces" [(ngModel)]="newUsage.Deces" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addUsage()">
               Ajouter le bien d'usage
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
-            
+
           </div>
         </div>
       </div>
@@ -1787,144 +1319,64 @@
     <!-- fin Modal bien d'usage-->
 
     <!-- Modal for Immobilier-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropImmobilier"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelImmobilier"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropImmobilier" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelImmobilier"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelImmobilier">
               Immobilier de rapport
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="immobilier-designation"
-                type="text"
-                placeholder="Désignation"
-                name="ImmobilierDesignation"
-                [(ngModel)]="newImmobilier.Designation"
-              />
+              <input class="form-control" id="immobilier-designation" type="text" placeholder="Désignation" name="ImmobilierDesignation" [(ngModel)]="newImmobilier.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="immobilier-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="ImmobilierValeur"
-                [(ngModel)]="newImmobilier.Valeur"
-              />
+              <input class="form-control" id="immobilier-valeur" type="text" placeholder="Valeur" name="ImmobilierValeur" [(ngModel)]="newImmobilier.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="immobilier-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="ImmobilierDetenteur"
-                [(ngModel)]="newImmobilier.Detenteur"
-              />
+              <input class="form-control" id="immobilier-detenteur" type="text" placeholder="Détenteur" name="ImmobilierDetenteur" [(ngModel)]="newImmobilier.Detenteur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-revenue">Revenue</label>
-              <input
-                class="form-control"
-                id="immobilier-revenue"
-                type="text"
-                placeholder="Revenue"
-                name="ImmobilierRevenue"
-                [(ngModel)]="newImmobilier.Revenue"
-              />
+              <input class="form-control" id="immobilier-revenue" type="text" placeholder="Revenue" name="ImmobilierRevenue" [(ngModel)]="newImmobilier.Revenue" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-charge">Charges</label>
-              <input
-                class="form-control"
-                id="immobilier-charge"
-                type="text"
-                placeholder="Charges"
-                name="ImmobilierCharge"
-                [(ngModel)]="newImmobilier.Charge"
-              />
+              <input class="form-control" id="immobilier-charge" type="text" placeholder="Charges" name="ImmobilierCharge" [(ngModel)]="newImmobilier.Charge" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="immobilier-capital"
-                >Capital emprunté ou restant du</label
-              >
-              <input
-                class="form-control"
-                id="immobilier-capital"
-                type="text"
-                placeholder="Capital emprunté ou restant du"
-                name="ImmobilierCapital"
-                [(ngModel)]="newImmobilier.Capital"
-              />
+              <label for="immobilier-capital">Capital emprunté ou restant du</label>
+              <input class="form-control" id="immobilier-capital" type="text" placeholder="Capital emprunté ou restant du" name="ImmobilierCapital"
+                [(ngModel)]="newImmobilier.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-duree">Durée</label>
-              <input
-                class="form-control"
-                id="immobilier-duree"
-                type="text"
-                placeholder="Durée"
-                name="ImmobilierDuree"
-                [(ngModel)]="newImmobilier.Duree"
-              />
+              <input class="form-control" id="immobilier-duree" type="text" placeholder="Durée" name="ImmobilierDuree" [(ngModel)]="newImmobilier.Duree" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-taux">Taux</label>
-              <input
-                class="form-control"
-                id="immobilier-taux"
-                type="text"
-                placeholder="Taux"
-                name="ImmobilierTaux"
-                [(ngModel)]="newImmobilier.Taux"
-              />
+              <input class="form-control" id="immobilier-taux" type="text" placeholder="Taux" name="ImmobilierTaux" [(ngModel)]="newImmobilier.Taux" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-deces">Décès</label>
-              <input
-                class="form-control"
-                id="immobilier-deces"
-                type="text"
-                placeholder="Décès"
-                name="ImmobilierDeces"
-                [(ngModel)]="newImmobilier.Deces"
-              />
+              <input class="form-control" id="immobilier-deces" type="text" placeholder="Décès" name="ImmobilierDeces" [(ngModel)]="newImmobilier.Deces" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addImmobilier()">
               Ajouter l'Immobilier de rapport
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
-           
+
           </div>
         </div>
       </div>
@@ -1932,106 +1384,48 @@
     <!-- fin Modal Immobilier-->
 
     <!-- Modal for Biens professionnel-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropProf"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelProf"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropProf" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelProf"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelProf">
               Biens professionnels
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="prof-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="prof-designation"
-                type="text"
-                placeholder="Désignation"
-                name="ProfDesignation"
-                [(ngModel)]="newProf.Designation"
-              />
+              <input class="form-control" id="prof-designation" type="text" placeholder="Désignation" name="ProfDesignation" [(ngModel)]="newProf.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="prof-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="prof-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="ProfValeur"
-                [(ngModel)]="newProf.Valeur"
-              />
+              <input class="form-control" id="prof-valeur" type="text" placeholder="Valeur" name="ProfValeur" [(ngModel)]="newProf.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="prof-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="prof-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="ProfDetenteur"
-                [(ngModel)]="newProf.Detenteur"
-              />
+              <input class="form-control" id="prof-detenteur" type="text" placeholder="Détenteur" name="ProfDetenteur" [(ngModel)]="newProf.Detenteur" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="prof-charge">Charges associées / Date d'achat</label>
-              <input
-                class="form-control"
-                id="prof-charge"
-                type="text"
-                placeholder="Charges associées / Date d'achat"
-                name="ProfCharge"
-                [(ngModel)]="newProf.Charge"
-              />
+              <input class="form-control" id="prof-charge" type="text" placeholder="Charges associées / Date d'achat" name="ProfCharge" [(ngModel)]="newProf.Charge" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-capital">Capital emprunté ou restant du</label>
-              <input
-                class="form-control"
-                id="usage-capital"
-                type="text"
-                placeholder="Capital emprunté ou restant du"
-                name="UsageCapital"
-                [(ngModel)]="newUsage.Capital"
-              />
+              <input class="form-control" id="usage-capital" type="text" placeholder="Capital emprunté ou restant du" name="UsageCapital" [(ngModel)]="newUsage.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="prof-partic">Particularités</label>
-              <input
-                class="form-control"
-                id="prof-partic"
-                type="text"
-                placeholder="Durée"
-                name="ProfPartic"
-                [(ngModel)]="newProf.Partic"
-              />
+              <input class="form-control" id="prof-partic" type="text" placeholder="Durée" name="ProfPartic" [(ngModel)]="newProf.Partic" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addProf()">
               Ajouter le bien professionnel
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
@@ -2041,109 +1435,51 @@
     <!-- fin Modal Prof-->
 
     <!-- Modal for Passif-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropPassif"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelPassif"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropPassif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelPassif"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelPassif">
               Vos passifs
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="dette-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="dette-designation"
-                type="text"
-                placeholder="Désignation"
-                name="detteDesignation"
-                [(ngModel)]="newDette.Designation"
-              />
+              <input class="form-control" id="dette-designation" type="text" placeholder="Désignation" name="detteDesignation" [(ngModel)]="newDette.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dette-capital">Capital</label>
-              <input
-                class="form-control"
-                id="dette-capital"
-                type="text"
-                placeholder="Capital"
-                name="DetteCapital"
-                [(ngModel)]="newDette.Capital"
-              />
+              <input class="form-control" id="dette-capital" type="text" placeholder="Capital" name="DetteCapital" [(ngModel)]="newDette.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dette-duree">Durée</label>
-              <input
-                class="form-control"
-                id="dette-duree"
-                type="text"
-                placeholder="Durée"
-                name="DetteDuree"
-                [(ngModel)]="newDette.Duree"
-              />
+              <input class="form-control" id="dette-duree" type="text" placeholder="Durée" name="DetteDuree" [(ngModel)]="newDette.Duree" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="dette-taux">Taux</label>
-              <input
-                class="form-control"
-                id="dette-taux"
-                type="text"
-                placeholder="Taux"
-                name="DetteTaux"
-                [(ngModel)]="newDette.Taux"
-              />
+              <input class="form-control" id="dette-taux" type="text" placeholder="Taux" name="DetteTaux" [(ngModel)]="newDette.Taux" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dette-deces">Ass.** Décès</label>
-              <input
-                class="form-control"
-                id="dette-deces"
-                type="text"
-                placeholder="Décès"
-                name="DetteDeces"
-                [(ngModel)]="newDette.Deces"
-              />
+              <input class="form-control" id="dette-deces" type="text" placeholder="Décès" name="DetteDeces" [(ngModel)]="newDette.Deces" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dette-partic">Particularités</label>
-              <input
-                class="form-control"
-                id="dette-partic"
-                type="text"
-                placeholder="Particularités"
-                name="DettePartic"
-                [(ngModel)]="newDette.Partic"
-              />
+              <input class="form-control" id="dette-partic" type="text" placeholder="Particularités" name="DettePartic" [(ngModel)]="newDette.Partic" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addDette()">
               Ajouter le passifs
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
-            
+
           </div>
         </div>
       </div>
@@ -2151,108 +1487,48 @@
     <!-- fin Modal Passif-->
 
     <!-- Modal for Assurance-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropAssur"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelAssur"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropAssur" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelAssur"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelPassif">
               Assurances
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="assur-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="assur-designation"
-                type="text"
-                placeholder="Désignation"
-                name="assureDesignation"
-                [(ngModel)]="newAssur.Designation"
-              />
+              <input class="form-control" id="assur-designation" type="text" placeholder="Désignation" name="assureDesignation" [(ngModel)]="newAssur.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="assur-capital"
-                >Valeur de rachat ou capital assuré</label
-              >
-              <input
-                class="form-control"
-                id="assur-capital"
-                type="text"
-                placeholder="Capital"
-                name="AssurCapital"
-                [(ngModel)]="newAssur.Capital"
-              />
+              <label for="assur-capital">Valeur de rachat ou capital assuré</label>
+              <input class="form-control" id="assur-capital" type="text" placeholder="Capital" name="AssurCapital" [(ngModel)]="newAssur.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="assur-date">Date de souscription</label>
-              <input
-                class="form-control"
-                id="assur-date"
-                type="text"
-                placeholder="Date"
-                name="AssurDate"
-                [(ngModel)]="newAssur.Date"
-              />
+              <input class="form-control" id="assur-date" type="text" placeholder="Date" name="AssurDate" [(ngModel)]="newAssur.Date" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="assur-assur">Assuré</label>
-              <input
-                class="form-control"
-                id="assur-assur"
-                type="text"
-                placeholder="Assuré"
-                name="AssurAssur"
-                [(ngModel)]="newAssur.Assur"
-              />
+              <input class="form-control" id="assur-assur" type="text" placeholder="Assuré" name="AssurAssur" [(ngModel)]="newAssur.Assur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="assur-benef">Benéficiaires</label>
-              <input
-                class="form-control"
-                id="assur-benef"
-                type="text"
-                placeholder="Bénéficiaires"
-                name="AssurBenef"
-                [(ngModel)]="newAssur.Benef"
-              />
+              <input class="form-control" id="assur-benef" type="text" placeholder="Bénéficiaires" name="AssurBenef" [(ngModel)]="newAssur.Benef" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="assur-partic">Particularités</label>
-              <input
-                class="form-control"
-                id="assur-partic"
-                type="text"
-                placeholder="Particularités"
-                name="AssurPartic"
-                [(ngModel)]="newAssur.Partic"
-              />
+              <input class="form-control" id="assur-partic" type="text" placeholder="Particularités" name="AssurPartic" [(ngModel)]="newAssur.Partic" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addAssur()">
               Ajouter l'assurance
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
@@ -2261,106 +1537,48 @@
     </div>
     <!-- fin Modal Assurance-->
     <!-- Modal for Epargne-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropEpar"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelEpar"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropEpar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelEpar"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelEpar">
               Épargne et dépôt à moyen et long terme
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="epar-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="epar-designation"
-                type="text"
-                placeholder="Désignation"
-                name="EparDesignation"
-                [(ngModel)]="newEpar.Designation"
-              />
+              <input class="form-control" id="epar-designation" type="text" placeholder="Désignation" name="EparDesignation" [(ngModel)]="newEpar.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="epar-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="epar-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="EparValeur"
-                [(ngModel)]="newEpar.Valeur"
-              />
+              <input class="form-control" id="epar-valeur" type="text" placeholder="Valeur" name="EparValeur" [(ngModel)]="newEpar.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="epar-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="epar-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="EparDetenteur"
-                [(ngModel)]="newEpar.Detenteur"
-              />
+              <input class="form-control" id="epar-detenteur" type="text" placeholder="Détenteur" name="EparDetenteur" [(ngModel)]="newEpar.Detenteur" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="epar-date">Date d'ouverture</label>
-              <input
-                class="form-control"
-                id="epar-date"
-                type="text"
-                placeholder="Date d'ouverture"
-                name="EparDate"
-                [(ngModel)]="newEpar.Date"
-              />
+              <input class="form-control" id="epar-date" type="text" placeholder="Date d'ouverture" name="EparDate" [(ngModel)]="newEpar.Date" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="epar-epar">Epargne associée</label>
-              <input
-                class="form-control"
-                id="epar-epar"
-                type="text"
-                placeholder="Epargne associée"
-                name="EparEpar"
-                [(ngModel)]="newEpar.Epar"
-              />
+              <input class="form-control" id="epar-epar" type="text" placeholder="Epargne associée" name="EparEpar" [(ngModel)]="newEpar.Epar" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="epar-partic">Particularités</label>
-              <input
-                class="form-control"
-                id="epar-partic"
-                type="text"
-                placeholder="Particularités"
-                name="EparPartic"
-                [(ngModel)]="newEpar.Partic"
-              />
+              <input class="form-control" id="epar-partic" type="text" placeholder="Particularités" name="EparPartic" [(ngModel)]="newEpar.Partic" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addEpar()">
               Ajouter l'epargne
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
@@ -2370,106 +1588,48 @@
     <!-- fin Modal Epargne-->
 
     <!-- Modal for Mobiliere-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropMobil"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelMobil"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropMobil" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelMobil"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelMobil">
               Valeurs mobilières
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="mobil-designation"
-                type="text"
-                placeholder="Désignation"
-                name="MobilDesignation"
-                [(ngModel)]="newMobil.Designation"
-              />
+              <input class="form-control" id="mobil-designation" type="text" placeholder="Désignation" name="MobilDesignation" [(ngModel)]="newMobil.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="mobil-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="MobilValeur"
-                [(ngModel)]="newMobil.Valeur"
-              />
+              <input class="form-control" id="mobil-valeur" type="text" placeholder="Valeur" name="MobilValeur" [(ngModel)]="newMobil.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="mobil-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="MobilDetenteur"
-                [(ngModel)]="newMobil.Detenteur"
-              />
+              <input class="form-control" id="mobil-detenteur" type="text" placeholder="Détenteur" name="MobilDetenteur" [(ngModel)]="newMobil.Detenteur" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-revenudis">Revenus distribués</label>
-              <input
-                class="form-control"
-                id="mobil-revenudis"
-                type="text"
-                placeholder="Revenus distribués"
-                name="MobilRevenuDis"
-                [(ngModel)]="newMobil.RevenuDis"
-              />
+              <input class="form-control" id="mobil-revenudis" type="text" placeholder="Revenus distribués" name="MobilRevenuDis" [(ngModel)]="newMobil.RevenuDis" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-fisca">Fiscalité ou revenu</label>
-              <input
-                class="form-control"
-                id="mobil-fisca"
-                type="text"
-                placeholder="Fiscalité ou revenu"
-                name="MobilFisca"
-                [(ngModel)]="newMobil.Fisca"
-              />
+              <input class="form-control" id="mobil-fisca" type="text" placeholder="Fiscalité ou revenu" name="MobilFisca" [(ngModel)]="newMobil.Fisca" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="mobil-taux">Taux de revalorisation</label>
-              <input
-                class="form-control"
-                id="mobil-taux"
-                type="text"
-                placeholder="Taux de revalorisation"
-                name="MobilTaux"
-                [(ngModel)]="newMobil.Taux"
-              />
+              <input class="form-control" id="mobil-taux" type="text" placeholder="Taux de revalorisation" name="MobilTaux" [(ngModel)]="newMobil.Taux" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addMobil()">
               Ajouter le mobilière
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
@@ -2479,84 +1639,40 @@
     <!-- fin Modal Mobil-->
 
     <!-- Modal for Dispo-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropDispo"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelDispo"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropDispo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelDispo"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelDispo">
               Disponibilités
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="dispo-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="dispo-designation"
-                type="text"
-                placeholder="Désignation"
-                name="DispoDesignation"
-                [(ngModel)]="newDispo.Designation"
-              />
+              <input class="form-control" id="dispo-designation" type="text" placeholder="Désignation" name="DispoDesignation" [(ngModel)]="newDispo.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dispo-valeur">Valeur</label>
-              <input
-                class="form-control"
-                id="dispo-valeur"
-                type="text"
-                placeholder="Valeur"
-                name="DispoValeur"
-                [(ngModel)]="newDispo.Valeur"
-              />
+              <input class="form-control" id="dispo-valeur" type="text" placeholder="Valeur" name="DispoValeur" [(ngModel)]="newDispo.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="dispo-detenteur">Détenteur</label>
-              <input
-                class="form-control"
-                id="dispo-detenteur"
-                type="text"
-                placeholder="Détenteur"
-                name="DispoDetenteur"
-                [(ngModel)]="newDispo.Detenteur"
-              />
+              <input class="form-control" id="dispo-detenteur" type="text" placeholder="Détenteur" name="DispoDetenteur" [(ngModel)]="newDispo.Detenteur" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="dispo-partic">Particularités</label>
-              <input
-                class="form-control"
-                id="dispo-partic"
-                type="text"
-                placeholder="Particularités"
-                name="DispoPartic"
-                [(ngModel)]="newDispo.Partic"
-              />
+              <input class="form-control" id="dispo-partic" type="text" placeholder="Particularités" name="DispoPartic" [(ngModel)]="newDispo.Partic" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addDispo()">
               Ajouter la Disponibilité
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
@@ -2566,61 +1682,31 @@
     <!-- fin Modal Dispo-->
 
     <!-- Modal for Budget-->
-    <div
-      class="modal modal-lg"
-      id="staticBackdropBudget"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="staticBackdropLabelBudget"
-      aria-hidden="true"
-    >
+    <div class="modal modal-lg" id="staticBackdropBudget" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelBudget"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabelBudget">
               Votre budget
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
             <div class="form-group mb-3 col-md-6">
               <label for="budget-designation">Désignation</label>
-              <input
-                class="form-control"
-                id="budget-designation"
-                type="text"
-                placeholder="Désignation"
-                name="BudgetDesignation"
-                [(ngModel)]="newBudget.Designation"
-              />
+              <input class="form-control" id="budget-designation" type="text" placeholder="Désignation" name="BudgetDesignation" [(ngModel)]="newBudget.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="budget-montant">Montant</label>
-              <input
-                class="form-control"
-                id="budget-montant"
-                type="text"
-                placeholder="Montant"
-                name="BudgetMontant"
-                [(ngModel)]="newBudget.Montant"
-              />
+              <input class="form-control" id="budget-montant" type="text" placeholder="Montant" name="BudgetMontant" [(ngModel)]="newBudget.Montant" />
             </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary" (click)="addBudget()">
               Ajouter le budget
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
           </div>
