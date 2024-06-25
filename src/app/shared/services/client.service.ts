@@ -42,4 +42,8 @@ export class ClientService {
     let url = `${environment.url}/CreateClientPiece?`;
     return this.http.post(url, formData);
   }
+  DeleteClientPiece(ClientPieceId: string) {
+    let url = `${environment.url}/DeleteClientPiece/${ClientPieceId}`;
+    return this.http.delete(url);
+  }
 }

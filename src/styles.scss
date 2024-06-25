@@ -1,16 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./assets/scss/app.scss";
 
-.router-wrapper  {
-    position:  relative;
-    overflow:  hidden;
-    width:  100vw;
-    height:  calc(100%  -  47px);
-    perspective:  1200px;
-    transform-style:  preserve-3d;
+.router-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: calc(100% - 47px);
+    perspective: 1200px;
+    transform-style: preserve-3d;
 }
 
-:host  {
+:host {
     display: block;
     position: absolute;
     width: 100%;
@@ -18,3 +18,7 @@
     background: #60d7a9;
 }
 
+
+.toast-container {
+    position: fixed;
+}

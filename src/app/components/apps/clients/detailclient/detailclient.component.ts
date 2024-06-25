@@ -146,12 +146,17 @@ export class DetailclientComponent {
     private title: Title,
     private modalService: NgbModal,
   ) {
+
+    // setInterval(() => {
+    //   this.toastr.success("aaaghbjkl;knhghjk");
+    // }, 5000)
+
   }
 
 
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
-    console.log("onNavChange changeEvent: ", changeEvent)
+    // console.log("onNavChange changeEvent: ", changeEvent)
     if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
@@ -185,7 +190,26 @@ export class DetailclientComponent {
       // Gérer les actions en fonction du bouton cliqué
       if (result.isConfirmed) {
         // Action lorsque l'utilisateur clique sur "Supprimer"
-        Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+        // Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+        this.loader.show()
+        this.clientService.DeleteClientPiece(clientpieceid)
+          .subscribe((response) => {
+            console.log("response DeleteClientPiece: ", response);
+            this.loader.hide();
+            if (response == null || response == false) {
+              this.toastr.error("Erreur de suppression de la pièce");
+
+            } else {
+              this.toastr.success("Suppression de la pièce effectué");
+              this.filtredClientPieces = this.filtredClientPieces.filter(x => x.ClientPieceId != clientpieceid);
+              this.currentClient.ClientPieces = this.currentClient.ClientPieces.filter(x => x.ClientPieceId != clientpieceid);
+            }
+
+          }, (error) => {
+            console.error("Erreur DeleteClientPiece: ", error);
+            this.toastr.error("Erreur de suppression de la pièce");
+            this.loader.hide();
+          })
 
       } else if (result.isDenied) {
         // Action lorsque l'utilisateur clique sur "Télécharger"
@@ -198,7 +222,7 @@ export class DetailclientComponent {
     });
   }
   OnSearchPieceKeyUp(event) {
-    console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
+    // console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
     this.filtredClientPieces = this.currentClient.ClientPieces.filter(x =>
       x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) ||
       x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
@@ -228,7 +252,7 @@ export class DetailclientComponent {
           this.loader.show();
           this.enumService.GetPieces()
             .subscribe((responsePieces) => {
-              console.log("responsePieces: ", responsePieces);
+              // console.log("responsePieces: ", responsePieces);
               this.loader.hide();
               this.Pieces = responsePieces;
             }, (errorPieces) => {
@@ -260,7 +284,7 @@ export class DetailclientComponent {
       this.modalService.open(content, { centered: true, backdrop: true, });
     },
     Close: () => {
-      this.dialogImportPiece.Clea();
+      this.dialogImportPiece.Clear();
       this.modalService.dismissAll();
     },
     Clear: () => {
