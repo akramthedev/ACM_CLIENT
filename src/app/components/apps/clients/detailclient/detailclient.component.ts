@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Piece, } from 'src/app/shared/model/dto.model';
 import { ClientService } from 'src/app/shared/services/client.service';
 import { EnumService } from 'src/app/shared/services/enum.service';
+import Swal from 'sweetalert2';
 import { v4 as uuidv4 } from "uuid";
 
 interface Task {
@@ -156,6 +157,43 @@ export class DetailclientComponent {
       changeEvent.preventDefault();
     }
   }
+  sweetAlertOptionPiece(id: string) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-light me-2',
+        denyButton:'btn btn-primary me-2'
+      },
+      buttonsStyling: false,
+    });
+  
+    swalWithBootstrapButtons.fire({
+      title: 'Tu es sûr ?',
+      text: id,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Supprimer',
+      cancelButtonText: 'Annuler',
+      reverseButtons: true,
+      showDenyButton: true,
+      denyButtonText: 'Télécharger',
+    }).then((result) => {
+      // Gérer les actions en fonction du bouton cliqué
+      if (result.isConfirmed) {
+        // Action lorsque l'utilisateur clique sur "Supprimer"
+        
+        Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+      } else if (result.isDenied) {
+        // Action lorsque l'utilisateur clique sur "Télécharger"
+        
+        Swal.fire('Téléchargement!', 'Votre fichier est en cours de téléchargement.', 'info');
+      } else {
+        // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
+        Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
+      }
+    });
+  }
+
   ngOnInit() {
     this.activeTabId = 1;
 
