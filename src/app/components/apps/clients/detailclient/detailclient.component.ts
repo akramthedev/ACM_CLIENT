@@ -177,7 +177,6 @@ export class DetailclientComponent {
       confirmButtonText: 'Supprimer',
       cancelButtonText: 'Annuler',
       reverseButtons: true,
-      // Ajouter le bouton Télécharger
       showDenyButton: true,
       denyButtonText: 'Télécharger',
     }).then((result) => {
