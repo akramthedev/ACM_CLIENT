@@ -29,15 +29,22 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.loginForm.value["email"] == "Test@gmail.com" && this.loginForm.value["password"] == "test123") {
-      let user = {
-        email: "Test@gmail.com",
-        password: "test123",
-        name: "test user",
-      };
-      localStorage.setItem("user", JSON.stringify(user));
-      this.router.navigate(["/home"]);
-    }
+    console.log();
+    console.log(this.loginForm.value["password"]);
+    // if (this.loginForm.value["email"] == "Test@gmail.com" && this.loginForm.value["password"] == "test123") {
+    let email = this.loginForm.value["email"];
+    let username = email;
+    if (email.includes("@"))
+      username = email.split("@")[0];
+    let user = {
+      email: this.loginForm.value["email"],
+      password: this.loginForm.value["password"],
+      name: username,
+      username: username,
+    };
+    localStorage.setItem("user", JSON.stringify(user));
+    this.router.navigate(["/home"]);
+    // }
   }
 
   // showPassword(){
