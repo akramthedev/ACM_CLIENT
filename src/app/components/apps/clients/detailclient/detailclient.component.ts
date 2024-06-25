@@ -124,16 +124,15 @@ interface SituationAdmin {
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
-  // clientId:number;
+
   clientId: string;
-  // public active1 = 1;
-  // public active2 = 1;
-  // public active3 = 1;
-  // public active4 = 1;
 
   activeTabId: number = 1;
   disabled = true;
   currentClient: any;
+
+  filtredClientPieces: any[] = [];
+  filterPiecesText: string = "";
 
   Pieces: Piece[] = [];
 
@@ -147,32 +146,40 @@ export class DetailclientComponent {
     private title: Title,
     private modalService: NgbModal,
   ) {
+
+    // setInterval(() => {
+    //   this.toastr.success("aaaghbjkl;knhghjk");
+    // }, 5000)
+
   }
-  onNavChange1(changeEvent: NgbNavChangeEvent) {
+
+
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    // console.log("onNavChange changeEvent: ", changeEvent)
     if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
 
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 4) {
-      changeEvent.preventDefault();
-    }
-  }
-  sweetAlertOptionPiece(id: string) {
+  OpenPieceTools(clientpieceid: string) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-danger',
         cancelButton: 'btn btn-light me-2',
-        denyButton:'btn btn-primary me-2'
+        denyButton: 'btn btn-primary me-2'
       },
       buttonsStyling: false,
     });
-  
+
+    let clientPiece = this.currentClient.ClientPieces.find(x => x.ClientPieceId == clientpieceid);
+    console.log("clientPiece: ", clientPiece);
+
+
     swalWithBootstrapButtons.fire({
-      title: 'Tu es sûr ?',
-      text: id,
-      icon: 'warning',
+      title: clientPiece.Libelle,//,'Tu es sûr ?',
+      // text: clientPiece.Libelle,
+      icon: null,//'warning',
       showCancelButton: true,
       confirmButtonText: 'Supprimer',
       cancelButtonText: 'Annuler',
@@ -183,19 +190,43 @@ export class DetailclientComponent {
       // Gérer les actions en fonction du bouton cliqué
       if (result.isConfirmed) {
         // Action lorsque l'utilisateur clique sur "Supprimer"
-        
-        Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+        // Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+        this.loader.show()
+        this.clientService.DeleteClientPiece(clientpieceid)
+          .subscribe((response) => {
+            console.log("response DeleteClientPiece: ", response);
+            this.loader.hide();
+            if (response == null || response == false) {
+              this.toastr.error("Erreur de suppression de la pièce");
+
+            } else {
+              this.toastr.success("Suppression de la pièce effectué");
+              this.filtredClientPieces = this.filtredClientPieces.filter(x => x.ClientPieceId != clientpieceid);
+              this.currentClient.ClientPieces = this.currentClient.ClientPieces.filter(x => x.ClientPieceId != clientpieceid);
+            }
+
+          }, (error) => {
+            console.error("Erreur DeleteClientPiece: ", error);
+            this.toastr.error("Erreur de suppression de la pièce");
+            this.loader.hide();
+          })
+
       } else if (result.isDenied) {
         // Action lorsque l'utilisateur clique sur "Télécharger"
-        
+
         Swal.fire('Téléchargement!', 'Votre fichier est en cours de téléchargement.', 'info');
       } else {
         // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
-        Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
+        // Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
       }
     });
   }
-
+  OnSearchPieceKeyUp(event) {
+    // console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
+    this.filtredClientPieces = this.currentClient.ClientPieces.filter(x =>
+      x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) ||
+      x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
+  }
   ngOnInit() {
     this.activeTabId = 1;
 
@@ -215,12 +246,13 @@ export class DetailclientComponent {
             }, 2000);
           }
           this.currentClient = response;
+          this.filtredClientPieces = this.currentClient.ClientPieces;
           this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
 
           this.loader.show();
           this.enumService.GetPieces()
             .subscribe((responsePieces) => {
-              console.log("responsePieces: ", responsePieces);
+              // console.log("responsePieces: ", responsePieces);
               this.loader.hide();
               this.Pieces = responsePieces;
             }, (errorPieces) => {
@@ -252,7 +284,7 @@ export class DetailclientComponent {
       this.modalService.open(content, { centered: true, backdrop: true, });
     },
     Close: () => {
-      this.dialogImportPiece.Clea();
+      this.dialogImportPiece.Clear();
       this.modalService.dismissAll();
     },
     Clear: () => {
