@@ -123,16 +123,13 @@ interface SituationAdmin {
   styleUrl: './detailclient.component.scss'
 })
 export class DetailclientComponent {
-  // clientId:number;
+
   clientId: string;
-  // public active1 = 1;
-  // public active2 = 1;
-  // public active3 = 1;
-  // public active4 = 1;
 
   activeTabId: number = 1;
   disabled = true;
   currentClient: any;
+  filtredClientPieces: any[] = [];
 
   Pieces: Piece[] = [];
 
@@ -147,6 +144,7 @@ export class DetailclientComponent {
     private modalService: NgbModal,
   ) {
   }
+
   onNavChange1(changeEvent: NgbNavChangeEvent) {
     if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
@@ -177,6 +175,7 @@ export class DetailclientComponent {
             }, 2000);
           }
           this.currentClient = response;
+          this.filtredClientPieces = this.currentClient.ClientPieces;
           this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
 
           this.loader.show();

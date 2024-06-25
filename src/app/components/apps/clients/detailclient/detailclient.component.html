@@ -1098,7 +1098,7 @@
                         <h4 class="mb-3">Toutes les pièces</h4>
                         <!-- <h6>Pièces de {{currentClient.Nom + ' '+currentClient.Prenom}}</h6> -->
                         <ul class="files">
-                          <li class="file-box me-1" *ngFor="let clientPiece of currentClient.ClientPieces;let index=index">
+                          <li class="file-box me-1" *ngFor="let clientPiece of filtredClientPieces;let index=index">
                             <div class="file-top">
                               <i *ngIf="['png','jpg','jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
                               <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
@@ -1242,7 +1242,7 @@
 
     <ng-template #modalUploadClientPiece let-modal>
       <div class="modal-header">
-        <h4 class="modal-title">Imporation de pièce</h4>
+        <h4 class="modal-title">Importation de pièce</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
       </div>
       <div class="modal-body">
