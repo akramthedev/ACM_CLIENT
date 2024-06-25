@@ -214,6 +214,7 @@ export class DetailclientComponent {
       this.modalService.open(content, { centered: true, backdrop: true, });
     },
     Close: () => {
+      this.dialogImportPiece.Clea();
       this.modalService.dismissAll();
     },
     Clear: () => {
@@ -227,47 +228,58 @@ export class DetailclientComponent {
       const formData = new FormData();
       // for (let i = 0; i < event.target.files.length; i++)
       formData.append('file', event.target.files[0], event.target.files[0].name);
+      console.log("event.target.files[0]: ", event.target.files[0])
+      let fileName = event.target.files[0].name
+      let extension = fileName.split(".")[fileName.split(".").length - 1]
+      console.log("extension: ", extension);
+      this.dialogImportPiece.Extension = extension;
 
       this.dialogImportPiece.formData = formData;
       this.dialogImportPiece.FileReady = true;
     },
     Submit: () => {
-      console.log("this.dialogImportPiece.SelectedPiece: ", this.dialogImportPiece.SelectedPiece);
-      // console.log("this.dialogImportPiece.SelectedFile: ", this.dialogImportPiece.SelectedFile)
 
-      this.dialogImportPiece.formData.append('ClientPieceId', uuidv4());
-      this.dialogImportPiece.formData.append('ClientId', this.currentClient.ClientId);
-      this.dialogImportPiece.formData.append('PieceId', this.dialogImportPiece.SelectedPiece);
-      console.log("this.dialogImportPiece.formData: ", this.dialogImportPiece.formData)
-      // if (event.target.files.length == 0) {
-      //   this.toastr.warning("Rien a importer.");
-      //   return;
-      // }
-      // const formData = new FormData();
-      // for (let i = 0; i < event.target.files.length; i++)
-      //   formData.append('Files', event.target.files[i], event.target.files[i].name);
+      if (this.dialogImportPiece.SelectedPiece == null || this.dialogImportPiece.SelectedPiece == "") {
+        this.toastr.warning("Veuillez choisir une piece.");
+        return;
+      }
+      let newClientPiece = {
+        ClientPieceId: uuidv4(),
+        ClientId: this.currentClient.ClientId,
+        PieceId: this.dialogImportPiece.SelectedPiece,
+        Libelle: this.Pieces.find(x => x.PieceId == this.dialogImportPiece.SelectedPiece)?.Libelle,
+        Extension: this.dialogImportPiece.Extension,
+      }
+      this.dialogImportPiece.formData.append('ClientPieceId', newClientPiece.ClientPieceId);
+      this.dialogImportPiece.formData.append('ClientId', newClientPiece.ClientId);
+      this.dialogImportPiece.formData.append('PieceId', newClientPiece.PieceId);
 
+      this.loader.show();
       this.clientService.CreateClientPiece(this.dialogImportPiece.formData)
         .subscribe((response: any) => {
           console.log("response CreateClientPiece: ", response);
-          // this.loader.loaderDialogEmitter.emit({ isOpen: false, isCancelable: false });
-          this.toastr.success("Importation reussi");
-          // this.GetEtudiantFilesById(this.currentStudent.Etd_Id)
+          this.loader.hide();
 
-          // clear file input:
-          let inputElem: any = document.getElementById(`importFile`);
-          inputElem.value = "";
+          if (response == null || response == false) {
+            this.toastr.error("Erreur d'imporation du fichier.");
+          } else {
+            this.toastr.success("Importation reussi");
+            // clear file input:
+            let inputElem: any = document.getElementById(`importFile`);
+            inputElem.value = "";
 
+            this.currentClient.ClientPieces.push(newClientPiece);
+            this.dialogImportPiece.Close();
+          }
         }, (error: any) => {
           console.error("error CreateClientPiece: ", error);
-
+          this.loader.hide();
+          this.toastr.error("Erreur d'imporation du fichier.");
 
           // clear file input:
           let inputElem: any = document.getElementById(`importFile`);
           inputElem.value = "";
         })
-
-
     }
   }
 

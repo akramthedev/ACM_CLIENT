@@ -1242,7 +1242,7 @@
 
     <ng-template #modalUploadClientPiece let-modal>
       <div class="modal-header">
-        <h4 class="modal-title">Modal title</h4>
+        <h4 class="modal-title">Imporation de pièce</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
       </div>
       <div class="modal-body">
@@ -1261,7 +1261,7 @@
             <div class="col">
               <div class="mb-3">
                 <label for="piece">Fichier</label>
-                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier"
+                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile"
                   (change)="dialogImportPiece.OnFileChange($event)" />
               </div>
             </div>
