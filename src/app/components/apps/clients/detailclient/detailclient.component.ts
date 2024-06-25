@@ -130,7 +130,9 @@ export class DetailclientComponent {
   activeTabId: number = 1;
   disabled = true;
   currentClient: any;
+
   filtredClientPieces: any[] = [];
+  filterPiecesText: string = "";
 
   Pieces: Piece[] = [];
 
@@ -146,31 +148,33 @@ export class DetailclientComponent {
   ) {
   }
 
-  onNavChange1(changeEvent: NgbNavChangeEvent) {
+
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    console.log("onNavChange changeEvent: ", changeEvent)
     if (changeEvent.nextId === 4) {
       changeEvent.preventDefault();
     }
   }
 
-  onNavChange(changeEvent: NgbNavChangeEvent) {
-    if (changeEvent.nextId === 4) {
-      changeEvent.preventDefault();
-    }
-  }
-  sweetAlertOptionPiece(id: string) {
+  OpenPieceTools(clientpieceid: string) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-danger',
         cancelButton: 'btn btn-light me-2',
-        denyButton:'btn btn-primary me-2'
+        denyButton: 'btn btn-primary me-2'
       },
       buttonsStyling: false,
     });
-  
+
+    let clientPiece = this.currentClient.ClientPieces.find(x => x.ClientPieceId == clientpieceid);
+    console.log("clientPiece: ", clientPiece);
+
+
     swalWithBootstrapButtons.fire({
-      title: 'Tu es sûr ?',
-      text: id,
-      icon: 'warning',
+      title: clientPiece.Libelle,//,'Tu es sûr ?',
+      // text: clientPiece.Libelle,
+      icon: null,//'warning',
       showCancelButton: true,
       confirmButtonText: 'Supprimer',
       cancelButtonText: 'Annuler',
@@ -181,19 +185,24 @@ export class DetailclientComponent {
       // Gérer les actions en fonction du bouton cliqué
       if (result.isConfirmed) {
         // Action lorsque l'utilisateur clique sur "Supprimer"
-        
         Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+
       } else if (result.isDenied) {
         // Action lorsque l'utilisateur clique sur "Télécharger"
-        
+
         Swal.fire('Téléchargement!', 'Votre fichier est en cours de téléchargement.', 'info');
       } else {
         // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
-        Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
+        // Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
       }
     });
   }
-
+  OnSearchPieceKeyUp(event) {
+    console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
+    this.filtredClientPieces = this.currentClient.ClientPieces.filter(x =>
+      x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) ||
+      x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
+  }
   ngOnInit() {
     this.activeTabId = 1;
 

@@ -8,7 +8,7 @@
           <h5>Détails client</h5>
         </div> -->
         <div class="card-body">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTabId" (navChange)="onNavChange1($event)" class="nav-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTabId" (navChange)="onNavChange($event)" class="nav-tabs">
             <li [ngbNavItem]="1">
               <a ngbNavLink>BP</a>
               <ng-template ngbNavContent>
@@ -1079,7 +1079,7 @@
                           <form class="form-inline" action="#" method="get">
                             <div class="form-group mb-0">
                               <i class="fa fa-search"></i>
-                              <input class="form-control-plaintext" type="text" placeholder="Chercher..." />
+                              <input class="form-control-plaintext" type="text" placeholder="Chercher..." (keyup)="OnSearchPieceKeyUp($event)" [(ngModel)]="filterPiecesText"  />
                             </div>
                           </form>
                           <div class="media-body text-end">
@@ -1103,10 +1103,7 @@
                               <i *ngIf="['png','jpg','jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
                               <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
                               <!-- class="d-inline-block" -->
-                               
-                                <i class="fa fa-ellipsis-v f-14 ellips" (click)="sweetAlertOptionPiece(clientPiece.PieceId)"></i>
-                               
-                                
+                              <i class="fa fa-ellipsis-v f-14 ellips" (click)="OpenPieceTools(clientPiece.ClientPieceId)"></i>
                             </div>
                             <div class="file-bottom">
                               <h6>{{ clientPiece.Libelle }}</h6>
@@ -1271,9 +1268,9 @@
 
 
     <!-- Modal for option piece -->
-    
-      
-    
+
+
+
     <!-- Modal for Bien d'usage-->
     <div class="modal modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
