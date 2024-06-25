@@ -47,8 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    // ToastrModule.forRoot(),
-    ToastrModule.forRoot({ closeButton: true, enableHtml: true, timeOut: 60 * 60 * 1000 }),
+    ToastrModule.forRoot(),
+    // ToastrModule.forRoot({ closeButton: true, enableHtml: true, timeOut: 60 * 60 * 1000 }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
