@@ -1104,7 +1104,7 @@
                               <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
                               <!-- class="d-inline-block" -->
                                
-                                <i class="fa fa-ellipsis-v f-14 ellips"></i>
+                                <i class="fa fa-ellipsis-v f-14 ellips" (click)="sweetAlertOptionPiece(clientPiece.PieceId)"></i>
                                
                                 
                             </div>
