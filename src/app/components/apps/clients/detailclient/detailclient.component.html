@@ -1102,16 +1102,11 @@
                             <div class="file-top">
                               <i *ngIf="['png','jpg','jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
                               <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
-
                               <!-- class="d-inline-block" -->
-                              <span ngbDropdown placement="bottom">
-                                <i [id]="'dropdownBasic'+index" class="fa fa-ellipsis-v f-14 ellips" ngbDropdownToggle></i>
-                                <div ngbDropdownMenu [aria-labelledby]="'dropdownBasic'+index">
-                                  <button class="dropdown-item">Telecharger</button>
-                                  <button class="dropdown-item">Supprimer</button>
-                                </div>
-                              </span>
-
+                               
+                                <i class="fa fa-ellipsis-v f-14 ellips"></i>
+                               
+                                
                             </div>
                             <div class="file-bottom">
                               <h6>{{ clientPiece.Libelle }}</h6>
@@ -1275,7 +1270,10 @@
     </ng-template>
 
 
-
+    <!-- Modal for option piece -->
+    
+      
+    
     <!-- Modal for Bien d'usage-->
     <div class="modal modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
