@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Piece, } from 'src/app/shared/model/dto.model';
 import { ClientService } from 'src/app/shared/services/client.service';
 import { EnumService } from 'src/app/shared/services/enum.service';
+import { v4 as uuidv4 } from "uuid";
 
 interface Task {
   title: string;
@@ -200,11 +201,73 @@ export class DetailclientComponent {
   }
 
   dialogImportPiece: any = {
+    PiecesToChoose: [],
+    SelectedPiece: null,
+    SelectedFile: null,
+    FileReady: false,
+    formData: null,
     Open: (content) => {
+      this.dialogImportPiece.PiecesToChoose = this.Pieces.filter(x => !this.currentClient.ClientPieces.map(w => w.PieceId).includes(x.PieceId));
+      this.dialogImportPiece.SelectedPiece = null;
+      console.log("PiecesToChoose: ", this.dialogImportPiece.PiecesToChoose);
+
       this.modalService.open(content, { centered: true, backdrop: true, });
     },
     Close: () => {
       this.modalService.dismissAll();
+    },
+    Clear: () => {
+      this.dialogImportPiece.PiecesToChoose = [];
+      this.dialogImportPiece.SelectedPiece = null;
+      this.dialogImportPiece.SelectedFile = null;
+      this.dialogImportPiece.FileReady = false;
+      this.dialogImportPiece.formData = null;
+    },
+    OnFileChange: (event: any) => {
+      const formData = new FormData();
+      // for (let i = 0; i < event.target.files.length; i++)
+      formData.append('file', event.target.files[0], event.target.files[0].name);
+
+      this.dialogImportPiece.formData = formData;
+      this.dialogImportPiece.FileReady = true;
+    },
+    Submit: () => {
+      console.log("this.dialogImportPiece.SelectedPiece: ", this.dialogImportPiece.SelectedPiece);
+      // console.log("this.dialogImportPiece.SelectedFile: ", this.dialogImportPiece.SelectedFile)
+
+      this.dialogImportPiece.formData.append('ClientPieceId', uuidv4());
+      this.dialogImportPiece.formData.append('ClientId', this.currentClient.ClientId);
+      this.dialogImportPiece.formData.append('PieceId', this.dialogImportPiece.SelectedPiece);
+      console.log("this.dialogImportPiece.formData: ", this.dialogImportPiece.formData)
+      // if (event.target.files.length == 0) {
+      //   this.toastr.warning("Rien a importer.");
+      //   return;
+      // }
+      // const formData = new FormData();
+      // for (let i = 0; i < event.target.files.length; i++)
+      //   formData.append('Files', event.target.files[i], event.target.files[i].name);
+
+      this.clientService.CreateClientPiece(this.dialogImportPiece.formData)
+        .subscribe((response: any) => {
+          console.log("response CreateClientPiece: ", response);
+          // this.loader.loaderDialogEmitter.emit({ isOpen: false, isCancelable: false });
+          this.toastr.success("Importation reussi");
+          // this.GetEtudiantFilesById(this.currentStudent.Etd_Id)
+
+          // clear file input:
+          let inputElem: any = document.getElementById(`importFile`);
+          inputElem.value = "";
+
+        }, (error: any) => {
+          console.error("error CreateClientPiece: ", error);
+
+
+          // clear file input:
+          let inputElem: any = document.getElementById(`importFile`);
+          inputElem.value = "";
+        })
+
+
     }
   }
 

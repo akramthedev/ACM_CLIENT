@@ -1248,11 +1248,28 @@
       <div class="modal-body">
         <div class="col-lg-12">
           <div class="row">
-
+            <div class="col">
+              <div class="mb-3">
+                <label for="piece">Pièce</label>
+                <select class="form-control" placeholder="Piece" [(ngModel)]="dialogImportPiece.SelectedPiece">
+                  <option *ngFor="let piece of dialogImportPiece.PiecesToChoose" [value]="piece.PieceId">{{ piece.Libelle }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="piece">Fichier</label>
+                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier"
+                  (change)="dialogImportPiece.OnFileChange($event)" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="dialogImportPiece.Submit()" [disabled]="!dialogImportPiece.FileReady">Importer</button>
         <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
       </div>
     </ng-template>
