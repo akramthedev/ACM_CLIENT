@@ -20,24 +20,24 @@
                     <button class="btn-primary badge-light d-block btn-mail w-100 text-light"><i class="me-2" data-feather="check-circle"> </i>Tâches</button>
                   </li>
                   <li class="nav-item">
-                    <a href="javascript:void(0)"
-                      ><span class="iconbg badge-light-primary"><app-feather-icons [icon]="'file-plus'" class="d-flex"></app-feather-icons></span><span class="title ms-2">Tous les tâches</span></a>
+                    <a href="javascript:void(0)"><span class="iconbg badge-light-primary"><app-feather-icons [icon]="'file-plus'" class="d-flex"></app-feather-icons></span><span
+                        class="title ms-2">Tous les tâches</span></a>
                   </li>
                   <li class="nav-item">
-                    <a href="javascript:void(0)"
-                      ><span class="iconbg badge-light-success"><app-feather-icons [icon]="'check-circle'" class="d-flex"></app-feather-icons></span><span class="title ms-2">Terminé</span><span class="badge badge-success">3</span></a>
+                    <a href="javascript:void(0)"><span class="iconbg badge-light-success"><app-feather-icons [icon]="'check-circle'" class="d-flex"></app-feather-icons></span><span
+                        class="title ms-2">Terminé</span><span class="badge badge-success">3</span></a>
                   </li>
                   <li class="nav-item">
-                    <a href="javascript:void(0)"
-                      ><span class="iconbg badge-light-danger"><app-feather-icons [icon]="'cast'" class="d-flex"></app-feather-icons></span><span class="title ms-2">En attente</span><span class="badge badge-danger">2</span></a>
+                    <a href="javascript:void(0)"><span class="iconbg badge-light-danger"><app-feather-icons [icon]="'cast'" class="d-flex"></app-feather-icons></span><span
+                        class="title ms-2">En attente</span><span class="badge badge-danger">2</span></a>
                   </li>
                   <li class="nav-item">
-                    <a href="javascript:void(0)"
-                      ><span class="iconbg badge-light-info"><app-feather-icons [icon]="'activity'" class="d-flex"></app-feather-icons></span><span class="title ms-2">En cours</span><span class="badge badge-primary">2</span></a>
+                    <a href="javascript:void(0)"><span class="iconbg badge-light-info"><app-feather-icons [icon]="'activity'" class="d-flex"></app-feather-icons></span><span
+                        class="title ms-2">En cours</span><span class="badge badge-primary">2</span></a>
                   </li>
                   <li class="nav-item">
-                    <a href="javascript:void(0)"
-                      ><span class="iconbg badge-light-danger"><app-feather-icons [icon]="'trash'" class="d-flex"></app-feather-icons></span><span class="title ms-2">Poubelle</span></a>
+                    <a href="javascript:void(0)"><span class="iconbg badge-light-danger"><app-feather-icons [icon]="'trash'" class="d-flex"></app-feather-icons></span><span
+                        class="title ms-2">Poubelle</span></a>
                   </li>
                 </ul>
               </div>
@@ -66,8 +66,7 @@
                       </span>
                     </span>
                     <span class="mark-all-btn move-down" id="mark-all-incomplete" role="button" [ngClass]="{ 'move-down': !completed }">
-                      <span class="btn-label">Marquer tous comme incomplet</span
-                      ><span class="action-box">
+                      <span class="btn-label">Marquer tous comme incomplet</span><span class="action-box">
                         <i class="icon" (click)="markAllAction(false)">
                           <i class="icon-check"></i>
                         </i>
@@ -85,13 +84,7 @@
                 </div>
                 <div class="todo-list-body">
                   <ul id="todo-list">
-                    <li
-                      class="task"
-                      [ngClass]="{
-                        completed: todo.completed ? todo.completed : completed
-                      }"
-                      *ngFor="let todo of todos; let i = index"
-                    >
+                    <li class="task" [ngClass]="{completed: todo.completed ? todo.completed : completed}" *ngFor="let todo of todos; let i = index">
                       <div class="task-container">
                         <h4 class="task-label">{{ todo.text }}</h4>
                         <h5 class="assign-name">{{ todo.client }}</h5>
@@ -101,11 +94,9 @@
                           </div>
                           <h5 class="assign-name">{{ todo.Date }}</h5>
                           <span class="task-action-btn">
-                            <span class="action-box large delete-btn" title="Delete Task" (click)="taskDeleted(i)"
-                              ><i class="icon"><i class="icon-trash"></i></i>
+                            <span class="action-box large delete-btn" title="Delete Task" (click)="taskDeleted(i)"><i class="icon"><i class="icon-trash"></i></i>
                             </span>
-                            <span class="action-box large complete-btn" title="Mark Complete" (click)="taskCompleted(todo)"
-                              ><i class="icon"><i class="icon-check"></i></i>
+                            <span class="action-box large complete-btn" title="Mark Complete" (click)="taskCompleted(todo)"><i class="icon"><i class="icon-check"></i></i>
                             </span>
                           </span>
                         </div>
@@ -117,10 +108,7 @@
                   <div class="new-task-wrapper" [ngClass]="{ visible: visible }">
                     <textarea class="textfield" name="todo" id="new-task" [(ngModel)]="text" [class.border-danger]="red_border"></textarea>
                     <span class="btn btn-danger cancel-btn" id="close-task-panel" (click)="visible = false">Fermer</span>
-                    <span
-                      class="btn btn-success ms-3 add-new-task-btn"
-                      id="add-task"
-                      (click)="
+                    <span class="btn btn-success ms-3 add-new-task-btn" id="add-task" (click)="
                         addTask({
                           text: text,
                           client:'Amine Laghlabi',
@@ -129,9 +117,7 @@
                           badgeClass: 'badge-light-danger',
                           completed: false
                         })
-                      "
-                      >Ajouter tâche</span
-                    >
+                      ">Ajouter tâche</span>
                   </div>
                 </div>
               </div>
@@ -145,4 +131,3 @@
     </div>
   </div>
 </div>
-

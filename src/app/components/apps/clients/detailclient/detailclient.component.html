@@ -272,7 +272,7 @@
                     <div ngbAccordionItem class="mt-3">
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white ">
-                          <span><i class="icofont icofont-bank-alt fs-3 px-2"></i> 
+                          <span><i class="icofont icofont-bank-alt fs-3 px-2"></i>
                             Passifs</span>
                         </button>
                       </h2>
@@ -1076,10 +1076,10 @@
                     <div class="card">
                       <div class="card-header">
                         <div class="media">
-                          <form class="form-inline" action="#" method="get">
+                          <form class="form-inline" action="#" method="get" *ngIf="currentClient.ClientPieces.length > 0">
                             <div class="form-group mb-0">
                               <i class="fa fa-search"></i>
-                              <input class="form-control-plaintext" type="text" placeholder="Chercher..." (keyup)="OnSearchPieceKeyUp($event)" [(ngModel)]="filterPiecesText"  />
+                              <input class="form-control-plaintext" type="text" placeholder="Chercher..." (keyup)="OnSearchPieceKeyUp($event)" [(ngModel)]="filterPiecesText" />
                             </div>
                           </form>
                           <div class="media-body text-end">
@@ -1095,7 +1095,8 @@
                         </div>
                       </div>
                       <div class="card-body file-manager">
-                        <h4 class="mb-3">Toutes les pièces</h4>
+                        <h4 class="mb-3" *ngIf="filtredClientPieces.length == 0">Aucune pièce importé</h4>
+                        <h4 class="mb-3" *ngIf="filtredClientPieces.length > 0">Toutes les pièces</h4>
                         <!-- <h6>Pièces de {{currentClient.Nom + ' '+currentClient.Prenom}}</h6> -->
                         <ul class="files">
                           <li class="file-box me-1" *ngFor="let clientPiece of filtredClientPieces;let index=index">

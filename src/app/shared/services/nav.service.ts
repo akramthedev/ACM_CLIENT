@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { Subject, BehaviorSubject, fromEvent } from "rxjs";
 import { takeUntil, debounceTime } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 
 // Menu
 export interface Menu {
@@ -46,6 +47,11 @@ export class NavService implements OnDestroy {
   public fullScreen: boolean = false;
 
   constructor(private router: Router) {
+
+    if (!environment.production) {
+      this.MENUITEMS = this.MENUITEMS.concat(this.otherRoutes);
+    }
+    
     this.setScreenWidth(window.innerWidth);
     fromEvent(window, "resize")
       .pipe(debounceTime(1000), takeUntil(this.unsubscriber))
@@ -83,7 +89,9 @@ export class NavService implements OnDestroy {
     { path: "/home", title: "Accueil", icon: "home", type: "link", bookmark: true, active: false, },
     { path: "/clients", title: "Clients", icon: "user", type: "link", bookmark: true, active: false, },
     { path: "/taches", title: "Tâches", icon: "task", type: "link", bookmark: true, active: false, },
+  ];
 
+  otherRoutes: Menu[] = [
     {
       headTitle1: "General",
     },
@@ -506,7 +514,7 @@ export class NavService implements OnDestroy {
     { path: "/editor", title: "Editor", icon: "editors", type: "link" },
     { path: "/knowledgebase", title: "Knowledgebase", icon: "knowledgebase", type: "link" },
     { path: "/support-ticket", title: "Support Ticket", icon: "support-tickets", type: "link" },
-  ];
+  ]
 
   // Array
   items = new BehaviorSubject<Menu[]>(this.MENUITEMS);

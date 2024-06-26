@@ -237,9 +237,9 @@ export class DetailclientComponent {
       this.clientService.GetClient(this.clientId)
         .subscribe((response) => {
           console.log("response GetClient: ", response)
-          this.loader.hide();
 
           if (response == null) {
+            this.loader.hide();
             this.toastr.error("Erreur de récuperation du client");
             setTimeout(() => {
               this.router.navigate(["/clients"]);
@@ -249,7 +249,7 @@ export class DetailclientComponent {
           this.filtredClientPieces = this.currentClient.ClientPieces;
           this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
 
-          this.loader.show();
+          // this.loader.show();
           this.enumService.GetPieces()
             .subscribe((responsePieces) => {
               // console.log("responsePieces: ", responsePieces);
