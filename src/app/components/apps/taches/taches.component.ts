@@ -2,7 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import * as data from "../../../shared/data/todo/todo";
 
-const Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const Months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
 export interface Task {
   text: string;
@@ -42,7 +42,9 @@ constructor(private title:Title){
 ngOnInit() {
   
 }
-
+getFirstThreeChars(date: string): string {
+  return date.substring(0, 3);
+}
 public addTask(text: any) {
   let someData = {
     text: text,

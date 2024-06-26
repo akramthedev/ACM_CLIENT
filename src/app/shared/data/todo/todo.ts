@@ -9,59 +9,59 @@ export interface Task {
   }
 export const task: Task[] = [
 	{
-	text: "Check validation involves making sure all your tags are properly closed and nested",
+	text: "Préparer la liste des pieces du dossier de la carte de sejour",
 	client:"Amadou Mboup",
-	priority: "In progress",
+	priority: "En Cours",
 	badgeClass: "badge-light-primary",
-	Date: "16 Jan",
+	Date: "16 Janvier",
 	completed: false
 },
 {
-	text: "Test the outgoing links from all the pages to the specific domain under test.",
+	text: "Remettre la liste des pieces du dossier carte sejour",
 	client:"Amine Laghlabi",
-	priority: "Pending",
+	priority: "En Attente",
 	badgeClass: "badge-light-danger",
-	Date: "04 Aug",
+	Date: "04 Août",
 	completed: false
 },
 {
-	text: "Test links are used to send emails to admin or other users from web pages.",
+	text: "Receptionner les pieces du depot de la carte de sejour",
 	client:"Mehdi Boulloul",
-	priority: "Done",
+	priority: "Terminé",
 	badgeClass: "badge-light-success",
-	Date: "25 Feb",
+	Date: "25 Février",
 	completed: true
 },
 {
-	text: "Options to create forms, if any, form deletes a view or modify the forms.",
+	text: "Préparer la liste des pieces du dossier de la carte de sejour",
 	client:"Amadou Mboup",
-	priority: "Done",
+	priority: "Terminé",
 	badgeClass: "badge-light-success",
-	Date: "30 Jan",
+	Date: "30 Janvier",
 	completed: true
 },
 {
-	text: "Wrong inputs in the forms to the fields in the forms.",
+	text: "Receptionner les pieces du depot de la carte de sejour",
 	client:"Amadou Mboup",
-	priority: "In progress",
+	priority: "En Cours",
 	badgeClass: "badge-light-primary",
-	Date: "06 Nov",
+	Date: "06 Novembre",
 	completed: false
 },
 {
-	text: "Check if the instructions provided are perfect to satisfy its purpose.",
+	text: "Valider le dossier de la carte de sejour",
 	client:"Amadou Mboup",
-	priority: "Pending",
+	priority: "En Attente",
 	badgeClass: "badge-light-danger",
-	Date: "08 Dec",
+	Date: "08 Décembre",
 	completed: false
 },
 {
-	text: "Application server and Database server interface.",
+	text: "Receptionner les pieces du depot de la carte de sejour",
 	client:"Amine Laghlabi",
-	priority: "Done",
+	priority: "Terminé",
 	badgeClass: "badge-light-success",
-	Date: "15 Mar",
+	Date: "15 Mars",
 	completed: true
 },
 

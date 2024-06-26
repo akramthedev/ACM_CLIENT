@@ -14,7 +14,7 @@ interface Task {
   title: string;
   date: string;
   status: string;
-  price: string;
+  prestation: string;
   statusClass: string;
 }
 
@@ -358,42 +358,42 @@ export class DetailclientComponent {
       title: 'Préparer la liste des pieces du dossier de la carte de sejour',
       date: '28 Mai 2023',
       status: 'Terminé',
-      price: '900 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-success'
     },
     {
       title: 'Remettre la liste des pieces  du dossier carte sejour',
       date: '12 Juin 2023',
       status: 'Terminé',
-      price: '200 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-success'
     },
     {
       title: 'Receptionner les pieces du depot de la carte de sejour',
       date: '12 Juillet 2023',
       status: 'En cours',
-      price: '300 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-warning'
     },
     {
       title: 'Scanner et enregistrer le passeport + cachet d\'entrée',
       date: '14 Juin 2023',
       status: 'En cours',
-      price: '400 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-warning'
     },
     {
       title: 'Valider le dossier de la carte de sejour',
       date: '25 Juin 2023',
       status: 'En cours',
-      price: '300 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-warning'
     },
     {
       title: 'Déposer le dossier de la carte sejour/prefecture',
       date: '25 Juin 2023',
       status: 'En cours',
-      price: '300 DH',
+      prestation: 'Demande de carte de sejour',
       statusClass: 'text-bg-warning'
     }
   ];

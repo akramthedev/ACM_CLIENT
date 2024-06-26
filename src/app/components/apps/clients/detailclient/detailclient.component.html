@@ -1037,8 +1037,8 @@
                         <th class="task-column">Tâche</th>
                         <th>Date</th>
                         <th>Status</th>
-                        <th>Prix</th>
-                        <th></th>
+                        <th>Prestation</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1052,7 +1052,7 @@
                         <td>
                           <span [class]="'badge ' + task.statusClass">{{ task.status }}</span>
                         </td>
-                        <td>{{ task.price }}</td>
+                        <td>{{ task.prestation }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
                             <a class="fs-2 text-warning" href="javascript:void(0)">
