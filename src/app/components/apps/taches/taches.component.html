@@ -85,15 +85,15 @@
                 <div class="todo-list-body">
                   <ul id="todo-list">
                     <li class="task" [ngClass]="{completed: todo.completed ? todo.completed : completed}" *ngFor="let todo of todos; let i = index">
-                      <div class="task-container">
-                        <h4 class="task-label">{{ todo.text }}</h4>
-                        <h5 class="assign-name">{{ todo.client }}</h5>
-                        <div class="d-flex align-items-center gap-4">
-                          <div>
+                      <div class="task-container d-flex align-items-center ">
+                        <h4 class="task-label col-5">{{ todo.text }}</h4>
+                        <h5 class="assign-name col-2">{{ todo.client }}</h5>
+                        <div class="d-flex align-items-center gap-4 col-4">
+                          <div >
                             <span class="task-priority badge {{ todo.badgeClass }}">{{ todo.priority }}</span>
                           </div>
-                          <h5 class="assign-name">{{ todo.Date }}</h5>
-                          <span class="task-action-btn">
+                          <h5 class="assign-name ">{{ todo.Date.slice(0,6) }}</h5>
+                          <span class="task-action-btn col-1">
                             <span class="action-box large delete-btn" title="Delete Task" (click)="taskDeleted(i)"><i class="icon"><i class="icon-trash"></i></i>
                             </span>
                             <span class="action-box large complete-btn" title="Mark Complete" (click)="taskCompleted(todo)"><i class="icon"><i class="icon-check"></i></i>
@@ -113,7 +113,7 @@
                           text: text,
                           client:'Amine Laghlabi',
                           Date: myDate,
-                          priority: 'Pending',
+                          priority: 'En Attente',
                           badgeClass: 'badge-light-danger',
                           completed: false
                         })
