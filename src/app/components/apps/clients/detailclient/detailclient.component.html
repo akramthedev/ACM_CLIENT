@@ -1076,12 +1076,12 @@
                     <div class="card">
                       <div class="card-header">
                         <div class="media">
-                          <form class="form-inline" action="#" method="get" *ngIf="currentClient.ClientPieces.length > 0">
+                          <div class="form-inline" *ngIf="currentClient.ClientPieces.length > 0">
                             <div class="form-group mb-0">
                               <i class="fa fa-search"></i>
                               <input class="form-control-plaintext" type="text" placeholder="Chercher..." (keyup)="OnSearchPieceKeyUp($event)" [(ngModel)]="filterPiecesText" />
                             </div>
-                          </form>
+                          </div>
                           <div class="media-body text-end">
                             <!-- <form class="d-inline-flex" action="#" method="POST" enctype="multipart/form-data" name="myForm">
                               <div class="btn btn-primary me-2" onclick="getFile()"><app-feather-icons [icon]="'plus-square'"></app-feather-icons>Add New</div>
