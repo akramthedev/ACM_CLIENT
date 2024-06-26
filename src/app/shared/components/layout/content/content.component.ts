@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import * as feather from 'feather-icons';
 import { LayoutService } from '../../../services/layout.service';
@@ -14,7 +14,7 @@ import { fadeInAnimation } from '../../../data/router-animation/router-animation
 export class ContentComponent implements OnInit, AfterViewInit {
   
   constructor(private route: ActivatedRoute, public navServices: NavService, 
-    public layout: LayoutService) {
+    public layout: LayoutService,private changeRef: ChangeDetectorRef) {
       
       this.route.queryParams.subscribe((params) => {
         this.layout.config.settings.layout = params.layout ? params.layout : this.layout.config.settings.layout
@@ -22,6 +22,7 @@ export class ContentComponent implements OnInit, AfterViewInit {
   }
     
   ngAfterViewInit() {
+    this.changeRef.detectChanges();
     setTimeout(() => {
       feather.replace();
     });
