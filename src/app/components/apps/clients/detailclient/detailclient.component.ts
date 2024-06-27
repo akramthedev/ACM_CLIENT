@@ -20,9 +20,11 @@ interface Task {
 
 interface Usage {
   Designation: string;
+  Adresse:string;
   Valeur: string;
   Detenteur: string;
   Charge: string;
+  Date:string;
   Capital: string;
   Duree: string;
   Taux: string;
@@ -31,7 +33,9 @@ interface Usage {
 
 interface Immobilier {
   Designation: string;
+  Adresse:string;
   Valeur: string;
+  Date:string;
   Detenteur: string;
   Revenue: string;
   Charge: string;
@@ -462,9 +466,11 @@ export class DetailclientComponent {
 
   newUsage: Usage = {
     Designation: '',
+    Adresse:'',
     Valeur: '',
     Detenteur: '',
     Charge: '',
+    Date:'',
     Capital: '',
     Duree: '',
     Taux: '',
@@ -473,7 +479,9 @@ export class DetailclientComponent {
 
   newImmobilier: Immobilier = {
     Designation: '',
+    Adresse:'',
     Valeur: '',
+    Date:'',
     Detenteur: '',
     Revenue: '',
     Charge: '',
@@ -574,9 +582,11 @@ export class DetailclientComponent {
     console.log(this.newUsage)
     this.newUsage = {
       Designation: '',
+      Adresse:'',
       Valeur: '',
       Detenteur: '',
       Charge: '',
+      Date:'',
       Capital: '',
       Duree: '',
       Taux: '',
@@ -595,7 +605,9 @@ export class DetailclientComponent {
     this.clientData.Immobiliers.push({ ...this.newImmobilier });
     this.newImmobilier = {
       Designation: '',
+      Adresse:'',
       Valeur: '',
+      Date:'',
       Detenteur: '',
       Revenue: '',
       Charge: '',

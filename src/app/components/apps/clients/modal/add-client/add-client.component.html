@@ -46,6 +46,11 @@
               <option value="PACS">PACS</option>
             </select>
           </div>
+          <div *ngIf="clientData.SituationFamiliale === 'Marié'" class="form-group mb-3 col-md-6">
+            <label for="matrimonial-regime">Régime matrimonial</label>
+              <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial"
+                [(ngModel)]="clientData.RegimeMatrimonial" />
+          </div>
           <div class="form-group mb-3 col-md-6">
             <label for="profession">Profession</label>
             <input class="form-control" id="profession" type="text" required="" placeholder="Profession" name="Profession" [(ngModel)]="clientData.Profession" />
@@ -54,10 +59,21 @@
             <label for="retirement">Date de départ en retraite</label>
             <input class="form-control" id="retirement" type="date" required="" name="DateRetraite" [(ngModel)]="clientData.DateRetraite" />
           </div>
-          <div class="form-group mb-3 col-md-6">
+          <!-- <div class="form-group mb-3 col-md-6">
             <label for="ssn">Numéro SS</label>
             <input class="form-control" id="ssn" type="text" required="" placeholder="Numéro SS" name="NumeroSS" [(ngModel)]="clientData.NumeroSS" />
+          </div> -->
+          <div class="form-group mb-3 col-md-6" [formGroup]="ssnForm">
+            <label for="ssn">Numéro SS</label>
+            <input class="form-control" id="ssn" type="text" required placeholder="Numéro SS" formControlName="NumeroSS" />
+            <div *ngIf="ssnForm.get('NumeroSS').invalid && ssnForm.get('NumeroSS').value?.length > 0 && (ssnForm.get('NumeroSS').dirty || ssnForm.get('NumeroSS').touched)">
+              <div *ngIf="ssnForm.get('NumeroSS').errors.required">Le numéro SS est requis.</div>
+              <div *ngIf="ssnForm.get('NumeroSS').errors.ssnInvalid">Le format du numéro SS est invalide (13 chiffres/2 chiffres).</div>
+            </div>
           </div>
+          
+          
+          
           <div class="form-group mb-3 col-md-6">
             <label for="address">Adresse</label>
             <input class="form-control" id="address" type="text" required="" placeholder="Adresse" name="Adresse" [(ngModel)]="clientData.Adresse" />
@@ -74,6 +90,7 @@
             <label for="con-phone">Téléphone 1</label>
             <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone1" autocomplete="off" name="Telephone1" [(ngModel)]="clientData.Telephone1" />
           </div>
+          
           <div class="form-group mb-3 col-md-6">
             <label for="con-phone">Téléphone 2</label>
             <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone2" autocomplete="off" name="Telephone2" [(ngModel)]="clientData.Telephone2" />

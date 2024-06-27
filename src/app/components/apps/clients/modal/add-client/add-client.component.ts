@@ -5,7 +5,9 @@ import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, Proche } from '../../../../../shared/model/dto.model'
+import { Client, Proche } from '../../../../../shared/model/dto.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ssnValidator } from './ssn-validator';
 @Component({
   selector: "app-add-client",
   templateUrl: "./add-client.component.html",
@@ -14,7 +16,7 @@ import { Client, Proche } from '../../../../../shared/model/dto.model'
 export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
-
+ssnForm:FormGroup;
   // Clients: any[] = [];
   clientData: Client = null;
   newProche: Proche = null;
@@ -62,8 +64,17 @@ export class AddClientComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private clientService: ClientService,
     private toastr: ToastrService,
-  ) { }
-
+    private fb: FormBuilder
+  ) { 
+    this.ssnForm = this.fb.group({
+      NumeroSS: ['', [Validators.required, ssnValidator()]]
+    });
+  }
+  telInputObject(obj) {
+    console.log(obj);
+    obj.setCountry('in');
+  }
+  
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();

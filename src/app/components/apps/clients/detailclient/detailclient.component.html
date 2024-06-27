@@ -56,21 +56,25 @@
                                   <thead>
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
+                                      <th>Adresse</th>
                                       <th>Valeur</th>
                                       <th>Détenteur</th>
-                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Charges associées</th>
+                                      <th>Date d'achat</th>
                                       <th>Capital emprunté</th>
                                       <th>Durée</th>
                                       <th>Taux</th>
-                                      <th>Décès</th>
+                                      <th>Garantie Décès</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr *ngFor="let usage of clientData.Usages">
                                       <td>{{ usage.Designation }}</td>
+                                      <td>{{usage.Adresse}}</td>
                                       <td>{{ usage.Valeur }}</td>
                                       <td>{{ usage.Detenteur }}</td>
                                       <td>{{ usage.Charge }}</td>
+                                      <td>{{ usage.Date }}</td>
                                       <td>{{ usage.Capital }}</td>
                                       <td>{{ usage.Duree }}</td>
                                       <td>{{ usage.Taux }}</td>
@@ -84,18 +88,20 @@
                                   <thead>
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
+                                      <th>Adresse</th>
                                       <th>Valeur</th>
                                       <th>Détenteur</th>
-                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Charges associées</th>
+                                      <th>Date d'achat</th>
                                       <th>Capital emprunté</th>
                                       <th>Durée</th>
                                       <th>Taux</th>
-                                      <th>Décès</th>
+                                      <th>Garantie Décès</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <td colspan="8" align="center">
+                                      <td colspan="10" align="center">
                                         <i>Aucun bien enregistré</i>
                                       </td>
                                     </tr>
@@ -135,8 +141,10 @@
                                   <thead>
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
+                                      <th>Adresse</th>
                                       <th>Valeur</th>
                                       <th>Détenteur</th>
+                                      <th>Date d'achat</th>
                                       <th>Revenue et fiscalité</th>
                                       <th>Charges</th>
                                       <th>Capital emprunté</th>
@@ -150,8 +158,10 @@
                                         let immobilier of clientData.Immobiliers
                                       ">
                                       <td>{{ immobilier.Designation }}</td>
+                                      <td>{{ immobilier.Adresse }}</td>
                                       <td>{{ immobilier.Valeur }}</td>
                                       <td>{{ immobilier.Detenteur }}</td>
+                                      <td>{{ immobilier.Date }}</td>
                                       <td>{{ immobilier.Revenue }}</td>
                                       <td>{{ immobilier.Charge }}</td>
                                       <td>{{ immobilier.Capital }}</td>
@@ -167,8 +177,10 @@
                                   <thead>
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
+                                      <th>Adresse</th>
                                       <th>Valeur</th>
                                       <th>Détenteur</th>
+                                      <th>Date d'achat</th>
                                       <th>Revenue et fiscalité</th>
                                       <th>Charges</th>
                                       <th>Capital emprunté</th>
@@ -178,7 +190,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <td colspan="9" align="center">
+                                    <td colspan="11" align="center">
                                       <i>Aucun bien enregistré</i>
                                     </td>
                                   </tbody>
@@ -1288,8 +1300,12 @@
               <input class="form-control" id="usage-designation" type="text" placeholder="Désignation" name="UsageDesignation" [(ngModel)]="newUsage.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
+              <label for="usage-adresse">Adresse</label>
+              <input class="form-control" id="usage-adresse" type="text" placeholder="Adresse" name="UsageAdresse" [(ngModel)]="newUsage.Adresse" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
               <label for="usage-valeur">Valeur</label>
-              <input class="form-control" id="usage-valeur" type="text" placeholder="Valeur" name="UsageValeur" [(ngModel)]="newUsage.Valeur" />
+              <input class="form-control" id="usage-valeur" type="number" placeholder="Valeur" name="UsageValeur" [(ngModel)]="newUsage.Valeur" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-detenteur">Détenteur</label>
@@ -1297,8 +1313,14 @@
             </div>
 
             <div class="form-group mb-3 col-md-6">
-              <label for="usage-charge">Charges associées / Date d'achat</label>
-              <input class="form-control" id="usage-charge" type="text" placeholder="Charges associées / Date d'achat" name="UsageCharge" [(ngModel)]="newUsage.Charge" />
+              <label for="usage-charge">Charges associées</label>
+              <select class="form-control" id="usage-charge" required="" name="UsageCharge" [(ngModel)]="newUsage.Charge">
+                <option value="charge1">En attente</option>
+                <option value="charge2">En attente</option>
+              </select>            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="usage-date">Date d'achat</label>
+              <input class="form-control" id="usage-date" type="date" placeholder="Date d'achat" name="UsageDate" [(ngModel)]="newUsage.Date" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-capital">Capital emprunté ou restant du</label>
@@ -1306,15 +1328,19 @@
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-duree">Durée</label>
-              <input class="form-control" id="usage-duree" type="text" placeholder="Durée" name="UsageDuree" [(ngModel)]="newUsage.Duree" />
+              <input class="form-control" id="usage-duree" type="number" placeholder="Durée" name="UsageDuree" [(ngModel)]="newUsage.Duree" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-taux">Taux</label>
               <input class="form-control" id="usage-taux" type="text" placeholder="Taux" name="UsageTaux" [(ngModel)]="newUsage.Taux" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="usage-deces">Décès</label>
-              <input class="form-control" id="usage-deces" type="text" placeholder="Décès" name="UsageDeces" [(ngModel)]="newUsage.Deces" />
+              <label for="usage-deces">Garantie Décès</label>
+              <!-- <input class="form-control" id="usage-deces" type="text" placeholder="Décès" name="UsageDeces" [(ngModel)]="newUsage.Deces" /> -->
+              <select class="form-control" id="usage-deces" required="" name="UsageDeces" [(ngModel)]="newUsage.Deces">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+              </select>
             </div>
           </div>
           <div class="modal-footer">
@@ -1348,21 +1374,29 @@
               <input class="form-control" id="immobilier-designation" type="text" placeholder="Désignation" name="ImmobilierDesignation" [(ngModel)]="newImmobilier.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
+              <label for="immobilier-adresse">Adresse</label>
+              <input class="form-control" id="immobilier-adresse" type="text" placeholder="Adresse" name="ImmobilierAdresse" [(ngModel)]="newImmobilier.Adresse" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
               <label for="immobilier-valeur">Valeur</label>
               <input class="form-control" id="immobilier-valeur" type="text" placeholder="Valeur" name="ImmobilierValeur" [(ngModel)]="newImmobilier.Valeur" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="immobilier-date">Date d'achat</label>
+              <input class="form-control" id="immobilier-date" type="date" placeholder="Date d'achat" name="ImmobilierDate" [(ngModel)]="newImmobilier.Date" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-detenteur">Détenteur</label>
               <input class="form-control" id="immobilier-detenteur" type="text" placeholder="Détenteur" name="ImmobilierDetenteur" [(ngModel)]="newImmobilier.Detenteur" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="immobilier-revenue">Revenue</label>
-              <input class="form-control" id="immobilier-revenue" type="text" placeholder="Revenue" name="ImmobilierRevenue" [(ngModel)]="newImmobilier.Revenue" />
+              <label for="immobilier-revenue">Revenu / Loyer</label>
+              <input class="form-control" id="immobilier-revenue" type="number" placeholder="Revenue" name="ImmobilierRevenue" [(ngModel)]="newImmobilier.Revenue" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-charge">Charges</label>
-              <input class="form-control" id="immobilier-charge" type="text" placeholder="Charges" name="ImmobilierCharge" [(ngModel)]="newImmobilier.Charge" />
+              <input class="form-control" id="immobilier-charge" type="number" placeholder="Charges" name="ImmobilierCharge" [(ngModel)]="newImmobilier.Charge" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="immobilier-capital">Capital emprunté ou restant du</label>
