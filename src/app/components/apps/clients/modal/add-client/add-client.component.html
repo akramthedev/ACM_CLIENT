@@ -36,6 +36,10 @@
             <input class="form-control" id="dob" type="date" required="" name="DateNaissance" [(ngModel)]="clientData.DateNaissance" />
           </div>
           <div class="form-group mb-3 col-md-6">
+            <label for="profession">Profession</label>
+            <input class="form-control" id="profession" type="text" required="" placeholder="Profession" name="Profession" [(ngModel)]="clientData.Profession" />
+          </div>
+          <div class="form-group mb-3 col-md-6">
             <label for="situation">Situation familiale</label>
             <select class="form-control" id="situation" required="" name="SituationFamiliale" [(ngModel)]="clientData.SituationFamiliale">
               <option value="Marié">Marié</option>
@@ -51,10 +55,11 @@
               <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial"
                 [(ngModel)]="clientData.RegimeMatrimonial" />
           </div>
-          <div class="form-group mb-3 col-md-6">
-            <label for="profession">Profession</label>
-            <input class="form-control" id="profession" type="text" required="" placeholder="Profession" name="Profession" [(ngModel)]="clientData.Profession" />
+          <div *ngIf="clientData.SituationFamiliale !== 'Marié'" class="form-group mb-3 col-md-6">
+            
           </div>
+          
+          
           <div class="form-group mb-3 col-md-6">
             <label for="retirement">Date de départ en retraite</label>
             <input class="form-control" id="retirement" type="date" required="" name="DateRetraite" [(ngModel)]="clientData.DateRetraite" />
@@ -162,7 +167,7 @@
               <textarea class="form-control" id="modif-regime" type="text" placeholder="Si modifi Régime matrimonial" name="modifregimedate"
                 [(ngModel)]="clientData.ModifRegimeDate"></textarea>
             </div>
-            <div class="form-group mb-3 col-md-6">
+            <div class="form-group mb-3 col-md-12">
               <label for="quest-comp">Question complémentaires</label>
               <p>
                 S'il y a eu des mariages précédents : quelle est la date du

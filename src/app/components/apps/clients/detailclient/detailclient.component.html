@@ -82,6 +82,9 @@
                                     </tr>
                                   </tbody>
                                 </table>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                  Total :
+                                </div>
                               </div>
                               <div *ngIf="clientData.Usages.length == 0" class="mb-4 mt-3">
                                 <table class="table table-bordered ">
@@ -229,8 +232,12 @@
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
                                       <th>Valeur</th>
+                                      <th>Date Création</th>
                                       <th>Détenteur</th>
-                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Date d'achat</th>
+                                      <th>Capital</th>
+                                      <th>Restant du</th>
+                                      <th>Status</th>
                                       <th>Particularités</th>
                                     </tr>
                                   </thead>
@@ -238,8 +245,12 @@
                                     <tr *ngFor="let usage of clientData.Profs">
                                       <td>{{ usage.Designation }}</td>
                                       <td>{{ usage.Valeur }}</td>
+                                      <td>{{ usage.DateCreation }}</td>
                                       <td>{{ usage.Detenteur }}</td>
-                                      <td>{{ usage.Charge }}</td>
+                                      <td>{{ usage.DateAchat }}</td>
+                                      <td>{{ usage.Capital }}</td>
+                                      <td>{{ usage.Restant }}</td>
+                                      <td>{{ usage.Status }}</td>
                                       <td>{{ usage.Partic }}</td>
                                     </tr>
                                   </tbody>
@@ -251,13 +262,17 @@
                                     <tr class="bg-primary-subtle">
                                       <th>Désignation</th>
                                       <th>Valeur</th>
+                                      <th>Date Création</th>
                                       <th>Détenteur</th>
-                                      <th>Charges associées/Date d'achat</th>
+                                      <th>Date d'achat</th>
+                                      <th>Capital</th>
+                                      <th>Restant du</th>
+                                      <th>Status</th>
                                       <th>Particularités</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <td colspan="5" align="center">
+                                    <td colspan="9" align="center">
                                       <i>Aucun bien enregistré</i>
                                     </td>
                                   </tbody>
@@ -683,14 +698,16 @@
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr class="bg-primary-subtle">
-                                      <th>Désignation</th>
-                                      <th>Montant</th>
+                                      <th>Revenu</th>
+                                      <th>Montant Mr</th>
+                                      <th>Montant Mme</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr *ngFor="let usage of clientData.Budgets">
                                       <td>{{ usage.Designation }}</td>
-                                      <td>{{ usage.Montant }}</td>
+                                      <td>{{ usage.MontantMr }}</td>
+                                      <td>{{ usage.MontantMme }}</td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -699,12 +716,13 @@
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr class="bg-primary-subtle">
-                                      <th>Désignation</th>
-                                      <th>Montant</th>
+                                      <th>Revenu</th>
+                                      <th>Montant Mr</th>
+                                      <th>Montant Mme</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <td colspan="2" align="center">
+                                    <td colspan="3" align="center">
                                       <i>Aucun bien enregistré</i>
                                     </td>
                                   </tbody>
@@ -732,11 +750,11 @@
                                 <input class="form-control" id="partic-fisca" type="text" placeholder="Particularités fiscales" name="ParticFisca" [(ngModel)]="newPartic" />
                               </div>
 
-                              <div class="d-grid gap-2 d-md-flex justify-content-center">
+                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-center">
                                 <button class="btn btn-primary " (click)="addPartic()">
                                   Ajouter la particularités fiscales
                                 </button>
-                              </div>
+                              </div> -->
                             </div>
                           </ng-template>
                         </div>
@@ -755,7 +773,7 @@
                             <div class="row">
                               <!-- Fields for usage goods -->
                               <div class="col-6 mb-3">
-                                <label>CFE :</label>
+                                <label>CFE</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.CFE" id="CFEYes" value="oui" [(ngModel)]="newSituationAdmin.CFE" />
                                   <label class="form-check-label" for="CFEYes">
@@ -768,9 +786,15 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CFE" id="CFEFaire" value="afaire" [(ngModel)]="newSituationAdmin.CFE" />
+                                  <label class="form-check-label" for="CFEFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Passeport Scanné :</label>
+                                <label>Passeport Scanné</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Passeport" id="PasseportYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Passeport" />
@@ -785,9 +809,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Passeport" id="PasseportFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Passeport" />
+                                  <label class="form-check-label" for="PasseportFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Avez-vous 15 ans de cotisation :</label>
+                                <label>15 ans de cotisation</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Cotisation" id="CotisationYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Cotisation" />
@@ -802,9 +833,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Cotisation" id="CotisationFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Cotisation" />
+                                  <label class="form-check-label" for="CotisationFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Carte de séjour scanée :</label>
+                                <label>Carte de séjour scanée</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.CarteSejour" id="CarteSejourYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.CarteSejour" />
@@ -819,9 +857,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CarteSejour" id="CarteSejourFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.CarteSejour" />
+                                  <label class="form-check-label" for="CarteSejourFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
-                              <div class="col-8 mb-3">
-                                <label>Pension de Réversion 15 ans de cotisation :</label>
+                              <div class="col-6 mb-3">
+                                <label>Réversion 15 ans de cotisation</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Reversion" id="ReversionYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Reversion" />
@@ -836,9 +881,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Reversion" id="ReversionFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Reversion" />
+                                  <label class="form-check-label" for="ReversionFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Permis de conduire marocain:</label>
+                                <label>Permis de conduire marocain</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Permis" id="PermisYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Permis" />
@@ -853,9 +905,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Permis" id="PermisFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Permis" />
+                                  <label class="form-check-label" for="PermisFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>CNSS :</label>
+                                <label>CNSS</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.CNSS" id="CNSSYes" value="oui" [(ngModel)]="newSituationAdmin.CNSS" />
                                   <label class="form-check-label" for="CNSSYes">
@@ -868,9 +927,15 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNSS" id="CNSSFaire" value="afaire" [(ngModel)]="newSituationAdmin.CNSS" />
+                                  <label class="form-check-label" for="CNSSFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Assurance Auto:</label>
+                                <label>Assurance Auto</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.AssurAuto" id="AssurAutoYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.AssurAuto" />
@@ -885,9 +950,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurAuto" id="AssurAutoFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.AssurAuto" />
+                                  <label class="form-check-label" for="AssurAutoFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>CNAREFE :</label>
+                                <label>CNAREFE</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.CNAREFE" id="CNAREFEYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.CNAREFE" />
@@ -902,9 +974,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CNAREFE" id="CNAREFEFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.CNAREFE" />
+                                  <label class="form-check-label" for="CNAREFEFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Assurance Habitation:</label>
+                                <label>Assurance Habitation</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.AssurHabi" id="AssurHabiYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.AssurHabi" />
@@ -919,9 +998,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.AssurHabi" id="AssurHabiFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.AssurHabi" />
+                                  <label class="form-check-label" for="AssurHabiFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Capitone :</label>
+                                <label>Capitone</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Capitone" id="CapitoneYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Capitone" />
@@ -936,9 +1022,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Capitone" id="CapitoneFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Capitone" />
+                                  <label class="form-check-label" for="CapitoneFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Inscription consulat:</label>
+                                <label>Inscription consulat</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.InscriConsulat" id="InscriConsulatYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.InscriConsulat" />
@@ -953,9 +1046,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.InscriConsulat" id="InscriConsulatFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.InscriConsulat" />
+                                  <label class="form-check-label" for="InscriConsulatFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Assurance Rapatriement :</label>
+                                <label>Assurance Rapatriement</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Rapatriement" id="RapatriementYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Rapatriement" />
@@ -970,24 +1070,37 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Rapatriement" id="RapatriementFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Rapatriement" />
+                                  <label class="form-check-label" for="RapatriementFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>UFE :</label>
+                                <label>CPAN</label>
                                 <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="SituationAdministrative.UFE" id="UFEYes" value="oui" [(ngModel)]="newSituationAdmin.UFE" />
-                                  <label class="form-check-label" for="UFEYes">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CPAN" id="CPANYes" value="oui" [(ngModel)]="newSituationAdmin.CPAN" />
+                                  <label class="form-check-label" for="CPANYes">
                                     Oui
                                   </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="SituationAdministrative.UFE" id="UFENo" value="non" [(ngModel)]="newSituationAdmin.UFE" />
-                                  <label class="form-check-label" for="UFENo">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CPAN" id="CPANNo" value="non" [(ngModel)]="newSituationAdmin.CPAN" />
+                                  <label class="form-check-label" for="CPANNo">
                                     Non
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CPAN" id="CPANFaire" value="afaire" [(ngModel)]="newSituationAdmin.CPAN" />
+                                  <label class="form-check-label" for="CPANFaire">
+                                    A faire
                                   </label>
                                 </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>Mutuelle Française :</label>
+                                <label>Mutuelle Française</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.Mutuelle" id="MutuelleYes" value="oui"
                                     [(ngModel)]="newSituationAdmin.Mutuelle" />
@@ -1002,9 +1115,16 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.Mutuelle" id="MutuelleFaire" value="afaire"
+                                    [(ngModel)]="newSituationAdmin.Mutuelle" />
+                                  <label class="form-check-label" for="MutuelleFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-6 mb-3">
-                                <label>CSG / CRDS :</label>
+                                <label>CSG / CRDS</label>
                                 <div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="SituationAdministrative.CSG" id="CSGYes" value="oui" [(ngModel)]="newSituationAdmin.CSG" />
                                   <label class="form-check-label" for="CSGYes">
@@ -1017,13 +1137,19 @@
                                     Non
                                   </label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="SituationAdministrative.CSG" id="CSGFaire" value="afaire" [(ngModel)]="newSituationAdmin.CSG" />
+                                  <label class="form-check-label" for="CSGFaire">
+                                    A faire
+                                  </label>
+                                </div>
                               </div>
 
-                              <div class="d-grid gap-2 d-md-flex justify-content-center">
+                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-center">
                                 <button class="btn btn-primary" (click)="addSituationAdmin()">
                                   Ajouter la situation administrative
                                 </button>
-                              </div>
+                              </div> -->
                             </div>
                           </ng-template>
                         </div>
@@ -1324,7 +1450,7 @@
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-capital">Capital emprunté ou restant du</label>
-              <input class="form-control" id="usage-capital" type="text" placeholder="Capital emprunté ou restant du" name="UsageCapital" [(ngModel)]="newUsage.Capital" />
+              <input class="form-control" id="usage-capital" type="number" placeholder="Capital emprunté ou restant du" name="UsageCapital" [(ngModel)]="newUsage.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-duree">Durée</label>
@@ -1332,7 +1458,7 @@
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-taux">Taux</label>
-              <input class="form-control" id="usage-taux" type="text" placeholder="Taux" name="UsageTaux" [(ngModel)]="newUsage.Taux" />
+              <input class="form-control" id="usage-taux" type="number" placeholder="Taux" name="UsageTaux" [(ngModel)]="newUsage.Taux" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="usage-deces">Garantie Décès</label>
@@ -1448,7 +1574,11 @@
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="prof-valeur">Valeur</label>
-              <input class="form-control" id="prof-valeur" type="text" placeholder="Valeur" name="ProfValeur" [(ngModel)]="newProf.Valeur" />
+              <input class="form-control" id="prof-valeur" type="number" placeholder="Valeur" name="ProfValeur" [(ngModel)]="newProf.Valeur" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="prof-datecreation">Date de création</label>
+              <input class="form-control" id="prof-datecreation" type="date" placeholder="Date de création" name="ProfDateCreation" [(ngModel)]="newProf.DateCreation" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="prof-detenteur">Détenteur</label>
@@ -1456,16 +1586,24 @@
             </div>
 
             <div class="form-group mb-3 col-md-6">
-              <label for="prof-charge">Charges associées / Date d'achat</label>
-              <input class="form-control" id="prof-charge" type="text" placeholder="Charges associées / Date d'achat" name="ProfCharge" [(ngModel)]="newProf.Charge" />
+              <label for="prof-dataachat">Date d'achat</label>
+              <input class="form-control" id="prof-dateachat" type="date" placeholder="Date d'achat" name="ProfDateAchat" [(ngModel)]="newProf.DateAchat" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="usage-capital">Capital emprunté ou restant du</label>
-              <input class="form-control" id="usage-capital" type="text" placeholder="Capital emprunté ou restant du" name="UsageCapital" [(ngModel)]="newUsage.Capital" />
+              <label for="usage-capital">Capital emprunté</label>
+              <input class="form-control" id="usage-capital" type="number" placeholder="Capital emprunté" name="ProfCapital" [(ngModel)]="newProf.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="prof-partic">Particularités</label>
-              <input class="form-control" id="prof-partic" type="text" placeholder="Particularités" name="ProfPartic" [(ngModel)]="newProf.Partic" />
+              <label for="usage-restant">Restant du</label>
+              <input class="form-control" id="usage-restant" type="number" placeholder="Restant du" name="ProfRestant" [(ngModel)]="newProf.Restant" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="usage-status">Status</label>
+              <input class="form-control" id="usage-status" type="text" placeholder="Status" name="ProfStatus" [(ngModel)]="newProf.Status" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="prof-partic">Dividende (reste les pièce jointe)</label>
+              <input class="form-control" id="prof-partic" type="number" placeholder="Particularités" name="ProfPartic" [(ngModel)]="newProf.Partic" />
             </div>
           </div>
           <div class="modal-footer">
@@ -1502,8 +1640,8 @@
               <input class="form-control" id="dette-capital" type="text" placeholder="Capital" name="DetteCapital" [(ngModel)]="newDette.Capital" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="dette-duree">Durée</label>
-              <input class="form-control" id="dette-duree" type="text" placeholder="Durée" name="DetteDuree" [(ngModel)]="newDette.Duree" />
+              <label for="dette-duree">Durée (mois)</label>
+              <input class="form-control" id="dette-duree" type="number" placeholder="Durée" name="DetteDuree" [(ngModel)]="newDette.Duree" />
             </div>
 
             <div class="form-group mb-3 col-md-6">
@@ -1740,13 +1878,17 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body row">
-            <div class="form-group mb-3 col-md-6">
-              <label for="budget-designation">Désignation</label>
+            <div class="form-group mb-3 col-md-12">
+              <label for="budget-designation">Revenu (attente de la liste)</label>
               <input class="form-control" id="budget-designation" type="text" placeholder="Désignation" name="BudgetDesignation" [(ngModel)]="newBudget.Designation" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="budget-montant">Montant</label>
-              <input class="form-control" id="budget-montant" type="text" placeholder="Montant" name="BudgetMontant" [(ngModel)]="newBudget.Montant" />
+              <label for="budget-montantmr">Montant Mr</label>
+              <input class="form-control" id="budget-montantmr" type="number" placeholder="Montant Mr" name="BudgetMontantMr" [(ngModel)]="newBudget.MontantMr" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="budget-montantmme">Montant Mme</label>
+              <input class="form-control" id="budget-montantmme" type="number" placeholder="Montant Mme" name="BudgetMontantMme" [(ngModel)]="newBudget.MontantMme" />
             </div>
           </div>
           <div class="modal-footer">

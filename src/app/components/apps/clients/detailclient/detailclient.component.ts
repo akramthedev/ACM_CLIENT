@@ -47,8 +47,12 @@ interface Immobilier {
 interface Professionnel {
   Designation: string;
   Valeur: string;
+  DateCreation:string;
   Detenteur: string;
-  Charge: string;
+  DateAchat: string;
+  Capital:string;
+  Restant:string;
+  Status:string;
   Partic: string;
 
 }
@@ -98,7 +102,8 @@ interface Disponibilite {
 }
 interface Budget {
   Designation: string;
-  Montant: string;
+  MontantMr: string;
+  MontantMme: string;
 
 
 }
@@ -118,7 +123,7 @@ interface SituationAdmin {
   AssurAuto: string;
   AssurHabi: string;
   InscriConsulat: string;
-  UFE: string;
+  CPAN: string;
   CSG: string;
 }
 
@@ -458,7 +463,7 @@ export class DetailclientComponent {
         AssurAuto: '',
         AssurHabi: '',
         InscriConsulat: '',
-        UFE: '',
+        CPAN: '',
         CSG: '',
 
       },
@@ -493,8 +498,12 @@ export class DetailclientComponent {
   newProf: Professionnel = {
     Designation: '',
     Valeur: '',
+    DateCreation:'',
     Detenteur: '',
-    Charge: '',
+    DateAchat: '',
+    Capital:'',
+    Restant:'',
+    Status:'',
     Partic: '',
 
   };
@@ -544,7 +553,8 @@ export class DetailclientComponent {
   };
   newBudget: Budget = {
     Designation: '',
-    Montant: '',
+    MontantMr: '',
+    MontantMme: ''
 
 
   };
@@ -565,7 +575,7 @@ export class DetailclientComponent {
     AssurAuto: '',
     AssurHabi: '',
     InscriConsulat: '',
-    UFE: '',
+    CPAN: '',
     CSG: '',
 
   };
@@ -630,8 +640,12 @@ export class DetailclientComponent {
     this.newProf = {
       Designation: '',
       Valeur: '',
+      DateCreation:'',
       Detenteur: '',
-      Charge: '',
+      DateAchat: '',
+      Capital:'',
+      Restant:'',
+      Status:'',
       Partic: '',
 
 
@@ -750,7 +764,8 @@ export class DetailclientComponent {
     console.log(this.newBudget)
     this.newBudget = {
       Designation: '',
-      Montant: '',
+      MontantMr: '',
+      MontantMme: ''
 
     };
   }
@@ -779,7 +794,7 @@ export class DetailclientComponent {
       AssurAuto: '',
       AssurHabi: '',
       InscriConsulat: '',
-      UFE: '',
+      CPAN: '',
       CSG: '',
 
     }
