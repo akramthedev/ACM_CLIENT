@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Menu, NavService } from '../../services/nav.service';
 import { LayoutService } from '../../services/layout.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sidebar',
@@ -50,6 +51,13 @@ export class SidebarComponent {
         }
       });
     });
+
+    if (!environment.production)
+      setTimeout(() => {
+        this.navServices.otherItems.subscribe((menuItems) => {
+          this.menuItems = this.menuItems.concat(menuItems);
+        });
+      }, 1000);
 
   }
 

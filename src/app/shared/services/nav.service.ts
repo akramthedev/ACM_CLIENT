@@ -47,11 +47,6 @@ export class NavService implements OnDestroy {
   public fullScreen: boolean = false;
 
   constructor(private router: Router) {
-
-    if (!environment.production) {
-      this.MENUITEMS = this.MENUITEMS.concat(this.otherRoutes);
-    }
-    
     this.setScreenWidth(window.innerWidth);
     fromEvent(window, "resize")
       .pipe(debounceTime(1000), takeUntil(this.unsubscriber))
@@ -136,17 +131,9 @@ export class NavService implements OnDestroy {
         { path: "/project/create", title: "Create New", type: "link" },
       ],
     },
+    { path: "/file-manager", title: "File Manager", icon: "file", type: "link", },
     {
-      path: "/file-manager",
-      title: "File Manager",
-      icon: "file",
-      type: "link",
-    },
-    {
-      title: "Ecommerce",
-      type: "sub",
-      icon: "ecommerce",
-      active: false,
+      title: "Ecommerce", type: "sub", icon: "ecommerce", active: false,
       children: [
         { path: "/ecommerce/products", title: "Product", type: "link" },
         { path: "/ecommerce/product-details", title: "Product page", type: "link" },
@@ -160,25 +147,10 @@ export class NavService implements OnDestroy {
         { path: "/ecommerce/pricing", title: "Pricing", type: "link" },
       ],
     },
+    { path: "/email", title: "Email", icon: "email", type: "link", bookmark: true, },
+    { path: "/chat", title: "Chat", icon: "chat", type: "link", bookmark: true, },
     {
-      path: "/email",
-      title: "Email",
-      icon: "email",
-      type: "link",
-      bookmark: true,
-    },
-    {
-      path: "/chat",
-      title: "Chat",
-      icon: "chat",
-      type: "link",
-      bookmark: true,
-    },
-    {
-      title: "Users",
-      icon: "user",
-      type: "sub",
-      active: false,
+      title: "Users", icon: "user", type: "sub", active: false,
       children: [
         { path: "/user/team-details", title: "All Users", type: "link" },
         { path: "/user/profile", title: "User Profile", type: "link" },
@@ -192,21 +164,12 @@ export class NavService implements OnDestroy {
     { path: "/social-app", title: "Social App", icon: "social", type: "link" },
     { path: "/todo", title: "Todo", icon: "to-do", type: "link" },
     { path: "/search-pages", title: "Search Result", icon: "search", type: "link" },
+    { headTitle1: "Forms & Table", headTitle2: "Ready To Use Froms & Tables.", },
     {
-      headTitle1: "Forms & Table",
-      headTitle2: "Ready To Use Froms & Tables.",
-    },
-    {
-      title: "Forms",
-      icon: "form",
-      type: "sub",
-      active: false,
+      title: "Forms", icon: "form", type: "sub", active: false,
       children: [
         {
-          title: "Form Controls",
-          icon: "file-text",
-          type: "sub",
-          active: false,
+          title: "Form Controls", icon: "file-text", type: "sub", active: false,
           children: [
             { path: "/form/form-controls/validation", title: "Form Validation", type: "link" },
             { path: "/form/form-controls/inputs", title: "Base Inputs", type: "link" },
@@ -216,10 +179,7 @@ export class NavService implements OnDestroy {
           ],
         },
         {
-          title: "Form Widgets",
-          icon: "file-text",
-          type: "sub",
-          active: false,
+          title: "Form Widgets", icon: "file-text", type: "sub", active: false,
           children: [
             { path: "/form/form-widgets/touchspin", title: "Touchspin", type: "link" },
             { path: "/form/form-widgets/ngselect", title: "Ng-Select", type: "link" },
@@ -228,10 +188,7 @@ export class NavService implements OnDestroy {
           ],
         },
         {
-          title: "Form Layout",
-          icon: "file-text",
-          type: "sub",
-          active: false,
+          title: "Form Layout", icon: "file-text", type: "sub", active: false,
           children: [
             { path: "/form/form-layout/default-form", title: "Default Forms", type: "link" },
           ],
@@ -239,37 +196,21 @@ export class NavService implements OnDestroy {
       ],
     },
     {
-      title: "Tables",
-      icon: "table",
-      type: "sub",
-      active: false,
+      title: "Tables", icon: "table", type: "sub", active: false,
       children: [
         {
-          title: "Bootstrap Tables",
-          type: "sub",
-          active: false,
+          title: "Bootstrap Tables", type: "sub", active: false,
           children: [
             { path: "/table/bootstrap-tables/basic", title: "Basic Table", type: "link" },
             { path: "/table/bootstrap-tables/table-components", title: "Table components", type: "link" },
           ],
         },
-        {
-          title: "Data table",
-          active: false,
-          type: "link",
-          path: "/table/datatable",
-        },
+        { title: "Data table", active: false, type: "link", path: "/table/datatable", },
       ],
     },
+    { headTitle1: "Components", headTitle2: "UI Components & Elements.", },
     {
-      headTitle1: "Components",
-      headTitle2: "UI Components & Elements.",
-    },
-    {
-      title: "Ui-Kits",
-      icon: "ui-kits",
-      type: "sub",
-      active: false,
+      title: "Ui-Kits", icon: "ui-kits", type: "sub", active: false,
       children: [
         { path: "/ui-kits/avatars", title: "Avatars", type: "link" },
         { path: "/ui-kits/breadcrumb", title: "Breadcrumb", type: "link" },
@@ -284,15 +225,10 @@ export class NavService implements OnDestroy {
       ],
     },
     {
-      title: "Bonus UI",
-      icon: "bonus-kit",
-      type: "sub",
-      active: false,
+      title: "Bonus UI", icon: "bonus-kit", type: "sub", active: false,
       children: [
         {
-          title: "Base",
-          icon: "box",
-          type: "sub",
+          title: "Base", icon: "box", type: "sub",
           children: [
             { path: "/base/accordion", title: "Accordion", type: "link" },
             { path: "/base/alert", title: "Alert", type: "link" },
@@ -313,9 +249,7 @@ export class NavService implements OnDestroy {
           ],
         },
         {
-          title: "Advance",
-          icon: "folder-plus",
-          type: "sub",
+          title: "Advance", icon: "folder-plus", type: "sub",
           children: [
             { path: "/advance/scrollable", title: "Scrollable", type: "link" },
             { path: "/advance/dropzone", title: "Dropzone", type: "link" },
@@ -518,4 +452,5 @@ export class NavService implements OnDestroy {
 
   // Array
   items = new BehaviorSubject<Menu[]>(this.MENUITEMS);
+  otherItems = new BehaviorSubject<Menu[]>(this.otherRoutes);
 }
