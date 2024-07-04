@@ -139,27 +139,29 @@ export class DetailclientComponent {
   ) {}
 
   editPatrimoine(id: string) {
-    console.log("Edit patrimoine cliquer")
+    console.log("Edit patrimoine cliquer");
     this.dialogPatrimoine.Open(id);
   }
 
   deletePatrimoine(id: string) {
-    console.log("delete patrimoine cliquer")
+    console.log("delete patrimoine cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
       this.clientService.DeletePatrimoine(id).subscribe(
         (response) => {
-          console.log("Delete client response : ",response)
+          console.log("Delete client response : ", response);
           this.toastr.success("Patrimoine supprimé avec succès");
-          this.PatrimoinesData = this.PatrimoinesData.filter(p => p.PatrimoineId !== id);
+          this.PatrimoinesData = this.PatrimoinesData.filter(
+            (p) => p.PatrimoineId !== id
+          );
         },
         (error) => {
           console.error("Erreur lors de la suppression du patrimoine", error);
           this.toastr.error("Erreur lors de la suppression du patrimoine");
         }
       );
-    }else{
-      console.log("error lors de la suppression")
+    } else {
+      console.log("error lors de la suppression");
     }
   }
   PatrimoinesData: Patrimoine[];
@@ -616,8 +618,6 @@ export class DetailclientComponent {
     },
   };
 
-  
-
   newImmobilier: Immobilier = {
     Designation: "",
     Adresse: "",
@@ -705,10 +705,6 @@ export class DetailclientComponent {
     CPAN: "",
     CSG: "",
   };
-
-  
-
-  
 
   onImmobilierChange() {
     if (this.clientData.hasImmobilier === "non") {
