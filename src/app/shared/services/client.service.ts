@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class ClientService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getClients(): Observable<any[]> {
     let url = `${environment.url}/GetClients?CabinetId=0E06E5A4-6246-415D-B119-C47077180755`;
@@ -32,11 +32,8 @@ export class ClientService {
   }
 
   deleteClient(clientId: string): Observable<any> {
-    return this.http.delete<any>(
-      `${environment.url}/DeleteClient/${clientId}`
-    );
+    return this.http.delete<any>(`${environment.url}/DeleteClient/${clientId}`);
   }
-
 
   CreateClientPiece(formData: any) {
     let url = `${environment.url}/CreateClientPiece?`;
@@ -44,6 +41,25 @@ export class ClientService {
   }
   DeleteClientPiece(ClientPieceId: string) {
     let url = `${environment.url}/DeleteClientPiece/${ClientPieceId}`;
+    return this.http.delete(url);
+  }
+
+  CreatePatrimoine(data: any) {
+    let url = `${environment.url}/CreatePatrimoine?`;
+    return this.http.post(url, data);
+  }
+  GetPatrimoines(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetPatrimoines?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  UpdatePatrimoine(data: any): Observable<any> {
+    console.log("UpdatePatrimoine.data: ", data);
+    let url = `${environment.url}/UpdatePatrimoine?`;
+    // data.CabinetId = "0E06E5A4-6246-415D-B119-C47077180755";
+    return this.http.put<any>(url, data);
+  }
+  DeletePatrimoine(PatrimoineId :string){
+    let url = `${environment.url}/DeletePatrimoine/${PatrimoineId}`;
     return this.http.delete(url);
   }
 }
