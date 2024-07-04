@@ -11,7 +11,10 @@ export class MyAccountComponent implements OnInit {
   public profileImg: "assets/images/dashboard/profile.jpg";
 
   constructor(public router: Router) {
-    if (JSON.parse(localStorage.getItem("user"))) {
+    let user = JSON.parse(localStorage.getItem("user"))
+    console.log("user: ", user);
+
+    if (user) {
     } else {
     }
   }
