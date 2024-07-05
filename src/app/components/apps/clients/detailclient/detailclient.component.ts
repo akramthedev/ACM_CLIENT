@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Piece } from "src/app/shared/model/dto.model";
+import { Client, Piece } from "src/app/shared/model/dto.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { ClientService } from "src/app/shared/services/client.service";
 import { EnumService } from "src/app/shared/services/enum.service";
@@ -19,107 +19,17 @@ interface Task {
   statusClass: string;
 }
 
-
-interface Immobilier {
-  Designation: string;
-  Adresse: string;
-  Valeur: string;
-  Date: string;
-  Detenteur: string;
-  Revenue: string;
-  Charge: string;
-  Capital: string;
-  Duree: string;
-  Taux: string;
-  Deces: string;
-}
-interface Professionnel {
-  Designation: string;
-  Valeur: string;
-  DateCreation: string;
-  Detenteur: string;
-  DateAchat: string;
-  Capital: string;
-  Restant: string;
-  Status: string;
-  Partic: string;
-}
-interface Dette {
-  Designation: string;
-  Capital: string;
-  Duree: string;
-  Taux: string;
-  Deces: string;
-  Partic: string;
-}
-interface Assur {
-  Designation: string;
-  Capital: string;
-  Date: string;
-  Assur: string;
-  Benef: string;
-  Partic: string;
-}
-interface Epar {
-  Designation: string;
-  Valeur: string;
-  Detenteur: string;
-  Date: string;
-  Epar: string;
-  Partic: string;
-}
-interface Mobiliere {
-  Designation: string;
-  Valeur: string;
-  Detenteur: string;
-  RevenuDis: string;
-  Fisca: string;
-  Taux: string;
-}
-interface Disponibilite {
-  Designation: string;
-  Valeur: string;
-  Detenteur: string;
-  Partic: string;
-}
-interface Budget {
-  Designation: string;
-  MontantMr: string;
-  MontantMme: string;
-}
-
-interface SituationAdmin {
-  CFE: string;
-  Cotisation: string;
-  Reversion: string;
-  CNSS: string;
-  CNAREFE: string;
-  Capitone: string;
-  Rapatriement: string;
-  Mutuelle: string;
-  Passeport: string;
-  CarteSejour: string;
-  Permis: string;
-  AssurAuto: string;
-  AssurHabi: string;
-  InscriConsulat: string;
-  CPAN: string;
-  CSG: string;
-}
-
 @Component({
   selector: "app-detailclient",
   templateUrl: "./detailclient.component.html",
   styleUrl: "./detailclient.component.scss",
 })
 export class DetailclientComponent {
-  @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> =
-    new EventEmitter<any>();
-  clientId: string;
+  @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   activeTabId: number = 1;
   disabled = true;
-  currentClient: any;
+  currentClient: Client;
 
   filtredClientPieces: any[] = [];
   filterPiecesText: string = "";
@@ -136,7 +46,7 @@ export class DetailclientComponent {
     private router: Router,
     private title: Title,
     private modalService: NgbModal
-  ) {}
+  ) { }
 
   editPatrimoine(id: string) {
     console.log("Edit patrimoine cliquer");
@@ -147,45 +57,53 @@ export class DetailclientComponent {
     console.log("delete patrimoine cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
     if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
-      this.clientService.DeletePatrimoine(id).subscribe(
-        (response) => {
+      this.clientService.DeletePatrimoine(id)
+        .subscribe((response) => {
           console.log("Delete client response : ", response);
           this.toastr.success("Patrimoine supprimé avec succès");
-          this.PatrimoinesData = this.PatrimoinesData.filter(
-            (p) => p.PatrimoineId !== id
-          );
-        },
-        (error) => {
+          this.currentClient.Patrimoines = this.currentClient.Patrimoines.filter((x) => x.PatrimoineId !== id);
+        }, (error) => {
           console.error("Erreur lors de la suppression du patrimoine", error);
           this.toastr.error("Erreur lors de la suppression du patrimoine");
-        }
-      );
+        });
     } else {
       console.log("error lors de la suppression");
     }
   }
-  PatrimoinesData: Patrimoine[];
-  getPatrimoines(ClientId: any) {
-    this.loader.show();
-    this.clientService.GetPatrimoines(ClientId).subscribe(
-      (response) => {
-        console.log("response getPatrimoines ", response);
-        this.PatrimoinesData = response;
-        this.loader.hide();
-      },
-      (error) => {
-        console.error("error fetching patrimoines ", error);
-        this.loader.hide();
-      }
-    );
-  }
+
+  //#region Patrimoine
+
+  tablesPatrimoines: { title: string, type: string, noDataMessage: string, total: number, columns: any[] }[] = [
+    {
+      title: "Biens d'usage", type: "Bien d'usage", noDataMessage: "Aucun bien d'usage enregistré", total: 1553548.52,
+      columns: [
+        { field: "Designation", header: "Désignation", dataType: "string" },
+        { field: "Adresse", header: "Adresse", dataType: "string" },
+        { field: "Valeur", header: "Valeur", dataType: "number" },
+        { field: "Detenteur", header: "Détenteur", dataType: "string" },
+        { field: "ChargesAssocies", header: "Charges associées", dataType: "string" },
+        { field: "DateAchat", header: "Date d'achat", dataType: "date" },
+        { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "string" },
+        { field: "Duree", header: "Durée", dataType: "number" },
+        { field: "Taux", header: "Taux", dataType: "number" },
+        { field: "AGarantieDeces", header: "Garantie Décès", dataType: "bool" },
+        { field: null, header: "Action", dataType: "" },
+      ]
+    },
+    {
+      title: "Immobiliers de rapport", type: "Immobilier de rapport", noDataMessage: "Aucun immobilier de rapport enregistré", total: null,
+      columns: [{ field: "Designation", header: "Désignation", dataType: "string" },]
+    },
+    {
+      title: "Biens professionnels", type: "Bien professionnel", noDataMessage: "Aucun bien professionel enregistré", total: 941581,
+      columns: [{ field: "Designation", header: "Désignation", dataType: "string" },]
+    },
+  ]
 
   GetPatrimoines(
     type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel"
   ) {
-    return this.PatrimoinesData.filter((x) =>
-      type != null ? x.TypePatrimoine === type : true
-    );
+    return this.currentClient.Patrimoines.filter((x) => type != null ? x.TypePatrimoine === type : true);
   }
 
   dialogPatrimoine: {
@@ -196,82 +114,76 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    isEditing: null,
-    Open: (
-      id: string | null,
-      type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel"
-    ) => {
-      if (id == null) {
-        // create patrimoine
-        this.dialogPatrimoine.isEditing = false;
-        this.dialogPatrimoine.data = {
-          PatrimoineId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-          TypePatrimoine: type,
-        };
+      data: null,
+      isEditing: null,
+      Open: (
+        id: string | null,
+        type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel"
+      ) => {
+        if (id == null) {
+          // create patrimoine
+          this.dialogPatrimoine.isEditing = false;
+          this.dialogPatrimoine.data = {
+            PatrimoineId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+            TypePatrimoine: type,
+          };
+          const modalDiv = document.getElementById("DialogPatrimoine");
+          if (modalDiv != null) modalDiv.style.display = "block";
+        } else {
+          // edit patrimoine
+          this.dialogPatrimoine.isEditing = true;
+          // get patrimoie data
+          let p = this.currentClient.Patrimoines.find((x) => x.PatrimoineId == id);
+          this.dialogPatrimoine.data = structuredClone(p);
+          const modalDiv = document.getElementById("DialogPatrimoine");
+          if (modalDiv != null) modalDiv.style.display = "block";
+        }
+      },
 
-        const modalDiv = document.getElementById("DialogPatrimoine");
-        if (modalDiv != null) modalDiv.style.display = "block";
-      } else {
-        // edit patrimoine
-        this.dialogPatrimoine.isEditing = true;
-        // get patrimoie data
-        this.dialogPatrimoine.data = this.PatrimoinesData.find(
-          (x) => x.PatrimoineId == id
-        );
+      Submit: () => {
+        console.log("sublit: this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
 
-        const modalDiv = document.getElementById("DialogPatrimoine");
-        if (modalDiv != null) modalDiv.style.display = "block";
-      }
-    },
+        if (!this.dialogPatrimoine.isEditing) {
+          // submit create
+          this.clientService
+            .CreatePatrimoine(this.dialogPatrimoine.data)
+            .subscribe(
+              (response) => {
+                console.log("response CreatePatrimoine: ", response);
 
-    Submit: () => {
-      console.log(
-        "sublit: this.dialogPatrimoine.data: ",
-        this.dialogPatrimoine.data
-      );
-
-      if (!this.dialogPatrimoine.isEditing) {
-        // submit create
-        this.clientService
-          .CreatePatrimoine(this.dialogPatrimoine.data)
-          .subscribe(
-            (response) => {
-              console.log("response CreatePatrimoine: ", response);
-
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de creation");
-              } else {
-                this.toastr.success("Patrimoine ajouté avec succès");
-                this.PatrimoinesData.push(this.dialogPatrimoine.data);
-                this.dialogPatrimoine.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-                // this.btnSaveEmitter.emit(this.patrimoineData);
+                if (response == null && response == false) {
+                  this.toastr.error("Erreur de creation");
+                } else {
+                  this.toastr.success("Patrimoine ajouté avec succès");
+                  this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
+                  this.dialogPatrimoine.Close();
+                  // Swal.fire("Succès", "Client ajouté avec succès", "success");
+                  // this.btnSaveEmitter.emit(this.patrimoineData);
+                }
+              },
+              (error) => {
+                console.error("Erreur CreatePatrimoine: ", error);
+                this.toastr.error(error?.error, "Erreur de creation du patrimoine");
               }
-            },
-            (error) => {
-              console.error("Erreur CreatePatrimoine: ", error);
-              this.toastr.error(
-                error?.error,
-                "Erreur de creation du patrimoine"
-              );
-            }
-          );
-      } else {
-        // submit update
-      }
-    },
-    Close: () => {
-      const modalDiv = document.getElementById("DialogPatrimoine");
-      if (modalDiv != null) modalDiv.style.display = "none";
-      this.dialogPatrimoine.Clear();
-    },
-    Clear: () => {
-      this.dialogPatrimoine.data = null;
-      this.dialogPatrimoine.isEditing = null;
-    },
-  };
+            );
+        } else {
+          // submit update
+        }
+      },
+      Close: () => {
+        const modalDiv = document.getElementById("DialogPatrimoine");
+        if (modalDiv != null) modalDiv.style.display = "none";
+        this.dialogPatrimoine.Clear();
+      },
+      Clear: () => {
+        this.dialogPatrimoine.data = null;
+        this.dialogPatrimoine.isEditing = null;
+      },
+    };
+
+  //#endregion Patrimoine
+
 
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
@@ -281,74 +193,60 @@ export class DetailclientComponent {
   }
 
   OpenPieceTools(clientpieceid: string) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-danger",
-        cancelButton: "btn btn-light me-2",
-        denyButton: "btn btn-primary me-2",
-      },
-      buttonsStyling: false,
-    });
+    const swalWithBootstrapButtons = Swal.mixin({ customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2", }, buttonsStyling: false, });
 
     let clientPiece = this.currentClient.ClientPieces.find(
       (x) => x.ClientPieceId == clientpieceid
     );
     console.log("clientPiece: ", clientPiece);
 
-    swalWithBootstrapButtons
-      .fire({
-        title: clientPiece.Libelle, //,'Tu es sûr ?',
-        // text: clientPiece.Libelle,
-        icon: null, //'warning',
-        showCancelButton: true,
-        confirmButtonText: "Supprimer",
-        cancelButtonText: "Annuler",
-        reverseButtons: true,
-        showDenyButton: true,
-        denyButtonText: "Télécharger",
-      })
-      .then((result) => {
-        // Gérer les actions en fonction du bouton cliqué
-        if (result.isConfirmed) {
-          // Action lorsque l'utilisateur clique sur "Supprimer"
-          // Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
-          this.loader.show();
-          this.clientService.DeleteClientPiece(clientpieceid).subscribe(
-            (response) => {
-              console.log("response DeleteClientPiece: ", response);
-              this.loader.hide();
-              if (response == null || response == false) {
-                this.toastr.error("Erreur de suppression de la pièce");
-              } else {
-                this.toastr.success("Suppression de la pièce effectué");
-                this.filtredClientPieces = this.filtredClientPieces.filter(
-                  (x) => x.ClientPieceId != clientpieceid
-                );
-                this.currentClient.ClientPieces =
-                  this.currentClient.ClientPieces.filter(
-                    (x) => x.ClientPieceId != clientpieceid
-                  );
-              }
-            },
-            (error) => {
-              console.error("Erreur DeleteClientPiece: ", error);
+    swalWithBootstrapButtons.fire({
+      title: clientPiece.Libelle,
+      // text: clientPiece.Libelle,
+      icon: null, //'warning',
+      showCancelButton: true,
+      confirmButtonText: "Supprimer",
+      cancelButtonText: "Annuler",
+      reverseButtons: true,
+      showDenyButton: true,
+      denyButtonText: "Télécharger",
+    }).then((result) => {
+      // Gérer les actions en fonction du bouton cliqué
+      if (result.isConfirmed) {
+        // Action lorsque l'utilisateur clique sur "Supprimer"
+        // Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
+        this.loader.show();
+        this.clientService.DeleteClientPiece(clientpieceid).subscribe(
+          (response) => {
+            console.log("response DeleteClientPiece: ", response);
+            this.loader.hide();
+            if (response == null || response == false) {
               this.toastr.error("Erreur de suppression de la pièce");
-              this.loader.hide();
+            } else {
+              this.toastr.success("Suppression de la pièce effectué");
+              this.filtredClientPieces = this.filtredClientPieces.filter((x) => x.ClientPieceId != clientpieceid);
+              this.currentClient.ClientPieces = this.currentClient.ClientPieces.filter((x) => x.ClientPieceId != clientpieceid);
             }
-          );
-        } else if (result.isDenied) {
-          // Action lorsque l'utilisateur clique sur "Télécharger"
+          },
+          (error) => {
+            console.error("Erreur DeleteClientPiece: ", error);
+            this.toastr.error("Erreur de suppression de la pièce");
+            this.loader.hide();
+          }
+        );
+      } else if (result.isDenied) {
+        // Action lorsque l'utilisateur clique sur "Télécharger"
 
-          Swal.fire(
-            "Téléchargement!",
-            "Votre fichier est en cours de téléchargement.",
-            "info"
-          );
-        } else {
-          // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
-          // Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
-        }
-      });
+        Swal.fire(
+          "Téléchargement!",
+          "Votre fichier est en cours de téléchargement.",
+          "info"
+        );
+      } else {
+        // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
+        // Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
+      }
+    });
   }
   OnSearchPieceKeyUp(event) {
     // console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
@@ -362,51 +260,64 @@ export class DetailclientComponent {
     this.activeTabId = 1;
 
     this.route.params.subscribe((params) => {
-      this.clientId = params["id"];
+      let clientId = params["id"];
 
       this.loader.show();
-      this.getPatrimoines(this.clientId);
-      this.clientService.GetClient(this.clientId).subscribe(
-        (response) => {
+      this.clientService.GetClient(clientId)
+        .subscribe((response) => {
           console.log("response GetClient: ", response);
 
           if (response == null) {
+
+            this.toastr.error("Erreur de récuperation du client");
+            setTimeout(() => {
+              this.router.navigate(["/clients"]);
+            }, 2000);
+          }
+          else {
+
+            this.currentClient = response;
+            this.filtredClientPieces = this.currentClient.ClientPieces;
+            this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
+
+
+            this.clientService.GetPatrimoines(this.currentClient.ClientId)
+              .subscribe((response) => {
+                console.log("response getPatrimoines ", response);
+                this.currentClient.Patrimoines = response;
+                this.loader.hide();
+              }, (error) => {
+                console.error("error fetching patrimoines ", error);
+                this.loader.hide();
+              });
+
+
+            // get liste pieces
+            this.enumService.GetPieces()
+              .subscribe((responsePieces) => {
+                this.loader.hide();
+                this.Pieces = responsePieces;
+              }, (errorPieces) => {
+                this.loader.hide();
+              });
+          }
+
+
+        },
+          (error) => {
+            console.error("Error GetClient: ", error);
             this.loader.hide();
             this.toastr.error("Erreur de récuperation du client");
             setTimeout(() => {
               this.router.navigate(["/clients"]);
             }, 2000);
           }
-          this.currentClient = response;
-          this.filtredClientPieces = this.currentClient.ClientPieces;
-          this.title.setTitle(
-            `${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`
-          );
-
-          // this.loader.show();
-          this.enumService.GetPieces().subscribe(
-            (responsePieces) => {
-              // console.log("responsePieces: ", responsePieces);
-              this.loader.hide();
-              this.Pieces = responsePieces;
-            },
-            (errorPieces) => {
-              this.loader.hide();
-            }
-          );
-        },
-        (error) => {
-          console.error("Error GetClient: ", error);
-          this.loader.hide();
-          this.toastr.error("Erreur de récuperation du client");
-          setTimeout(() => {
-            this.router.navigate(["/clients"]);
-          }, 2000);
-        }
-      );
+        );
     });
   }
 
+
+  //#region ImportPiece
   dialogImportPiece: any = {
     PiecesToChoose: [],
     SelectedPiece: null,
@@ -465,9 +376,7 @@ export class DetailclientComponent {
         ClientPieceId: uuidv4(),
         ClientId: this.currentClient.ClientId,
         PieceId: this.dialogImportPiece.SelectedPiece,
-        Libelle: this.Pieces.find(
-          (x) => x.PieceId == this.dialogImportPiece.SelectedPiece
-        )?.Libelle,
+        Libelle: this.Pieces.find((x) => x.PieceId == this.dialogImportPiece.SelectedPiece)?.Libelle,
         Extension: this.dialogImportPiece.Extension,
       };
       this.dialogImportPiece.formData.append(
@@ -512,6 +421,7 @@ export class DetailclientComponent {
         );
     },
   };
+  //#endregion ImportPiece
 
   tasks: Task[] = [
     {
@@ -558,331 +468,55 @@ export class DetailclientComponent {
     },
   ];
 
-  // patrimoineData: Patrimoine;
-  clientData: {
-    hasUsage: string;
-    hasImmobilier: string;
-    Immobiliers: Immobilier[];
-    hasProf: string;
-    Profs: Professionnel[];
-    hasDette: string;
-    Dettes: Dette[];
-    hasAssur: string;
-    Assurs: Assur[];
-    hasEpar: string;
-    Epars: Epar[];
-    hasMobil: string;
-    Mobils: Mobiliere[];
-    hasDispo: string;
-    Dispos: Disponibilite[];
-    hasBudget: string;
-    Budgets: Budget[];
-    Partic: string;
-    SituationAdministrative: SituationAdmin;
-  } = {
-    hasUsage: "",
-    hasImmobilier: "",
-    Immobiliers: [],
-    hasProf: "",
-    Profs: [],
-    hasDette: "",
-    Dettes: [],
-    hasAssur: "",
-    Assurs: [],
-    hasEpar: "",
-    Epars: [],
-    hasMobil: "",
-    Mobils: [],
-    hasDispo: "",
-    Dispos: [],
-    hasBudget: "",
-    Budgets: [],
-    Partic: "",
-    SituationAdministrative: {
-      CFE: "",
-      Cotisation: "",
-      Reversion: "",
-      CNSS: "",
-      CNAREFE: "",
-      Capitone: "",
-      Rapatriement: "",
-      Mutuelle: "",
-      Passeport: "",
-      CarteSejour: "",
-      Permis: "",
-      AssurAuto: "",
-      AssurHabi: "",
-      InscriConsulat: "",
-      CPAN: "",
-      CSG: "",
-    },
-  };
+  // onImmobilierChange() {
+  // }
 
-  newImmobilier: Immobilier = {
-    Designation: "",
-    Adresse: "",
-    Valeur: "",
-    Date: "",
-    Detenteur: "",
-    Revenue: "",
-    Charge: "",
-    Capital: "",
-    Duree: "",
-    Taux: "",
-    Deces: "",
-  };
-  newProf: Professionnel = {
-    Designation: "",
-    Valeur: "",
-    DateCreation: "",
-    Detenteur: "",
-    DateAchat: "",
-    Capital: "",
-    Restant: "",
-    Status: "",
-    Partic: "",
-  };
-  newDette: Dette = {
-    Designation: "",
-    Capital: "",
-    Duree: "",
-    Taux: "",
-    Deces: "",
-    Partic: "",
-  };
-  newAssur: Assur = {
-    Designation: "",
-    Capital: "",
-    Date: "",
-    Assur: "",
-    Benef: "",
-    Partic: "",
-  };
-  newEpar: Epar = {
-    Designation: "",
-    Valeur: "",
-    Detenteur: "",
-    Date: "",
-    Epar: "",
-    Partic: "",
-  };
-  newMobil: Mobiliere = {
-    Designation: "",
-    Valeur: "",
-    Detenteur: "",
-    RevenuDis: "",
-    Fisca: "",
-    Taux: "",
-  };
-  newDispo: Disponibilite = {
-    Designation: "",
-    Valeur: "",
-    Detenteur: "",
-    Partic: "",
-  };
-  newBudget: Budget = {
-    Designation: "",
-    MontantMr: "",
-    MontantMme: "",
-  };
-  newPartic: "";
+  // addImmobilier() {
 
-  newSituationAdmin: SituationAdmin = {
-    CFE: "",
-    Cotisation: "",
-    Reversion: "",
-    CNSS: "",
-    CNAREFE: "",
-    Capitone: "",
-    Rapatriement: "",
-    Mutuelle: "",
-    Passeport: "",
-    CarteSejour: "",
-    Permis: "",
-    AssurAuto: "",
-    AssurHabi: "",
-    InscriConsulat: "",
-    CPAN: "",
-    CSG: "",
-  };
+  // }
 
-  onImmobilierChange() {
-    if (this.clientData.hasImmobilier === "non") {
-      this.clientData.Immobiliers = [];
-    }
-  }
+  // onProfChange() {
+  // }
 
-  addImmobilier() {
-    this.clientData.Immobiliers.push({ ...this.newImmobilier });
-    this.newImmobilier = {
-      Designation: "",
-      Adresse: "",
-      Valeur: "",
-      Date: "",
-      Detenteur: "",
-      Revenue: "",
-      Charge: "",
-      Capital: "",
-      Duree: "",
-      Taux: "",
-      Deces: "",
-    };
-  }
+  // addProf() {
+  // }
 
-  onProfChange() {
-    if (this.clientData.hasProf === "non") {
-      this.clientData.Profs = [];
-    }
-  }
+  // onDetteChange() {
+  // }
 
-  addProf() {
-    this.clientData.Profs.push({ ...this.newProf });
-    console.log(this.newProf);
-    this.newProf = {
-      Designation: "",
-      Valeur: "",
-      DateCreation: "",
-      Detenteur: "",
-      DateAchat: "",
-      Capital: "",
-      Restant: "",
-      Status: "",
-      Partic: "",
-    };
-  }
+  // addDette() {
+  // }
+  // onAssurChange() {
+  // }
 
-  onDetteChange() {
-    if (this.clientData.hasDette === "non") {
-      this.clientData.Dettes = [];
-    }
-  }
+  // addAssur() {
+  // }
+  // onEparChange() {
+  // }
 
-  addDette() {
-    this.clientData.Dettes.push({ ...this.newDette });
-    console.log(this.newDette);
-    this.newDette = {
-      Designation: "",
-      Capital: "",
-      Duree: "",
-      Taux: "",
-      Deces: "",
-      Partic: "",
-    };
-  }
-  onAssurChange() {
-    if (this.clientData.hasAssur === "non") {
-      this.clientData.Assurs = [];
-    }
-  }
+  // addEpar() {
+  // }
 
-  addAssur() {
-    this.clientData.Assurs.push({ ...this.newAssur });
-    console.log(this.newAssur);
-    this.newAssur = {
-      Designation: "",
-      Capital: "",
-      Date: "",
-      Assur: "",
-      Benef: "",
-      Partic: "",
-    };
-  }
-  onEparChange() {
-    if (this.clientData.hasEpar === "non") {
-      this.clientData.Epars = [];
-    }
-  }
+  // onMobilChange() {
+  // }
 
-  addEpar() {
-    this.clientData.Epars.push({ ...this.newEpar });
-    console.log(this.newEpar);
-    this.newEpar = {
-      Designation: "",
-      Valeur: "",
-      Detenteur: "",
-      Date: "",
-      Epar: "",
-      Partic: "",
-    };
-  }
+  // addMobil() {
+  // }
+  // onDispoChange() {
+  // }
 
-  onMobilChange() {
-    if (this.clientData.hasMobil === "non") {
-      this.clientData.Mobils = [];
-    }
-  }
+  // addDispo() {
+  // }
 
-  addMobil() {
-    this.clientData.Mobils.push({ ...this.newMobil });
-    console.log(this.newMobil);
-    this.newMobil = {
-      Designation: "",
-      Valeur: "",
-      Detenteur: "",
-      RevenuDis: "",
-      Fisca: "",
-      Taux: "",
-    };
-  }
-  onDispoChange() {
-    if (this.clientData.hasDispo === "non") {
-      this.clientData.Dispos = [];
-    }
-  }
+  // onBudgetChange() {
+  // }
 
-  addDispo() {
-    this.clientData.Dispos.push({ ...this.newDispo });
-    console.log(this.newDispo);
-    this.newDispo = {
-      Designation: "",
-      Valeur: "",
-      Detenteur: "",
-      Partic: "",
-    };
-  }
+  // addBudget() {
+  // }
 
-  onBudgetChange() {
-    if (this.clientData.hasBudget === "non") {
-      this.clientData.Budgets = [];
-    }
-  }
+  // addPartic() {
+  // }
 
-  addBudget() {
-    this.clientData.Budgets.push({ ...this.newBudget });
-    console.log(this.newBudget);
-    this.newBudget = {
-      Designation: "",
-      MontantMr: "",
-      MontantMme: "",
-    };
-  }
-
-  addPartic() {
-    this.clientData.Partic = this.newPartic;
-    console.log(this.newPartic);
-    this.newPartic = "";
-  }
-
-  addSituationAdmin() {
-    this.clientData.SituationAdministrative = { ...this.newSituationAdmin };
-    console.log(this.newSituationAdmin);
-    this.newSituationAdmin = {
-      CFE: "",
-      Cotisation: "",
-      Reversion: "",
-      CNSS: "",
-      CNAREFE: "",
-      Capitone: "",
-      Rapatriement: "",
-      Mutuelle: "",
-      Passeport: "",
-      CarteSejour: "",
-      Permis: "",
-      AssurAuto: "",
-      AssurHabi: "",
-      InscriConsulat: "",
-      CPAN: "",
-      CSG: "",
-    };
-  }
+  // addSituationAdmin() {
+  // }
 }

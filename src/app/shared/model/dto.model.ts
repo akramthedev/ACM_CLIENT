@@ -25,6 +25,8 @@ export class Client {
     | "PACS";
 
   Proches?: Proche[];
+  Patrimoines?: Patrimoine[];
+  ClientPieces?: any[];
 }
 
 export class Proche {

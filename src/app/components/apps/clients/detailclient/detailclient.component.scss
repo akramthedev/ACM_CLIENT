@@ -16,3 +16,11 @@ label {
     word-wrap: break-word;
     white-space: normal;
 }
+
+.center-content{
+    display: flex;
+    justify-content: center;
+}
+.small-button{
+    padding: 5px;
+}
