@@ -16,17 +16,13 @@ export class Client {
   Telephone2?: string;
   HasConjoint: boolean;
 
-  SituationFamiliale:
-    | "Marié"
-    | "Célibataire"
-    | "Divorcé"
-    | "Veuf"
-    | "Union"
-    | "PACS";
+  SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
 
   Proches?: Proche[];
   Patrimoines?: Patrimoine[];
   ClientPieces?: any[];
+  Passifs?: Passif[];
+  Budgets: Budget[];
 }
 
 export class Proche {
@@ -72,4 +68,37 @@ export class Patrimoine {
   Particularite?: string;
   Commentaire?: string;
   QuestionComplementaire?: string;
+}
+
+export class Passif {
+  PassifsId: string;
+  ClientId: string;
+  TypePassifs?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité";
+  Designation?: string;
+  CapitalEmprunte?: string;
+  Valeur?: string;
+  Detenteur?: string;
+  DureeMois?: string;
+  Taux?: string;
+  Deces?: string;
+  Particularite?: string;
+  ValeurRachat?: string;
+  DateSouscription?: string;
+  Assure?: string;
+  Beneficiaire?: string;
+  DateOuverture?: string;
+  EpargneAssocie?: string;
+  RevenusDistribue?: string;
+  FiscaliteOuRevenue?: string;
+  TauxRevalorisation?: string;
+  CommentPassifs?: string;
+}
+
+export class Budget {
+  BudgetsId: string;
+  ClientId: string;
+  Designation?: string;
+  Montant?: string;
+  Sexe?: string;
+  CommentBudget?: string;
 }
