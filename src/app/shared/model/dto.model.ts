@@ -64,7 +64,7 @@ export class Patrimoine {
   CapitalEmprunte?: string;
   Duree?: string;
   Taux?: string;
-  Deces?: string;
+  AGarantieDeces?: boolean;
   Particularite?: string;
   Commentaire?: string;
   QuestionComplementaire?: string;

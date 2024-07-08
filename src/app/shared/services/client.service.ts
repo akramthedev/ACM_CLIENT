@@ -97,7 +97,7 @@ export class ClientService {
     return this.http.put<any>(url, data);
   }
   DeleteBudget(BudgetsId: string) {
-    let url = `${environment.url}/DeletePassif/${BudgetsId}`;
+    let url = `${environment.url}/DeleteBudget/${BudgetsId}`;
     return this.http.delete(url);
   }
 }
