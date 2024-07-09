@@ -5,7 +5,6 @@ export class Client {
   Prenom: string;
   DateNaissance: Date;
   Photo?: string;
-
   Profession?: string;
   DateRetraite?: Date;
   NumeroSS?: string;
@@ -18,6 +17,25 @@ export class Client {
 
   SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
 
+  ParticulariteFiscale?: string;
+
+  AssuranceAuto?: string;
+  AssuranceHabitation?: string;
+  AssuranceRapatriement?: string;
+  CAPITONE?: string;
+  CFE?: string;
+  CNAREFE?: string;
+  CNSS?: string;
+  CPAN?: string;
+  CSG_CRDS?: string;
+  CarteSejour?: string;
+  Cotisation?: string;
+  InscriptionConsulat?: string;
+  MutuelleFrancaise?: string;
+  PASSEPORT?: string;
+  PermisConduire?: string;
+  Reversion?: string;
+
   Proches?: Proche[];
   Patrimoines?: Patrimoine[];
   ClientPieces?: any[];
@@ -28,8 +46,8 @@ export class Client {
 export class Proche {
   ProcheId: string;
   ClientId: string;
-  Nom: string;
-  Prenom: string;
+  Nom?: string;
+  Prenom?: string;
   DateNaissance?: Date;
   Telephone1?: string;
   Telephone2?: string;

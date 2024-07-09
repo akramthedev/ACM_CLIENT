@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Client, Passif, Piece } from "src/app/shared/model/dto.model";
+import { Client, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
 import { ClientService } from "src/app/shared/services/client.service";
@@ -35,8 +35,8 @@ export class DetailclientComponent {
   //   let formatedDate = new DatePipe().transform(this.Students.dob, 'dd/mm/yyyy')
   //   console.log(formatedDate);
   // }
-  //#region Patrimoine
 
+  //#region Patrimoine
   @ViewChild("DialogPatrimoine") public DialogPatrimoine!: any;
   tablesPatrimoines: {
     title: string;
@@ -718,7 +718,10 @@ export class DetailclientComponent {
               this.toastr.error("Erreur de modification du budget");
             } else {
               this.toastr.success("Budget modifié avec succès");
-              this.currentClient.Budgets.push(this.dialogBudget.data);
+              this.currentClient.Budgets = this.currentClient.Budgets.map((item) => {
+                if (item.BudgetsId == this.dialogBudget.data.BudgetsId) item = this.dialogBudget.data;
+                return item;
+              });
               this.dialogBudget.Close();
               // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
@@ -762,9 +765,214 @@ export class DetailclientComponent {
     }
   }
   //#endregion Budget
+
+  //#region Fiscale
+  oldParticulariteFiscale: string = null;
+  particulariteFiscaleChanged: boolean = false;
+  situationAdministrativeChanged: boolean = false;
+
+  //#endregion
+
+  //#region Proche
+  @ViewChild("DialogProche") public DialogProche!: any;
+  tablesProches: {
+    title: string;
+    noDataMessage: string;
+    total: number;
+    columns: {
+      field: string;
+      header: string;
+      dataType: "string" | "number" | "date" | "datetime" | "bool";
+      TextTrue?: string;
+      TextFalse?: string;
+      visible?: boolean;
+      inputOptions?: {
+        type: "text" | "number" | "date" | "select" | "checkbox";
+        required: boolean;
+        min?: number;
+        max?: number;
+        step?: number;
+        selectData?: any[];
+        selectValue?: string;
+        selectLibelle?: string;
+      };
+    }[];
+  }[] = [
+    {
+      title: "Proche",
+      noDataMessage: "Aucun proche enregistré",
+      total: 2,
+      columns: [
+        { field: "Nom", header: "Nom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+        { field: "Prenom", header: "Prénom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+        { field: "DateNaissance", header: "Date de naissance", dataType: "date", visible: true, inputOptions: { type: "date", required: false } },
+        { field: "Telephone1", header: "Téléphone 1", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Telephone2", header: "Téléphone 2", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "Email1", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "Email2", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "Adresse", header: "Adresse", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        {
+          field: "Charge",
+          header: "A Charge fiscalement",
+          dataType: "bool",
+          TextTrue: "Oui",
+          TextFalse: "Non",
+          visible: true,
+          inputOptions: {
+            type: "checkbox",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: true, libelle: "Oui" },
+              { key: false, libelle: "Non" },
+            ],
+          },
+        },
+        { field: "LienParente", header: "Lien de parenté", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "Particularite", header: "Particularité", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "NombreEnfant", header: "Nombre d'enfant", dataType: "number", visible: false, inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "action", header: "Action", visible: true, dataType: null },
+      ],
+    },
+  ];
+
+  GetProches() {
+    return this.currentClient.Proches;
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
+  }
+  getVisibleColumns(columns: any[]): any[] {
+    return columns.filter((column) => column.visible);
+  }
+  dialogProche: {
+    data: Proche;
+    isEditing: boolean;
+    title: string;
+    Inputs: any[];
+    Open: Function;
+    Submit: Function;
+    Close: Function;
+    Clear: Function;
+  } = {
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create proche
+        this.dialogProche.title = "Creation de Proche";
+        this.dialogProche.isEditing = false;
+        this.dialogProche.data = {
+          ProcheId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+        };
+        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+      } else {
+        // edit proche
+        this.dialogProche.isEditing = true;
+        // get proche data
+        let p = this.currentClient.Proches.find((x) => x.ProcheId == id);
+        this.dialogProche.title = p.Nom;
+        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+        this.dialogProche.data = structuredClone(p);
+      }
+      this.modalService.open(this.DialogProche, { ariaLabelledBy: "DialogProcheLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+      console.log("this.dialogProche.data: ", this.dialogProche.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogProche.data: ", this.dialogProche.data);
+      // return;
+      if (!this.dialogProche.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateProche(this.dialogProche.data).subscribe(
+          (response) => {
+            console.log("response CreateProche: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du proche");
+            } else {
+              this.toastr.success("Proche ajouté avec succès");
+              this.currentClient.Proches.push(this.dialogProche.data);
+              this.dialogProche.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur CreateProche: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du proche");
+          }
+        );
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateProche(this.dialogProche.data).subscribe(
+          (response) => {
+            console.log("response UpdateProche: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du proche");
+            } else {
+              this.toastr.success("Proche modifié avec succès");
+              this.currentClient.Proches = this.currentClient.Proches.map((item) => {
+                if (item.ProcheId == this.dialogProche.data.ProcheId) item = this.dialogProche.data;
+                return item;
+              });
+              this.dialogProche.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur UpdateProche: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du proche");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogProche.Clear();
+    },
+    Clear: () => {
+      this.dialogProche.title = null;
+      this.dialogProche.data = null;
+      this.dialogProche.Inputs = [];
+      this.dialogProche.isEditing = null;
+    },
+  };
+  DeleteProche(id: string) {
+    console.log("delete proche cliquer");
+    // Utilisez une boîte de dialogue de confirmation si nécessaire
+    if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+      this.clientService.DeleteProche(id).subscribe(
+        (response) => {
+          console.log("Delete proche response : ", response);
+          this.toastr.success("Proche supprimé avec succès");
+          this.currentClient.Proches = this.currentClient.Proches.filter((x) => x.ProcheId !== id);
+        },
+        (error) => {
+          console.error("Erreur lors de la suppression du proche", error);
+          this.toastr.error("Erreur lors de la suppression du proche");
+        }
+      );
+    } else {
+      console.log("error lors de la suppression");
+    }
+  }
+  //#endregion
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
-    if (changeEvent.nextId === 4) {
+    if (changeEvent.nextId === 5) {
       changeEvent.preventDefault();
     }
   }
@@ -848,6 +1056,8 @@ export class DetailclientComponent {
             this.currentClient = response;
             this.filtredClientPieces = this.currentClient.ClientPieces;
             this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
+
+            this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
 
             // get liste pieces
             this.enumService.GetPieces().subscribe(
@@ -1004,55 +1214,27 @@ export class DetailclientComponent {
     },
   ];
 
-  // onImmobilierChange() {
-  // }
-
-  // addImmobilier() {
-
-  // }
-
-  // onProfChange() {
-  // }
-
-  // addProf() {
-  // }
-
-  // onDetteChange() {
-  // }
-
-  // addDette() {
-  // }
-  // onAssurChange() {
-  // }
-
-  // addAssur() {
-  // }
-  // onEparChange() {
-  // }
-
-  // addEpar() {
-  // }
-
-  // onMobilChange() {
-  // }
-
-  // addMobil() {
-  // }
-  // onDispoChange() {
-  // }
-
-  // addDispo() {
-  // }
-
-  // onBudgetChange() {
-  // }
-
-  // addBudget() {
-  // }
-
-  // addPartic() {
-  // }
-
-  // addSituationAdmin() {
-  // }
+  UpdateClient() {
+    this.loader.show();
+    this.clientService.UpdateClient(this.currentClient).subscribe(
+      (response) => {
+        console.log("response UpdateClient: ", response);
+        this.loader.hide();
+        if (response == null && response == false) {
+          this.toastr.error("Erreur de modification du client");
+        } else {
+          this.toastr.success("Enregisté");
+          this.particulariteFiscaleChanged = false;
+          this.situationAdministrativeChanged = false;
+          this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
+          // Swal.fire("Succès", "Client ajouté avec succès", "success");
+        }
+      },
+      (error) => {
+        console.error("Erreur UpdateClient: ", error);
+        this.loader.hide();
+        this.toastr.error(error?.error, "Erreur de modification du client");
+      }
+    );
+  }
 }

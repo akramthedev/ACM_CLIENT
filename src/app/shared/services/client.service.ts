@@ -100,4 +100,23 @@ export class ClientService {
     let url = `${environment.url}/DeleteBudget/${BudgetsId}`;
     return this.http.delete(url);
   }
+
+  CreateProche(data: any) {
+    let url = `${environment.url}/CreateProche?`;
+    return this.http.post(url, data);
+  }
+  GetProches(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetProches?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  UpdateProche(data: any): Observable<any> {
+    console.log("UpdateProche.data: ", data);
+    let url = `${environment.url}/UpdateProche?`;
+    // data.CabinetId = "0E06E5A4-6246-415D-B119-C47077180755";
+    return this.http.put<any>(url, data);
+  }
+  DeleteProche(ProchesId: string) {
+    let url = `${environment.url}/DeleteProche/${ProchesId}`;
+    return this.http.delete(url);
+  }
 }
