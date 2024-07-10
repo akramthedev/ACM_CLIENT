@@ -25,13 +25,7 @@ export class ClientsComponent implements OnInit {
   titre: String;
   Clients: any[] = [];
 
-  constructor(
-    private title: Title,
-    private router: Router,
-    private clientService: ClientService,
-    private loader: NgxSpinnerService,
-    private toastr: ToastrService
-  ) {
+  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
   }
@@ -40,15 +34,7 @@ export class ClientsComponent implements OnInit {
     this.getClients();
   }
 
-  images = [
-    "assets/images/user/2.png",
-    "assets/images/user/user-dp.png",
-    "assets/images/user/1.png",
-    "assets/images/user/2.png",
-    "assets/images/user/2.png",
-    "assets/images/user/2.png",
-    "assets/images/user/2.png",
-  ];
+  images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
   getClients() {
     this.loader.show();
@@ -182,12 +168,7 @@ export class ClientsComponent implements OnInit {
     this.IsEditingClient = true;
   }
   SubmitUpdateClient() {
-    if (
-      this.ClientToUpdate.Nom == null ||
-      this.ClientToUpdate.Nom == "" ||
-      this.ClientToUpdate.Prenom == null ||
-      this.ClientToUpdate.Prenom == ""
-    ) {
+    if (this.ClientToUpdate.Nom == null || this.ClientToUpdate.Nom == "" || this.ClientToUpdate.Prenom == null || this.ClientToUpdate.Prenom == "") {
       this.toastr.warning("Veuillez saisir le nom et prénom du client.");
       return;
     }

@@ -290,7 +290,7 @@
 .social {
   &-profile {
     text-align: center;
-    background-image: url(../../images/dashboard-5/profile-bg.png);
+    // background-image: url(../../images/dashboard-5/profile-bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     .card-body {
@@ -373,7 +373,8 @@
   }
 }
 
-.card-body, .card-header {
+.card-body,
+.card-header {
   color: $theme-font-color;
 }
 

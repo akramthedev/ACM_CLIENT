@@ -970,6 +970,120 @@ export class DetailclientComponent {
     }
   }
   //#endregion
+
+  //#region Client
+  tablesClients: {
+    data: Client;
+    title: string;
+    columns: {
+      field: string;
+      header: string;
+      dataType: "string" | "number" | "date" | "datetime" | "bool";
+      TextTrue?: string;
+      TextFalse?: string;
+      inputOptions?: {
+        type: "text" | "number" | "date" | "select" | "checkbox";
+        required: boolean;
+        min?: number;
+        max?: number;
+        step?: number;
+        selectData?: any[];
+        selectValue?: string;
+        selectLibelle?: string;
+      };
+    }[];
+  }[] = [
+    {
+      data: this.GetClient(),
+      title: "Client",
+      columns: [
+        { field: "Nom", header: "Nom", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Prenom", header: "Prénom", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "DateNaissance", header: "Date de naissance", dataType: "date", inputOptions: { type: "date", required: false } },
+        { field: "Adresse", header: "Adresse", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Profession", header: "Profession", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "NumeroSS", header: "Numero SS", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Email1", header: "Email 1", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Email2", header: "Email 2", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Telephone1", header: "Telephone 1", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Telephone2", header: "Telephone 2", dataType: "string", inputOptions: { type: "text", required: false } },
+      ],
+    },
+  ];
+
+  GetClient() {
+    return structuredClone(this.currentClient);
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
+  }
+
+  dialogClient: {
+    data: Client;
+    isEditing: boolean;
+    title: string;
+    Inputs: any[];
+    Open: Function;
+    Submit: Function;
+    // Close: Function;
+    // Clear: Function;
+  } = {
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        this.dialogClient.Inputs = this.tablesClients.find((x) => x.title == "Client").columns;
+      } else {
+        // edit client
+        this.dialogClient.isEditing = true;
+        // get client data
+        let p = this.currentClient.ClientId == id ? this.currentClient.ClientId : id;
+        this.dialogClient.title = p;
+        this.dialogClient.Inputs = this.tablesClients.find((x) => x.title == "Client").columns;
+        this.dialogClient.data = structuredClone(this.currentClient);
+        console.log("dialogClient.Inputs : ", this.dialogClient.Inputs);
+      }
+      console.log("this.dialogClient.data: ", this.dialogClient.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogClient.data: ", this.dialogClient.data);
+      // return;
+      if (this.dialogClient.isEditing) {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateClient(this.dialogClient.data).subscribe(
+          (response) => {
+            console.log("response UpdateClient: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du client");
+            } else {
+              this.toastr.success("Client modifié avec succès");
+              // this.dialogClient.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur UpdateClient: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du client");
+          }
+        );
+      }
+    },
+    // Close: () => {
+    //   this.modalService.dismissAll();
+    //   this.dialogClient.Clear();
+    // },
+    // Clear: () => {
+    //   this.dialogClient.title = null;
+    //   this.dialogClient.data = null;
+    //   this.dialogClient.Inputs = [];
+    //   this.dialogClient.isEditing = null;
+    // },
+  };
+
+  //#endregion Client
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
     if (changeEvent.nextId === 5) {
@@ -1058,7 +1172,8 @@ export class DetailclientComponent {
             this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
 
             this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
-
+            this.GetClient();
+            console.log("GetClient pour modifer", this.GetClient());
             // get liste pieces
             this.enumService.GetPieces().subscribe(
               (responsePieces) => {
