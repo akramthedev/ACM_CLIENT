@@ -6,7 +6,7 @@ import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 import { Client, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
-import { CustomTable } from "src/app/shared/model/models.model";
+import { CustomTable, CustomTableColumn, CustomTableColumnInputOption } from "src/app/shared/model/models.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
 import { ClientService } from "src/app/shared/services/client.service";
@@ -20,6 +20,8 @@ import { v4 as uuidv4 } from "uuid";
   styleUrl: "./detailclient.component.scss",
 })
 export class DetailclientComponent {
+
+  isComponentReady: boolean = false;
   activeTabId: number = 1;
   currentClient: Client;
   closeResult: string;
@@ -728,7 +730,7 @@ export class DetailclientComponent {
   particulariteFiscaleChanged: boolean = false;
   situationAdministrativeChanged: boolean = false;
 
-  //#endregion
+  //#endregion Fiscale
 
   //#region Proche
   @ViewChild("DialogProche") public DialogProche!: any;
@@ -756,13 +758,8 @@ export class DetailclientComponent {
     },
   ];
 
-  GetProches() {
-    return this.currentClient.Proches;
-    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
-  }
-  getVisibleColumns(columns: any[]): any[] {
-    return columns.filter((column) => column.visible);
-  }
+  GetProches() { return this.currentClient.Proches; }
+  getVisibleColumns(columns: any[]): any[] { return columns.filter((column) => column.visible); }
   dialogProche: {
     data: Proche;
     isEditing: boolean;
@@ -888,137 +885,32 @@ export class DetailclientComponent {
       console.log("error lors de la suppression");
     }
   }
-  //#endregion
+  //#endregion Proche
 
   //#region Client
-  tablesClients: {
-    data: Client;
-    title: string;
-    columns: {
-      field: string;
-      header: string;
-      dataType: "string" | "number" | "date" | "datetime" | "bool";
-      TextTrue?: string;
-      TextFalse?: string;
-      inputOptions?: {
-        type: "text" | "number" | "date" | "select" | "checkbox";
-        required: boolean;
-        min?: number;
-        max?: number;
-        step?: number;
-        selectData?: any[];
-        selectValue?: string;
-        selectLibelle?: string;
-      };
-    }[];
-  }[] = [
-      {
-        data: this.GetClient(),
-        title: "Client",
-        columns: [
-          { field: "Nom", header: "Nom", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Prenom", header: "Prénom", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "DateNaissance", header: "Date de naissance", dataType: "date", inputOptions: { type: "date", required: false } },
-          { field: "Adresse", header: "Adresse", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Profession", header: "Profession", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "NumeroSS", header: "Numero SS", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Email1", header: "Email 1", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Email2", header: "Email 2", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Telephone1", header: "Telephone 1", dataType: "string", inputOptions: { type: "text", required: false } },
-          { field: "Telephone2", header: "Telephone 2", dataType: "string", inputOptions: { type: "text", required: false } },
-        ],
-      },
-    ];
-
-  GetClient() {
-    return structuredClone(this.currentClient);
-    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
-  }
-
-  dialogClient: {
-    data: Client;
-    isEditing: boolean;
-    title: string;
-    Inputs: any[];
-    Open: Function;
-    Submit: Function;
-    // Close: Function;
-    // Clear: Function;
-  } = {
-      data: null,
-      isEditing: null,
-      title: null,
-      Inputs: [],
-      Open: (id: string | null) => {
-        if (id == null) {
-          this.dialogClient.Inputs = this.tablesClients.find((x) => x.title == "Client").columns;
-        } else {
-          // edit client
-          this.dialogClient.isEditing = true;
-          // get client data
-          let p = this.currentClient.ClientId == id ? this.currentClient.ClientId : id;
-          this.dialogClient.title = p;
-          this.dialogClient.Inputs = this.tablesClients.find((x) => x.title == "Client").columns;
-          this.dialogClient.data = structuredClone(this.currentClient);
-          console.log("dialogClient.Inputs : ", this.dialogClient.Inputs);
-        }
-        console.log("this.dialogClient.data: ", this.dialogClient.data);
-      },
-      Submit: () => {
-        console.log("sublit: this.dialogClient.data: ", this.dialogClient.data);
-        // return;
-        if (this.dialogClient.isEditing) {
-          // submit update
-          this.loader.show();
-          this.clientService.UpdateClient(this.dialogClient.data).subscribe(
-            (response) => {
-              console.log("response UpdateClient: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de modification du client");
-              } else {
-                this.toastr.success("Client modifié avec succès");
-                // this.dialogClient.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur UpdateClient: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de modification du client");
-            }
-          );
-        }
-      },
-      // Close: () => {
-      //   this.modalService.dismissAll();
-      //   this.dialogClient.Clear();
-      // },
-      // Clear: () => {
-      //   this.dialogClient.title = null;
-      //   this.dialogClient.data = null;
-      //   this.dialogClient.Inputs = [];
-      //   this.dialogClient.isEditing = null;
-      // },
-    };
-
+  formClientInputs: CustomTableColumn[] = [
+    { field: "Nom", header: "Nom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+    { field: "Prenom", header: "Prénom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+    { field: "DateNaissance", header: "Date de naissance", dataType: "date", visible: true, inputOptions: { type: "date", required: false } },
+    { field: "Telephone1", header: "Téléphone 1", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+    { field: "Telephone2", header: "Téléphone 2", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "Email1", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "Email2", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "Adresse", header: "Adresse", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+    { field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
+    { field: "LienParente", header: "Lien de parenté", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "Particularite", header: "Particularité", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "NombreEnfant", header: "Nombre d'enfant", dataType: "number", visible: false, inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+  ];
   //#endregion Client
+
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
-    if (changeEvent.nextId === 5) {
-      changeEvent.preventDefault();
-    }
+    if (changeEvent.nextId === 5) { changeEvent.preventDefault(); }
   }
-
   OpenPieceTools(clientpieceid: string) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2" },
-      buttonsStyling: false,
-    });
-
+    const swalWithBootstrapButtons = Swal.mixin({ customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2" }, buttonsStyling: false, });
     let clientPiece = this.currentClient.ClientPieces.find((x) => x.ClientPieceId == clientpieceid);
-    console.log("clientPiece: ", clientPiece);
-
     swalWithBootstrapButtons
       .fire({
         title: clientPiece.Libelle,
@@ -1086,23 +978,17 @@ export class DetailclientComponent {
               this.router.navigate(["/clients"]);
             }, 2000);
           } else {
+            this.isComponentReady = true;
             this.currentClient = response;
             this.filtredClientPieces = this.currentClient.ClientPieces;
             this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
-
             this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
-            this.GetClient();
-            console.log("GetClient pour modifer", this.GetClient());
             // get liste pieces
-            this.enumService.GetPieces().subscribe(
-              (responsePieces) => {
+            this.enumService.GetPieces()
+              .subscribe((responsePieces) => {
                 this.loader.hide();
                 this.Pieces = responsePieces;
-              },
-              (errorPieces) => {
-                this.loader.hide();
-              }
-            );
+              }, (errorPieces) => { this.loader.hide(); });
           }
         },
         (error) => {
