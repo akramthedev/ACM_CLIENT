@@ -1,11 +1,11 @@
 import { Component, ViewChild } from "@angular/core";
-import { DatePipe } from "@angular/common";
+import { formatDate, DatePipe } from "@angular/common";
 import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Client, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
+import { Client, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
 import { CustomTable, CustomTableColumn, CustomTableColumnInputOption } from "src/app/shared/model/models.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
@@ -20,8 +20,8 @@ import { v4 as uuidv4 } from "uuid";
   styleUrl: "./detailclient.component.scss",
 })
 export class DetailclientComponent {
-
-  isComponentReady: boolean = false;
+  date = new Date();
+  isCompReadyeee: boolean = false;
   activeTabId: number = 1;
   currentClient: Client;
   closeResult: string;
@@ -179,106 +179,107 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-      title: null,
-      data: null,
-      isEditing: null,
-      Inputs: [],
-      Open: (id: string | null, type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel") => {
-        if (id == null) {
-          // create patrimoine
-          this.dialogPatrimoine.title = "Creation de " + type;
-          this.dialogPatrimoine.isEditing = false;
-          this.dialogPatrimoine.data = {
-            PatrimoineId: uuidv4(),
-            ClientId: this.currentClient.ClientId,
-            TypePatrimoine: type,
-          };
-          //DialogPatrimoineLabel
-          this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
-        } else {
-          // edit patrimoine
-          this.dialogPatrimoine.isEditing = true;
-          // get patrimoie data
-          let p = this.currentClient.Patrimoines.find((x) => x.PatrimoineId == id);
-          this.dialogPatrimoine.title = p.Designation;
-          this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == p.TypePatrimoine).columns.filter((x) => x.field != "action");
-          this.dialogPatrimoine.data = structuredClone(p);
-        }
+    title: null,
+    data: null,
+    isEditing: null,
+    Inputs: [],
+    Open: (id: string | null, type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel") => {
+      if (id == null) {
+        // create patrimoine
+        this.dialogPatrimoine.title = "Creation de " + type;
+        this.dialogPatrimoine.isEditing = false;
+        this.dialogPatrimoine.data = {
+          PatrimoineId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+          TypePatrimoine: type,
+        };
+        //DialogPatrimoineLabel
+        this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
+      } else {
+        // edit patrimoine
+        this.dialogPatrimoine.isEditing = true;
+        // get patrimoie data
+        let p = this.currentClient.Patrimoines.find((x) => x.PatrimoineId == id);
+        this.dialogPatrimoine.title = p.Designation;
+        this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == p.TypePatrimoine).columns.filter((x) => x.field != "action");
+        this.dialogPatrimoine.data = structuredClone(p);
+        this.dialogPatrimoine.data.DateAchat = this.formatDate(this.dialogPatrimoine.data.DateAchat);
+      }
 
-        this.modalService.open(this.DialogPatrimoine, { ariaLabelledBy: "DialogPatrimoineLabel", fullscreen: false, size: "xl" }).result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
+      this.modalService.open(this.DialogPatrimoine, { ariaLabelledBy: "DialogPatrimoineLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+      console.log("this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
+      //return;
+      if (!this.dialogPatrimoine.isEditing) {
+        // submit create
+        // this.dialogPatrimoine.data.AGarantieDeces = this.dialogPatrimoine.data.AGarantieDeces.includes("true") ? true : false;
+        this.loader.show();
+        this.clientService.CreatePatrimoine(this.dialogPatrimoine.data).subscribe(
+          (response) => {
+            console.log("response CreatePatrimoine: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du patrimoine");
+            } else {
+              this.toastr.success("Patrimoine ajouté avec succès");
+              this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
+              this.dialogPatrimoine.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
           },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          (error) => {
+            console.error("Erreur CreatePatrimoine: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du patrimoine");
           }
         );
-        console.log("this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
-      },
-      Submit: () => {
-        console.log("sublit: this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
-        //return;
-        if (!this.dialogPatrimoine.isEditing) {
-          // submit create
-          // this.dialogPatrimoine.data.AGarantieDeces = this.dialogPatrimoine.data.AGarantieDeces.includes("true") ? true : false;
-          this.loader.show();
-          this.clientService.CreatePatrimoine(this.dialogPatrimoine.data).subscribe(
-            (response) => {
-              console.log("response CreatePatrimoine: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de création du patrimoine");
-              } else {
-                this.toastr.success("Patrimoine ajouté avec succès");
-                this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
-                this.dialogPatrimoine.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur CreatePatrimoine: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de creation du patrimoine");
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdatePatrimoine(this.dialogPatrimoine.data).subscribe(
+          (response) => {
+            console.log("response UpdatePatrimoine: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du patrimoine");
+            } else {
+              this.toastr.success("Patrimoine modifié avec succès");
+              this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
+                if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
+                return item;
+              });
+              this.dialogPatrimoine.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
-          );
-        } else {
-          // submit update
-          this.loader.show();
-          this.clientService.UpdatePatrimoine(this.dialogPatrimoine.data).subscribe(
-            (response) => {
-              console.log("response UpdatePatrimoine: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de modification du patrimoine");
-              } else {
-                this.toastr.success("Patrimoine modifié avec succès");
-                this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
-                  if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
-                  return item;
-                });
-                this.dialogPatrimoine.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur UpdatePatrimoine: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de modification du patrimoine");
-            }
-          );
-        }
-      },
-      Close: () => {
-        this.modalService.dismissAll();
-        this.dialogPatrimoine.Clear();
-      },
-      Clear: () => {
-        this.dialogPatrimoine.title = null;
-        this.dialogPatrimoine.data = null;
-        this.dialogPatrimoine.Inputs = [];
-        this.dialogPatrimoine.isEditing = null;
-      },
-    };
+          },
+          (error) => {
+            console.error("Erreur UpdatePatrimoine: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du patrimoine");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogPatrimoine.Clear();
+    },
+    Clear: () => {
+      this.dialogPatrimoine.title = null;
+      this.dialogPatrimoine.data = null;
+      this.dialogPatrimoine.Inputs = [];
+      this.dialogPatrimoine.isEditing = null;
+    },
+  };
   DeletePatrimoine(id: string) {
     console.log("delete patrimoine cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -424,103 +425,105 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-      data: null,
-      title: null,
-      Inputs: [],
-      isEditing: null,
-      Open: (id: string | null, type?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité") => {
-        if (id == null) {
-          // create passif
-          this.dialogPassif.title = "Creation de " + type;
-          this.dialogPassif.isEditing = false;
-          this.dialogPassif.data = {
-            PassifsId: uuidv4(),
-            ClientId: this.currentClient.ClientId,
-            TypePassifs: type,
-          };
-          this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == type).columns.filter((x) => x.field != "action");
-        } else {
-          // edit passif
-          this.dialogPassif.isEditing = true;
-          // get passif data
-          let p = this.currentClient.Passifs.find((x) => x.PassifsId == id);
-          this.dialogPassif.title = p.Designation;
-          this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == p.TypePassifs).columns.filter((x) => x.field != "action");
-          this.dialogPassif.data = structuredClone(p);
+    data: null,
+    title: null,
+    Inputs: [],
+    isEditing: null,
+    Open: (id: string | null, type?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité") => {
+      if (id == null) {
+        // create passif
+        this.dialogPassif.title = "Creation de " + type;
+        this.dialogPassif.isEditing = false;
+        this.dialogPassif.data = {
+          PassifsId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+          TypePassifs: type,
+        };
+        this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == type).columns.filter((x) => x.field != "action");
+      } else {
+        // edit passif
+        this.dialogPassif.isEditing = true;
+        // get passif data
+        let p = this.currentClient.Passifs.find((x) => x.PassifsId == id);
+        this.dialogPassif.title = p.Designation;
+        this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == p.TypePassifs).columns.filter((x) => x.field != "action");
+        this.dialogPassif.data = structuredClone(p);
+        this.dialogPassif.data.DateOuverture = this.formatDate(this.dialogPassif.data.DateOuverture);
+        this.dialogPassif.data.DateSouscription = this.formatDate(this.dialogPassif.data.DateSouscription);
+      }
+      this.modalService.open(this.DialogPassif, { ariaLabelledBy: "DialogPassifLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
-        this.modalService.open(this.DialogPassif, { ariaLabelledBy: "DialogPassifLabel", fullscreen: false, size: "xl" }).result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
+      );
+      console.log("this.dialogPassif.data: ", this.dialogPassif.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogPassif.data: ", this.dialogPassif.data);
+      // return;
+      if (!this.dialogPassif.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreatePassif(this.dialogPassif.data).subscribe(
+          (response) => {
+            console.log("response CreatePassif: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du passif");
+            } else {
+              this.toastr.success("Passif ajouté avec succès");
+              this.currentClient.Passifs.push(this.dialogPassif.data);
+              this.dialogPassif.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
           },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          (error) => {
+            console.error("Erreur CreatePassif: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du passif");
           }
         );
-        console.log("this.dialogPassif.data: ", this.dialogPassif.data);
-      },
-      Submit: () => {
-        console.log("sublit: this.dialogPassif.data: ", this.dialogPassif.data);
-        // return;
-        if (!this.dialogPassif.isEditing) {
-          // submit create
-          this.loader.show();
-          this.clientService.CreatePassif(this.dialogPassif.data).subscribe(
-            (response) => {
-              console.log("response CreatePassif: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de création du passif");
-              } else {
-                this.toastr.success("Passif ajouté avec succès");
-                this.currentClient.Passifs.push(this.dialogPassif.data);
-                this.dialogPassif.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur CreatePassif: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de creation du passif");
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdatePassif(this.dialogPassif.data).subscribe(
+          (response) => {
+            console.log("response UpdatePassif: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du passif");
+            } else {
+              this.toastr.success("Passif modifié avec succès");
+              this.currentClient.Passifs = this.currentClient.Passifs.map((item) => {
+                if (item.PassifsId == this.dialogPassif.data.PassifsId) item = this.dialogPassif.data;
+                return item;
+              });
+              this.dialogPassif.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
-          );
-        } else {
-          // submit update
-          this.loader.show();
-          this.clientService.UpdatePassif(this.dialogPassif.data).subscribe(
-            (response) => {
-              console.log("response UpdatePassif: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de modification du passif");
-              } else {
-                this.toastr.success("Passif modifié avec succès");
-                this.currentClient.Passifs = this.currentClient.Passifs.map((item) => {
-                  if (item.PassifsId == this.dialogPassif.data.PassifsId) item = this.dialogPassif.data;
-                  return item;
-                });
-                this.dialogPassif.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur UpdatePassif: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de modification du passif");
-            }
-          );
-        }
-      },
-      Close: () => {
-        this.modalService.dismissAll();
-        this.dialogPassif.Clear();
-      },
-      Clear: () => {
-        this.dialogPassif.title = null;
-        this.dialogPassif.data = null;
-        this.dialogPassif.Inputs = [];
-        this.dialogPassif.isEditing = null;
-      },
-    };
+          },
+          (error) => {
+            console.error("Erreur UpdatePassif: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du passif");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogPassif.Clear();
+    },
+    Clear: () => {
+      this.dialogPassif.title = null;
+      this.dialogPassif.data = null;
+      this.dialogPassif.Inputs = [];
+      this.dialogPassif.isEditing = null;
+    },
+  };
   DeletePassif(id: string) {
     console.log("delete passif cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -566,32 +569,32 @@ export class DetailclientComponent {
       };
     }[];
   }[] = [
-      {
-        title: "Budget",
-        noDataMessage: "Aucun budget enregistré",
-        total: 1553548.52,
-        columns: [
-          {
-            field: "Sexe",
-            header: "Sexe",
-            dataType: "string",
-            inputOptions: {
-              type: "select",
-              required: true,
-              selectValue: "key",
-              selectLibelle: "libelle",
-              selectData: [
-                { key: "homme", libelle: "Homme" },
-                { key: "femme", libelle: "Femme" },
-              ],
-            },
+    {
+      title: "Budget",
+      noDataMessage: "Aucun budget enregistré",
+      total: 1553548.52,
+      columns: [
+        {
+          field: "Sexe",
+          header: "Sexe",
+          dataType: "string",
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "homme", libelle: "Homme" },
+              { key: "femme", libelle: "Femme" },
+            ],
           },
-          { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-          { field: "Montant", header: "Montant", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-          { field: "action", header: "Action", dataType: null },
-        ],
-      },
-    ];
+        },
+        { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
+        { field: "Montant", header: "Montant", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "action", header: "Action", dataType: null },
+      ],
+    },
+  ];
 
   GetBudgets() {
     return this.currentClient.Budgets;
@@ -608,102 +611,102 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-      data: null,
-      isEditing: null,
-      title: null,
-      Inputs: [],
-      Open: (id: string | null) => {
-        if (id == null) {
-          // create budget
-          this.dialogBudget.title = "Creation de Budget";
-          this.dialogBudget.isEditing = false;
-          this.dialogBudget.data = {
-            BudgetsId: uuidv4(),
-            ClientId: this.currentClient.ClientId,
-          };
-          this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
-        } else {
-          // edit budget
-          this.dialogBudget.isEditing = true;
-          // get budget data
-          let p = this.currentClient.Budgets.find((x) => x.BudgetsId == id);
-          this.dialogBudget.title = p.Designation;
-          this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
-          this.dialogBudget.data = structuredClone(p);
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create budget
+        this.dialogBudget.title = "Creation de Budget";
+        this.dialogBudget.isEditing = false;
+        this.dialogBudget.data = {
+          BudgetsId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+        };
+        this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
+      } else {
+        // edit budget
+        this.dialogBudget.isEditing = true;
+        // get budget data
+        let p = this.currentClient.Budgets.find((x) => x.BudgetsId == id);
+        this.dialogBudget.title = p.Designation;
+        this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
+        this.dialogBudget.data = structuredClone(p);
+      }
+      this.modalService.open(this.DialogBudget, { ariaLabelledBy: "DialogBudgetLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
-        this.modalService.open(this.DialogBudget, { ariaLabelledBy: "DialogBudgetLabel", fullscreen: false, size: "xl" }).result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
+      );
+      console.log("this.dialogBudget.data: ", this.dialogBudget.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogBudget.data: ", this.dialogBudget.data);
+      // return;
+      if (!this.dialogBudget.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateBudget(this.dialogBudget.data).subscribe(
+          (response) => {
+            console.log("response CreateBudget: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du budget");
+            } else {
+              this.toastr.success("Budget ajouté avec succès");
+              this.currentClient.Budgets.push(this.dialogBudget.data);
+              this.dialogBudget.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
           },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          (error) => {
+            console.error("Erreur CreateBudget: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du budget");
           }
         );
-        console.log("this.dialogBudget.data: ", this.dialogBudget.data);
-      },
-      Submit: () => {
-        console.log("sublit: this.dialogBudget.data: ", this.dialogBudget.data);
-        // return;
-        if (!this.dialogBudget.isEditing) {
-          // submit create
-          this.loader.show();
-          this.clientService.CreateBudget(this.dialogBudget.data).subscribe(
-            (response) => {
-              console.log("response CreateBudget: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de création du budget");
-              } else {
-                this.toastr.success("Budget ajouté avec succès");
-                this.currentClient.Budgets.push(this.dialogBudget.data);
-                this.dialogBudget.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur CreateBudget: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de creation du budget");
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateBudget(this.dialogBudget.data).subscribe(
+          (response) => {
+            console.log("response UpdateBudget: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du budget");
+            } else {
+              this.toastr.success("Budget modifié avec succès");
+              this.currentClient.Budgets = this.currentClient.Budgets.map((item) => {
+                if (item.BudgetsId == this.dialogBudget.data.BudgetsId) item = this.dialogBudget.data;
+                return item;
+              });
+              this.dialogBudget.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
-          );
-        } else {
-          // submit update
-          this.loader.show();
-          this.clientService.UpdateBudget(this.dialogBudget.data).subscribe(
-            (response) => {
-              console.log("response UpdateBudget: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de modification du budget");
-              } else {
-                this.toastr.success("Budget modifié avec succès");
-                this.currentClient.Budgets = this.currentClient.Budgets.map((item) => {
-                  if (item.BudgetsId == this.dialogBudget.data.BudgetsId) item = this.dialogBudget.data;
-                  return item;
-                });
-                this.dialogBudget.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur UpdateBudget: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de modification du budget");
-            }
-          );
-        }
-      },
-      Close: () => {
-        this.modalService.dismissAll();
-        this.dialogBudget.Clear();
-      },
-      Clear: () => {
-        this.dialogBudget.title = null;
-        this.dialogBudget.data = null;
-        this.dialogBudget.Inputs = [];
-        this.dialogBudget.isEditing = null;
-      },
-    };
+          },
+          (error) => {
+            console.error("Erreur UpdateBudget: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du budget");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogBudget.Clear();
+    },
+    Clear: () => {
+      this.dialogBudget.title = null;
+      this.dialogBudget.data = null;
+      this.dialogBudget.Inputs = [];
+      this.dialogBudget.isEditing = null;
+    },
+  };
   DeleteBudget(id: string) {
     console.log("delete budget cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -728,7 +731,7 @@ export class DetailclientComponent {
   //#region Fiscale
   oldParticulariteFiscale: string = null;
   particulariteFiscaleChanged: boolean = false;
-  situationAdministrativeChanged: boolean = false;
+  //situationAdministrativeChanged: boolean = false;
 
   //#endregion Fiscale
 
@@ -749,7 +752,24 @@ export class DetailclientComponent {
         { field: "Email1", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         { field: "Email2", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         { field: "Adresse", header: "Adresse", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
+        {
+          field: "Charge",
+          header: "A Charge fiscalement",
+          dataType: "bool",
+          TextTrue: "Oui",
+          TextFalse: "Non",
+          visible: true,
+          inputOptions: {
+            type: "checkbox",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: true, libelle: "Oui" },
+              { key: false, libelle: "Non" },
+            ],
+          },
+        },
         { field: "LienParente", header: "Lien de parenté", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         { field: "Particularite", header: "Particularité", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         { field: "NombreEnfant", header: "Nombre d'enfant", dataType: "number", visible: false, inputOptions: { type: "number", required: false, min: 0, step: 1 } },
@@ -758,8 +778,12 @@ export class DetailclientComponent {
     },
   ];
 
-  GetProches() { return this.currentClient.Proches; }
-  getVisibleColumns(columns: any[]): any[] { return columns.filter((column) => column.visible); }
+  GetProches() {
+    return this.currentClient.Proches;
+  }
+  getVisibleColumns(columns: any[]): any[] {
+    return columns.filter((column) => column.visible);
+  }
   dialogProche: {
     data: Proche;
     isEditing: boolean;
@@ -770,102 +794,103 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-      data: null,
-      isEditing: null,
-      title: null,
-      Inputs: [],
-      Open: (id: string | null) => {
-        if (id == null) {
-          // create proche
-          this.dialogProche.title = "Creation de Proche";
-          this.dialogProche.isEditing = false;
-          this.dialogProche.data = {
-            ProcheId: uuidv4(),
-            ClientId: this.currentClient.ClientId,
-          };
-          this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
-        } else {
-          // edit proche
-          this.dialogProche.isEditing = true;
-          // get proche data
-          let p = this.currentClient.Proches.find((x) => x.ProcheId == id);
-          this.dialogProche.title = p.Nom;
-          this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
-          this.dialogProche.data = structuredClone(p);
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create proche
+        this.dialogProche.title = "Creation de Proche";
+        this.dialogProche.isEditing = false;
+        this.dialogProche.data = {
+          ProcheId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+        };
+        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+      } else {
+        // edit proche
+        this.dialogProche.isEditing = true;
+        // get proche data
+        let p = this.currentClient.Proches.find((x) => x.ProcheId == id);
+        this.dialogProche.title = p.Nom;
+        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+        this.dialogProche.data = structuredClone(p);
+        this.dialogProche.data.DateNaissance = this.formatDate(this.dialogProche.data.DateNaissance);
+      }
+      this.modalService.open(this.DialogProche, { ariaLabelledBy: "DialogProcheLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
-        this.modalService.open(this.DialogProche, { ariaLabelledBy: "DialogProcheLabel", fullscreen: false, size: "xl" }).result.then(
-          (result) => {
-            this.closeResult = `Closed with: ${result}`;
+      );
+      console.log("this.dialogProche.data: ", this.dialogProche.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogProche.data: ", this.dialogProche.data);
+      // return;
+      if (!this.dialogProche.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateProche(this.dialogProche.data).subscribe(
+          (response) => {
+            console.log("response CreateProche: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du proche");
+            } else {
+              this.toastr.success("Proche ajouté avec succès");
+              this.currentClient.Proches.push(this.dialogProche.data);
+              this.dialogProche.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
           },
-          (reason) => {
-            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          (error) => {
+            console.error("Erreur CreateProche: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du proche");
           }
         );
-        console.log("this.dialogProche.data: ", this.dialogProche.data);
-      },
-      Submit: () => {
-        console.log("sublit: this.dialogProche.data: ", this.dialogProche.data);
-        // return;
-        if (!this.dialogProche.isEditing) {
-          // submit create
-          this.loader.show();
-          this.clientService.CreateProche(this.dialogProche.data).subscribe(
-            (response) => {
-              console.log("response CreateProche: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de création du proche");
-              } else {
-                this.toastr.success("Proche ajouté avec succès");
-                this.currentClient.Proches.push(this.dialogProche.data);
-                this.dialogProche.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur CreateProche: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de creation du proche");
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateProche(this.dialogProche.data).subscribe(
+          (response) => {
+            console.log("response UpdateProche: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du proche");
+            } else {
+              this.toastr.success("Proche modifié avec succès");
+              this.currentClient.Proches = this.currentClient.Proches.map((item) => {
+                if (item.ProcheId == this.dialogProche.data.ProcheId) item = this.dialogProche.data;
+                return item;
+              });
+              this.dialogProche.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
-          );
-        } else {
-          // submit update
-          this.loader.show();
-          this.clientService.UpdateProche(this.dialogProche.data).subscribe(
-            (response) => {
-              console.log("response UpdateProche: ", response);
-              this.loader.hide();
-              if (response == null && response == false) {
-                this.toastr.error("Erreur de modification du proche");
-              } else {
-                this.toastr.success("Proche modifié avec succès");
-                this.currentClient.Proches = this.currentClient.Proches.map((item) => {
-                  if (item.ProcheId == this.dialogProche.data.ProcheId) item = this.dialogProche.data;
-                  return item;
-                });
-                this.dialogProche.Close();
-                // Swal.fire("Succès", "Client ajouté avec succès", "success");
-              }
-            },
-            (error) => {
-              console.error("Erreur UpdateProche: ", error);
-              this.loader.hide();
-              this.toastr.error(error?.error, "Erreur de modification du proche");
-            }
-          );
-        }
-      },
-      Close: () => {
-        this.modalService.dismissAll();
-        this.dialogProche.Clear();
-      },
-      Clear: () => {
-        this.dialogProche.title = null;
-        this.dialogProche.data = null;
-        this.dialogProche.Inputs = [];
-        this.dialogProche.isEditing = null;
-      },
-    };
+          },
+          (error) => {
+            console.error("Erreur UpdateProche: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du proche");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogProche.Clear();
+    },
+    Clear: () => {
+      this.dialogProche.title = null;
+      this.dialogProche.data = null;
+      this.dialogProche.Inputs = [];
+      this.dialogProche.isEditing = null;
+    },
+  };
   DeleteProche(id: string) {
     console.log("delete proche cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -895,21 +920,216 @@ export class DetailclientComponent {
     { field: "Telephone1", header: "Téléphone 1", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
     { field: "Telephone2", header: "Téléphone 2", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
     { field: "Email1", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
-    { field: "Email2", header: "Email 1", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "Email2", header: "Email 2", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
     { field: "Adresse", header: "Adresse", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-    { field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
-    { field: "LienParente", header: "Lien de parenté", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
-    { field: "Particularite", header: "Particularité", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
-    { field: "NombreEnfant", header: "Nombre d'enfant", dataType: "number", visible: false, inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+    //{ field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
+    { field: "NumeroSS", header: "Numéro SS", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+    { field: "DateRetraite", header: "Date de Retraite", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
   ];
   //#endregion Client
 
+  //#region Conjoint
+  @ViewChild("DialogConjoint") public DialogConjoint!: any;
+  tablesConjoints: CustomTable[] = [
+    {
+      title: "Conjoint",
+      type: null,
+      noDataMessage: "Aucun conjoint enregistré",
+      columns: [
+        { field: "Nom", header: "Nom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+        { field: "Prenom", header: "Prénom", dataType: "string", visible: true, inputOptions: { type: "text", required: true } },
+        { field: "DateNaissance", header: "Date de naissance", dataType: "date", visible: true, inputOptions: { type: "date", required: false } },
+        { field: "Adresse", header: "Adresse", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "Profession", header: "Profession", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "DateRetraite", header: "Date de retraite", dataType: "date", visible: true, inputOptions: { type: "date", required: false } },
+        { field: "NumeroSS", header: "Numéro SS", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "DateMariage", header: "Date de mariage", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
+        { field: "RegimeMatrimonial", header: "Régime matrimonial", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        {
+          field: "DonationEpoux",
+          header: "Donation epoux",
+          dataType: "bool",
+          TextTrue: "Oui",
+          TextFalse: "Non",
+          visible: true,
+          inputOptions: {
+            type: "checkbox",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: true, libelle: "Oui" },
+              { key: false, libelle: "Non" },
+            ],
+          },
+        },
+        { field: "ModifRegimeDate", header: "Modification régime et date", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "QuestComp", header: "Question complémentaire", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        { field: "action", header: "Action", visible: true, dataType: null },
+      ],
+    },
+  ];
+
+  GetConjoints() {
+    return this.currentClient.Conjoint;
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
+  }
+
+  dialogConjoint: {
+    data: Conjoint;
+    isEditing: boolean;
+    title: string;
+    Inputs: any[];
+    Open: Function;
+    Submit: Function;
+    Close: Function;
+    Clear: Function;
+  } = {
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create conjoint
+        this.dialogConjoint.title = "Creation du Conjoint";
+        this.dialogConjoint.isEditing = false;
+        this.dialogConjoint.data = {
+          ConjointId: uuidv4(),
+          ClientId: this.currentClient.ClientId,
+        };
+        this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
+      } else {
+        // edit conjoint
+        this.dialogConjoint.isEditing = true;
+        // get conjoint data
+        let p = this.currentClient.Conjoint.find((x) => x.ConjointId == id);
+        this.dialogConjoint.title = p.Nom + " " + p.Prenom;
+        this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
+        this.dialogConjoint.data = structuredClone(p);
+        this.dialogConjoint.data.DateNaissance = this.formatDate(this.dialogConjoint.data.DateNaissance);
+        this.dialogConjoint.data.DateRetraite = this.formatDate(this.dialogConjoint.data.DateRetraite);
+        this.dialogConjoint.data.DateMariage = this.formatDate(this.dialogConjoint.data.DateMariage);
+      }
+      this.modalService.open(this.DialogConjoint, { ariaLabelledBy: "DialogConjointLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+      console.log("this.dialogConjoint.data: ", this.dialogConjoint.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogConjoint.data: ", this.dialogConjoint.data);
+      this.cleanDateFields(this.dialogConjoint.data);
+      // return;
+      if (!this.dialogConjoint.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateConjoint(this.dialogConjoint.data).subscribe(
+          (response) => {
+            console.log("response CreateConjoint: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du conjoint");
+            } else {
+              this.toastr.success("Conjoint ajouté avec succès");
+              this.currentClient.Conjoint.push(this.dialogConjoint.data);
+              this.dialogConjoint.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur CreateConjoint: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du conjoint");
+          }
+        );
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateConjoint(this.dialogConjoint.data).subscribe(
+          (response) => {
+            console.log("response UpdateConjoint: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du conjoint");
+            } else {
+              this.toastr.success("Conjoint modifié avec succès");
+              this.currentClient.Conjoint = this.currentClient.Conjoint.map((item) => {
+                if (item.ConjointId == this.dialogConjoint.data.ConjointId) item = this.dialogConjoint.data;
+                return item;
+              });
+              this.dialogConjoint.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur UpdateConjoint: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du conjoint");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogConjoint.Clear();
+    },
+    Clear: () => {
+      this.dialogConjoint.title = null;
+      this.dialogConjoint.data = null;
+      this.dialogConjoint.Inputs = [];
+      this.dialogConjoint.isEditing = null;
+    },
+  };
+  DeleteConjoint(id: string) {
+    console.log("delete conjoint cliquer");
+    // Utilisez une boîte de dialogue de confirmation si nécessaire
+    if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+      this.clientService.DeleteConjoint(id).subscribe(
+        (response) => {
+          console.log("Delete conjoint response : ", response);
+          this.toastr.success("Conjoint supprimé avec succès");
+          this.currentClient.Conjoint = this.currentClient.Conjoint.filter((x) => x.ConjointId !== id);
+        },
+        (error) => {
+          console.error("Erreur lors de la suppression du conjoint", error);
+          this.toastr.error("Erreur lors de la suppression du conjoint");
+        }
+      );
+    } else {
+      console.log("error lors de la suppression");
+    }
+  }
+  //#endregion Conjoint
+
+  private formatDate(date: string | null): string | null {
+    //console.log("before date: ", date);
+    //if (date.includes("T")) date = date.split("T")[0];
+    // if (!date.includes("T")) date = `${date}T12:00:00.000`;
+    //console.log("after date: ", date);
+    //let formated = formatDate(date, "YYYY-MM-dd", "en-US");
+    //console.log("formated: ", formated);
+    //return formated;
+    return date ? formatDate(date, "yyyy-MM-dd", "en-US") : null;
+  }
+
+  private cleanDateFields(data: any) {
+    if (!data.DateNaissance) data.DateNaissance = null;
+    if (!data.DateRetraite) data.DateRetraite = null;
+    if (!data.DateMariage) data.DateMariage = null;
+  }
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
-    if (changeEvent.nextId === 5) { changeEvent.preventDefault(); }
+    if (changeEvent.nextId === 5) {
+      changeEvent.preventDefault();
+    }
   }
   OpenPieceTools(clientpieceid: string) {
-    const swalWithBootstrapButtons = Swal.mixin({ customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2" }, buttonsStyling: false, });
+    const swalWithBootstrapButtons = Swal.mixin({ customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2" }, buttonsStyling: false });
     let clientPiece = this.currentClient.ClientPieces.find((x) => x.ClientPieceId == clientpieceid);
     swalWithBootstrapButtons
       .fire({
@@ -978,17 +1198,24 @@ export class DetailclientComponent {
               this.router.navigate(["/clients"]);
             }, 2000);
           } else {
-            this.isComponentReady = true;
+            //this.isComponentReady = true;
             this.currentClient = response;
             this.filtredClientPieces = this.currentClient.ClientPieces;
             this.title.setTitle(`${this.currentClient.Nom} ${this.currentClient.Prenom} | ACM`);
             this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
+            this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
+            this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
+
             // get liste pieces
-            this.enumService.GetPieces()
-              .subscribe((responsePieces) => {
+            this.enumService.GetPieces().subscribe(
+              (responsePieces) => {
                 this.loader.hide();
                 this.Pieces = responsePieces;
-              }, (errorPieces) => { this.loader.hide(); });
+              },
+              (errorPieces) => {
+                this.loader.hide();
+              }
+            );
           }
         },
         (error) => {
@@ -1136,6 +1363,8 @@ export class DetailclientComponent {
 
   UpdateClient() {
     this.loader.show();
+    this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
+    this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
     this.clientService.UpdateClient(this.currentClient).subscribe(
       (response) => {
         console.log("response UpdateClient: ", response);
@@ -1145,7 +1374,7 @@ export class DetailclientComponent {
         } else {
           this.toastr.success("Enregisté");
           this.particulariteFiscaleChanged = false;
-          this.situationAdministrativeChanged = false;
+          //this.situationAdministrativeChanged = false;
           this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
         }

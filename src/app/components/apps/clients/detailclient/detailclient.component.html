@@ -1,5 +1,4 @@
-<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="['Clients']"
-  [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
+<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="['Clients']" [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
 <div class="container-fluid" *ngIf="currentClient != null">
   <div class="edit-profile">
     <div class="row">
@@ -21,12 +20,12 @@
                       </h2>
                       <div ngbAccordionCollapse>
                         <div ngbAccordionBody>
-                          <div class="row">
+                          <div *ngIf="false" class="row">
                             <div class="col-xl-4 col-sm-6 col-xxl-3 col-ed-4 box-col-4">
                               <div class="card social-profile">
                                 <div class="card-body">
                                   <div class="social-img-wrap">
-                                    <div class="social-img"><img src="assets/images/dashboard-5/profile.png" alt="profile" /></div>
+                                    <div class="social-img"><img src="assets/images/user/2.png" alt="profile" /></div>
                                     <div class="edit-icon">
                                       <svg>
                                         <use href="assets/svg/icon-sprite.svg#profile-check"></use>
@@ -41,41 +40,34 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xl-8 col-sm-6 col-xxl-9 col-ed-8 box-col-8" *ngIf="isComponentReady">
-                              <div class="card">
-                                <!-- <div class="card-header"><h4 class="card-title mb-0">Edit Profile</h4></div> -->
-                                <div class="card-body">
-                                  <span class="row">
-                                    <div class="form-group mb-3 col-md-6" *ngFor="let input of formClientInputs;">
-                                      <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
-                                        <label [for]="input.field">{{ input.header }}</label>
-                                        <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type"
-                                          [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max"
-                                          [step]="input.inputOptions.step" [(ngModel)]="currentClient[input.field]" />
-                                      </span>
-                                      <span *ngIf="['select'].includes(input.inputOptions.type)">
-                                        <label [for]="input.field">{{ input.header }}</label>
-                                        <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field"
-                                          [(ngModel)]="currentClient[input.field]">
-                                          <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{
-                                            item[input.inputOptions.selectLibelle] }}</option>
-                                        </select>
-                                      </span>
-                                      <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
-                                        <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-                                          <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                                            [(ngModel)]="currentClient[input.field]" />
-                                          <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
-                                        </div>
-                                      </span>
-                                    </div>
 
-                                    <div class="card-footer text-end">
-                                      <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
-                                    </div>
-                                  </span>
-                                </div>
+                            <div class="col-xl-8">
+                              <!-- <div class="card-header"><h4 class="card-title mb-0">Edit Profile</h4></div> -->
+                              <div class="card-body">
+                                <span class="row">
+                                  <div class="form-group mb-3 col-md-6" *ngFor="let input of formClientInputs">
+                                    <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
+                                      <label [for]="input.field">{{ input.header }}</label>
+                                      <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="currentClient[input.field]" />
+                                    </span>
+                                    <span *ngIf="['select'].includes(input.inputOptions.type)">
+                                      <label [for]="input.field">{{ input.header }}</label>
+                                      <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field" [(ngModel)]="currentClient[input.field]">
+                                        <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{ item[input.inputOptions.selectLibelle] }}</option>
+                                      </select>
+                                    </span>
+                                    <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
+                                      <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
+                                        <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="currentClient[input.field]" />
+                                        <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
+                                      </div>
+                                    </span>
+                                  </div>
 
+                                  <div class="card-footer text-end">
+                                    <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
+                                  </div>
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -87,7 +79,66 @@
                         <button ngbAccordionButton class="bg-primary text-white"><i class="icofont icofont-users-alt-4 fs-3 px-2"></i> Conjoint</button>
                       </h2>
                       <div ngbAccordionCollapse>
-                        <div ngbAccordionBody>Conjoint</div>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+
+                            <div class="mb-4 mt-3" *ngFor="let conjointType of tablesConjoints">
+                              <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th [attr.colspan]="getVisibleColumns(conjointType.columns).length - 1">
+                                      <b>{{ conjointType.title }}</b>
+                                    </th>
+                                    <th>
+                                      <button (click)="dialogConjoint.Open(null, conjointType.type)" type="button" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i>
+                                      </button>
+                                    </th>
+                                  </tr>
+                                  <!-- table columns -->
+                                  <tr class="bg-primary-subtle">
+                                    <td *ngFor="let column of getVisibleColumns(conjointType.columns)">{{ column.header }}</td>
+                                  </tr>
+                                </thead>
+                                <tbody *ngIf="GetConjoints().length === 0">
+                                  <tr>
+                                    <td [attr.colspan]="getVisibleColumns(conjointType.columns).length" align="center">
+                                      <i>{{ conjointType.noDataMessage }}</i>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                                <tbody *ngIf="GetConjoints().length > 0">
+                                  <tr *ngFor="let conjoint of GetConjoints()">
+                                    <td *ngFor="let column of getVisibleColumns(conjointType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
+                                      <span *ngIf="column.dataType == 'string'">{{ conjoint[column.field] }}</span>
+                                      <span *ngIf="column.dataType == 'date'">{{ conjoint[column.field] | date : "dd/MM/yyyy" }}</span>
+                                      <span *ngIf="column.dataType == 'datetime'">{{ conjoint[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
+                                      <span *ngIf="column.dataType == 'number'">{{ conjoint[column.field] }}</span>
+                                      <span *ngIf="column.dataType == 'bool'">{{ conjoint[column.field] ? column.TextTrue : column.TextFalse }}</span>
+                                      <span *ngIf="column.field == 'action'">
+                                        <div class="d-flex justify-content-around">
+                                          <a class="text-warning" (click)="dialogConjoint.Open(conjoint.ConjointId)">
+                                            <i class="fa fa-pencil"></i>
+                                          </a>
+                                          <a class="text-danger" (click)="DeleteConjoint(conjoint.ConjointId)">
+                                            <i class="fa fa-trash"></i>
+                                          </a>
+                                        </div>
+                                      </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end">Total: {{ GetConjoints().length }}</div>
+                            </div>
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                          </ng-template>
+                        </div>
                       </div>
                     </div>
                     <div ngbAccordionItem class="mt-3">
@@ -128,9 +179,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetProches().length > 0">
                                   <tr *ngFor="let proche of GetProches()">
-                                    <td *ngFor="let column of getVisibleColumns(procheType.columns)" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of getVisibleColumns(procheType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <span *ngIf="column.dataType == 'string'">{{ proche[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ proche[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ proche[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
@@ -209,9 +258,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetPatrimoines(patrimoineType.type).length > 0">
                                   <tr *ngFor="let patrimoine of GetPatrimoines(patrimoineType.type)">
-                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ patrimoine[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ patrimoine[column.field] | date : "dd/MM/yyyy" }}</span>
@@ -237,8 +284,7 @@
                             </div>
                             <div class="form-group mb-3 col-md-6">
                               <label for="prof-commentaire">Questions complémentaires : (pas encore programmé)</label>
-                              <p>quelle répartition du capital et des pouvoirs dans l'entreprise ? Quelles participations ? Comment est détenue l'immobilier professionnel ? Un
-                                pacte d'actionnaires a-t-il été signé ?</p>
+                              <p>quelle répartition du capital et des pouvoirs dans l'entreprise ? Quelles participations ? Comment est détenue l'immobilier professionnel ? Un pacte d'actionnaires a-t-il été signé ?</p>
                               <input class="form-control" id="prof-commentaire" type="text" placeholder="Réponse" name="ProfCommentaire" />
                             </div>
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -287,9 +333,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetPassifs(passifsType.type).length > 0">
                                   <tr *ngFor="let passif of GetPassifs(passifsType.type)">
-                                    <td *ngFor="let column of passifsType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of passifsType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ passif[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ passif[column.field] | date : "dd/MM/yyyy" }}</span>
@@ -362,9 +406,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetBudgets().length > 0">
                                   <tr *ngFor="let budget of GetBudgets()">
-                                    <td *ngFor="let column of budgetType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of budgetType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ budget[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ budget[column.field] | date : "dd/MM/yyyy" }}</span>
@@ -386,8 +428,7 @@
                                   </tr>
                                 </tbody>
                               </table>
-                              <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="budgetType.total != null">Total: {{ budgetType.total | currency : "MAD " : "symbol"
-                                : "4.2-2" }}</div>
+                              <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="budgetType.total != null">Total: {{ budgetType.total | currency : "MAD " : "symbol" : "4.2-2" }}</div>
                               <!--output '0 001,35 CA$'-->
                             </div>
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -411,11 +452,9 @@
                               <!-- Fields for usage goods -->
                               <div class="form-group mb-3 col-md-12">
                                 <label for="ParticulariteFiscale">Particularités fiscales</label>
-                                <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale"
-                                  [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
+                                <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale" [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
                               </div>
-                              <div class="d-grid gap-2 d-md-flex justify-content-center"
-                                *ngIf="particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale">
+                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale">
                                 <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
                               </div>
                             </div>
@@ -441,18 +480,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFEOui" value="oui" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFEOui" value="oui" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFEOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFENon" value="non" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFENon" value="non" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFENon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFEAFaire" value="afaire" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFEAFaire" value="afaire" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFEAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -515,8 +551,7 @@
                                       <label class="form-check-label" for="CarteSejourNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.CarteSejour" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire" [(ngModel)]="currentClient.CarteSejour" />
                                       <label class="form-check-label" for="CarteSejourAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -558,8 +593,7 @@
                                       <label class="form-check-label" for="PermisNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.PermisConsuire" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire" [(ngModel)]="currentClient.PermisConsuire" />
                                       <label class="form-check-label" for="PermisAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -601,8 +635,7 @@
                                       <label class="form-check-label" for="AssurAutoNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceAuto" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceAuto" />
                                       <label class="form-check-label" for="AssurAutoAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -636,18 +669,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui" [(ngModel)]="currentClient.AssuranceHabitation" />
                                       <label class="form-check-label" for="AssurHabiOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non" [(ngModel)]="currentClient.AssuranceHabitation" />
                                       <label class="form-check-label" for="AssurHabiNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceHabitation" />
                                       <label class="form-check-label" for="AssurHabiAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -681,18 +711,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui" [(ngModel)]="currentClient.InscriptionConsulat" />
                                       <label class="form-check-label" for="InscriConsulatOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non" [(ngModel)]="currentClient.InscriptionConsulat" />
                                       <label class="form-check-label" for="InscriConsulatNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire" [(ngModel)]="currentClient.InscriptionConsulat" />
                                       <label class="form-check-label" for="InscriConsulatAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -705,18 +732,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui" [(ngModel)]="currentClient.AssuranceRapatriement" />
                                       <label class="form-check-label" for="RapatriementOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non" [(ngModel)]="currentClient.AssuranceRapatriement" />
                                       <label class="form-check-label" for="RapatriementNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceRapatriement" />
                                       <label class="form-check-label" for="RapatriementAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -750,18 +774,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui" [(ngModel)]="currentClient.MutuelleFrancaise" />
                                       <label class="form-check-label" for="MutuelleOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non" [(ngModel)]="currentClient.MutuelleFrancaise" />
                                       <label class="form-check-label" for="MutuelleNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire" [(ngModel)]="currentClient.MutuelleFrancaise" />
                                       <label class="form-check-label" for="MutuelleAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -789,7 +810,7 @@
                                 </div>
                               </div>
 
-                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="situationAdministrativeChanged">
+                              <div class="d-grid gap-2 d-md-flex justify-content-center">
                                 <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
                               </div>
                             </div>
@@ -863,8 +884,7 @@
                                 <input id="upfile" type="file" onchange="sub(this)" />
                               </div>
                             </form> -->
-                            <div class="btn btn-outline-primary" (click)="dialogImportPiece.Open(modalUploadClientPiece)"><app-feather-icons [icon]="'upload'">
-                              </app-feather-icons>Importer</div>
+                            <div class="btn btn-outline-primary" (click)="dialogImportPiece.Open(modalUploadClientPiece)"><app-feather-icons [icon]="'upload'"> </app-feather-icons>Importer</div>
                           </div>
                         </div>
                       </div>
@@ -920,8 +940,7 @@
             <div class="col">
               <div class="mb-3">
                 <label for="piece">Fichier</label>
-                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile"
-                  (change)="dialogImportPiece.OnFileChange($event)" />
+                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile" (change)="dialogImportPiece.OnFileChange($event)" />
               </div>
             </div>
           </div>
@@ -944,13 +963,11 @@
         </h1>
         <button type="button" class="btn-close" (click)="dialogPatrimoine.Close()"></button>
       </div>
-      <div class="modal-body row" *ngIf="dialogPatrimoine.data != null">
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogPatrimoine.data != null">
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogPatrimoine.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step"
-              [(ngModel)]="dialogPatrimoine.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPatrimoine.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -960,8 +977,7 @@
           </span>
           <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogPatrimoine.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPatrimoine.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -987,12 +1003,11 @@
         </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="dialogPassif.Close()"></button>
       </div>
-      <div class="modal-body row" *ngIf="dialogPassif.data != null">
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogPassif.data != null">
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogPassif.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPassif.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPassif.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1004,8 +1019,7 @@
             <!-- <label [for]="input.field">{{ input.header }}</label> -->
             <!-- <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPatrimoine.data[input.field]" /> -->
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogPassif.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPassif.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1031,12 +1045,11 @@
         </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="dialogBudget.Close()"></button>
       </div>
-      <div class="modal-body row" *ngIf="dialogBudget.data != null">
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogBudget.data != null">
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogBudget.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogBudget.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogBudget.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1066,12 +1079,11 @@
         </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="dialogProche.Close()"></button>
       </div>
-      <div class="modal-body row" *ngIf="dialogProche.data != null">
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogProche.data != null">
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogProche.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogProche.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogProche.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1081,8 +1093,7 @@
           </span>
           <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogProche.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogProche.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1098,5 +1109,45 @@
     </ng-template>
 
     <!-- #endregion DialogProche -->
+
+    <!-- #region DialogConjoint -->
+
+    <ng-template #DialogConjoint let-modal>
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="DialogConjointLabel">
+          {{ dialogConjoint.title }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="dialogConjoint.Close()"></button>
+      </div>
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogConjoint.data != null">
+        <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogConjoint.Inputs">
+          <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
+            <label [for]="input.field">{{ input.header }}</label>
+            <input class="form-control digits" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogConjoint.data[input.field]" />
+          </span>
+          <span *ngIf="['select'].includes(input.inputOptions.type)">
+            <label [for]="input.field">{{ input.header }}</label>
+            <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field" [(ngModel)]="dialogConjoint.data[input.field]">
+              <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{ item[input.inputOptions.selectLibelle] }}</option>
+            </select>
+          </span>
+          <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
+            <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogConjoint.data[input.field]" />
+              <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
+            </div>
+          </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="dialogConjoint.Submit()">
+          <span *ngIf="dialogConjoint.isEditing == false">Ajouter</span>
+          <span *ngIf="dialogConjoint.isEditing == true">Modifier</span>
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="dialogConjoint.Close()">Fermer</button>
+      </div>
+    </ng-template>
+
+    <!-- #endregion DialogConjoint -->
   </div>
 </div>

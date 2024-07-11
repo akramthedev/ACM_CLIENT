@@ -2,25 +2,30 @@
 //     --bs-accordion-btn-bg:#7366ff;
 // }
 .form-check-label {
-    font-weight: initial;
+  font-weight: initial;
 }
 
 label {
-    font-weight: bold;
-    margin-right: 10px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .task-column {
-    max-width: 300px;
-    /* Vous pouvez ajuster cette valeur selon vos besoins */
-    word-wrap: break-word;
-    white-space: normal;
+  max-width: 300px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
-.center-content{
-    display: flex;
-    justify-content: center;
+.center-content {
+  display: flex;
+  justify-content: center;
 }
-.small-button{
-    padding: 5px;
+.small-button {
+  padding: 5px;
+}
+
+.modal-body-scrollable {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  width: 100%;
 }

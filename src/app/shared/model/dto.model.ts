@@ -3,10 +3,10 @@ export class Client {
   CabinetId: string;
   Nom: string;
   Prenom: string;
-  DateNaissance: Date;
+  DateNaissance: string;
   Photo?: string;
   Profession?: string;
-  DateRetraite?: Date;
+  DateRetraite?: string;
   NumeroSS?: string;
   Adresse?: string;
   Email1?: string;
@@ -40,7 +40,8 @@ export class Client {
   Patrimoines?: Patrimoine[];
   ClientPieces?: any[];
   Passifs?: Passif[];
-  Budgets: Budget[];
+  Budgets?: Budget[];
+  Conjoint?: Conjoint[];
 }
 
 export class Proche {
@@ -48,7 +49,7 @@ export class Proche {
   ClientId: string;
   Nom?: string;
   Prenom?: string;
-  DateNaissance?: Date;
+  DateNaissance?: string;
   Telephone1?: string;
   Telephone2?: string;
   Email1?: string;
@@ -59,6 +60,23 @@ export class Proche {
   Particularite?: string;
   NombreEnfant?: string;
   Commentaire?: string;
+}
+
+export class Conjoint {
+  ConjointId: string;
+  ClientId: string;
+  Nom?: string;
+  Prenom?: string;
+  DateNaissance?: string;
+  Profession?: string;
+  DateRetraite?: string;
+  NumeroSS?: string;
+  DateMariage?: string;
+  Adresse?: string;
+  RegimeMatrimonial?: string;
+  DonationEpoux?: string;
+  ModifRegimeDate?: string;
+  QuestComp?: string;
 }
 
 export class Piece {

@@ -119,4 +119,23 @@ export class ClientService {
     let url = `${environment.url}/DeleteProche/${ProchesId}`;
     return this.http.delete(url);
   }
+
+  CreateConjoint(data: any) {
+    let url = `${environment.url}/CreateConjoint?`;
+    return this.http.post(url, data);
+  }
+  GetConjoint(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetProche?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  UpdateConjoint(data: any): Observable<any> {
+    console.log("UpdateConjoint.data: ", data);
+    let url = `${environment.url}/UpdateConjoint?`;
+    // data.CabinetId = "0E06E5A4-6246-415D-B119-C47077180755";
+    return this.http.put<any>(url, data);
+  }
+  DeleteConjoint(ConjointId: string) {
+    let url = `${environment.url}/DeleteConjoint/${ConjointId}`;
+    return this.http.delete(url);
+  }
 }
