@@ -50,7 +50,7 @@ export class DetailclientComponent {
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
         { field: "Adresse", header: "Adresse", dataType: "string", inputOptions: { type: "text", required: false } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         {
           field: "ChargesAssocies",
@@ -69,7 +69,7 @@ export class DetailclientComponent {
         },
         { field: "DateAchat", header: "Date d'achat", dataType: "date", inputOptions: { type: "date", required: false } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Duree", header: "Durée (année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Duree", header: "Durée (Année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, max: 1, step: 0.1 } },
         {
           field: "AGarantieDeces",
@@ -99,13 +99,13 @@ export class DetailclientComponent {
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
         { field: "Adresse", header: "Adresse", dataType: "string", inputOptions: { type: "text", required: false } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "DateAchat", header: "Date d'achat", dataType: "date", inputOptions: { type: "date", required: false } },
-        { field: "RevenueFiscalite", header: "Revenue et fiscalité", dataType: "string", inputOptions: { type: "text", required: false } },
-        { field: "Charges", header: "Charges", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "RevenueFiscalite", header: "Revenue / loyer (Annuel)", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "Charges", header: "Charges (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Duree", header: "Durée", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Duree", header: "Durée (année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
@@ -134,24 +134,31 @@ export class DetailclientComponent {
       total: 941581,
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: true } },
-        {
-          field: "ChargesAssocies",
-          header: "Charges Associées",
-          dataType: "string",
-          inputOptions: {
-            type: "select",
-            required: false,
-            selectValue: "key",
-            selectLibelle: "libelle",
-            selectData: [
-              { key: "charge1", libelle: "Charge numero1" },
-              { key: "charge2", libelle: "Charge numero2" },
-            ],
-          },
-        },
-        { field: "Particularite", header: "Particularités", dataType: "string", inputOptions: { type: "text", required: false } },
+        { field: "DateCreation", header: "Date de création", dataType: "date", inputOptions: { type: "date", required: false } },
+        { field: "DateAchat", header: "Date d'achat", dataType: "date", inputOptions: { type: "date", required: false } },
+        { field: "CapitalEmprunte", header: "Capital", dataType: "number", inputOptions: { type: "number", required: false } },
+        { field: "Restant", header: "Restant", dataType: "number", inputOptions: { type: "number", required: false } },
+
+        // {
+        //   field: "ChargesAssocies",
+        //   header: "Charges Associées",
+        //   dataType: "string",
+        //   inputOptions: {
+        //     type: "select",
+        //     required: false,
+        //     selectValue: "key",
+        //     selectLibelle: "libelle",
+        //     selectData: [
+        //       { key: "charge1", libelle: "Charge numero1" },
+        //       { key: "charge2", libelle: "Charge numero2" },
+        //     ],
+        //   },
+        // },
+        { field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
+
+        { field: "Particularite", header: "Dividende", dataType: "number", inputOptions: { type: "number", required: false } },
         { field: "action", header: "Action", dataType: null },
       ],
     },
@@ -312,7 +319,7 @@ export class DetailclientComponent {
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "DureeMois", header: "Durée", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "DureeMois", header: "Durée (Mois)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
@@ -342,7 +349,7 @@ export class DetailclientComponent {
       total: 123456.55,
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-        { field: "ValeurRachat", header: "Valeur de rachat", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "ValeurRachat", header: "Valeur de rachat (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "DateSouscription", header: "Date de souscription", dataType: "date", inputOptions: { type: "date", required: false } },
         {
           field: "Assure",
@@ -373,7 +380,7 @@ export class DetailclientComponent {
       total: 941581,
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "DateOuverture", header: "Date d'ouverture", dataType: "date", inputOptions: { type: "date", required: false } },
         { field: "EpargneAssocie", header: "Epargne associée", dataType: "string", inputOptions: { type: "text", required: false } },
@@ -388,7 +395,7 @@ export class DetailclientComponent {
       total: 941581,
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "RevenusDistribue", header: "Revenus distribués", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "FiscaliteOuRevenue", header: "Fiscalité ou revenu", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
@@ -403,7 +410,7 @@ export class DetailclientComponent {
       total: 941581,
       columns: [
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
-        { field: "Valeur", header: "Valeur", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "Valeur", header: "Valeur (€)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "Particularite", header: "Particularités", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "action", header: "Action", dataType: null },
@@ -589,7 +596,21 @@ export class DetailclientComponent {
             ],
           },
         },
-        { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
+        {
+          field: "Designation",
+          header: "Désignation",
+          dataType: "string",
+          inputOptions: {
+            type: "select",
+            required: false,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "designation1", libelle: "Désignation numero1" },
+              { key: "designation2", libelle: "Désignation numero2" },
+            ],
+          },
+        },
         { field: "Montant", header: "Montant", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "action", header: "Action", dataType: null },
       ],
