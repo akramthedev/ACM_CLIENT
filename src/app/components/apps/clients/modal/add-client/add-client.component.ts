@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output, } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, Proche } from '../../../../../shared/model/dto.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ssnValidator } from './ssn-validator';
+import { Client, Proche } from "../../../../../shared/model/dto.model";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ssnValidator } from "./ssn-validator";
 @Component({
   selector: "app-add-client",
   templateUrl: "./add-client.component.html",
@@ -16,82 +16,66 @@ import { ssnValidator } from './ssn-validator';
 export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
-ssnForm:FormGroup;
+  ssnForm: FormGroup;
   // Clients: any[] = [];
+  showPrestations = true;
+  prestations = [
+    { id: "checkbox-primary-1", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false },
+    { id: "checkbox-primary", value: "Inscription consulaire", label: "Inscription consulaire", checked: false },
+    { id: "checkbox-dark", value: "Installation fiscale", label: "Installation fiscale", checked: false },
+    { id: "checkbox-Renouv", value: "Changement de permis", label: "Changement de permis", checked: false },
+    { id: "checkbox-Consulaire", value: "Courrier CSG/CRDS", label: "Courrier CSG/CRDS", checked: false },
+    { id: "checkbox-casier", value: "Adhesion Sante/Base", label: "Adhesion Sante/Base", checked: false },
+    { id: "checkbox-suivi", value: "Adhesion Sante/Capitone", label: "Adhesion Sante/Capitone", checked: false },
+    { id: "checkbox-transfert", value: "Etude fiscale", label: "Etude fiscale", checked: false },
+  ];
+  missions = [
+    { id: "radio11", value: "Installation au Maroc", label: "Installation au Maroc", checked: true, disabled: false },
+    { id: "radio22", value: "Installation en France", label: "Installation en France", checked: false, disabled: false },
+    { id: "radio55", value: "Achat", label: "Achat", checked: false, disabled: true },
+    { id: "radio33", value: "Renouvellement de carte de sejour", label: "Renouvellement de carte de sejour", checked: false, disabled: true },
+    { id: "radio44", value: "Inscription consulaire", label: "Inscription consulaire", checked: false, disabled: true },
+    { id: "radio66", value: "Demande de casier judiciaire", label: "Demande de casier judiciaire", checked: false, disabled: true },
+    { id: "radio77", value: "Suivi vente", label: "Suivi vente", checked: false, disabled: true },
+    { id: "radio88", value: "Vente", label: "Vente", checked: false, disabled: true },
+    { id: "radio99", value: "Transfert de fond", label: "Transfert de fond", checked: false, disabled: true },
+    { id: "radio100", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false, disabled: true },
+    { id: "radio110", value: "Demande de passport", label: "Demande de passport", checked: false, disabled: true },
+  ];
   clientData: Client = null;
   newProche: Proche = null;
-
-  // newChild = {
-  //   Nom: "",
-  //   Prenom: "",
-  //   Date: "",
-  //   Parent: "",
-  //   Charge: "",
-  //   Particularite: "",
-  //   Nchild: "",
-  //   Comment: "",
-  // };
-  newUsage = {
-    // New object for a single usage good
-    Designation: "",
-    Valeur: "",
-    Detenteur: "",
-    Charge: "",
-    Capital: "",
-    Duree: "",
-    Taux: "",
-    Deces: "",
-  };
-  newImmobilier = {
-    // New object for a single immobilier good
-    Designation: "",
-    Valeur: "",
-    Detenteur: "",
-    Revenue: "",
-    Charge: "",
-    Capital: "",
-    Duree: "",
-    Taux: "",
-    Deces: "",
-  };
 
   public closeResult: string;
   public modalOpen: boolean = false;
   public currentStep: number = 1;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private modalService: NgbModal,
-    private clientService: ClientService,
-    private toastr: ToastrService,
-    private fb: FormBuilder
-  ) { 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private modalService: NgbModal, private clientService: ClientService, private toastr: ToastrService, private fb: FormBuilder) {
     this.ssnForm = this.fb.group({
-      NumeroSS: ['', [Validators.required, ssnValidator()]]
+      NumeroSS: ["", [Validators.required, ssnValidator()]],
     });
   }
   telInputObject(obj) {
     console.log(obj);
-    obj.setCountry('in');
+    obj.setCountry("in");
   }
-  
+  onSelectionChange(event: any) {
+    const value = event.target.value;
+    this.showPrestations = value === "Installation au Maroc";
+  }
+  toggleAllCheckboxes(event: any) {
+    const checked = event.target.checked;
+    this.prestations.forEach((prestation) => (prestation.checked = checked));
+  }
+  updateChecked(prestation: any, event: any) {
+    prestation.checked = event.target.checked;
+  }
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();
   }
-  // getClients() {
-  //   this.clientService.getClients().subscribe(
-  //     (response) => {
-  //       this.Clients = response;
-  //       console.log(response);
-  //     },
-  //     (error) => {
-  //       console.error("Error fetching clients: ", error);
-  //     }
-  //   );
-  // }
+
   openModal() {
-    console.log("openModal: ")
+    console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
       this.clientData = new Client();
@@ -139,7 +123,7 @@ ssnForm:FormGroup;
   }
 
   nextStep() {
-    if (this.currentStep < 3) {
+    if (this.currentStep < 4) {
       this.currentStep++;
     }
   }
@@ -167,14 +151,10 @@ ssnForm:FormGroup;
       Particularite: null,
       NombreEnfant: null,
       Commentaire: null,
-    }
+    };
   }
   submitAddProche() {
-    if (this.newProche.Nom == null || this.newProche.Nom == "" ||
-      this.newProche.Prenom == null || this.newProche.Prenom == "" ||
-      this.newProche.LienParente == null || this.newProche.LienParente == "" ||
-      this.newProche.Particularite == null || this.newProche.Particularite == ""
-    ) {
+    if (this.newProche.Nom == null || this.newProche.Nom == "" || this.newProche.Prenom == null || this.newProche.Prenom == "" || this.newProche.LienParente == null || this.newProche.LienParente == "" || this.newProche.Particularite == null || this.newProche.Particularite == "") {
       this.toastr.warning("Veuillez saisir le nom, prénom, lien parenté et particularité du proche");
       return;
     }
@@ -184,44 +164,6 @@ ssnForm:FormGroup;
   cancelAddProche() {
     this.newProche = null;
   }
-  addUsage() {
-    // this.clientData.Usages.push({ ...this.newUsage });
-    // this.newUsage = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
-  }
-  addImmobilier() {
-    // this.clientData.Immobiliers.push({ ...this.newImmobilier });
-    // this.newImmobilier = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Revenue: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
-  }
-
-  // onSave() {
-  //   if (this.isFormValid()) {
-  //     console.log("addClient.OnSave: ", this.clientData);
-  //     this.btnSaveEmitter.emit(this.clientData);
-  //     this.modalService.dismissAll();
-  //     this.resetForm();
-  //   } else {
-  //     alert("Veuillez remplir tous les champs obligatoires.");
-  //   }
-  // }
 
   onSave() {
     if (this.isFormValid()) {
@@ -240,11 +182,7 @@ ssnForm:FormGroup;
         }
       );
     } else {
-      Swal.fire(
-        "Erreur",
-        "Veuillez remplir tous les champs obligatoires.",
-        "error"
-      );
+      Swal.fire("Erreur", "Veuillez remplir tous les champs obligatoires.", "error");
     }
   }
 
@@ -276,118 +214,19 @@ ssnForm:FormGroup;
   }
 
   private isFormValid(): boolean {
-    if (
-      this.currentStep === 1 &&
-      (!this.clientData.Nom || !this.clientData.Prenom)
-    ) {
+    if (this.currentStep === 2 && (!this.clientData.Nom || !this.clientData.Prenom)) {
       return false;
     }
-    if (
-      this.currentStep === 2 &&
-      (!this.clientData.Nom || !this.clientData.Prenom)
-    ) {
+    if (this.currentStep === 3 && (!this.clientData.Nom || !this.clientData.Prenom)) {
       return false;
     }
-    if (
-      this.currentStep === 3 &&
-      (!this.clientData.Nom || !this.clientData.Prenom)
-    ) {
+    if (this.currentStep === 4 && (!this.clientData.Nom || !this.clientData.Prenom)) {
       return false;
     }
     return true;
   }
 
   private resetForm() {
-    // this.clientData = {
-    //   ClientId: "",
-    //   Nom: "",
-    //   Prenom: "",
-    //   DateNaissance: null,
-    //   SituationFamiliale: "",
-    //   Profession: "",
-    //   DateRetraite: null,
-    //   NumeroSS: "",
-    //   Adresse: "",
-    //   Email1: "",
-    //   Telephone1: "",
-    //   TelType: "",
-    //   ImgSrc: "assets/images/user/8.jpg",
-    //   hasConjoint: "non",
-    //   ConjointName: "",
-    //   ConjointPrenom: "",
-    //   ConjointDateNaissance: "",
-    //   ConjointProfession: "",
-    //   ConjointDateRetraite: "",
-    //   ConjointNumeroSS: "",
-    //   DateMariage: "",
-    //   RegimeMatrimonial: "",
-    //   DonationEpoux: "",
-    //   ModifRegimeDate: "",
-    //   QuestComp: "",
-    //   Children: [],
-    //   hasUsage: "",
-    //   Usages: [], // Reset the usage goods array
-    //   hasImmobilier: "",
-    //   Immobiliers: [],
-    // };
-    // this.newChild = {
-    //   Nom: "",
-    //   Prenom: "",
-    //   Date: "",
-    //   Parent: "",
-    //   Charge: "",
-    //   Particularite: "",
-    //   Nchild: "",
-    //   Comment: "",
-    // };
-    // this.newUsage = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
-    // this.newImmobilier = {
-    //   Designation: "",
-    //   Valeur: "",
-    //   Detenteur: "",
-    //   Revenue: "",
-    //   Charge: "",
-    //   Capital: "",
-    //   Duree: "",
-    //   Taux: "",
-    //   Deces: "",
-    // };
     this.currentStep = 1;
-  }
-
-  onConjointChange() {
-    // if (this.clientData.hasConjoint === "non") {
-    //   (this.clientData.ConjointName = ""),
-    //     (this.clientData.ConjointPrenom = "");
-    //   this.clientData.ConjointDateNaissance = "";
-    //   this.clientData.ConjointProfession = "";
-    //   this.clientData.ConjointDateRetraite = "";
-    //   this.clientData.ConjointNumeroSS = "";
-    //   this.clientData.DateMariage = "";
-    //   this.clientData.RegimeMatrimonial = "";
-    //   this.clientData.DonationEpoux = "";
-    //   this.clientData.ModifRegimeDate = "";
-    //   this.clientData.QuestComp = "";
-    //   this.clientData.Children = [];
-    // }
-  }
-  onUsageChange() {
-    // if (this.clientData.hasUsage === "non") {
-    //   this.clientData.Usages = [];
-    // }
-  }
-  onImmobilierChange() {
-    // if (this.clientData.hasImmobilier === "non") {
-    //   this.clientData.Immobiliers = [];
-    // }
   }
 }

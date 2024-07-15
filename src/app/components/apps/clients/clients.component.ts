@@ -77,44 +77,6 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  // sweetAlertDelete(id: string) {
-  //   const swalWithBootstrapButtons = Swal.mixin({
-  //     customClass: {
-  //       confirmButton: 'btn btn-danger',
-  //       cancelButton: 'btn btn-light me-2'
-  //     },
-  //     buttonsStyling: false,
-  //   })
-  //   swalWithBootstrapButtons.fire({
-  //     title: 'Tu es sûr ?',
-  //     text: "Vous ne pourrez pas revenir en arrière !",
-  //     //type: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Supprimer',
-  //     cancelButtonText: 'Annuler',
-  //     reverseButtons: true
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       this.CurrentClient = null;
-  //       this.Clients = this.Clients.filter(x => x.ClientId != id);
-  //       swalWithBootstrapButtons.fire(
-  //         'Supprimer !',
-  //         'Le client est supprimé .',
-  //         'success'
-  //       )
-  //     } else if (
-  //       // Read more about handling dismissals
-  //       result.dismiss === Swal.DismissReason.cancel
-  //     ) {
-  //       swalWithBootstrapButtons.fire(
-  //         'Annuler',
-  //         'Le client est safe :)',
-  //         'error'
-  //       )
-  //     }
-  //   })
-  // }
-
   sweetAlertDelete(id: string) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

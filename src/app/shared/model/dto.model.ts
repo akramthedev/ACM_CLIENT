@@ -42,6 +42,9 @@ export class Client {
   Passifs?: Passif[];
   Budgets?: Budget[];
   Conjoint?: Conjoint[];
+  Service: Service[];
+  Mission: Mission[];
+  Prestation: Prestation[];
 }
 
 export class Proche {
@@ -137,4 +140,25 @@ export class Budget {
   Montant?: string;
   Sexe?: string;
   CommentBudget?: string;
+}
+
+export class Service {
+  ServiceId: string;
+  CabinetId: string;
+  Designation: string;
+  Description: string;
+}
+
+export class Mission {
+  MissionId: string;
+  ServiceId: string;
+  Designation: string;
+  Description: string;
+}
+
+export class Prestation {
+  PrestationId: string;
+  MissionId: string;
+  Designation: string;
+  Description: string;
 }
