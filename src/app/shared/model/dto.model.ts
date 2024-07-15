@@ -145,20 +145,20 @@ export class Budget {
 export class Service {
   ServiceId: string;
   CabinetId: string;
-  Designation: string;
-  Description: string;
+  Designation?: string;
+  Description?: string;
 }
 
 export class Mission {
   MissionId: string;
   ServiceId: string;
-  Designation: string;
-  Description: string;
+  Designation?: string;
+  Description?: string;
 }
 
 export class Prestation {
   PrestationId: string;
   MissionId: string;
-  Designation: string;
-  Description: string;
+  Designation?: string;
+  Description?: string;
 }

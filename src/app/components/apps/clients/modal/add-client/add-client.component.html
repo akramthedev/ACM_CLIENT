@@ -32,9 +32,9 @@
               <div class="col-sm-6">
                 <h5>Missions</h5>
                 <div class="mb-3 m-t-15 custom-radio-ml">
-                  <div *ngFor="let mission of missions" class="radio radio-primary">
-                    <input class="form-check-input" [id]="mission.id" type="radio" name="radio1" [value]="mission.value" [checked]="mission.checked" [disabled]="mission.disabled" (change)="onSelectionChange($event)" />
-                    <label class="form-check-label" [for]="mission.id">{{ mission.label }}</label>
+                  <div *ngFor="let mission of Missions" class="radio radio-primary">
+                    <input class="form-check-input" [id]="mission.MissionId" type="radio" name="radio1" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Installation en France'" (change)="onSelectionChange($event)" />
+                    <label class="form-check-label" [for]="mission.MissionId">{{ mission.Designation }}</label>
                   </div>
                 </div>
               </div>
@@ -50,9 +50,9 @@
                 </div>
                 <div *ngIf="showPrestations">
                   <div class="form-group mb-6 col-md-6">
-                    <div class="form-check checkbox checkbox-primary mb-0" *ngFor="let prestation of prestations">
-                      <input class="form-check-input" [id]="prestation.id" type="checkbox" [value]="prestation.value" [checked]="prestation.checked" (change)="updateChecked(prestation, $event)" />
-                      <label class="form-check-label" [for]="prestation.id">{{ prestation.label }}</label>
+                    <div class="form-check checkbox checkbox-primary mb-0" *ngFor="let prestation of Prestations">
+                      <input class="form-check-input" [id]="prestation.PrestationId" type="checkbox" [value]="prestation.Designation" (change)="updateChecked(prestation, $event)" />
+                      <label class="form-check-label" [for]="prestation.PrestationId">{{ prestation.Designation }}</label>
                     </div>
                   </div>
                 </div>

@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgxSpinnerService } from "ngx-spinner";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, Proche } from "../../../../../shared/model/dto.model";
+import { Client, Mission, Prestation, Proche } from "../../../../../shared/model/dto.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
 @Component({
@@ -44,12 +45,14 @@ export class AddClientComponent implements OnInit, OnDestroy {
   ];
   clientData: Client = null;
   newProche: Proche = null;
+  Prestations: any = null;
+  Missions: any = null;
 
   public closeResult: string;
   public modalOpen: boolean = false;
   public currentStep: number = 1;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private modalService: NgbModal, private clientService: ClientService, private toastr: ToastrService, private fb: FormBuilder) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private modalService: NgbModal, private clientService: ClientService, private toastr: ToastrService, private fb: FormBuilder, private loader: NgxSpinnerService) {
     this.ssnForm = this.fb.group({
       NumeroSS: ["", [Validators.required, ssnValidator()]],
     });
@@ -72,8 +75,41 @@ export class AddClientComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();
+    this.getMissions();
+    this.getPrestations();
   }
-
+  getMissions() {
+    this.loader.show();
+    this.clientService.getMissions().subscribe(
+      (response) => {
+        console.log("response getMissions: ", response);
+        this.loader.hide();
+        let i = 0;
+        this.Missions = response;
+        console.log("this.Missions : ", this.Missions);
+      },
+      (error) => {
+        console.error("Error fetching Missions: ", error);
+        this.loader.hide();
+      }
+    );
+  }
+  getPrestations() {
+    this.loader.show();
+    this.clientService.getPrestations().subscribe(
+      (response) => {
+        console.log("response getPrestations: ", response);
+        this.loader.hide();
+        let i = 0;
+        this.Prestations = response;
+        console.log("this.Prestations : ", this.Prestations);
+      },
+      (error) => {
+        console.error("Error fetching Prestation: ", error);
+        this.loader.hide();
+      }
+    );
+  }
   openModal() {
     console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {

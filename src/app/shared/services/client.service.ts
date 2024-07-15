@@ -138,4 +138,14 @@ export class ClientService {
     let url = `${environment.url}/DeleteConjoint/${ConjointId}`;
     return this.http.delete(url);
   }
+
+  getMissions(): Observable<any[]> {
+    let url = `${environment.url}/GetMissions?ServiceId=66eb9acf-02e0-44e8-bfe3-5686873e8761`;
+    return this.http.get<any[]>(url);
+  }
+
+  getPrestations(): Observable<any[]> {
+    let url = `${environment.url}/GetPrestations?MissionId=a83dcad0-3a14-4523-a5c5-30e1baa232d0`;
+    return this.http.get<any[]>(url);
+  }
 }
