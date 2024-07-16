@@ -19,7 +19,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
   ssnForm: FormGroup;
   // Clients: any[] = [];
-  showPrestations = true;
+  showPrestations = false;
+  selectedMission: string | null = null;
+  allChecked = false;
   prestations = [
     { id: "checkbox-primary-1", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false },
     { id: "checkbox-primary", value: "Inscription consulaire", label: "Inscription consulaire", checked: false },
@@ -63,20 +65,23 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   onSelectionChange(event: any) {
     const value = event.target.value;
+    this.selectedMission = value; // Enregistrer la mission sélectionnée
     this.showPrestations = value === "Installation au Maroc";
   }
-  toggleAllCheckboxes(event: any) {
+  toggleAllPrestations(event: any) {
     const checked = event.target.checked;
-    this.prestations.forEach((prestation) => (prestation.checked = checked));
-  }
-  updateChecked(prestation: any, event: any) {
-    prestation.checked = event.target.checked;
+    this.allChecked = checked;
+    this.Prestations.forEach((prestation) => (prestation.checked = checked));
   }
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();
     this.getMissions();
     this.getPrestations();
+    // Restaurer la mission sélectionnée si elle existe
+    if (this.selectedMission === "Installation au Maroc") {
+      this.showPrestations = true;
+    }
   }
   getMissions() {
     this.loader.show();
