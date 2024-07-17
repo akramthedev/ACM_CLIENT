@@ -21,7 +21,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
   // Clients: any[] = [];
   showPrestations = false;
   selectedMission: string | null = null;
-  allChecked = false;
   prestations = [
     { id: "checkbox-primary-1", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false },
     { id: "checkbox-primary", value: "Inscription consulaire", label: "Inscription consulaire", checked: false },
@@ -68,11 +67,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.selectedMission = value; // Enregistrer la mission sélectionnée
     this.showPrestations = value === "Installation au Maroc";
   }
-  toggleAllPrestations(event: any) {
-    const checked = event.target.checked;
-    this.allChecked = checked;
-    this.Prestations.forEach((prestation) => (prestation.checked = checked));
-  }
+
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();

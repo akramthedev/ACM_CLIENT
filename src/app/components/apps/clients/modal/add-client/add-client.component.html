@@ -41,23 +41,22 @@
               <div class="col-sm-6">
                 <div class="d-flex align-items-center">
                   <h5 class="mr-3">Prestations</h5>
-                  <div *ngIf="showPrestations">
-                    <div class="form-check checkbox checkbox-primary mb-0">
-                      <input class="form-check-input" id="checkbox-all" type="checkbox" [checked]="allChecked" (change)="toggleAllPrestations($event)" />
-                      <label class="form-check-label" for="checkbox-all">Tout cocher</label>
-                    </div>
-                  </div>
                 </div>
                 <div *ngIf="showPrestations">
                   <div class="form-group mb-6 col-md-6">
-                    <div class="form-check checkbox checkbox-primary mb-0" *ngFor="let prestation of Prestations">
-                      <input class="form-check-input" [id]="prestation.PrestationId" type="checkbox" [value]="prestation.Designation" [checked]="prestation.checked || allChecked" />
-                      <label class="form-check-label" [for]="prestation.PrestationId">{{ prestation.Designation }}</label>
+                    <div class="form-check mb-0" *ngFor="let prestation of Prestations">
+                      <label class="form-check-label">{{ prestation.Designation }}</label>
                     </div>
                   </div>
                 </div>
+
                 <div *ngIf="!showPrestations">
-                  <p>Aucune prestation pour le moment</p>
+                  <div class="form-group mb-8 col-md-8">
+                    <div class="form-check mb-0">
+                      <label class="form-check-label">Aucune prestation pour le moment</label>
+                    </div>
+                  </div>
+                  <!-- <p></p> -->
                 </div>
               </div>
             </div>

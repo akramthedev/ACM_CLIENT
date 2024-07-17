@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Renderer2 } from "@angular/core";
 import { AddClientComponent } from "./modal/add-client/add-client.component";
 import { AddCategoryComponent } from "./modal/add-category/add-category.component";
 import { PrintContactComponent } from "./modal/print-contact/print-contact.component";
@@ -25,13 +25,21 @@ export class ClientsComponent implements OnInit {
   titre: String;
   Clients: any[] = [];
 
-  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService) {
+  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
   }
 
   ngOnInit() {
     this.getClients();
+    this.LoadTous();
+  }
+  LoadTous() {
+    const butonTous = document.getElementById("pills-personal-tab");
+    if (butonTous) {
+      butonTous.click();
+      console.log("bouton cliqued");
+    }
   }
 
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
