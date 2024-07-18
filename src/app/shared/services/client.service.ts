@@ -148,4 +148,8 @@ export class ClientService {
     let url = `${environment.url}/GetPrestations?MissionId=a83dcad0-3a14-4523-a5c5-30e1baa232d0`;
     return this.http.get<any[]>(url);
   }
+  getTaches(): Observable<any[]> {
+    let url = `${environment.url}/GetTaches`;
+    return this.http.get<any[]>(url);
+  }
 }

@@ -1,20 +1,22 @@
 .active {
-    font-weight: bold;
-  }
- .scrollable-block{
-  overflow-y: auto; /* permet le défilement vertical si le contenu dépasse la hauteur disponible */
-  max-height: 275px; /* définissez une hauteur maximale pour limiter la zone scrollable si nécessaire */
-
- }
- label{
   font-weight: bold;
- }
+}
+.scrollable-block {
+  // overflow-y: auto; /* permet le défilement vertical si le contenu dépasse la hauteur disponible */
+  // max-height: 275px; /* définissez une hauteur maximale pour limiter la zone scrollable si nécessaire */
+  max-height: calc(100vh - 50vh);
+  overflow-y: auto;
+  width: 100%;
+}
+label {
+  font-weight: bold;
+}
 
- .votrePatrimoine{
+.votrePatrimoine {
   background-color: aqua;
- }
+}
 
- .steps {
+.steps {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -68,7 +70,6 @@
   height: 2px;
   background-color: #7366ff;
   z-index: 0; /* To place the line behind the steps */
-  
 }
 
 // .modal-body{

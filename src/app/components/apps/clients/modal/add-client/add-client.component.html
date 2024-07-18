@@ -16,9 +16,14 @@
         <div class="label">Vous et votre conjoint</div>
       </div>
       <div class="line"></div>
-      <div class="step" [class.active]="currentStep === 3">
+      <div class="step" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
         <div class="circle">3</div>
         <div class="label">Proches</div>
+      </div>
+      <div class="line"></div>
+      <div class="step" [class.active]="currentStep === 4">
+        <div class="circle">4</div>
+        <div class="label">Résumer</div>
       </div>
     </div>
 
@@ -30,22 +35,22 @@
           <div class="row">
             <div class="row">
               <div class="col-sm-6">
-                <h5>Missions</h5>
+                <h6>Missions</h6>
                 <div class="mb-3 m-t-15 custom-radio-ml">
                   <div *ngFor="let mission of Missions" class="radio radio-primary">
-                    <input class="form-check-input" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Installation en France'" (change)="onSelectionChange($event)" />
-                    <label class="form-check-label" [for]="mission.MissionId">{{ mission.Designation }}</label>
+                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Installation en France'" (change)="onSelectionChange($event)" />
+                    <label class="form-check-label fw-normal" [for]="mission.MissionId">{{ mission.Designation }}</label>
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-center">
-                  <h5 class="mr-3">Prestations</h5>
+                  <h6>Prestations</h6>
                 </div>
                 <div *ngIf="showPrestations">
                   <div class="form-group mb-6 col-md-6">
                     <div class="form-check mb-0" *ngFor="let prestation of Prestations">
-                      <label class="form-check-label">{{ prestation.Designation }}</label>
+                      <p class="form-check-label">{{ prestation.Designation }}</p>
                     </div>
                   </div>
                 </div>
@@ -53,7 +58,7 @@
                 <div *ngIf="!showPrestations">
                   <div class="form-group mb-8 col-md-8">
                     <div class="form-check mb-0">
-                      <label class="form-check-label">Aucune prestation pour le moment</label>
+                      <p class="form-check-label">Aucune prestation pour le moment</p>
                     </div>
                   </div>
                   <!-- <p></p> -->
@@ -297,13 +302,52 @@
           </div>
         </div>
         <!-- #endregion Step 3 -->
+        <!-- #region Step 4 -->
+        <div *ngSwitchCase="4" class="row scrollable-block">
+          <div class="card-body default-accordion">
+            <div ngbAccordion>
+              <!-- [collapsed]="false" -->
+              <div ngbAccordionItem *ngFor="let prestation of Prestations">
+                <h2 ngbAccordionHeader>
+                  <button ngbAccordionButton class="bg-primary text-white">{{ prestation.Designation }}</button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <div *ngFor="let tache of Taches">
+                      <div *ngIf="tache && tache.PrestationId === prestation.PrestationId">
+                        {{ tache.Intitule }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div ngbAccordionItem class="mt-3">
+                <h2 ngbAccordionHeader>
+                  <button ngbAccordionButton class="bg-primary text-white"><i class="icofont icofont-users-alt-4 fs-3 px-2"></i> Conjoint</button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>conjoint</div>
+                </div>
+              </div> -->
+              <!-- <div ngbAccordionItem class="mt-3">
+                <h2 ngbAccordionHeader>
+                  <button ngbAccordionButton class="bg-primary text-white"><i class="icofont icofont-users-social fs-3 px-2"></i> Proches</button>
+                </h2>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>Proche</div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <!-- #endregion Step 4 -->
       </ng-container>
       <div class="d-flex justify-content-between mt-3" *ngIf="newProche == null">
         <button *ngIf="currentStep > 1" class="btn btn-secondary" type="button" (click)="previousStep()">Précédent</button>
         <button class="btn btn-primary mt-3" type="button" (click)="modal.dismiss('Cross click')">Annuler</button>
 
-        <button *ngIf="currentStep < 3" class="btn btn-secondary" type="button" (click)="nextStep()">Suivant</button>
-        <button *ngIf="currentStep === 3" class="btn btn-success" type="button" (click)="onSave()">Enregistrer</button>
+        <button *ngIf="currentStep < 4" class="btn btn-secondary" type="button" (click)="nextStep()">Suivant</button>
+        <button *ngIf="currentStep === 4" class="btn btn-success" type="button" (click)="onSave()">Enregistrer</button>
       </div>
       <!-- <button class="btn btn-primary mt-3" type="button" (click)="modal.dismiss('Cross click')">Annuler</button> -->
     </form>

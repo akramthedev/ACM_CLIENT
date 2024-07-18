@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, PLATFORM_ID, Inject, EventEmitter, Output } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, ModalDismissReasons, NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
@@ -48,12 +48,15 @@ export class AddClientComponent implements OnInit, OnDestroy {
   newProche: Proche = null;
   Prestations: any = null;
   Missions: any = null;
+  Taches: any = null;
 
   public closeResult: string;
   public modalOpen: boolean = false;
   public currentStep: number = 1;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private modalService: NgbModal, private clientService: ClientService, private toastr: ToastrService, private fb: FormBuilder, private loader: NgxSpinnerService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private modalService: NgbModal, private clientService: ClientService, private toastr: ToastrService, private fb: FormBuilder, private loader: NgxSpinnerService, config: NgbModalConfig) {
+    config.backdrop = "static";
+    config.keyboard = false;
     this.ssnForm = this.fb.group({
       NumeroSS: ["", [Validators.required, ssnValidator()]],
     });
@@ -73,6 +76,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     // this.getClients();
     this.getMissions();
     this.getPrestations();
+    this.getTaches();
     // Restaurer la mission sélectionnée si elle existe
     if (this.selectedMission === "Installation au Maroc") {
       this.showPrestations = true;
@@ -106,6 +110,22 @@ export class AddClientComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error("Error fetching Prestation: ", error);
+        this.loader.hide();
+      }
+    );
+  }
+  getTaches() {
+    this.loader.show();
+    this.clientService.getTaches().subscribe(
+      (response) => {
+        console.log("response getTaches: ", response);
+        this.loader.hide();
+        let i = 0;
+        this.Taches = response;
+        console.log("this.Taches : ", this.Taches);
+      },
+      (error) => {
+        console.error("Error fetching Taches: ", error);
         this.loader.hide();
       }
     );
@@ -159,7 +179,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
 
   nextStep() {
-    if (this.currentStep < 4) {
+    if (this.currentStep < 5) {
       this.currentStep++;
     }
   }
@@ -257,6 +277,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       return false;
     }
     if (this.currentStep === 4 && (!this.clientData.Nom || !this.clientData.Prenom)) {
+      return false;
+    }
+    if (this.currentStep === 5 && (!this.clientData.Nom || !this.clientData.Prenom)) {
       return false;
     }
     return true;
