@@ -139,6 +139,11 @@ export class ClientService {
     return this.http.delete(url);
   }
 
+  getServices(): Observable<any[]> {
+    let url = `${environment.url}/GetServices?CabinetId=0e06e5a4-6246-415d-b119-c47077180755`;
+    return this.http.get<any[]>(url);
+  }
+
   getMissions(): Observable<any[]> {
     let url = `${environment.url}/GetMissions?ServiceId=66eb9acf-02e0-44e8-bfe3-5686873e8761`;
     return this.http.get<any[]>(url);

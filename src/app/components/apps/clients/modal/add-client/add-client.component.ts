@@ -47,6 +47,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   clientData: Client = null;
   newProche: Proche = null;
   Prestations: any = null;
+  Services: any = null;
   Missions: any = null;
   Taches: any = null;
 
@@ -74,6 +75,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("addClient.ngOnInit......");
     // this.getClients();
+    this.getServices();
     this.getMissions();
     this.getPrestations();
     this.getTaches();
@@ -96,6 +98,22 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   toggleTache(tacheId: number, isChecked: boolean) {
     this.tacheStates[tacheId] = isChecked;
+  }
+  getServices() {
+    this.loader.show();
+    this.clientService.getServices().subscribe(
+      (response) => {
+        console.log("response getServices: ", response);
+        this.loader.hide();
+        let i = 0;
+        this.Services = response;
+        console.log("this.Services : ", this.Services);
+      },
+      (error) => {
+        console.error("Error fetching Services: ", error);
+        this.loader.hide();
+      }
+    );
   }
   getMissions() {
     this.loader.show();

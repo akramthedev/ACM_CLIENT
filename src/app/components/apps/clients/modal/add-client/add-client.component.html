@@ -308,9 +308,12 @@
             <div ngbAccordion>
               <!-- [collapsed]="false" -->
               <div ngbAccordionItem *ngFor="let prestation of Prestations">
-                <h2 ngbAccordionHeader>
-                  <button ngbAccordionButton class="bg-primary text-white"><input class="checkbox_animated fw-normal" type="checkbox" (click)="$event.stopPropagation()" [checked]="prestationStates[prestation.PrestationId]" (change)="toggleAllTaches(prestation.PrestationId, $event.target.checked)" />{{ prestation.Designation }}</button>
-                </h2>
+                <h3 ngbAccordionHeader>
+                  <button ngbAccordionButton class="bg-primary text-white">
+                    <input class="checkbox_animated" type="checkbox" (click)="$event.stopPropagation()" [checked]="prestationStates[prestation.PrestationId]" (change)="toggleAllTaches(prestation.PrestationId, $event.target.checked)" />
+                    {{ prestation.Designation }}
+                  </button>
+                </h3>
                 <div ngbAccordionCollapse>
                   <div ngbAccordionBody>
                     <div *ngFor="let tache of Taches">
