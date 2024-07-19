@@ -82,6 +82,21 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.showPrestations = true;
     }
   }
+  prestationStates = {};
+  tacheStates = {};
+
+  toggleAllTaches(prestationId: number, isChecked: boolean) {
+    this.prestationStates[prestationId] = isChecked;
+    this.Taches.forEach((tache) => {
+      if (tache.PrestationId === prestationId) {
+        this.tacheStates[tache.TacheId] = isChecked;
+      }
+    });
+  }
+
+  toggleTache(tacheId: number, isChecked: boolean) {
+    this.tacheStates[tacheId] = isChecked;
+  }
   getMissions() {
     this.loader.show();
     this.clientService.getMissions().subscribe(

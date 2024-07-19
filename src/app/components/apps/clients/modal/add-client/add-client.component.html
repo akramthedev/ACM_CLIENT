@@ -58,7 +58,7 @@
                 <div *ngIf="!showPrestations">
                   <div class="form-group mb-8 col-md-8">
                     <div class="form-check mb-0">
-                      <p class="form-check-label">Aucune prestation pour le moment</p>
+                      <p class="form-check-label Paucuneprestation">Aucune prestation pour le moment</p>
                     </div>
                   </div>
                   <!-- <p></p> -->
@@ -309,34 +309,25 @@
               <!-- [collapsed]="false" -->
               <div ngbAccordionItem *ngFor="let prestation of Prestations">
                 <h2 ngbAccordionHeader>
-                  <button ngbAccordionButton class="bg-primary text-white">{{ prestation.Designation }}</button>
+                  <button ngbAccordionButton class="bg-primary text-white"><input class="checkbox_animated fw-normal" type="checkbox" (click)="$event.stopPropagation()" [checked]="prestationStates[prestation.PrestationId]" (change)="toggleAllTaches(prestation.PrestationId, $event.target.checked)" />{{ prestation.Designation }}</button>
                 </h2>
                 <div ngbAccordionCollapse>
                   <div ngbAccordionBody>
                     <div *ngFor="let tache of Taches">
-                      <div *ngIf="tache && tache.PrestationId === prestation.PrestationId">
-                        {{ tache.Intitule }}
+                      <div class="card-body animate-chk fw-normal">
+                        <div class="row fw-normal">
+                          <div *ngIf="tache && tache.PrestationId === prestation.PrestationId" class="col fw-normal">
+                            <label class="d-block fw-normal" [for]="tache.TacheId">
+                              <input class="checkbox_animated fw-normal" [id]="tache.TacheId" [name]="tache.TacheId" type="checkbox" [checked]="tacheStates[tache.TacheId]" (change)="toggleTache(tache.TacheId, $event.target.checked)" />
+                              {{ tache.Intitule }}
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- <div ngbAccordionItem class="mt-3">
-                <h2 ngbAccordionHeader>
-                  <button ngbAccordionButton class="bg-primary text-white"><i class="icofont icofont-users-alt-4 fs-3 px-2"></i> Conjoint</button>
-                </h2>
-                <div ngbAccordionCollapse>
-                  <div ngbAccordionBody>conjoint</div>
-                </div>
-              </div> -->
-              <!-- <div ngbAccordionItem class="mt-3">
-                <h2 ngbAccordionHeader>
-                  <button ngbAccordionButton class="bg-primary text-white"><i class="icofont icofont-users-social fs-3 px-2"></i> Proches</button>
-                </h2>
-                <div ngbAccordionCollapse>
-                  <div ngbAccordionBody>Proche</div>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
