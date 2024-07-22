@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, Mission, Prestation, Proche } from "../../../../../shared/model/dto.model";
+import { Client, ClientMission, ClientMissionPrestation, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
 @Component({
@@ -18,37 +18,17 @@ export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
   ssnForm: FormGroup;
-  // Clients: any[] = [];
   showPrestations = false;
   selectedMission: string | null = null;
-  prestations = [
-    { id: "checkbox-primary-1", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false },
-    { id: "checkbox-primary", value: "Inscription consulaire", label: "Inscription consulaire", checked: false },
-    { id: "checkbox-dark", value: "Installation fiscale", label: "Installation fiscale", checked: false },
-    { id: "checkbox-Renouv", value: "Changement de permis", label: "Changement de permis", checked: false },
-    { id: "checkbox-Consulaire", value: "Courrier CSG/CRDS", label: "Courrier CSG/CRDS", checked: false },
-    { id: "checkbox-casier", value: "Adhesion Sante/Base", label: "Adhesion Sante/Base", checked: false },
-    { id: "checkbox-suivi", value: "Adhesion Sante/Capitone", label: "Adhesion Sante/Capitone", checked: false },
-    { id: "checkbox-transfert", value: "Etude fiscale", label: "Etude fiscale", checked: false },
-  ];
-  missions = [
-    { id: "radio11", value: "Installation au Maroc", label: "Installation au Maroc", checked: true, disabled: false },
-    { id: "radio22", value: "Installation en France", label: "Installation en France", checked: false, disabled: false },
-    { id: "radio55", value: "Achat", label: "Achat", checked: false, disabled: true },
-    { id: "radio33", value: "Renouvellement de carte de sejour", label: "Renouvellement de carte de sejour", checked: false, disabled: true },
-    { id: "radio44", value: "Inscription consulaire", label: "Inscription consulaire", checked: false, disabled: true },
-    { id: "radio66", value: "Demande de casier judiciaire", label: "Demande de casier judiciaire", checked: false, disabled: true },
-    { id: "radio77", value: "Suivi vente", label: "Suivi vente", checked: false, disabled: true },
-    { id: "radio88", value: "Vente", label: "Vente", checked: false, disabled: true },
-    { id: "radio99", value: "Transfert de fond", label: "Transfert de fond", checked: false, disabled: true },
-    { id: "radio100", value: "Demande de carte de sejour", label: "Demande de carte de sejour", checked: false, disabled: true },
-    { id: "radio110", value: "Demande de passport", label: "Demande de passport", checked: false, disabled: true },
-  ];
+
   clientData: Client = null;
   newProche: Proche = null;
   Prestations: any = null;
   Services: any = null;
+  newService: Service;
   Missions: any = null;
+  newClientMission: ClientMission = null;
+  newClientMissionPrestation: ClientMissionPrestation = null;
   Taches: any = null;
 
   public closeResult: string;
@@ -66,9 +46,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     console.log(obj);
     obj.setCountry("in");
   }
-  onSelectionChange(event: any) {
+  onSelectionChange(event: any, MissionId: any) {
     const value = event.target.value;
     this.selectedMission = value; // Enregistrer la mission sélectionnée
+    this.startAddClientMission(MissionId);
+    console.log(MissionId, " ", value);
     this.showPrestations = value === "Installation au Maroc";
   }
 
@@ -79,6 +61,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.getMissions();
     this.getPrestations();
     this.getTaches();
+    //this.startAddMission();
     // Restaurer la mission sélectionnée si elle existe
     if (this.selectedMission === "Installation au Maroc") {
       this.showPrestations = true;
@@ -170,6 +153,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
       this.clientData.Proches = [];
+      this.clientData.ClientMissions = [];
+      this.clientData.ClientMissionPrestations = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -213,6 +198,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   nextStep() {
     if (this.currentStep < 5) {
+      if (this.currentStep < 2) {
+        this.submitAddClientMission();
+      }
       this.currentStep++;
     }
   }
@@ -252,6 +240,28 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   cancelAddProche() {
     this.newProche = null;
+  }
+
+  startAddClientMission(MissionId) {
+    this.newClientMission = {
+      ClientMissionId: uuidv4(),
+      MissionId: MissionId,
+      ClientId: this.clientData.ClientId,
+      DateAffectation: null,
+    };
+  }
+  submitAddClientMission() {
+    if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
+      this.toastr.warning("Veuillez verifier submitClient du ClientMission");
+      return;
+    }
+    console.log(this.newClientMission);
+    this.clientData.ClientMissions.push(this.newClientMission);
+    console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
+    this.newClientMission = null;
+  }
+  cancelAddClientMission() {
+    this.newClientMission = null;
   }
 
   onSave() {
