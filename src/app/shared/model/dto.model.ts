@@ -47,6 +47,7 @@ export class Client {
   Prestation?: Prestation[];
   ClientMission?: ClientMission[];
   ClientMissionPrestation?: ClientMissionPrestation[];
+  ClientTache?: ClientTache[];
 }
 
 export class Proche {
@@ -177,4 +178,20 @@ export class ClientMissionPrestation {
   ClientMissionId: string;
   PrestationId: string;
   DateAffectation?: string;
+}
+
+export class ClientTache {
+  ClientTacheId: string;
+  ClientMissionPrestationId: string;
+  ClientMissionId: string;
+  TacheId: string;
+  DateAffectation?: string;
+  Intitule?: string;
+  Numero_Ordre?: string;
+  Commentaire?: string;
+  Deadline?: string;
+  DateButoir?: string;
+  Date_Execution?: string;
+  Status?: string;
+  AgentResponsable?: string;
 }

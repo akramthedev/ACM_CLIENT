@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, ClientMission, ClientMissionPrestation, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
+import { Client, ClientMission, ClientMissionPrestation, ClientTache, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
 @Component({
@@ -29,6 +29,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   Missions: any = null;
   newClientMission: ClientMission = null;
   newClientMissionPrestation: ClientMissionPrestation = null;
+  newClientTache: ClientTache = null;
   Taches: any = null;
 
   public closeResult: string;
@@ -77,19 +78,63 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.Taches.forEach((tache) => {
       if (tache.PrestationId === prestationId) {
         this.tacheStates[tache.TacheId] = isChecked;
+        this.updateClientTache(tache.TacheId, isChecked, prestationId);
       }
     });
   }
 
-  toggleTache(tacheId: number, isChecked: boolean) {
+  toggleTache(tacheId: any, isChecked: boolean) {
     this.tacheStates[tacheId] = isChecked;
+    const tache = this.Taches.find((t) => t.TacheId === tacheId);
+    const prestationId = tache.PrestationId;
+
+    if (isChecked) {
+      // Cocher automatiquement la prestation correspondante
+      if (!this.prestationStates[prestationId]) {
+        this.prestationStates[prestationId] = true;
+        this.updateClientMissionPrestation(prestationId, true);
+      }
+      this.updateClientTache(tacheId, isChecked, prestationId);
+    } else {
+      // Décochez la tâche et vérifiez si toutes les tâches de cette prestation sont décochées
+      this.updateClientTache(tacheId, isChecked, prestationId);
+      const allTachesUnchecked = this.Taches.filter((t) => t.PrestationId === prestationId).every((t) => !this.tacheStates[t.TacheId]);
+
+      if (allTachesUnchecked) {
+        this.prestationStates[prestationId] = false;
+        this.updateClientMissionPrestation(prestationId, false);
+      }
+    }
   }
 
+  // updateClientMissionPrestation(prestationId: any, isChecked: boolean) {
+  //   if (isChecked) {
+  //     // Add prestation
+  //     this.startAddClientMissionPrestation(prestationId);
+  //     this.submitAddClientMissionPrestation();
+  //   } else {
+  //     // Remove prestation
+  //     this.clientData.ClientMissionPrestation = this.clientData.ClientMissionPrestation.filter((prestation) => prestation.PrestationId !== prestationId);
+  //     console.log("Removed prestation with PrestationId: ", prestationId);
+  //   }
+
+  //   console.log("Updated ClientMissionPrestation: ", this.clientData.ClientMissionPrestation);
+  // }
   updateClientMissionPrestation(prestationId: any, isChecked: boolean) {
     if (isChecked) {
-      // Add prestation
-      this.startAddClientMissionPrestation(prestationId);
-      this.submitAddClientMissionPrestation();
+      // Add prestation if it does not already exist
+      const existingPrestation = this.clientData.ClientMissionPrestation.find((prestation) => prestation.PrestationId === prestationId);
+
+      if (!existingPrestation) {
+        const newPrestation = {
+          ClientMissionPrestationId: uuidv4(),
+          ClientMissionId: this.clientData.ClientMission[0].ClientMissionId,
+          PrestationId: prestationId,
+        };
+
+        this.clientData.ClientMissionPrestation.push(newPrestation);
+        console.log("Added new prestation: ", newPrestation);
+      }
     } else {
       // Remove prestation
       this.clientData.ClientMissionPrestation = this.clientData.ClientMissionPrestation.filter((prestation) => prestation.PrestationId !== prestationId);
@@ -97,6 +142,37 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
 
     console.log("Updated ClientMissionPrestation: ", this.clientData.ClientMissionPrestation);
+  }
+  updateClientTache(tacheId: any, isChecked: boolean, prestationId: any) {
+    const clientMissionPrestation = this.clientData.ClientMissionPrestation.find((prestation) => prestation.PrestationId === prestationId);
+
+    if (!clientMissionPrestation && isChecked) {
+      // Create the prestation if it doesn't exist
+      const newPrestation = {
+        ClientMissionPrestationId: uuidv4(),
+        ClientMissionId: this.clientData.ClientMission[0].ClientMissionId,
+        PrestationId: prestationId,
+      };
+
+      this.clientData.ClientMissionPrestation.push(newPrestation);
+      console.log("Added new prestation for tache: ", newPrestation);
+    }
+
+    if (isChecked) {
+      // Add task if it does not already exist
+      const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === tacheId);
+
+      if (!existingTache) {
+        this.startAddClientTache(tacheId, prestationId);
+        this.submitAddClientTache();
+      }
+    } else {
+      // Remove task
+      this.clientData.ClientTache = this.clientData.ClientTache.filter((tache) => tache.TacheId !== tacheId);
+      console.log("Removed tache with TacheId: ", tacheId);
+    }
+
+    console.log("Updated ClientTache: ", this.clientData.ClientTache);
   }
   getServices() {
     this.loader.show();
@@ -171,6 +247,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
       this.clientData.ClientMissionPrestation = [];
+      this.clientData.ClientTache = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -300,10 +377,50 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.newClientMissionPrestation = null;
   }
 
+  startAddClientTache(TacheId, prestationId) {
+    const clientMissionPrestation = this.clientData.ClientMissionPrestation.find((prestation) => prestation.PrestationId === prestationId);
+    if (!clientMissionPrestation) {
+      console.error(`No ClientMissionPrestation found for PrestationId: ${prestationId}`);
+      return;
+    }
+    this.newClientTache = {
+      ClientTacheId: uuidv4(),
+      ClientMissionPrestationId: clientMissionPrestation.ClientMissionPrestationId,
+      ClientMissionId: this.clientData.ClientMission[0].ClientMissionId,
+      TacheId: TacheId,
+    };
+  }
+  submitAddClientTache() {
+    if (this.newClientTache.ClientMissionId == null || this.newClientTache.ClientMissionPrestationId == null || this.newClientTache.TacheId == null || this.newClientTache.ClientTacheId == null) {
+      this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
+      return;
+    }
+    if (!this.clientData.ClientTache) {
+      this.clientData.ClientTache = [];
+    }
+    const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === this.newClientTache.TacheId);
+    console.log(this.newClientTache);
+    if (!existingTache) {
+      this.clientData.ClientTache.push(this.newClientTache);
+      console.log("Submit AddClientTache: ", this.newClientTache);
+    } else {
+      console.log("Tache already exists: ", existingTache);
+    }
+    console.log("Submit AddClientTache (ClientData.ClientTache)", this.clientData);
+
+    this.newClientTache = null;
+  }
+  cancelAddClientTache() {
+    this.newClientTache = null;
+  }
+
   onSave() {
     if (this.isFormValid()) {
       if (this.newClientMissionPrestation) {
         this.submitAddClientMissionPrestation();
+      }
+      if (this.newClientTache) {
+        this.submitAddClientTache();
       }
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
