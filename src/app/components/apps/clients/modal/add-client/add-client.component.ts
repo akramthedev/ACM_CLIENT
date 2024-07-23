@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
-import { Client, ClientMission, ClientMissionPrestation, ClientTache, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
+import { Client, ClientMission, ClientMissionPrestation, ClientTache, Conjoint, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
 @Component({
@@ -23,6 +23,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   clientData: Client = null;
   newProche: Proche = null;
+  newConjoint: Conjoint = null;
   Prestations: any = null;
   Services: any = null;
   newService: Service;
@@ -107,19 +108,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
-  // updateClientMissionPrestation(prestationId: any, isChecked: boolean) {
-  //   if (isChecked) {
-  //     // Add prestation
-  //     this.startAddClientMissionPrestation(prestationId);
-  //     this.submitAddClientMissionPrestation();
-  //   } else {
-  //     // Remove prestation
-  //     this.clientData.ClientMissionPrestation = this.clientData.ClientMissionPrestation.filter((prestation) => prestation.PrestationId !== prestationId);
-  //     console.log("Removed prestation with PrestationId: ", prestationId);
-  //   }
-
-  //   console.log("Updated ClientMissionPrestation: ", this.clientData.ClientMissionPrestation);
-  // }
   updateClientMissionPrestation(prestationId: any, isChecked: boolean) {
     if (isChecked) {
       // Add prestation if it does not already exist
@@ -244,6 +232,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.resetForm();
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
+      this.clientData.Conjoint = [];
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
       this.clientData.ClientMissionPrestation = [];
@@ -294,6 +283,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       if (this.currentStep < 2) {
         this.submitAddClientMission();
       }
+
       this.currentStep++;
     }
   }
@@ -304,6 +294,38 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+  startAddConjoint() {
+    this.newConjoint = {
+      ConjointId: uuidv4(),
+      ClientId: this.clientData.ClientId,
+      Nom: null,
+      Prenom: null,
+      DateNaissance: null,
+      Profession: null,
+      DateRetraite: null,
+      NumeroSS: null,
+      DateMariage: null,
+      Adresse: null,
+      RegimeMatrimonial: null,
+      DonationEpoux: null,
+      ModifRegimeDate: null,
+      QuestComp: null,
+    };
+
+    console.log("Start add conjoint : ", this.newConjoint);
+  }
+  submitAddConjoint() {
+    if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
+      this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
+      return;
+    }
+    console.log("submit add conjoint : ", this.newConjoint);
+    this.clientData.Conjoint.push(this.newConjoint);
+    this.newConjoint = null;
+  }
+  cancelAddConjoint() {
+    this.newConjoint = null;
+  }
   startAddProche() {
     this.newProche = {
       ProcheId: uuidv4(),
@@ -416,12 +438,16 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   onSave() {
     if (this.isFormValid()) {
+      if (this.clientData.HasConjoint && this.newConjoint) {
+        this.submitAddConjoint();
+      }
       if (this.newClientMissionPrestation) {
         this.submitAddClientMissionPrestation();
       }
       if (this.newClientTache) {
         this.submitAddClientTache();
       }
+
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log("Client ajouté avec succès", response);

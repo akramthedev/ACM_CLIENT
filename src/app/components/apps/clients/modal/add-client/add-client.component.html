@@ -145,67 +145,74 @@
           <div class="form-group mb-3 col-md-6 row">
             <label>Avez-vous un conjoint?</label>
             <div class="form-check col">
-              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointYes" value="oui" [(ngModel)]="clientData.hasConjoint" (change)="onConjointChange()" />
+              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointYes" value="oui" [(ngModel)]="clientData.hasConjoint" (click)="startAddConjoint()" />
               <label class="form-check-label" for="hasConjointYes"> Oui </label>
             </div>
             <div class="form-check col">
-              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointNo" value="non" [(ngModel)]="clientData.hasConjoint" (change)="onConjointChange()" />
+              <input class="form-check-input" type="radio" name="hasConjoint" id="hasConjointNo" value="non" [(ngModel)]="clientData.hasConjoint" (click)="cancelAddConjoint()" />
               <label class="form-check-label" for="hasConjointNo"> Non </label>
             </div>
           </div>
 
-          <div class="row" *ngIf="clientData.hasConjoint === 'oui'">
+          <div class="row" *ngIf="clientData.hasConjoint === 'oui' && newConjoint != null">
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-nom">Nom du conjoint</label>
-              <input class="form-control" id="conjoint-nom" type="text" placeholder="Nom du conjoint" name="ConjointName" [(ngModel)]="clientData.ConjointName" />
+              <input class="form-control" id="conjoint-nom" type="text" placeholder="Nom du conjoint" name="ConjointName" [(ngModel)]="newConjoint.Nom" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-prenom">Prénom du conjoint</label>
-              <input class="form-control" id="conjoint-prenom" type="text" placeholder="Prénom du conjoint" name="ConjointPrenom" [(ngModel)]="clientData.ConjointPrenom" />
+              <input class="form-control" id="conjoint-prenom" type="text" placeholder="Prénom du conjoint" name="ConjointPrenom" [(ngModel)]="newConjoint.Prenom" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-dob">Date de naissance du conjoint</label>
-              <input class="form-control" id="conjoint-dob" type="date" name="ConjointDateNaissance" [(ngModel)]="clientData.ConjointDateNaissance" />
+              <input class="form-control" id="conjoint-dob" type="date" name="ConjointDateNaissance" [(ngModel)]="newConjoint.DateNaissance" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-profession">Profession du conjoint</label>
-              <input class="form-control" id="conjoint-profession" type="text" placeholder="Profession du conjoint" name="ConjointProfession" [(ngModel)]="clientData.ConjointProfession" />
+              <input class="form-control" id="conjoint-profession" type="text" placeholder="Profession du conjoint" name="ConjointProfession" [(ngModel)]="newConjoint.Profession" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-retirement">Date de départ en retraite du conjoint</label>
-              <input class="form-control" id="conjoint-retirement" type="date" name="ConjointDateRetraite" [(ngModel)]="clientData.ConjointDateRetraite" />
+              <input class="form-control" id="conjoint-retirement" type="date" name="ConjointDateRetraite" [(ngModel)]="newConjoint.DateRetraite" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="conjoint-ssn">Numéro SS du conjoint</label>
-              <input class="form-control" id="conjoint-ssn" type="text" placeholder="Numéro SS du conjoint" name="ConjointNumeroSS" [(ngModel)]="clientData.ConjointNumeroSS" />
+              <input class="form-control" id="conjoint-ssn" type="text" placeholder="Numéro SS du conjoint" name="ConjointNumeroSS" [(ngModel)]="newConjoint.NumeroSS" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="marriage-date">Date de mariage</label>
-              <input class="form-control" id="marriage-date" type="date" name="DateMariage" [(ngModel)]="clientData.DateMariage" />
+              <input class="form-control" id="marriage-date" type="date" name="DateMariage" [(ngModel)]="newConjoint.DateMariage" />
+            </div>
+            <div class="form-group mb-3 col-md-6">
+              <label for="conjoint-adresse">Adresse</label>
+              <input class="form-control" id="conjoint-adresse" type="text" name="ConjointAdresse" [(ngModel)]="newConjoint.Adresse" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="matrimonial-regime">Régime matrimonial</label>
-              <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial" [(ngModel)]="clientData.RegimeMatrimonial" />
+              <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial" [(ngModel)]="newConjoint.RegimeMatrimonial" />
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="donation-epoux">Donation entre époux</label>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxYes" value="yes" [(ngModel)]="clientData.DonationEpoux" />
+                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxYes" value="Oui" [(ngModel)]="newConjoint.DonationEpoux" />
                 <label class="form-check-label" for="donationEpouxYes"> Oui </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxNo" value="no" [(ngModel)]="clientData.DonationEpoux" />
+                <input class="form-check-input" type="radio" name="DonationEpoux" id="donationEpouxNo" value="Non" [(ngModel)]="newConjoint.DonationEpoux" />
                 <label class="form-check-label" for="donationEpouxNo"> Non </label>
               </div>
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="modif-regime">Si Modification du régime et date</label>
-              <textarea class="form-control" id="modif-regime" type="text" placeholder="Si modifi Régime matrimonial" name="modifregimedate" [(ngModel)]="clientData.ModifRegimeDate"></textarea>
+              <textarea class="form-control" id="modif-regime" type="text" placeholder="Si modifi Régime matrimonial" name="modifregimedate" [(ngModel)]="newConjoint.ModifRegimeDate"></textarea>
             </div>
             <div class="form-group mb-3 col-md-12">
               <label for="quest-comp">Question complémentaires</label>
               <p>S'il y a eu des mariages précédents : quelle est la date du mariage ? Quelle est la durée des mariages précédents ? Quelles est la situation du premier conjoint ? Quelles conséquences financières du jugement de divorce ?</p>
-              <textarea class="form-control" id="quest-comp" type="text" placeholder="Réponse ..." name="questcomp" [(ngModel)]="clientData.QuestComp"></textarea>
+              <textarea class="form-control" id="quest-comp" type="text" placeholder="Réponse ..." name="questcomp" [(ngModel)]="newConjoint.QuestComp"></textarea>
+            </div>
+            <div class="form-group mb-3 col-md-12">
+              <button class="btn btn-secondary" (click)="submitAddConjoint()">Ajouter conjoint</button>
             </div>
           </div>
         </div>
