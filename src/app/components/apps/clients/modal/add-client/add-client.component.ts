@@ -70,8 +70,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
   prestationStates = {};
   tacheStates = {};
 
-  toggleAllTaches(prestationId: number, isChecked: boolean) {
+  toggleAllTaches(prestationId: any, isChecked: boolean) {
     this.prestationStates[prestationId] = isChecked;
+    console.log("PrestationId : ", prestationId);
+    this.updateClientMissionPrestation(prestationId, isChecked);
     this.Taches.forEach((tache) => {
       if (tache.PrestationId === prestationId) {
         this.tacheStates[tache.TacheId] = isChecked;
@@ -81,6 +83,20 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   toggleTache(tacheId: number, isChecked: boolean) {
     this.tacheStates[tacheId] = isChecked;
+  }
+
+  updateClientMissionPrestation(prestationId: any, isChecked: boolean) {
+    if (isChecked) {
+      // Add prestation
+      this.startAddClientMissionPrestation(prestationId);
+      this.submitAddClientMissionPrestation();
+    } else {
+      // Remove prestation
+      this.clientData.ClientMissionPrestation = this.clientData.ClientMissionPrestation.filter((prestation) => prestation.PrestationId !== prestationId);
+      console.log("Removed prestation with PrestationId: ", prestationId);
+    }
+
+    console.log("Updated ClientMissionPrestation: ", this.clientData.ClientMissionPrestation);
   }
   getServices() {
     this.loader.show();
@@ -153,8 +169,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
       this.clientData.Proches = [];
-      this.clientData.ClientMissions = [];
-      this.clientData.ClientMissionPrestations = [];
+      this.clientData.ClientMission = [];
+      this.clientData.ClientMissionPrestation = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -247,7 +263,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       ClientMissionId: uuidv4(),
       MissionId: MissionId,
       ClientId: this.clientData.ClientId,
-      DateAffectation: null,
     };
   }
   submitAddClientMission() {
@@ -256,7 +271,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       return;
     }
     console.log(this.newClientMission);
-    this.clientData.ClientMissions.push(this.newClientMission);
+    this.clientData.ClientMission.push(this.newClientMission);
     console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
     this.newClientMission = null;
   }
@@ -264,8 +279,32 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.newClientMission = null;
   }
 
+  startAddClientMissionPrestation(PrestationId) {
+    this.newClientMissionPrestation = {
+      ClientMissionPrestationId: uuidv4(),
+      ClientMissionId: this.clientData.ClientMission[0].ClientMissionId,
+      PrestationId: PrestationId,
+    };
+  }
+  submitAddClientMissionPrestation() {
+    if (this.newClientMissionPrestation.ClientMissionId == null || this.newClientMissionPrestation.ClientMissionPrestationId == null || this.newClientMissionPrestation.PrestationId == null) {
+      this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
+      return;
+    }
+    console.log(this.newClientMissionPrestation);
+    this.clientData.ClientMissionPrestation.push(this.newClientMissionPrestation);
+    console.log("Submit AddClientMissionPrestation (ClientData.ClientMissionPrestation)", this.clientData);
+    this.newClientMissionPrestation = null;
+  }
+  cancelAddClientMissionPrestation() {
+    this.newClientMissionPrestation = null;
+  }
+
   onSave() {
     if (this.isFormValid()) {
+      if (this.newClientMissionPrestation) {
+        this.submitAddClientMissionPrestation();
+      }
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log("Client ajouté avec succès", response);

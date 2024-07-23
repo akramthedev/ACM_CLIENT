@@ -157,4 +157,9 @@ export class ClientService {
     let url = `${environment.url}/GetTaches`;
     return this.http.get<any[]>(url);
   }
+
+  CreateClientMission(data: any) {
+    let url = `${environment.url}/CreateClientMission?`;
+    return this.http.post(url, data);
+  }
 }

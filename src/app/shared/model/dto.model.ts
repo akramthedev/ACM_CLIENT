@@ -45,8 +45,8 @@ export class Client {
   Service?: Service[];
   Mission?: Mission[];
   Prestation?: Prestation[];
-  ClientMissions?: ClientMission[];
-  ClientMissionPrestations?: ClientMissionPrestation[];
+  ClientMission?: ClientMission[];
+  ClientMissionPrestation?: ClientMissionPrestation[];
 }
 
 export class Proche {
@@ -173,7 +173,7 @@ export class ClientMission {
 }
 
 export class ClientMissionPrestation {
-  ClientMissionPrestation: string;
+  ClientMissionPrestationId: string;
   ClientMissionId: string;
   PrestationId: string;
   DateAffectation?: string;
