@@ -319,6 +319,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
       return;
     }
+    // Vérification de l'ID du conjoint
+    if (!this.newConjoint.ConjointId) {
+      this.newConjoint.ConjointId = uuidv4();
+    }
     console.log("submit add conjoint : ", this.newConjoint);
     this.clientData.Conjoint.push(this.newConjoint);
     this.newConjoint = null;
@@ -416,9 +420,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     if (this.newClientTache.ClientMissionId == null || this.newClientTache.ClientMissionPrestationId == null || this.newClientTache.TacheId == null || this.newClientTache.ClientTacheId == null) {
       this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
       return;
-    }
-    if (!this.clientData.ClientTache) {
-      this.clientData.ClientTache = [];
     }
     const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === this.newClientTache.TacheId);
     console.log(this.newClientTache);
