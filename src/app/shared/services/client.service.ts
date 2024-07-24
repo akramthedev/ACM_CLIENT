@@ -162,4 +162,9 @@ export class ClientService {
     let url = `${environment.url}/CreateClientMission?`;
     return this.http.post(url, data);
   }
+
+  GetClientTaches(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientTaches?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
 }

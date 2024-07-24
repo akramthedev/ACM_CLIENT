@@ -417,9 +417,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
       return;
     }
-    if (!this.clientData.ClientTache) {
-      this.clientData.ClientTache = [];
-    }
+    // if (!this.clientData.ClientTache) {
+    //   this.clientData.ClientTache = [];
+    // }
     const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === this.newClientTache.TacheId);
     console.log(this.newClientTache);
     if (!existingTache) {
