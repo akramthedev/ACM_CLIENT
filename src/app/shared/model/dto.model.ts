@@ -26,7 +26,7 @@ export class Client {
   CFE?: string;
   CNAREFE?: string;
   CNSS?: string;
-  CPAN?: string;
+  CPAM?: string;
   CSG_CRDS?: string;
   CarteSejour?: string;
   Cotisation?: string;

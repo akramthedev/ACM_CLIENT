@@ -38,7 +38,7 @@
                 <h6>Missions</h6>
                 <div class="mb-3 m-t-15 custom-radio-ml">
                   <div *ngFor="let mission of Missions" class="radio radio-primary">
-                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Installation en France'" (change)="onSelectionChange($event, mission.MissionId)" />
+                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Retour en France'" (change)="onSelectionChange($event, mission.MissionId)" />
                     <label class="form-check-label fw-normal" [for]="mission.MissionId">{{ mission.Designation }}</label>
                   </div>
                 </div>
@@ -100,7 +100,11 @@
           </div>
           <div *ngIf="clientData.SituationFamiliale === 'Marié'" class="form-group mb-3 col-md-6">
             <label for="matrimonial-regime">Régime matrimonial</label>
-            <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial" [(ngModel)]="clientData.RegimeMatrimonial" />
+            <select class="form-control" id="matrimonial-regime" required="" name="RegimeMatrimonial" [(ngModel)]="clientData.RegimeMatrimonial">
+              <option value="La séparation de biens">La séparation de biens</option>
+              <option value="La communauté universelle">La communauté universelle</option>
+              <option value="La participation aux acquêts">La participation aux acquêts</option>
+            </select>
           </div>
           <div *ngIf="clientData.SituationFamiliale !== 'Marié'" class="form-group mb-3 col-md-6"></div>
 
@@ -188,8 +192,12 @@
               <input class="form-control" id="conjoint-adresse" type="text" name="ConjointAdresse" [(ngModel)]="newConjoint.Adresse" />
             </div>
             <div class="form-group mb-3 col-md-6">
-              <label for="matrimonial-regime">Régime matrimonial</label>
-              <input class="form-control" id="matrimonial-regime" type="text" placeholder="Régime matrimonial" name="RegimeMatrimonial" [(ngModel)]="newConjoint.RegimeMatrimonial" />
+              <label for="conjointmatrimonial-regime">Régime matrimonial</label>
+              <select class="form-control" id="conjointmatrimonial-regime" required="" name="ConjointRegimeMatrimonial" [(ngModel)]="newConjoint.RegimeMatrimonial">
+                <option value="La séparation de biens">La séparation de biens</option>
+                <option value="La communauté universelle">La communauté universelle</option>
+                <option value="La participation aux acquêts">La participation aux acquêts</option>
+              </select>
             </div>
             <div class="form-group mb-3 col-md-6">
               <label for="donation-epoux">Donation entre époux</label>
@@ -236,7 +244,12 @@
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-parent">Lien de parenté *</label>
-                <input class="form-control" id="child-parent" type="text" placeholder="Enfant / petit enfant / parent" name="ChildParent" [(ngModel)]="newProche.LienParente" />
+                <select class="form-control" id="child-parent" required="" name="ChildParent" [(ngModel)]="newProche.LienParente">
+                  <option value="Père">Père</option>
+                  <option value="Mère">Mère</option>
+                  <option value="Adoption simple">Adoption simple</option>
+                  <option value="Adoption plénière">Adoption plénière</option>
+                </select>
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-charge">A charge fiscalement</label>
@@ -244,7 +257,12 @@
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-particularite">Particularités *</label>
-                <input class="form-control" id="child-particularite" type="text" placeholder="Adoption / invalidité / etc ..." name="ChildParticularite" [(ngModel)]="newProche.Particularite" />
+                <select class="form-control" id="child-particularite" required="" name="ChildParticularite" [(ngModel)]="newProche.Particularite">
+                  <option value="Handicapé">Handicapé</option>
+                  <option value="À charge">À charge</option>
+                  <option value="Tutelle">Tutelle</option>
+                  <option value="Curatelle">Curatelle</option>
+                </select>
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-nchild">Nombres d'enfants</label>

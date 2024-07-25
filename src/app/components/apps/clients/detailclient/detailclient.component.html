@@ -749,20 +749,20 @@
                               <div class="col-6 mb-3">
                                 <div class="row">
                                   <div class="col-lg-6 col-sm-12">
-                                    <label>CPAN</label>
+                                    <label>CPAM</label>
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAN" id="CPANOui" value="oui" [(ngModel)]="currentClient.CPAN" />
-                                      <label class="form-check-label" for="CPANOui"> Oui </label>
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMOui" value="oui" [(ngModel)]="currentClient.CPAM" />
+                                      <label class="form-check-label" for="CPAMOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAN" id="CPANNon" value="non" [(ngModel)]="currentClient.CPAN" />
-                                      <label class="form-check-label" for="CPANNon"> Non </label>
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMNon" value="non" [(ngModel)]="currentClient.CPAM" />
+                                      <label class="form-check-label" for="CPAMNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAN" id="CPANAFaire" value="afaire" [(ngModel)]="currentClient.CPAN" />
-                                      <label class="form-check-label" for="CPANAFaire"> A faire </label>
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMAFaire" value="afaire" [(ngModel)]="currentClient.CPAM" />
+                                      <label class="form-check-label" for="CPAMAFaire"> A faire </label>
                                     </div>
                                   </div>
                                 </div>
@@ -829,7 +829,7 @@
               <a ngbNavLink>Tâches</a>
               <ng-template ngbNavContent>
                 <div class="table-responsive edit-table">
-                  <table class="table card-table table-vcenter text-nowrap">
+                  <!-- <table class="table card-table table-vcenter text-nowrap">
                     <thead>
                       <tr>
                         <th class="task-column">Tâche</th>
@@ -852,6 +852,37 @@
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
                             <a class="fs-2 text-warning" href="javascript:void(0)"> <i class="fa fa-pencil"></i></a>
+                            <a class="fs-2 text-danger" href="javascript:void(0)">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+                  <table class="table card-table table-vcenter text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>Tâche</th>
+                        <th>Numéro Ordre</th>
+                        <th>Status</th>
+                        <th>Prestation</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let task of currentClient.ClientTaches">
+                        <td>{{ task.TacheIntitule }}</td>
+                        <td>{{ task.Numero_Ordre }}</td>
+                        <td>
+                          <span [class]="'badge ' + task.Status">{{ task.Status }}</span>
+                        </td>
+                        <td>{{ task.PrestationDesignation }}</td>
+                        <td class="text-start">
+                          <div class="d-flex justify-content-around">
+                            <a class="fs-2 text-warning" href="javascript:void(0)">
+                              <i class="fa fa-pencil"></i>
+                            </a>
                             <a class="fs-2 text-danger" href="javascript:void(0)">
                               <i class="fa fa-trash"></i>
                             </a>
