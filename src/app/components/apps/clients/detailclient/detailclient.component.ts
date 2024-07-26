@@ -1173,7 +1173,7 @@ export class DetailclientComponent {
   }
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
-    if (changeEvent.nextId === 5) {
+    if (changeEvent.nextId === 6) {
       changeEvent.preventDefault();
     }
   }
