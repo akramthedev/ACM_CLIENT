@@ -167,4 +167,8 @@ export class ClientService {
     let url = `${environment.url}/GetClientTaches?ClientId=${clientId}`;
     return this.http.get(url);
   }
+  GetLettreMission(clientMissionId: string): Observable<Blob> {
+    let url = `${environment.url}/GetLettreMission/${clientMissionId}`;
+    return this.http.get(url, { responseType: "blob" });
+  }
 }

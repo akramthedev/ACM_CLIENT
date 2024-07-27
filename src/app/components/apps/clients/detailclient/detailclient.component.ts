@@ -977,6 +977,41 @@ export class DetailclientComponent {
   ];
   //#endregion Client
 
+  //#region LettreMission
+  generatePdf(clientMissionId: string) {
+    this.clientService.GetLettreMission(clientMissionId).subscribe(
+      (response) => {
+        console.log("response GetLettreMission: ", response);
+        if (response) {
+          // Créer un URL Blob à partir de la réponse et ouvrir dans un nouvel onglet
+          const fileURL = URL.createObjectURL(response);
+          window.open(fileURL, "_blank");
+          this.toastr.success("Impression de la lettre de mission du client réussie");
+        } else {
+          this.toastr.error("Erreur d'imprimer la lettre de mission du client");
+        }
+      },
+      (error) => {
+        console.error("Erreur GetLettreMission: ", error);
+        // this.handleBlobError(error);
+      }
+    );
+  }
+
+  // handleBlobError(error: any) {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     const errorMessage = reader.result as string;
+  //     this.toastr.error(errorMessage, "Erreur de GetLettreMission du client");
+  //   };
+  //   reader.onerror = () => {
+  //     this.toastr.error("Erreur de GetLettreMission du client");
+  //   };
+  //   reader.readAsText(error.error);
+  // }
+
+  //#endregion LettreMission
+
   //#region Conjoint
   @ViewChild("DialogConjoint") public DialogConjoint!: any;
   tablesConjoints: CustomTable[] = [
@@ -1364,51 +1399,6 @@ export class DetailclientComponent {
     },
   };
   //#endregion ImportPiece
-
-  tasks: any[] = [
-    {
-      title: "Préparer la liste des pieces du dossier de la carte de sejour",
-      date: "28 Mai 2023",
-      status: "Terminé",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-success",
-    },
-    {
-      title: "Remettre la liste des pieces  du dossier carte sejour",
-      date: "12 Juin 2023",
-      status: "Terminé",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-success",
-    },
-    {
-      title: "Receptionner les pieces du depot de la carte de sejour",
-      date: "12 Juillet 2023",
-      status: "En cours",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-warning",
-    },
-    {
-      title: "Scanner et enregistrer le passeport + cachet d'entrée",
-      date: "14 Juin 2023",
-      status: "En cours",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-warning",
-    },
-    {
-      title: "Valider le dossier de la carte de sejour",
-      date: "25 Juin 2023",
-      status: "En cours",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-warning",
-    },
-    {
-      title: "Déposer le dossier de la carte sejour/prefecture",
-      date: "25 Juin 2023",
-      status: "En cours",
-      prestation: "Demande de carte de sejour",
-      statusClass: "text-bg-warning",
-    },
-  ];
 
   UpdateClient() {
     this.loader.show();

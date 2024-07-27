@@ -962,7 +962,7 @@
                         <td>{{ mission.DateAffectation }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
-                            <a class="fs-2 text-warning" href="javascript:void(0)">
+                            <a class="fs-2 text-warning" (click)="generatePdf(mission.ClientMissionId)">
                               <i class="fa fa-print"></i>
                             </a>
                           </div>
