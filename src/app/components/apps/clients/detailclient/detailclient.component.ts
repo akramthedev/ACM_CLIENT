@@ -974,6 +974,26 @@ export class DetailclientComponent {
     //{ field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
     { field: "NumeroSS", header: "Numéro SS", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
     { field: "DateRetraite", header: "Date de Retraite", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
+    {
+      field: "SituationFamiliale",
+      header: "Situation Familiale",
+      dataType: "string",
+      visible: false,
+      inputOptions: {
+        type: "select",
+        required: false,
+        selectValue: "key",
+        selectLibelle: "libelle",
+        selectData: [
+          { key: "Marié", libelle: "Marié" },
+          { key: "Célibataire", libelle: "Célibataire" },
+          { key: "Divorcé", libelle: "Divorcé" },
+          { key: "Veuf", libelle: "Veuf" },
+          { key: "Union libre", libelle: "Union libre" },
+          { key: "PACS", libelle: "PACS" },
+        ],
+      },
+    },
   ];
   //#endregion Client
 
