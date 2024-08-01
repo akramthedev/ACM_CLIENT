@@ -959,7 +959,7 @@
                       <tr *ngFor="let mission of currentClient.ClientMissions">
                         <td>{{ mission.Designation }}</td>
                         <td>{{ mission.Description }}</td>
-                        <td>{{ mission.DateAffectation }}</td>
+                        <td>{{ mission.DateAffectation | date : "dd/MM/yyyy" }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
                             <a class="fs-2 text-warning" (click)="generatePdf(mission.ClientMissionId)">

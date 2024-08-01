@@ -25,6 +25,8 @@ export class TachesComponent implements OnInit {
   public red_border: boolean = false;
   public visible: boolean = false;
   public isOpen: boolean = false;
+  filter = "all"; // 'all', 'completed', 'pending', 'inProgress', 'trash'
+  filteredTodos: any[] = [];
 
   public objToAdd: object = {
     text: "",
@@ -62,6 +64,25 @@ export class TachesComponent implements OnInit {
 
   ngOnInit() {
     this.getClients();
+    this.filteredTodos = this.todos;
+  }
+  setFilter(status: string): void {
+    this.filter = status;
+    this.filterTodos();
+  }
+
+  filterTodos(): void {
+    if (this.filter === "all") {
+      this.filteredTodos = this.todos;
+    } else if (this.filter === "completed") {
+      this.filteredTodos = this.todos.filter((todo) => todo.completed);
+    } else if (this.filter === "pending") {
+      this.filteredTodos = this.todos.filter((todo) => !todo.completed && todo.priority === "En Attente");
+    } else if (this.filter === "inProgress") {
+      this.filteredTodos = this.todos.filter((todo) => todo.priority === "En cours");
+    } else if (this.filter === "trash") {
+      this.filteredTodos = this.todos.filter((todo) => todo.priority === "Corbeille");
+    }
   }
   getFirstThreeChars(date: string): string {
     return date.substring(0, 3);
@@ -71,14 +92,17 @@ export class TachesComponent implements OnInit {
       text: text,
     };
     this.todos.push(text);
+    this.filterTodos();
   }
 
   public taskCompleted(task: any) {
     task.completed = !task.completed;
+    this.filterTodos();
   }
 
   public taskDeleted(index: any) {
     this.todos.splice(index, 1);
+    this.filterTodos();
   }
 
   public markAllAction(action: any) {
@@ -86,5 +110,16 @@ export class TachesComponent implements OnInit {
       task.completed = action;
     });
     this.completed = action;
+    this.filterTodos();
+  }
+  getCount(status: string): number {
+    if (status === "completed") {
+      return this.todos.filter((todo) => todo.completed).length;
+    } else if (status === "pending") {
+      return this.todos.filter((todo) => !todo.completed && todo.priority === "En Attente").length;
+    } else if (status === "inProgress") {
+      return this.todos.filter((todo) => todo.priority === "En cours").length;
+    }
+    return 0;
   }
 }
