@@ -171,4 +171,13 @@ export class ClientService {
     let url = `${environment.url}/GetLettreMission/${clientMissionId}`;
     return this.http.get(url, { responseType: "blob" });
   }
+  CreateClientTache(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientTache?`;
+    return this.http.post(url, data);
+  }
+  UpdateClientTache(data: any): Observable<any> {
+    console.log("UpdateClientTache.data: ", data);
+    let url = `${environment.url}/UpdateClientTache?`;
+    return this.http.put<any>(url, data);
+  }
 }

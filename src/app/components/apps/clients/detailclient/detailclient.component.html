@@ -840,13 +840,15 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let task of currentClient.ClientTaches">
-                        <td>{{ task.TacheIntitule }}</td>
+                      <tr *ngFor="let task of ClientTaches">
+                        <td>{{ task.Intitule }}</td>
                         <td>{{ task.Numero_Ordre }}</td>
                         <td>
-                          <span [class]="'badge ' + task.Status">{{ task.Status }}</span>
+                          <span *ngIf="task.Status === 'En attente'" [class]="'badge badge-light-danger'">{{ task.Status }}</span>
+                          <span *ngIf="task.Status === 'En cours'" [class]="'badge badge-light-primary'">{{ task.Status }}</span>
+                          <span *ngIf="task.Status === 'Terminé'" [class]="'badge badge-light-success'">{{ task.Status }}</span>
                         </td>
-                        <td>{{ task.PrestationDesignation }}</td>
+                        <td>{{ task.Commentaire }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
                             <a class="fs-2 text-warning" href="javascript:void(0)">
@@ -860,6 +862,55 @@
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div class="mb-4 mt-3" *ngFor="let taskType of tablesTasks">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th [attr.colspan]="getVisibleColumns(taskType.columns).length - 1">
+                          <b>{{ taskType.title }}</b>
+                        </th>
+                        <th>
+                          <button (click)="dialogTask.Open(null, taskType.type)" type="button" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </th>
+                      </tr>
+                      <!-- table columns -->
+                      <tr class="bg-primary-subtle">
+                        <td *ngFor="let column of getVisibleColumns(taskType.columns)">{{ column.header }}</td>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="GetTasks().length === 0">
+                      <tr>
+                        <td [attr.colspan]="getVisibleColumns(taskType.columns).length" align="center">
+                          <i>{{ taskType.noDataMessage }}</i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="GetTasks().length > 0">
+                      <tr *ngFor="let task of GetTasks()">
+                        <td *ngFor="let column of getVisibleColumns(taskType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
+                          <span *ngIf="column.dataType == 'string'">{{ task[column.field] }}</span>
+                          <span *ngIf="column.dataType == 'date'">{{ task[column.field] | date : "dd/MM/yyyy" }}</span>
+                          <span *ngIf="column.dataType == 'datetime'">{{ task[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
+                          <span *ngIf="column.dataType == 'number'">{{ task[column.field] }}</span>
+                          <span *ngIf="column.dataType == 'bool'">{{ task[column.field] ? column.TextTrue : column.TextFalse }}</span>
+                          <span *ngIf="column.field == 'action'">
+                            <div class="d-flex justify-content-around">
+                              <a class="text-warning" (click)="dialogTask.Open(task.ClientTacheId)">
+                                <i class="fa fa-pencil"></i>
+                              </a>
+                              <a class="text-danger" (click)="DeleteTask(task.ClientTacheId)">
+                                <i class="fa fa-trash"></i>
+                              </a>
+                            </div>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">Total: {{ GetTasks().length }}</div>
                 </div>
               </ng-template>
             </li>
@@ -1180,5 +1231,38 @@
     </ng-template>
 
     <!-- #endregion DialogConjoint -->
+    <!-- #region DialogTask -->
+
+    <ng-template #DialogTask let-modal>
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="DialogTaskLabel">
+          {{ dialogTask.title }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="dialogTask.Close()"></button>
+      </div>
+      <div class="modal-body row modal-body-scrollable" *ngIf="dialogTask.data != null">
+        <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogTask.Inputs">
+          <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
+            <label [for]="input.field">{{ input.header }}</label>
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogTask.data[input.field]" />
+          </span>
+          <span *ngIf="['select'].includes(input.inputOptions.type)">
+            <label [for]="input.field">{{ input.header }}</label>
+            <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field" [(ngModel)]="dialogTask.data[input.field]">
+              <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{ item[input.inputOptions.selectLibelle] }}</option>
+            </select>
+          </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="dialogTask.Submit()">
+          <span *ngIf="dialogTask.isEditing == false">Ajouter</span>
+          <span *ngIf="dialogTask.isEditing == true">Modifier</span>
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="dialogTask.Close()">Fermer</button>
+      </div>
+    </ng-template>
+
+    <!-- #endregion DialogTask -->
   </div>
 </div>

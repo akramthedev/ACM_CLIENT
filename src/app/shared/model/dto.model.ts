@@ -47,7 +47,7 @@ export class Client {
   Prestation?: Prestation[];
   ClientMission?: ClientMission[];
   ClientMissionPrestation?: ClientMissionPrestation[];
-  ClientTache?: ClientTache[];
+  ClientTaches?: ClientTache[];
 }
 
 export class Proche {

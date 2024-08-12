@@ -148,7 +148,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     if (isChecked) {
       // Add task if it does not already exist
-      const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === tacheId);
+      const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === tacheId);
 
       if (!existingTache) {
         this.startAddClientTache(tacheId, prestationId);
@@ -156,11 +156,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
       }
     } else {
       // Remove task
-      this.clientData.ClientTache = this.clientData.ClientTache.filter((tache) => tache.TacheId !== tacheId);
+      this.clientData.ClientTaches = this.clientData.ClientTaches.filter((tache) => tache.TacheId !== tacheId);
       console.log("Removed tache with TacheId: ", tacheId);
     }
 
-    console.log("Updated ClientTache: ", this.clientData.ClientTache);
+    console.log("Updated ClientTache: ", this.clientData.ClientTaches);
   }
   getServices() {
     this.loader.show();
@@ -236,7 +236,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
       this.clientData.ClientMissionPrestation = [];
-      this.clientData.ClientTache = [];
+      this.clientData.ClientTaches = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -420,10 +420,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
     // if (!this.clientData.ClientTache) {
     //   this.clientData.ClientTache = [];
     // }
-    const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === this.newClientTache.TacheId);
+    const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === this.newClientTache.TacheId);
     console.log(this.newClientTache);
     if (!existingTache) {
-      this.clientData.ClientTache.push(this.newClientTache);
+      this.clientData.ClientTaches.push(this.newClientTache);
       console.log("Submit AddClientTache: ", this.newClientTache);
     } else {
       console.log("Tache already exists: ", existingTache);

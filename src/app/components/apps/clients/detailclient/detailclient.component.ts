@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Client, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
+import { Client, ClientTache, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
 import { CustomTable, CustomTableColumn, CustomTableColumnInputOption } from "src/app/shared/model/models.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
@@ -28,6 +28,7 @@ export class DetailclientComponent {
   filtredClientPieces: any[] = [];
   filterPiecesText: string = "";
   Pieces: Piece[] = [];
+  ClientTaches: ClientTache[] = [];
 
   constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
     config.backdrop = "static";
@@ -1320,6 +1321,13 @@ export class DetailclientComponent {
                 this.loader.hide();
               }
             );
+
+            //get ClientTache
+            this.clientService.GetClientTaches(clientId).subscribe((responseClientTache) => {
+              console.log("responseClientTache : ", responseClientTache);
+              this.ClientTaches = responseClientTache;
+              this.toastr.show("ClientTache Marche");
+            });
           }
         },
         (error) => {
@@ -1420,6 +1428,174 @@ export class DetailclientComponent {
   };
   //#endregion ImportPiece
 
+  //#region Task
+  @ViewChild("DialogTask") public DialogTask!: any;
+  tablesTasks: CustomTable[] = [
+    {
+      title: "Taches",
+      type: null,
+      noDataMessage: "Aucune tache affecter",
+      columns: [
+        { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Commentaire", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        {
+          field: "Status",
+          header: "Status",
+          dataType: "string",
+          visible: true,
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "En attente", libelle: "En attente" },
+              { key: "En cours", libelle: "En cours" },
+              { key: "Terminé", libelle: "Terminé" },
+            ],
+          },
+        },
+        //{ field: "ClientTacheIntitule", header: "ClientTacheIntitule", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "action", header: "Action", visible: true, dataType: null },
+      ],
+    },
+  ];
+
+  GetTasks() {
+    return this.currentClient.ClientTaches;
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
+  }
+  dialogTask: {
+    data: ClientTache;
+    isEditing: boolean;
+    title: string;
+    Inputs: any[];
+    Open: Function;
+    Submit: Function;
+    Close: Function;
+    Clear: Function;
+  } = {
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create task
+        this.dialogTask.title = "Creation de la tache";
+        this.dialogTask.isEditing = false;
+        this.dialogTask.data = {
+          ClientTacheId: uuidv4(),
+          ClientMissionPrestationId: null,
+          ClientMissionId: null,
+          TacheId: null,
+        };
+
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action");
+        console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));
+      } else {
+        // edit task
+        this.dialogTask.isEditing = true;
+        // get task data
+        let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
+        this.dialogTask.title = p.ClientTacheId;
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action");
+        this.dialogTask.data = structuredClone(p);
+      }
+      this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+      console.log("this.dialogTask.data: ", this.dialogTask.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogTask.data: ", this.dialogTask.data);
+      // return;
+      if (!this.dialogTask.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateClientTache(this.dialogTask.data).subscribe(
+          (response) => {
+            console.log("response CreateTask: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du task");
+            } else {
+              this.toastr.success("Task ajouté avec succès");
+              this.currentClient.ClientTaches.push(this.dialogTask.data);
+              this.dialogTask.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur CreateTask: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du task");
+          }
+        );
+      } else {
+        // submit update
+        this.loader.show();
+        this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
+          (response) => {
+            console.log("response UpdateClientTache: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du CleintTache");
+            } else {
+              this.toastr.success("ClientTache modifié avec succès");
+              this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
+                if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
+                return item;
+              });
+              this.dialogTask.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur UpdateClientTask: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du clientTask");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogTask.Clear();
+    },
+    Clear: () => {
+      this.dialogTask.title = null;
+      this.dialogTask.data = null;
+      this.dialogTask.Inputs = [];
+      this.dialogTask.isEditing = null;
+    },
+  };
+  DeleteTask(id: string) {
+    console.log("delete budget cliquer");
+    // Utilisez une boîte de dialogue de confirmation si nécessaire
+    if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+      this.clientService.DeleteBudget(id).subscribe(
+        (response) => {
+          console.log("Delete client response : ", response);
+          this.toastr.success("Budget supprimé avec succès");
+          this.currentClient.Budgets = this.currentClient.Budgets.filter((x) => x.BudgetsId !== id);
+        },
+        (error) => {
+          console.error("Erreur lors de la suppression du budget", error);
+          this.toastr.error("Erreur lors de la suppression du budget");
+        }
+      );
+    } else {
+      console.log("error lors de la suppression");
+    }
+  }
+  //#endregion Task
   UpdateClient() {
     this.loader.show();
     this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
