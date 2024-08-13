@@ -1323,7 +1323,7 @@ export class DetailclientComponent {
             );
 
             //get ClientTache
-            this.clientService.GetClientTaches(clientId).subscribe((responseClientTache) => {
+            this.clientService.GetClientTachesSimple(clientId).subscribe((responseClientTache) => {
               console.log("responseClientTache : ", responseClientTache);
               this.ClientTaches = responseClientTache;
               this.toastr.show("ClientTache Marche");
