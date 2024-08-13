@@ -175,6 +175,10 @@ export class ClientService {
     let url = `${environment.url}/CreateClientTache?`;
     return this.http.post(url, data);
   }
+  CreateClientTacheCustom(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientTacheCustom?`;
+    return this.http.post(url, data);
+  }
   UpdateClientTache(data: any): Observable<any> {
     console.log("UpdateClientTache.data: ", data);
     let url = `${environment.url}/UpdateClientTache?`;

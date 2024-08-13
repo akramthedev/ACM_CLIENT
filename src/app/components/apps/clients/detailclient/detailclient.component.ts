@@ -1438,7 +1438,7 @@ export class DetailclientComponent {
       columns: [
         { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Commentaire", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Commentaire", header: "Prestation / Commentaire", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         {
           field: "Status",
           header: "Status",
@@ -1519,7 +1519,7 @@ export class DetailclientComponent {
       if (!this.dialogTask.isEditing) {
         // submit create
         this.loader.show();
-        this.clientService.CreateClientTache(this.dialogTask.data).subscribe(
+        this.clientService.CreateClientTacheCustom(this.dialogTask.data).subscribe(
           (response) => {
             console.log("response CreateTask: ", response);
             this.loader.hide();
