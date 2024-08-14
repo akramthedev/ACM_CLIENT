@@ -1456,15 +1456,37 @@ export class DetailclientComponent {
             ],
           },
         },
-        //{ field: "ClientTacheIntitule", header: "ClientTacheIntitule", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        {
+          field: "AgentResposable",
+          header: "Agent",
+          dataType: "string",
+          visible: true,
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "3d9d1ac0-ac20-469e-be24-97cb3c8c5187", libelle: "Radouane" },
+              { key: "a4d50d3f-cdfb-44f4-86e7-411f9428fff7", libelle: "Cecile" },
+              { key: "c1fa6c8b-ed6a-4416-8f1d-7b8ed980575b", libelle: "Manal" },
+              { key: "8ea98a14-b480-4743-b214-25eeba35a4e8", libelle: "Magali" },
+            ],
+          },
+        },
         { field: "action", header: "Action", visible: true, dataType: null },
       ],
     },
   ];
-
+  getAgentValueByKey(key: string, options: any[]): string {
+    const normalizedKey = key.toLowerCase();
+    const option = options.find((opt) => opt.key.toLowerCase() === normalizedKey);
+    return option ? option.libelle : "Inconnu";
+  }
   GetTasks() {
+    this.currentClient.ClientTaches = this.ClientTaches;
     return this.currentClient.ClientTaches;
-    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))  this.currentClient.
   }
   dialogTask: {
     data: ClientTache;
@@ -1499,7 +1521,7 @@ export class DetailclientComponent {
         this.dialogTask.isEditing = true;
         // get task data
         let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
-        this.dialogTask.title = p.ClientTacheId;
+        this.dialogTask.title = "Modifer la Tache";
         this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action");
         this.dialogTask.data = structuredClone(p);
       }

@@ -891,7 +891,16 @@
                     <tbody *ngIf="GetTasks().length > 0">
                       <tr *ngFor="let task of GetTasks()">
                         <td *ngFor="let column of getVisibleColumns(taskType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
-                          <span *ngIf="column.dataType == 'string'">{{ task[column.field] }}</span>
+                          <!-- Affichage conditionnel des données selon leur type -->
+                          <span *ngIf="column.dataType == 'string' && column.field !== 'AgentResposable'">
+                            {{ task[column.field] }}
+                          </span>
+
+                          <!-- Affichage du nom de l'agent pour la colonne 'AgentResposable' -->
+                          <span *ngIf="column.field === 'AgentResposable'">
+                            {{ getAgentValueByKey(task[column.field], column.inputOptions.selectData) }}
+                          </span>
+                          <!-- <span *ngIf="column.dataType == 'string'">{{ task[column.field] }}</span> -->
                           <span *ngIf="column.dataType == 'date'">{{ task[column.field] | date : "dd/MM/yyyy" }}</span>
                           <span *ngIf="column.dataType == 'datetime'">{{ task[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
                           <span *ngIf="column.dataType == 'number'">{{ task[column.field] }}</span>

@@ -3,6 +3,7 @@ import { Title } from "@angular/platform-browser";
 import * as data from "../../../shared/data/todo/todo";
 import { ClientService } from "src/app/shared/services/client.service";
 import { NgxSpinnerService } from "ngx-spinner";
+import DataTables from "datatables.net";
 
 const Months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -27,7 +28,6 @@ export class TachesComponent implements OnInit {
   public isOpen: boolean = false;
   filter = "all"; // 'all', 'completed', 'pending', 'inProgress', 'trash'
   filteredTodos: any[] = [];
-
   public objToAdd: object = {
     text: "",
     client: "",
@@ -37,6 +37,7 @@ export class TachesComponent implements OnInit {
     badgeClass: "",
   };
   Clients: any[] = [];
+  AllClientTaches: any[] = [];
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
   constructor(private title: Title, private clientService: ClientService, private loader: NgxSpinnerService) {
@@ -62,8 +63,29 @@ export class TachesComponent implements OnInit {
     );
   }
 
+  getTasks() {
+    this.loader.show();
+    this.clientService.GetAllClientTaches().subscribe(
+      (response) => {
+        console.log("response getAllClientTaches: ", response);
+        this.loader.hide();
+        this.AllClientTaches = response;
+        this.initializeDataTable();
+      },
+      (error) => {
+        console.error("Error fetching allclienttaches: ", error);
+        this.loader.hide();
+      }
+    );
+  }
+  initializeDataTable() {
+    setTimeout(() => {
+      $("#example").DataTable(); // Initialize DataTables on your table
+    }, 0);
+  }
   ngOnInit() {
     this.getClients();
+    this.getTasks();
     this.filteredTodos = this.todos;
   }
   setFilter(status: string): void {
