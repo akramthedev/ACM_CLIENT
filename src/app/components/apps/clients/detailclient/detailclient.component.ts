@@ -1581,6 +1581,18 @@ export class DetailclientComponent {
               if (index !== -1) {
                 this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
               }
+
+              // Check if the status is "Terminé" and send an email
+              if (this.dialogTask.data.Status === "Terminé") {
+                this.clientService.SentEmail().subscribe(
+                  (emailResponse) => {
+                    console.log("Email sent successfully: ", emailResponse);
+                  },
+                  (emailError) => {
+                    console.error("Error sending email: ", emailError);
+                  }
+                );
+              }
               this.dialogTask.Close();
               // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }

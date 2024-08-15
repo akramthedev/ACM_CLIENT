@@ -196,4 +196,8 @@ export class ClientService {
     let url = `${environment.url}/DeleteClientTache/${ClientTacheId}`;
     return this.http.delete(url);
   }
+  SentEmail() {
+    let url = `${environment.url}/email?`;
+    return this.http.get(url, { responseType: "text" });
+  }
 }
