@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import * as data from "../../../shared/data/todo/todo";
 import { ClientService } from "src/app/shared/services/client.service";
@@ -78,9 +78,37 @@ export class TachesComponent implements OnInit {
       }
     );
   }
+  // initializeDataTable() {
+  //   setTimeout(() => {
+  //     $("#example").DataTable(); // Initialize DataTables on your table
+  //   }, 0);
+  // }
+  // initializeDataTable() {
+  //   setTimeout(() => {
+  //     if ($.fn.DataTable.isDataTable("#example")) {
+  //       $("#example").DataTable().destroy(); // Destroy existing DataTable instance
+  //     }
+  //     $("#example").DataTable(); // Initialize DataTables on your table
+  //   }, 0);
+  // }
   initializeDataTable() {
     setTimeout(() => {
-      $("#example").DataTable(); // Initialize DataTables on your table
+      // Détruire l'ancienne instance si elle existe
+      if ($.fn.DataTable.isDataTable("#example")) {
+        $("#example").DataTable().destroy();
+      }
+
+      // Initialiser DataTables avec les nouvelles données
+      $("#example").DataTable({
+        data: this.AllClientTaches,
+        columns: [
+          { data: "ClientNom", title: "Nom" },
+          { data: "MissionDesignation", title: "Mission" },
+          { data: "PrestationDesignation", title: "Prestation" },
+          { data: "TacheIntitule", title: "Tache" },
+          { data: "AgentNom", title: "Agent" },
+        ],
+      });
     }, 0);
   }
   ngOnInit() {
@@ -88,6 +116,10 @@ export class TachesComponent implements OnInit {
     this.getTasks();
     this.filteredTodos = this.todos;
   }
+  // ngAfterViewInit() {
+  //   // Initialize DataTables
+  //   $("#example").DataTable();
+  // }
   setFilter(status: string): void {
     this.filter = status;
     this.filterTodos();
