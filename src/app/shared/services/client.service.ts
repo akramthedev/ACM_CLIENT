@@ -192,4 +192,8 @@ export class ClientService {
     let url = `${environment.url}/UpdateClientTache?`;
     return this.http.put<any>(url, data);
   }
+  DeleteClientTache(ClientTacheId: string) {
+    let url = `${environment.url}/DeleteClientTache/${ClientTacheId}`;
+    return this.http.delete(url);
+  }
 }

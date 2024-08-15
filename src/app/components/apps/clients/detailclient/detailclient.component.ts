@@ -1438,7 +1438,8 @@ export class DetailclientComponent {
       columns: [
         { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Commentaire", header: "Prestation / Commentaire", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Commentaire", header: "Commentaire", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         {
           field: "Status",
           header: "Status",
@@ -1514,7 +1515,7 @@ export class DetailclientComponent {
           TacheId: null,
         };
 
-        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action");
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
         console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));
       } else {
         // edit task
@@ -1522,7 +1523,7 @@ export class DetailclientComponent {
         // get task data
         let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
         this.dialogTask.title = "Modifer la Tache";
-        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action");
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
         this.dialogTask.data = structuredClone(p);
       }
       this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
@@ -1571,10 +1572,15 @@ export class DetailclientComponent {
               this.toastr.error("Erreur de modification du CleintTache");
             } else {
               this.toastr.success("ClientTache modifié avec succès");
-              this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
-                if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
-                return item;
-              });
+              // this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
+              //   if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
+              //   return item;
+              // });
+              // Update the task in the list
+              const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+              if (index !== -1) {
+                this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
+              }
               this.dialogTask.Close();
               // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
@@ -1599,18 +1605,24 @@ export class DetailclientComponent {
     },
   };
   DeleteTask(id: string) {
-    console.log("delete budget cliquer");
+    console.log("delete task cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
     if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
-      this.clientService.DeleteBudget(id).subscribe(
+      this.clientService.DeleteClientTache(id).subscribe(
         (response) => {
-          console.log("Delete client response : ", response);
-          this.toastr.success("Budget supprimé avec succès");
-          this.currentClient.Budgets = this.currentClient.Budgets.filter((x) => x.BudgetsId !== id);
+          console.log("Delete ClientTache response : ", response);
+          this.toastr.success("Task supprimé avec succès");
+          //this.currentClient.ClientTaches = this.currentClient.ClientTaches.filter((x) => x.ClientTacheId !== id);
+          const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === id);
+
+          // Si l'élément est trouvé, le supprimer
+          if (index !== -1) {
+            this.currentClient.ClientTaches.splice(index, 1);
+          }
         },
         (error) => {
-          console.error("Erreur lors de la suppression du budget", error);
-          this.toastr.error("Erreur lors de la suppression du budget");
+          console.error("Erreur lors de la suppression du task", error);
+          this.toastr.error("Erreur lors de la suppression du task");
         }
       );
     } else {
