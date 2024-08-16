@@ -132,11 +132,16 @@
           <div class="form-group mb-3 col-md-6">
             <label for="con-mail">Email 1</label>
             <input class="form-control" id="con-mail" type="email" required="" placeholder="Email1" autocomplete="off" name="Email1" [(ngModel)]="clientData.Email1" />
+            <!-- Message d'erreur si les emails sont identiques -->
+            <div *ngIf="clientData.Email1 === clientData.Email2 && clientData.Email1 && clientData.Email2" style="color: red">Les adresses email 1 et email 2 ne doivent pas être identiques.</div>
           </div>
           <div class="form-group mb-3 col-md-6">
             <label for="con-mail">Email 2</label>
             <input class="form-control" id="con-mail" type="email" required="" placeholder="Email2" autocomplete="off" name="Email2" [(ngModel)]="clientData.Email2" />
+            <!-- Message d'erreur si les emails sont identiques -->
+            <div *ngIf="clientData.Email1 === clientData.Email2 && clientData.Email1 && clientData.Email2" style="color: red">Les adresses email 1 et email 2 ne doivent pas être identiques.</div>
           </div>
+
           <div class="form-group mb-3 col-md-6">
             <label for="con-phone">Téléphone 1</label>
             <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone1" autocomplete="off" name="Telephone1" [(ngModel)]="clientData.Telephone1" />

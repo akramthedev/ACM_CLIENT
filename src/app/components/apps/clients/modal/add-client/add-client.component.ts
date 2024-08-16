@@ -327,7 +327,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS avant de continuer");
           return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
         }
-
+        // Vérifier que les emails ne sont pas identiques ou vides
+        if (!this.validateEmails()) {
+          return; // Empêche le passage à l'étape suivante si les emails sont identiques
+        }
         // Si "Oui" est sélectionné pour hasConjoint, valider les champs du conjoint
         if (this.clientData.HasConjoint === "oui") {
           // const conjointNomRempli = this.newConjoint?.Nom?.trim() !== "";
@@ -357,7 +360,21 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.currentStep++;
     }
   }
+  validateEmails() {
+    // Si les deux emails sont vides ou nulls, permettre de passer
+    if ((!this.clientData.Email1 || this.clientData.Email1.trim() === "") && (!this.clientData.Email2 || this.clientData.Email2.trim() === "")) {
+      return true;
+    }
 
+    // Si les deux emails ne sont pas vides et identiques, afficher un message d'erreur
+    if (this.clientData.Email1 === this.clientData.Email2) {
+      this.toastr.warning("Les adresses email 1 et email 2 ne doivent pas être identiques.");
+      return false;
+    }
+
+    // Si les emails sont différents ou l'un d'eux est vide, continuer
+    return true;
+  }
   previousStep() {
     if (this.currentStep > 1) {
       this.currentStep--;
