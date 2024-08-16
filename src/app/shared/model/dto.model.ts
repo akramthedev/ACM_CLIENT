@@ -13,10 +13,10 @@ export class Client {
   Email2?: string;
   Telephone1?: string;
   Telephone2?: string;
-  HasConjoint: boolean;
+  HasConjoint: string;
 
   SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
-
+  RegimeMatrimonial?: string;
   ParticulariteFiscale?: string;
 
   AssuranceAuto?: string;
@@ -193,5 +193,5 @@ export class ClientTache {
   DateButoir?: string;
   Date_Execution?: string;
   Status?: string;
-  AgentResponsable?: string;
+  AgentResposable?: string;
 }

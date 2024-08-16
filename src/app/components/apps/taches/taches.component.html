@@ -146,24 +146,34 @@
         <thead>
           <tr>
             <th>Nom</th>
+            <th>Prenom</th>
+            <th>Tache</th>
+            <th>Numéro Ordre</th>
+            <th>Prestation</th>
             <th>Mission</th>
+            <th>Status</th>
+            <th>Agent</th>
+            <!-- <th>Mission</th>
             <th>Prestation</th>
             <th>Tache</th>
-            <th>Agent</th>
+            <th>Agent</th> -->
           </tr>
         </thead>
         <tbody *ngIf="AllClientTaches?.length != 0">
           <tr *ngFor="let clienttaches of AllClientTaches">
             <td>{{ clienttaches.ClientNom }}</td>
-            <td>{{ clienttaches.MissionDesignation }}</td>
-            <td>{{ clienttaches.PrestationDesignation }}</td>
+            <td>{{ clienttaches.ClientPrenom }}</td>
             <td>{{ clienttaches.TacheIntitule }}</td>
+            <td>{{ clienttaches.Numero_Ordre }}</td>
+            <td>{{ clienttaches.PrestationDesignation }}</td>
+            <td>{{ clienttaches.MissionDesignation }}</td>
+            <td>{{ clienttaches.Status }}</td>
             <td>{{ clienttaches.AgentNom }}</td>
           </tr>
         </tbody>
         <tbody *ngIf="AllClientTaches?.length == 0">
           <tr>
-            <td colspan="5">pas de data</td>
+            <td colspan="8">pas de data</td>
           </tr>
         </tbody>
       </table>

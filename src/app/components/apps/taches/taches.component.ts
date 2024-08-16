@@ -103,9 +103,12 @@ export class TachesComponent implements OnInit {
         data: this.AllClientTaches,
         columns: [
           { data: "ClientNom", title: "Nom" },
-          { data: "MissionDesignation", title: "Mission" },
-          { data: "PrestationDesignation", title: "Prestation" },
+          { data: "ClientPrenom", title: "Prenom" },
           { data: "TacheIntitule", title: "Tache" },
+          { data: "Numero_Ordre", title: "Numero Ordre" },
+          { data: "PrestationDesignation", title: "Prestation" },
+          { data: "MissionDesignation", title: "Mission" },
+          { data: "Status", title: "Status" },
           { data: "AgentNom", title: "Agent" },
         ],
       });

@@ -239,9 +239,11 @@
                                       <b>{{ patrimoineType.title }}</b>
                                     </th>
                                     <th>
-                                      <button (click)="dialogPatrimoine.Open(null, patrimoineType.type)" type="button" class="btn btn-primary">
-                                        <i class="fa fa-plus"></i>
-                                      </button>
+                                      <div class="text-end">
+                                        <button (click)="dialogPatrimoine.Open(null, patrimoineType.type)" type="button" class="btn btn-primary">
+                                          <i class="fa fa-plus"></i>
+                                        </button>
+                                      </div>
                                     </th>
                                   </tr>
                                   <!-- table columns -->
@@ -280,13 +282,13 @@
                                   </tr>
                                 </tbody>
                               </table>
-                              <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="patrimoineType.total != null">Total: {{ patrimoineType.total | currency }} dhs</div>
+                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="patrimoineType.total != null">Total: {{ patrimoineType.total | currency }} dhs</div> -->
                             </div>
-                            <div class="form-group mb-3 col-md-6">
+                            <!-- <div class="form-group mb-3 col-md-6">
                               <label for="prof-commentaire">Questions complémentaires : (pas encore programmé)</label>
                               <p>quelle répartition du capital et des pouvoirs dans l'entreprise ? Quelles participations ? Comment est détenue l'immobilier professionnel ? Un pacte d'actionnaires a-t-il été signé ?</p>
                               <input class="form-control" id="prof-commentaire" type="text" placeholder="Réponse" name="ProfCommentaire" />
-                            </div>
+                            </div> -->
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -315,9 +317,11 @@
                                       <b>{{ passifsType.title }}</b>
                                     </th>
                                     <th>
-                                      <button (click)="dialogPassif.Open(null, passifsType.type)" type="button" class="btn btn-primary">
-                                        <i class="fa fa-plus"></i>
-                                      </button>
+                                      <div class="text-end">
+                                        <button (click)="dialogPassif.Open(null, passifsType.type)" type="button" class="btn btn-primary">
+                                          <i class="fa fa-plus"></i>
+                                        </button>
+                                      </div>
                                     </th>
                                   </tr>
                                   <tr class="bg-primary-subtle">
@@ -355,7 +359,7 @@
                                   </tr>
                                 </tbody>
                               </table>
-                              <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="passifsType.total != null">Total: {{ passifsType.total | currency }} dhs</div>
+                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="passifsType.total != null">Total: {{ passifsType.total | currency }} dhs</div> -->
                             </div>
 
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -387,9 +391,11 @@
                                       <b>{{ budgetType.title }}</b>
                                     </th>
                                     <th>
-                                      <button (click)="dialogBudget.Open(null, budgetType.type)" type="button" class="btn btn-primary">
-                                        <i class="fa fa-plus"></i>
-                                      </button>
+                                      <div class="text-end">
+                                        <button (click)="dialogBudget.Open(null, budgetType.type)" type="button" class="btn btn-primary">
+                                          <i class="fa fa-plus"></i>
+                                        </button>
+                                      </div>
                                     </th>
                                   </tr>
                                   <!-- table columns -->
@@ -428,7 +434,7 @@
                                   </tr>
                                 </tbody>
                               </table>
-                              <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="budgetType.total != null">Total: {{ budgetType.total | currency : "MAD " : "symbol" : "4.2-2" }}</div>
+                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="budgetType.total != null">Total: {{ budgetType.total | currency : "MAD " : "symbol" : "4.2-2" }}</div> -->
                               <!--output '0 001,35 CA$'-->
                             </div>
                             <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -454,8 +460,8 @@
                                 <label for="ParticulariteFiscale">Particularités fiscales</label>
                                 <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale" [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
                               </div>
-                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale">
-                                <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
+                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="(particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale) || currentClient.ParticulariteFiscale == null">
+                                <button class="btn btn-primary" (click)="UpdateClient()">Enregistrer</button>
                               </div>
                             </div>
                           </ng-template>
@@ -501,15 +507,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportOui" value="oui" [(ngModel)]="currentClient.PASSEPORT" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportOui" value="oui" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportNon" value="non" [(ngModel)]="currentClient.PASSEPORT" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportNon" value="non" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportAFaire" value="afaire" [(ngModel)]="currentClient.PASSEPORT" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportAFaire" value="afaire" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -522,15 +528,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationOui" value="oui" [(ngModel)]="currentClient.Cotisation" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationOui" value="oui" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationNon" value="non" [(ngModel)]="currentClient.Cotisation" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationNon" value="non" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationAFaire" value="afaire" [(ngModel)]="currentClient.Cotisation" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationAFaire" value="afaire" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -543,15 +549,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourOui" value="oui" [(ngModel)]="currentClient.CarteSejour" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourOui" value="oui" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourNon" value="non" [(ngModel)]="currentClient.CarteSejour" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourNon" value="non" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire" [(ngModel)]="currentClient.CarteSejour" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -564,15 +570,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionOui" value="oui" [(ngModel)]="currentClient.Reversion" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionOui" value="oui" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionNon" value="non" [(ngModel)]="currentClient.Reversion" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionNon" value="non" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionAFaire" value="afaire" [(ngModel)]="currentClient.Reversion" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionAFaire" value="afaire" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -585,15 +591,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisOui" value="oui" [(ngModel)]="currentClient.PermisConsuire" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisOui" value="oui" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisNon" value="non" [(ngModel)]="currentClient.PermisConsuire" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisNon" value="non" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire" [(ngModel)]="currentClient.PermisConsuire" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -606,15 +612,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSOui" value="oui" [(ngModel)]="currentClient.CNSS" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSOui" value="oui" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSNon" value="non" [(ngModel)]="currentClient.CNSS" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSNon" value="non" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSAFaire" value="afaire" [(ngModel)]="currentClient.CNSS" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSAFaire" value="afaire" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -627,15 +633,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoOui" value="oui" [(ngModel)]="currentClient.AssuranceAuto" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoOui" value="oui" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoNon" value="non" [(ngModel)]="currentClient.AssuranceAuto" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoNon" value="non" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceAuto" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -648,15 +654,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEOui" value="oui" [(ngModel)]="currentClient.CNAREFE" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEOui" value="oui" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFEOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFENon" value="non" [(ngModel)]="currentClient.CNAREFE" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFENon" value="non" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFENon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEAFaire" value="afaire" [(ngModel)]="currentClient.CNAREFE" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEAFaire" value="afaire" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFEAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -669,15 +675,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui" [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non" [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceHabitation" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -690,15 +696,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneOui" value="oui" [(ngModel)]="currentClient.CAPITONE" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneOui" value="oui" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneNon" value="non" [(ngModel)]="currentClient.CAPITONE" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneNon" value="non" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneAFaire" value="afaire" [(ngModel)]="currentClient.CAPITONE" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneAFaire" value="afaire" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -711,15 +717,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui" [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non" [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire" [(ngModel)]="currentClient.InscriptionConsulat" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -732,15 +738,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui" [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non" [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceRapatriement" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -753,15 +759,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMOui" value="oui" [(ngModel)]="currentClient.CPAM" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMOui" value="oui" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMNon" value="non" [(ngModel)]="currentClient.CPAM" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMNon" value="non" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMAFaire" value="afaire" [(ngModel)]="currentClient.CPAM" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMAFaire" value="afaire" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -774,15 +780,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui" [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non" [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire" [(ngModel)]="currentClient.MutuelleFrancaise" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -795,23 +801,23 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGOui" value="oui" [(ngModel)]="currentClient.CSG_CRDS" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGOui" value="oui" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGNon" value="non" [(ngModel)]="currentClient.CSG_CRDS" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGNon" value="non" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGAFaire" value="afaire" [(ngModel)]="currentClient.CSG_CRDS" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGAFaire" value="afaire" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGAFaire">A faire</label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
 
-                              <div class="d-grid gap-2 d-md-flex justify-content-center">
-                                <button class="btn btn-primary" (click)="UpdateClient()">Modifier</button>
+                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="shouldShowModifyButton()">
+                                <button class="btn btn-primary" (click)="UpdateClient()">Enregistrer</button>
                               </div>
                             </div>
                           </ng-template>
@@ -1063,7 +1069,7 @@
                         <td>{{ mission.DateAffectation | date : "dd/MM/yyyy" }}</td>
                         <td class="text-start">
                           <div class="d-flex justify-content-around">
-                            <a class="fs-2 text-warning" (click)="generatePdf(mission.ClientMissionId)">
+                            <a class="fs-2 text-warning print-btn" (click)="generatePdf(mission.ClientMissionId)">
                               <i class="fa fa-print"></i>
                             </a>
                           </div>

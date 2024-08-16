@@ -91,7 +91,7 @@ export class DetailclientComponent {
         { field: "DateAchat", header: "Date d'achat", dataType: "date", inputOptions: { type: "date", required: false } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Duree", header: "Durée (Année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, max: 1, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, max: 1, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -127,7 +127,7 @@ export class DetailclientComponent {
         { field: "Charges", header: "Charges (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Duree", header: "Durée (année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -177,7 +177,7 @@ export class DetailclientComponent {
         //     ],
         //   },
         // },
-        { field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
+        //{ field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
 
         { field: "Particularite", header: "Dividende", dataType: "number", inputOptions: { type: "number", required: false } },
         { field: "action", header: "Action", dataType: null },
@@ -341,7 +341,7 @@ export class DetailclientComponent {
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "DureeMois", header: "Durée (Mois)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -420,7 +420,7 @@ export class DetailclientComponent {
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "RevenusDistribue", header: "Revenus distribués", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "FiscaliteOuRevenue", header: "Fiscalité ou revenu", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "TauxRevalorisation", header: "Taux de révalorisation", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "TauxRevalorisation", header: "Taux de révalorisation (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         { field: "action", header: "Action", dataType: null },
       ],
     },
@@ -604,7 +604,7 @@ export class DetailclientComponent {
       columns: [
         {
           field: "Sexe",
-          header: "Sexe",
+          header: "Personne",
           dataType: "string",
           inputOptions: {
             type: "select",
@@ -612,8 +612,8 @@ export class DetailclientComponent {
             selectValue: "key",
             selectLibelle: "libelle",
             selectData: [
-              { key: "homme", libelle: "Homme" },
-              { key: "femme", libelle: "Femme" },
+              { key: "Monsieur", libelle: "Monsieur" },
+              { key: "Madame", libelle: "Madame" },
             ],
           },
         },
@@ -781,9 +781,37 @@ export class DetailclientComponent {
   //#region Fiscale
   oldParticulariteFiscale: string = null;
   particulariteFiscaleChanged: boolean = false;
-  //situationAdministrativeChanged: boolean = false;
+  situationAdministrativeChanged: boolean = false;
 
   //#endregion Fiscale
+
+  //#region SituationAdministrative
+  areAllRadioValuesNull(): boolean {
+    return (
+      this.currentClient.CFE == null &&
+      this.currentClient.PASSEPORT == null &&
+      this.currentClient.Cotisation == null &&
+      this.currentClient.CarteSejour == null &&
+      this.currentClient.Reversion == null &&
+      this.currentClient.PermisConduire == null &&
+      this.currentClient.CNSS == null &&
+      this.currentClient.AssuranceAuto == null &&
+      this.currentClient.CNAREFE == null &&
+      this.currentClient.AssuranceHabitation == null &&
+      this.currentClient.CAPITONE == null &&
+      this.currentClient.InscriptionConsulat == null &&
+      this.currentClient.AssuranceRapatriement == null &&
+      this.currentClient.CPAM == null &&
+      this.currentClient.MutuelleFrancaise == null &&
+      this.currentClient.CSG_CRDS == null
+    );
+  }
+
+  shouldShowModifyButton(): boolean {
+    return this.situationAdministrativeChanged || this.areAllRadioValuesNull();
+  }
+
+  //#endregion SituationAdministrative
 
   //#region Proche
   @ViewChild("DialogProche") public DialogProche!: any;
@@ -1326,7 +1354,6 @@ export class DetailclientComponent {
             this.clientService.GetClientTachesSimple(clientId).subscribe((responseClientTache) => {
               console.log("responseClientTache : ", responseClientTache);
               this.ClientTaches = responseClientTache;
-              this.toastr.show("ClientTache Marche");
             });
           }
         },
@@ -1439,7 +1466,7 @@ export class DetailclientComponent {
         { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Commentaire", header: "Commentaire", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Commentaire", header: "Commentaire", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         {
           field: "Status",
           header: "Status",
@@ -1484,6 +1511,24 @@ export class DetailclientComponent {
     const option = options.find((opt) => opt.key.toLowerCase() === normalizedKey);
     return option ? option.libelle : "Inconnu";
   }
+  getAgentLibelleByKey(key: string): string {
+    const agentOptions = this.tablesTasks.find((x) => x.title === "Taches").columns.find((col) => col.field === "AgentResposable").inputOptions.selectData;
+
+    if (!key) {
+      console.warn("La clé est manquante ou invalide:", key);
+      return "Inconnu";
+    }
+
+    const normalizedKey = key.trim().toLowerCase(); // Normaliser la clé en minuscules
+    const agent = agentOptions.find((item) => item.key.trim().toLowerCase() === normalizedKey);
+
+    if (agent) {
+      return agent.libelle; // Retourne le libellé si une correspondance est trouvée
+    } else {
+      console.warn("Aucune correspondance trouvée pour la clé:", normalizedKey);
+      return "Inconnu";
+    }
+  }
   GetTasks() {
     this.currentClient.ClientTaches = this.ClientTaches;
     return this.currentClient.ClientTaches;
@@ -1525,6 +1570,10 @@ export class DetailclientComponent {
         this.dialogTask.title = "Modifer la Tache";
         this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
         this.dialogTask.data = structuredClone(p);
+        console.log("la valeur de Agent", this.dialogTask.data.AgentResposable);
+        if (this.dialogTask.data.AgentResposable) {
+          this.dialogTask.data.AgentResposable = this.dialogTask.data.AgentResposable.toLowerCase();
+        }
       }
       this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
         (result) => {
@@ -1563,6 +1612,10 @@ export class DetailclientComponent {
         );
       } else {
         // submit update
+
+        const originalTask = this.currentClient.ClientTaches.find((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+        const originalStatus = originalTask ? originalTask.Status : null; // Save original status
+
         this.loader.show();
         this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
           (response) => {
@@ -1582,8 +1635,8 @@ export class DetailclientComponent {
                 this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
               }
 
-              // Check if the status is "Terminé" and send an email
-              if (this.dialogTask.data.Status === "Terminé") {
+              // Check if the status changed from something else to "Terminé" and send an email
+              if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
                 this.clientService.SentEmail().subscribe(
                   (emailResponse) => {
                     console.log("Email sent successfully: ", emailResponse);
@@ -1655,7 +1708,7 @@ export class DetailclientComponent {
         } else {
           this.toastr.success("Enregisté");
           this.particulariteFiscaleChanged = false;
-          //this.situationAdministrativeChanged = false;
+          this.situationAdministrativeChanged = false;
           this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
         }

@@ -42,6 +42,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     config.keyboard = false;
     this.ssnForm = this.fb.group({
       NumeroSS: ["", [Validators.required, ssnValidator()]],
+      ConjointNumeroSS: ["", [ssnValidator()]], // Champ pour le conjoint
     });
   }
   telInputObject(obj) {
@@ -230,6 +231,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
     console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
+      // Réinitialiser les variables
+      this.selectedMission = null;
+      this.showPrestations = false;
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
       this.clientData.Conjoint = [];
@@ -278,12 +282,78 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+  // nextStep() {
+  //   // if (this.currentStep < 5) {
+  //   //   if (this.currentStep < 2) {
+  //   //     this.submitAddClientMission();
+  //   //   }
+
+  //   //   this.currentStep++;
+  //   // }
+  //   //celui ci marche
+  //   if (this.currentStep < 5) {
+  //     if (this.currentStep === 1 && !this.selectedMission) {
+  //       this.toastr.warning("Veuillez sélectionner une mission avant de continuer");
+  //       return; // Empêche de passer à l'étape suivante si la mission n'est pas sélectionnée
+  //     }
+
+  //     if (this.currentStep === 2) {
+  //       this.submitAddClientMission();
+  //     }
+
+  //     this.currentStep++;
+  //   }
+  // }
   nextStep() {
     if (this.currentStep < 5) {
-      if (this.currentStep < 2) {
+      // Étape 1 : Validation de la mission sélectionnée
+      if (this.currentStep === 1) {
+        if (!this.selectedMission) {
+          this.toastr.warning("Veuillez sélectionner une mission avant de continuer");
+          return; // Arrête l'exécution ici si la mission n'est pas sélectionnée
+        }
+
+        // Soumettre la mission seulement si elle est sélectionnée
         this.submitAddClientMission();
       }
 
+      // Étape 2 : Validation des champs nom, prénom, et numéro SS du client
+      if (this.currentStep === 2) {
+        const nomRempli = this.clientData?.Nom?.trim() !== "";
+        const prenomRempli = this.clientData?.Prenom?.trim() !== "";
+        const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
+
+        if (!nomRempli || !prenomRempli || !numeroSSRempli) {
+          this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS avant de continuer");
+          return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
+        }
+
+        // Si "Oui" est sélectionné pour hasConjoint, valider les champs du conjoint
+        if (this.clientData.HasConjoint === "oui") {
+          // const conjointNomRempli = this.newConjoint?.Nom?.trim() !== "";
+          // const conjointPrenomRempli = this.newConjoint?.Prenom?.trim() !== "";
+          // const conjointNumeroSSRempli = this.newConjoint?.NumeroSS?.trim() !== "";
+
+          // if (!conjointNomRempli || !conjointPrenomRempli || !conjointNumeroSSRempli) {
+          //   this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
+          //   return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
+          // }
+          if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+            this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
+            return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
+          }
+
+          // Ajouter le conjoint si tous les champs sont valides
+          this.submitAddConjoint();
+        }
+
+        // Si "Non" est sélectionné pour hasConjoint, réinitialiser les données du conjoint
+        if (this.clientData.HasConjoint === "non") {
+          this.newConjoint = null;
+        }
+      }
+
+      // Seulement si toutes les validations passent, incrémenter l'étape
       this.currentStep++;
     }
   }
@@ -314,17 +384,53 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     console.log("Start add conjoint : ", this.newConjoint);
   }
+  // submitAddConjoint() {
+  //   if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
+  //     this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
+  //     return;
+  //   }
+  //   console.log("submit add conjoint : ", this.newConjoint);
+  //   this.clientData.Conjoint.push(this.newConjoint);
+  //   this.newConjoint = null;
+  // }
+  //marche submitAddConjoint() {
+  //   if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+  //     this.toastr.warning("Veuillez saisir le nom, prénom, et numéro SS du conjoint");
+  //     return;
+  //   }
+
+  //   console.log("submit add conjoint : ", this.newConjoint);
+  //   this.clientData.Conjoint.push(this.newConjoint);
+  //   this.newConjoint = null; // Réinitialiser le formulaire conjoint après ajout
+  // }
   submitAddConjoint() {
-    if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
-      this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
+    if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+      this.toastr.warning("Veuillez remplir toutes les informations du conjoint avant de continuer.");
       return;
     }
-    console.log("submit add conjoint : ", this.newConjoint);
+    // Vérification du numéro SS du conjoint à travers le validateur de ssnForm
+    if (this.ssnForm.get("ConjointNumeroSS").invalid) {
+      this.toastr.warning("Le numéro SS du conjoint est invalide.");
+      return;
+    }
+    // Ajouter le conjoint au clientData
+    if (!this.clientData.Conjoint) {
+      this.clientData.Conjoint = [];
+    }
     this.clientData.Conjoint.push(this.newConjoint);
-    this.newConjoint = null;
   }
+
   cancelAddConjoint() {
     this.newConjoint = null;
+  }
+  onHasConjointChange(value: string) {
+    if (value === "non") {
+      // Réinitialiser les données du conjoint lorsque "Non" est sélectionné
+      this.cancelAddConjoint();
+    } else if (value === "oui") {
+      // Initialiser un nouveau conjoint s'il n'y en a pas déjà un
+      this.startAddConjoint();
+    }
   }
   startAddProche() {
     this.newProche = {
@@ -364,15 +470,38 @@ export class AddClientComponent implements OnInit, OnDestroy {
       ClientId: this.clientData.ClientId,
     };
   }
+  // submitAddClientMission() {
+  //   if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
+  //     this.toastr.warning("Veuillez verifier submitClient du ClientMission");
+  //     return;
+  //   }
+  //   console.log(this.newClientMission);
+  //   this.clientData.ClientMission.push(this.newClientMission);
+  //   console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
+  //   this.newClientMission = null;
+  // }
   submitAddClientMission() {
-    if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
-      this.toastr.warning("Veuillez verifier submitClient du ClientMission");
-      return;
+    // Vérifie si clientData et ClientId sont définis
+    if (!this.clientData || !this.clientData.ClientId) {
+      this.toastr.warning("Erreur : Le ClientId n'est pas défini. Veuillez vérifier les informations du client.");
+      return; // Arrêter si ClientId est null ou undefined
     }
-    console.log(this.newClientMission);
+
+    if (!this.newClientMission) {
+      this.newClientMission = {
+        ClientMissionId: uuidv4(),
+        MissionId: this.selectedMission,
+        ClientId: this.clientData.ClientId,
+      };
+    }
+
+    // Ajouter la nouvelle mission au tableau des missions du client
+    if (!this.clientData.ClientMission) {
+      this.clientData.ClientMission = [];
+    }
+
     this.clientData.ClientMission.push(this.newClientMission);
-    console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
-    this.newClientMission = null;
+    this.newClientMission = null; // Réinitialiser après ajout
   }
   cancelAddClientMission() {
     this.newClientMission = null;
@@ -438,6 +567,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   onSave() {
     if (this.isFormValid()) {
+      this.loader.show();
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
       }
@@ -456,8 +586,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
+          this.loader.hide();
         },
         (error) => {
+          this.loader.hide();
           console.error("Erreur lors de l'ajout du client", error);
           Swal.fire("Erreur", "Erreur lors de l'ajout du client", "error");
         }
@@ -512,5 +644,39 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   private resetForm() {
     this.currentStep = 1;
+    this.prestationStates = {};
+    this.tacheStates = {};
+    this.selectedMission = null; // Réinitialiser la mission sélectionnée
+    this.showPrestations = false; // Réinitialiser l'affichage des prestations
+    this.newProche = null;
+    this.newConjoint = null;
+    this.newClientMission = null;
+    this.newClientMissionPrestation = null;
+    this.newClientTache = null;
+    // Réinitialiser les données client
+    this.clientData = {
+      CabinetId: null,
+      ClientId: null,
+      HasConjoint: null,
+      Nom: null,
+      Prenom: null,
+      DateNaissance: null,
+      Profession: null,
+      DateRetraite: null,
+      NumeroSS: null,
+      SituationFamiliale: null,
+      RegimeMatrimonial: null,
+      Adresse: null,
+      Email1: null,
+      Email2: null,
+      Telephone1: null,
+      Telephone2: null,
+      ClientMission: [],
+      ClientMissionPrestation: [],
+      ClientTaches: [],
+      Conjoint: [],
+      Proches: [],
+    };
+    this.ssnForm.reset();
   }
 }
