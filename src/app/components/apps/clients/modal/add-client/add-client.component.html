@@ -116,13 +116,18 @@
             <label for="ssn">Numéro SS</label>
             <input class="form-control" id="ssn" type="text" required="" placeholder="Numéro SS" name="NumeroSS" [(ngModel)]="clientData.NumeroSS" />
           </div> -->
-          <div class="form-group mb-3 col-md-6" [formGroup]="ssnForm">
+          <!-- <div class="form-group mb-3 col-md-6" [formGroup]="ssnForm">
             <label for="ssn">Numéro SS</label>
             <input class="form-control" id="ssn" type="text" required placeholder="Numéro SS" formControlName="NumeroSS" />
             <div *ngIf="ssnForm.get('NumeroSS').invalid && (ssnForm.get('NumeroSS').dirty || ssnForm.get('NumeroSS').touched)">
               <div *ngIf="ssnForm.get('NumeroSS').errors?.required" class="text-error">Le numéro SS est requis.</div>
               <div *ngIf="ssnForm.get('NumeroSS').errors?.ssnInvalid" class="text-error">Le format du numéro SS est invalide (13 chiffres/2 chiffres).</div>
             </div>
+          </div> -->
+          <div class="form-group mb-3 col-md-6">
+            <label for="ssn">Numéro SS</label>
+            <input class="form-control" id="ssn" type="text" required placeholder="Numéro SS" [(ngModel)]="clientData.NumeroSS" name="NumeroSS" />
+            <div *ngIf="clientData.NumeroSS && !isValidSSN(clientData.NumeroSS)" class="text-error">Le format du numéro SS est invalide (13 chiffres/2 chiffres).</div>
           </div>
 
           <div class="form-group mb-3 col-md-6">

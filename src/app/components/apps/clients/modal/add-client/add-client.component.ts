@@ -321,10 +321,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
       if (this.currentStep === 2) {
         const nomRempli = this.clientData?.Nom?.trim() !== "";
         const prenomRempli = this.clientData?.Prenom?.trim() !== "";
-        const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
+        // const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
+        const numeroSSRempli = this.clientData?.NumeroSS?.trim() !== "";
 
         if (!nomRempli || !prenomRempli || !numeroSSRempli) {
-          this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS avant de continuer");
+          this.toastr.warning("Veuillez remplir le nom, prénom avant de continuer");
           return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
         }
         // Vérifier que les emails ne sont pas identiques ou vides
@@ -360,6 +361,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.currentStep++;
     }
   }
+
   validateEmails() {
     // Si les deux emails sont vides ou nulls, permettre de passer
     if ((!this.clientData.Email1 || this.clientData.Email1.trim() === "") && (!this.clientData.Email2 || this.clientData.Email2.trim() === "")) {
@@ -581,7 +583,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
   cancelAddClientTache() {
     this.newClientTache = null;
   }
-
+  isValidSSN(ssn: string): boolean {
+    const ssnRegex = /^\d{13}\/\d{2}$/; // Exige 13 chiffres suivis de '/2 chiffres'
+    return ssnRegex.test(ssn);
+  }
   onSave() {
     if (this.isFormValid()) {
       this.loader.show();
@@ -597,6 +602,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
+          console.log(this.clientData);
           console.log("Client ajouté avec succès", response);
           this.toastr.success("Client ajouté avec succès");
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
