@@ -227,6 +227,33 @@ export class AddClientComponent implements OnInit, OnDestroy {
       }
     );
   }
+  formatNom() {
+    if (this.clientData.Nom) {
+      this.clientData.Nom = this.clientData.Nom.toUpperCase();
+    }
+  }
+
+  formatPrenom() {
+    if (this.clientData.Prenom) {
+      this.clientData.Prenom = this.clientData.Prenom.charAt(0).toUpperCase() + this.clientData.Prenom.slice(1).toLowerCase();
+    }
+  }
+
+  validatePhoneNumber(country: string, event: any) {
+    let value = event.target.value;
+
+    // Pour le Maroc, vérifier si le numéro comporte 9 chiffres après l'indicatif
+    if (country === "maroc" && value.length > 9) {
+      this.toastr.warning("Le numéro de téléphone pour le Maroc doit comporter 9 chiffres après l'indicatif.");
+      event.target.value = value.slice(0, 9); // Limiter à 9 chiffres
+    }
+
+    // Pour la France, vérifier si le numéro comporte 9 chiffres après l'indicatif
+    if (country === "france" && value.length > 9) {
+      this.toastr.warning("Le numéro de téléphone pour la France doit comporter 9 chiffres après l'indicatif.");
+      event.target.value = value.slice(0, 9); // Limiter à 9 chiffres
+    }
+  }
   openModal() {
     console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {
@@ -321,12 +348,22 @@ export class AddClientComponent implements OnInit, OnDestroy {
       if (this.currentStep === 2) {
         const nomRempli = this.clientData?.Nom?.trim() !== "";
         const prenomRempli = this.clientData?.Prenom?.trim() !== "";
-        // const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
+        //const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
         const numeroSSRempli = this.clientData?.NumeroSS?.trim() !== "";
 
-        if (!nomRempli || !prenomRempli || !numeroSSRempli) {
+        if (!this.clientData.Nom || !this.clientData.Prenom) {
           this.toastr.warning("Veuillez remplir le nom, prénom avant de continuer");
           return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
+        }
+        // if (!nomRempli || !prenomRempli || !numeroSSRempli) {
+        //   this.toastr.warning("Veuillez remplir le nom, prénom avant de continuer");
+        //   return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
+        // }
+
+        // Vérification du format du numéro SS si saisi
+        if (this.clientData.NumeroSS && !this.isValidSSN(this.clientData.NumeroSS)) {
+          this.toastr.warning("Le format du numéro SS est invalide. Il doit comporter 13 chiffres suivis de 2 chiffres de clé.");
+          return; // Empêche le passage à l'étape suivante si le format du numéro SS est incorrect
         }
         // Vérifier que les emails ne sont pas identiques ou vides
         if (!this.validateEmails()) {
@@ -590,6 +627,12 @@ export class AddClientComponent implements OnInit, OnDestroy {
   onSave() {
     if (this.isFormValid()) {
       this.loader.show();
+      // Ajouter l'indicatif téléphonique pour le Maroc (+212) et la France (+33)
+      const phone1WithCode = `+212${this.clientData.Telephone1}`;
+      const phone2WithCode = `+33${this.clientData.Telephone2}`;
+      // Mettre à jour les champs Téléphone1 et Téléphone2 avec les indicatifs
+      this.clientData.Telephone1 = phone1WithCode;
+      this.clientData.Telephone2 = phone2WithCode;
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
       }
@@ -684,6 +727,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Nom: null,
       Prenom: null,
       DateNaissance: null,
+      DateResidence: null,
       Profession: null,
       DateRetraite: null,
       NumeroSS: null,

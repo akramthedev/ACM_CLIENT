@@ -640,7 +640,7 @@ export class DetailclientComponent {
             ],
           },
         },
-        { field: "Montant", header: "Montant", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Montant", header: "Montant (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "action", header: "Action", dataType: null },
       ],
     },
@@ -1003,6 +1003,7 @@ export class DetailclientComponent {
     //{ field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
     { field: "NumeroSS", header: "Numéro SS", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
     { field: "DateRetraite", header: "Date de Retraite", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
+    { field: "DateResidence", header: "Date de Residence fiscale", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
     {
       field: "SituationFamiliale",
       header: "Situation Familiale",
@@ -1015,9 +1016,12 @@ export class DetailclientComponent {
         selectLibelle: "libelle",
         selectData: [
           { key: "Marié", libelle: "Marié" },
+          { key: "Mariée", libelle: "Mariée" },
           { key: "Célibataire", libelle: "Célibataire" },
           { key: "Divorcé", libelle: "Divorcé" },
+          { key: "Divorcée", libelle: "Divorcée" },
           { key: "Veuf", libelle: "Veuf" },
+          { key: "Veuve", libelle: "Veuve" },
           { key: "Union libre", libelle: "Union libre" },
           { key: "PACS", libelle: "PACS" },
         ],
@@ -1254,6 +1258,7 @@ export class DetailclientComponent {
     if (!data.DateNaissance) data.DateNaissance = null;
     if (!data.DateRetraite) data.DateRetraite = null;
     if (!data.DateMariage) data.DateMariage = null;
+    if (!data.DateResidence) data.DateResidence = null;
   }
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
@@ -1338,6 +1343,7 @@ export class DetailclientComponent {
             this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
             this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
+            this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
 
             // get liste pieces
             this.enumService.GetPieces().subscribe(
@@ -1637,7 +1643,7 @@ export class DetailclientComponent {
 
               // Check if the status changed from something else to "Terminé" and send an email
               if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
-                this.clientService.SentEmail().subscribe(
+                this.clientService.SentEmail2("amine.laghlabi@e-polytechnique.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
                   (emailResponse) => {
                     console.log("Email sent successfully: ", emailResponse);
                   },

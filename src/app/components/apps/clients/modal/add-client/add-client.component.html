@@ -70,13 +70,21 @@
         <!-- #endregion Step 1 -->
         <!-- #region Step 2 -->
         <div *ngSwitchCase="2" class="row scrollable-block">
-          <div class="form-group mb-3 col-md-6">
+          <!-- <div class="form-group mb-3 col-md-6">
             <label for="con-name">Nom</label>
             <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" [(ngModel)]="clientData.Nom" />
           </div>
           <div class="form-group mb-3 col-md-6">
             <label for="con-last">Prénom</label>
             <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" [(ngModel)]="clientData.Prenom" />
+          </div> -->
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-name">Nom</label>
+            <input class="form-control" id="con-name" type="text" required="" placeholder="Nom" autocomplete="off" name="Nom" [(ngModel)]="clientData.Nom" (keyup)="formatNom()" />
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-last">Prénom</label>
+            <input class="form-control" id="con-last" type="text" required="" placeholder="Prénom" autocomplete="off" name="Prenom" [(ngModel)]="clientData.Prenom" (keyup)="formatPrenom()" />
           </div>
 
           <div class="form-group mb-3 col-md-6">
@@ -111,6 +119,10 @@
           <div class="form-group mb-3 col-md-6">
             <label for="retirement">Date de départ en retraite</label>
             <input class="form-control" id="retirement" type="date" required="" name="DateRetraite" [(ngModel)]="clientData.DateRetraite" />
+          </div>
+          <div class="form-group mb-3 col-md-6">
+            <label for="retirement">Date de résidence fiscale</label>
+            <input class="form-control" id="retirement" type="date" required="" name="DateRetraite" [(ngModel)]="clientData.DateResidence" />
           </div>
           <!-- <div class="form-group mb-3 col-md-6">
             <label for="ssn">Numéro SS</label>
@@ -147,7 +159,7 @@
             <div *ngIf="clientData.Email1 === clientData.Email2 && clientData.Email1 && clientData.Email2" style="color: red">Les adresses email 1 et email 2 ne doivent pas être identiques.</div>
           </div>
 
-          <div class="form-group mb-3 col-md-6">
+          <!-- <div class="form-group mb-3 col-md-6">
             <label for="con-phone">Téléphone 1</label>
             <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone1" autocomplete="off" name="Telephone1" [(ngModel)]="clientData.Telephone1" />
           </div>
@@ -155,6 +167,21 @@
           <div class="form-group mb-3 col-md-6">
             <label for="con-phone">Téléphone 2</label>
             <input class="form-control" id="con-phone" type="text" required="" placeholder="Téléphone2" autocomplete="off" name="Telephone2" [(ngModel)]="clientData.Telephone2" />
+          </div> -->
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-phone1">Téléphone (Maroc)</label>
+            <div class="input-group">
+              <span class="input-group-text">+212</span>
+              <input class="form-control" id="con-phone1" type="text" required="" placeholder="Téléphone1" autocomplete="off" name="Telephone1" [(ngModel)]="clientData.Telephone1" (input)="validatePhoneNumber('maroc', $event)" />
+            </div>
+          </div>
+
+          <div class="form-group mb-3 col-md-6">
+            <label for="con-phone2">Téléphone (France)</label>
+            <div class="input-group">
+              <span class="input-group-text">+33</span>
+              <input class="form-control" id="con-phone2" type="text" required="" placeholder="Téléphone2" autocomplete="off" name="Telephone2" [(ngModel)]="clientData.Telephone2" (input)="validatePhoneNumber('france', $event)" />
+            </div>
           </div>
           <div class="form-group mb-3 col-md-6 row">
             <label>Avez-vous un conjoint?</label>

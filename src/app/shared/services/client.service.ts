@@ -200,4 +200,8 @@ export class ClientService {
     let url = `${environment.url}/email?`;
     return this.http.get(url, { responseType: "text" });
   }
+  SentEmail2(to: string, subject: string, html: string) {
+    const url = `${environment.url}/email2?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}&html=${encodeURIComponent(html)}`;
+    return this.http.get(url, { responseType: "text" });
+  }
 }

@@ -7,6 +7,7 @@ export class Client {
   Photo?: string;
   Profession?: string;
   DateRetraite?: string;
+  DateResidence?: string;
   NumeroSS?: string;
   Adresse?: string;
   Email1?: string;
