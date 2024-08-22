@@ -885,7 +885,7 @@
                         </th>
                       </tr>
                       <tr>
-                        <th *ngFor="let column of getVisibleColumns(taskType.columns)">
+                        <th *ngFor="let column of getVisibleColumns(taskType.columns)" [ngClass]="{ 'text-wrap-column': column.field === 'Intitule' }">
                           {{ column.header }}
                         </th>
                       </tr>
@@ -899,7 +899,7 @@
                     </tbody>
                     <tbody *ngIf="GetTasks().length > 0">
                       <tr *ngFor="let task of GetTasks()" style="height: 3.5rem">
-                        <td *ngFor="let column of getVisibleColumns(taskType.columns)">
+                        <td *ngFor="let column of getVisibleColumns(taskType.columns)" [ngClass]="{ 'text-wrap-column': column.field === 'Intitule' }">
                           <!-- Affichage conditionnel des données selon leur type -->
                           <span *ngIf="column.dataType == 'string' && column.field !== 'AgentResposable' && column.field !== 'Status'">
                             {{ task[column.field] }}
