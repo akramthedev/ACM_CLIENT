@@ -9,6 +9,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
 import { Client } from "src/app/shared/model/dto.model";
+import { environment } from "src/environments/environment";
 @Component({
   selector: "app-clients",
   templateUrl: "./clients.component.html",
@@ -28,6 +29,25 @@ export class ClientsComponent implements OnInit {
   constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
+  }
+
+  onProfileImageChange(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      const formData = new FormData();
+      formData.append("file", event.target.files[0], event.target.files[0].name);
+      formData.append("ClientId", this.CurrentClient.ClientId);
+
+      this.clientService.UploadProfileImage(formData).subscribe(
+        (response: any) => {
+          this.CurrentClient.ImgSrc = response.imageUrl; // Met à jour l'URL de l'image de profil
+          console.log(this.CurrentClient.ImgSrc);
+          this.toastr.success("Image de profil mise à jour avec succès");
+        },
+        (error: any) => {
+          this.toastr.error("Erreur lors de l'upload de l'image de profil");
+        }
+      );
+    }
   }
 
   ngOnInit() {
@@ -80,6 +100,7 @@ export class ClientsComponent implements OnInit {
       if (item.ClientId == id) {
         item.IsSelected = true;
         this.CurrentClient = item;
+        this.CurrentClient.ImgSrc = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
       }
       return item;
     });

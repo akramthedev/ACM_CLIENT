@@ -204,4 +204,9 @@ export class ClientService {
     const url = `${environment.url}/email2?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}&html=${encodeURIComponent(html)}`;
     return this.http.get(url, { responseType: "text" });
   }
+
+  UploadProfileImage(formData: FormData) {
+    const url = `${environment.url}/UploadProfileImage`; // Remplacez par votre URL API
+    return this.http.post(url, formData);
+  }
 }
