@@ -64,17 +64,47 @@ export class ClientsComponent implements OnInit {
 
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
+  // getClients() {
+  //   this.loader.show();
+  //   this.clientService.getClients().subscribe(
+  //     (response) => {
+  //       console.log("response getClients: ", response);
+  //       this.loader.hide();
+  //       let i = 0;
+  //       this.Clients = response.map((item) => {
+  //         if (this.images[i] != null) item.imgSrc = this.images[i];
+  //         i++;
+  //         return item;
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error("Error fetching clients: ", error);
+  //       this.loader.hide();
+  //     }
+  //   );
+  // }
   getClients() {
     this.loader.show();
     this.clientService.getClients().subscribe(
       (response) => {
         console.log("response getClients: ", response);
         this.loader.hide();
-        let i = 0;
-        this.Clients = response.map((item) => {
-          if (this.images[i] != null) item.imgSrc = this.images[i];
-          i++;
-          return item;
+
+        this.Clients = response.map((client) => {
+          const imageUrl = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
+
+          // Vérifier l'existence de l'image pour chaque client
+          this.checkImageExists(imageUrl, (exists: boolean) => {
+            if (exists) {
+              client.ImgSrc = imageUrl;
+              console.log(`Image found for client ${client.ClientId}`);
+            } else {
+              client.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+              console.log(`Image not found for client ${client.ClientId}, using default.`);
+            }
+          });
+
+          return client;
         });
       },
       (error) => {
@@ -90,20 +120,60 @@ export class ClientsComponent implements OnInit {
     this.history = !this.history;
   }
 
+  // OnClientSelected(id: string) {
+  //   if (this.IsEditingClient == true) {
+  //     this.toastr.warning("Veuillez completer la modification");
+  //     return;
+  //   }
+  //   this.Clients = this.Clients.map((item) => {
+  //     item.IsSelected = false;
+  //     if (item.ClientId == id) {
+  //       item.IsSelected = true;
+  //       this.CurrentClient = item;
+  //       this.CurrentClient.ImgSrc = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+  //     }
+  //     return item;
+  //   });
+  // }
   OnClientSelected(id: string) {
-    if (this.IsEditingClient == true) {
+    if (this.IsEditingClient) {
       this.toastr.warning("Veuillez completer la modification");
       return;
     }
+
     this.Clients = this.Clients.map((item) => {
       item.IsSelected = false;
-      if (item.ClientId == id) {
+      if (item.ClientId === id) {
         item.IsSelected = true;
         this.CurrentClient = item;
-        this.CurrentClient.ImgSrc = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+
+        const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+
+        // Vérifie si l'image existe sur le serveur
+        this.checkImageExists(imageUrl, (exists: boolean) => {
+          if (exists) {
+            this.CurrentClient.ImgSrc = imageUrl;
+            console.log("Image found.");
+          } else {
+            this.CurrentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+            console.log("Image not found, using default.");
+          }
+        });
       }
       return item;
     });
+  }
+
+  // Méthode pour vérifier l'existence de l'image
+  checkImageExists(url: string, callback: (exists: boolean) => void) {
+    const http = new XMLHttpRequest();
+    http.open("HEAD", url, true);
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        callback(this.status === 200);
+      }
+    };
+    http.send();
   }
 
   sweetAlertDelete(id: string) {
