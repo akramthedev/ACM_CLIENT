@@ -15,7 +15,7 @@ export class Client {
   Telephone1?: string;
   Telephone2?: string;
   HasConjoint: string;
-
+  ImgSrc?: string;
   SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
   RegimeMatrimonial?: string;
   ParticulariteFiscale?: string;

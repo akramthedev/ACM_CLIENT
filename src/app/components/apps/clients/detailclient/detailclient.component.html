@@ -25,7 +25,10 @@
                               <div class="card social-profile">
                                 <div class="card-body">
                                   <div class="social-img-wrap">
-                                    <div class="social-img"><img src="assets/images/user/2.png" alt="profile" /></div>
+                                    <div class="social-img">
+                                      <!-- <img src="assets/images/user/2.png" alt="profile" /> -->
+                                      <img [src]="currentClient.ImgSrc" alt="profile" />
+                                    </div>
                                     <div class="edit-icon">
                                       <svg>
                                         <use href="assets/svg/icon-sprite.svg#profile-check"></use>

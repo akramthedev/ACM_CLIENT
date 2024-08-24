@@ -13,6 +13,7 @@ import { ClientService } from "src/app/shared/services/client.service";
 import { EnumService } from "src/app/shared/services/enum.service";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-detailclient",
@@ -1345,6 +1346,16 @@ export class DetailclientComponent {
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
             this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
 
+            // Check if profile image exists
+            const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
+            this.checkImageExists(profileImageUrl, (exists: boolean) => {
+              if (exists) {
+                this.currentClient.ImgSrc = profileImageUrl;
+              } else {
+                this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+              }
+            });
+
             // get liste pieces
             this.enumService.GetPieces().subscribe(
               (responsePieces) => {
@@ -1373,6 +1384,17 @@ export class DetailclientComponent {
         }
       );
     });
+  }
+  // Méthode pour vérifier l'existence de l'image
+  checkImageExists(url: string, callback: (exists: boolean) => void) {
+    const http = new XMLHttpRequest();
+    http.open("HEAD", url, true);
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        callback(this.status === 200);
+      }
+    };
+    http.send();
   }
 
   //#region ImportPiece
