@@ -627,12 +627,24 @@ export class AddClientComponent implements OnInit, OnDestroy {
   onSave() {
     if (this.isFormValid()) {
       this.loader.show();
-      // Ajouter l'indicatif téléphonique pour le Maroc (+212) et la France (+33)
-      const phone1WithCode = `+212${this.clientData.Telephone1}`;
-      const phone2WithCode = `+33${this.clientData.Telephone2}`;
-      // Mettre à jour les champs Téléphone1 et Téléphone2 avec les indicatifs
-      this.clientData.Telephone1 = phone1WithCode;
-      this.clientData.Telephone2 = phone2WithCode;
+      // // Ajouter l'indicatif téléphonique pour le Maroc (+212) et la France (+33)
+      // const phone1WithCode = `+212${this.clientData.Telephone1}`;
+      // const phone2WithCode = `+33${this.clientData.Telephone2}`;
+      // // Mettre à jour les champs Téléphone1 et Téléphone2 avec les indicatifs
+      // this.clientData.Telephone1 = phone1WithCode;
+      // this.clientData.Telephone2 = phone2WithCode;
+      // Check if the phone number fields are not empty before adding the country code
+      if (this.clientData.Telephone1 && this.clientData.Telephone1.trim() !== "") {
+        this.clientData.Telephone1 = `+212${this.clientData.Telephone1}`;
+      } else {
+        this.clientData.Telephone1 = ""; // Leave empty if not provided
+      }
+
+      if (this.clientData.Telephone2 && this.clientData.Telephone2.trim() !== "") {
+        this.clientData.Telephone2 = `+33${this.clientData.Telephone2}`;
+      } else {
+        this.clientData.Telephone2 = ""; // Leave empty if not provided
+      }
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
       }

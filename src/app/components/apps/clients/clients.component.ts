@@ -10,6 +10,9 @@ import { ToastrService } from "ngx-toastr";
 import { ClientService } from "src/app/shared/services/client.service";
 import { Client } from "src/app/shared/model/dto.model";
 import { environment } from "src/environments/environment";
+import { forkJoin, of } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
+
 @Component({
   selector: "app-clients",
   templateUrl: "./clients.component.html",
@@ -30,23 +33,119 @@ export class ClientsComponent implements OnInit {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
   }
+  // onProfileImageChange(event: any) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const formData = new FormData();
+  //     formData.append("file", event.target.files[0], event.target.files[0].name);
+  //     formData.append("ClientId", this.CurrentClient.ClientId);
 
+  //     this.clientService.UploadProfileImage(formData).subscribe(
+  //       (response: any) => {
+  //         // Utilisez le chemin complet et ajoutez le timestamp pour forcer le rechargement de l'image
+  //         const timestamp = new Date().getTime();
+  //         const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg?t=${timestamp}`;
+
+  //         // Assignez cette URL avec le timestamp à ImgSrc
+  //         this.CurrentClient.ImgSrc = imageUrl;
+  //         console.log(this.CurrentClient.ImgSrc);
+  //         this.toastr.success("Image de profil mise à jour avec succès");
+  //       },
+  //       (error: any) => {
+  //         this.toastr.error("Erreur lors de l'upload de l'image de profil");
+  //       }
+  //     );
+  //   }
+  // }
+  // onProfileImageChange(event: any) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const formData = new FormData();
+  //     formData.append("file", event.target.files[0], event.target.files[0].name);
+  //     formData.append("ClientId", this.CurrentClient.ClientId);
+
+  //     // Supprimer les anciennes images (jpg, jpeg, png) avant d'uploader la nouvelle
+  //     const oldExtensions = ["jpg", "jpeg", "png"];
+  //     oldExtensions.forEach((ext) => {
+  //       const oldFilePath = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${ext}`;
+  //       this.clientService.DeleteProfileImage(oldFilePath).subscribe(
+  //         () => console.log(`Deleted old image: ${oldFilePath}`),
+  //         (err) => console.log(`No previous image found to delete: ${oldFilePath}`, err)
+  //       );
+  //     });
+
+  //     this.clientService.UploadProfileImage(formData).subscribe(
+  //       (response: any) => {
+  //         // Utilisez le chemin complet avec un timestamp pour forcer le rechargement de l'image
+  //         const timestamp = new Date().getTime();
+  //         const newExtension = event.target.files[0].name.split(".").pop().toLowerCase();
+  //         const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${newExtension}?t=${timestamp}`;
+
+  //         // Mettre à jour l'URL de l'image de profil
+  //         this.CurrentClient.ImgSrc = imageUrl;
+  //         console.log("Image updated:", this.CurrentClient.ImgSrc);
+  //         this.toastr.success("Image de profil mise à jour avec succès");
+  //       },
+  //       (error: any) => {
+  //         this.toastr.error("Erreur lors de l'upload de l'image de profil");
+  //       }
+  //     );
+  //   }
+  // }
   onProfileImageChange(event: any) {
     if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      const mimeType = file.type;
+
+      // Check if the file is an image and has the allowed extension
+      if (!allowedExtensions.includes(fileExtension) || !mimeType.startsWith("image/")) {
+        this.toastr.error("Veuillez sélectionner un fichier image valide (jpg, jpeg, png).");
+        return;
+      }
+
       const formData = new FormData();
-      formData.append("file", event.target.files[0], event.target.files[0].name);
+      formData.append("file", file, file.name);
       formData.append("ClientId", this.CurrentClient.ClientId);
 
-      this.clientService.UploadProfileImage(formData).subscribe(
-        (response: any) => {
-          this.CurrentClient.ImgSrc = response.imageUrl; // Met à jour l'URL de l'image de profil
-          console.log(this.CurrentClient.ImgSrc);
-          this.toastr.success("Image de profil mise à jour avec succès");
-        },
-        (error: any) => {
-          this.toastr.error("Erreur lors de l'upload de l'image de profil");
-        }
-      );
+      const clientId = this.CurrentClient.ClientId;
+      const oldExtensions = ["jpg", "jpeg", "png"];
+
+      // Créer une requête HTTP pour chaque extension
+      const checkAndDeleteRequests = oldExtensions.map((ext) => {
+        return this.clientService.checkImageExists(clientId, ext).pipe(
+          switchMap((exists: boolean) => {
+            if (exists) {
+              return this.clientService.DeleteProfileImage(clientId, ext);
+            } else {
+              return of(null); // Si l'image n'existe pas, on continue
+            }
+          }),
+          catchError((err) => {
+            console.log(`Erreur lors de la suppression de l'image avec extension ${ext}:`, err);
+            return of(null); // En cas d'erreur, continuer quand même
+          })
+        );
+      });
+
+      // Exécuter les suppressions en parallèle
+      forkJoin(checkAndDeleteRequests).subscribe(() => {
+        // Après avoir supprimé les anciennes images, uploader la nouvelle
+        this.clientService.UploadProfileImage(formData).subscribe(
+          (response: any) => {
+            // Utilisez le chemin complet avec un timestamp pour forcer le rechargement de l'image
+            const timestamp = new Date().getTime();
+            const imageUrl = `${environment.url}/Pieces/${clientId}/profile.${fileExtension}?t=${timestamp}`;
+
+            // Mettre à jour l'URL de l'image de profil
+            this.CurrentClient.ImgSrc = imageUrl;
+            console.log("Image mise à jour:", this.CurrentClient.ImgSrc);
+            this.toastr.success("Image de profil mise à jour avec succès");
+          },
+          (error: any) => {
+            this.toastr.error("Erreur lors de l'upload de l'image de profil");
+          }
+        );
+      });
     }
   }
 
@@ -83,6 +182,36 @@ export class ClientsComponent implements OnInit {
   //     }
   //   );
   // }
+  // getClients() {
+  //   this.loader.show();
+  //   this.clientService.getClients().subscribe(
+  //     (response) => {
+  //       console.log("response getClients: ", response);
+  //       this.loader.hide();
+
+  //       this.Clients = response.map((client) => {
+  //         const imageUrl = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
+
+  //         // Vérifier l'existence de l'image pour chaque client
+  //         this.checkImageExists(imageUrl, (exists: boolean) => {
+  //           if (exists) {
+  //             client.ImgSrc = imageUrl;
+  //             console.log(`Image found for client ${client.ClientId}`);
+  //           } else {
+  //             client.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+  //             console.log(`Image not found for client ${client.ClientId}, using default.`);
+  //           }
+  //         });
+
+  //         return client;
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error("Error fetching clients: ", error);
+  //       this.loader.hide();
+  //     }
+  //   );
+  // }
   getClients() {
     this.loader.show();
     this.clientService.getClients().subscribe(
@@ -90,17 +219,30 @@ export class ClientsComponent implements OnInit {
         console.log("response getClients: ", response);
         this.loader.hide();
 
+        // Charger tous les clients
         this.Clients = response.map((client) => {
-          const imageUrl = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
+          const imageUrlJpg = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
+          const imageUrlJpeg = `${environment.url}/Pieces/${client.ClientId}/profile.jpeg`;
+          const imageUrlPng = `${environment.url}/Pieces/${client.ClientId}/profile.png`;
 
-          // Vérifier l'existence de l'image pour chaque client
-          this.checkImageExists(imageUrl, (exists: boolean) => {
-            if (exists) {
-              client.ImgSrc = imageUrl;
-              console.log(`Image found for client ${client.ClientId}`);
+          // Vérifie si l'image existe (.jpg, .jpeg, puis .png)
+          this.checkImageExists(imageUrlJpg, (existsJpg: boolean) => {
+            if (existsJpg) {
+              client.ImgSrc = imageUrlJpg; // Si le fichier .jpg existe
             } else {
-              client.ImgSrc = "assets/images/user/user.png"; // Image par défaut
-              console.log(`Image not found for client ${client.ClientId}, using default.`);
+              this.checkImageExists(imageUrlJpeg, (existsJpeg: boolean) => {
+                if (existsJpeg) {
+                  client.ImgSrc = imageUrlJpeg; // Si le fichier .jpeg existe
+                } else {
+                  this.checkImageExists(imageUrlPng, (existsPng: boolean) => {
+                    if (existsPng) {
+                      client.ImgSrc = imageUrlPng; // Si le fichier .png existe
+                    } else {
+                      client.ImgSrc = "assets/images/user/user.png"; // Sinon, afficher l'image par défaut
+                    }
+                  });
+                }
+              });
             }
           });
 
@@ -113,31 +255,44 @@ export class ClientsComponent implements OnInit {
       }
     );
   }
+
   navigateToDetails(clientId: string) {
     this.router.navigate(["/clients/details/", clientId]);
   }
   showHistory() {
     this.history = !this.history;
   }
-
   // OnClientSelected(id: string) {
-  //   if (this.IsEditingClient == true) {
+  //   if (this.IsEditingClient) {
   //     this.toastr.warning("Veuillez completer la modification");
   //     return;
   //   }
+
   //   this.Clients = this.Clients.map((item) => {
   //     item.IsSelected = false;
-  //     if (item.ClientId == id) {
+  //     if (item.ClientId === id) {
   //       item.IsSelected = true;
   //       this.CurrentClient = item;
-  //       this.CurrentClient.ImgSrc = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+
+  //       const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+
+  //       // Vérifie si l'image existe sur le serveur
+  //       this.checkImageExists(imageUrl, (exists: boolean) => {
+  //         if (exists) {
+  //           this.CurrentClient.ImgSrc = imageUrl;
+  //           console.log("Image found.");
+  //         } else {
+  //           this.CurrentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+  //           console.log("Image not found, using default.");
+  //         }
+  //       });
   //     }
   //     return item;
   //   });
   // }
   OnClientSelected(id: string) {
     if (this.IsEditingClient) {
-      this.toastr.warning("Veuillez completer la modification");
+      this.toastr.warning("Veuillez compléter la modification");
       return;
     }
 
@@ -147,33 +302,67 @@ export class ClientsComponent implements OnInit {
         item.IsSelected = true;
         this.CurrentClient = item;
 
-        const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg`;
+        // Gérer plusieurs extensions d'images
+        const extensions = ["jpg", "jpeg", "png"];
+        let imageFound = false;
 
-        // Vérifie si l'image existe sur le serveur
-        this.checkImageExists(imageUrl, (exists: boolean) => {
-          if (exists) {
-            this.CurrentClient.ImgSrc = imageUrl;
-            console.log("Image found.");
-          } else {
-            this.CurrentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
-            console.log("Image not found, using default.");
-          }
+        extensions.forEach((ext) => {
+          const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${ext}`;
+
+          // Vérifie si l'image existe sur le serveur
+          this.checkImageExists(imageUrl, (exists: boolean) => {
+            if (exists && !imageFound) {
+              this.CurrentClient.ImgSrc = imageUrl;
+              imageFound = true; // Marque comme trouvé pour éviter d'écraser
+              console.log("Image found:", imageUrl);
+            }
+          });
         });
+
+        // Si aucune image n'est trouvée, assigner l'image par défaut
+        if (!imageFound) {
+          this.CurrentClient.ImgSrc = "assets/images/user/user.png";
+          console.log("Image not found, using default.");
+        }
       }
       return item;
     });
   }
 
-  // Méthode pour vérifier l'existence de l'image
+  // Méthode pour vérifier l'existence de l'image sans générer d'erreur 404 visible dans la console
+  // checkImageExists(url: string, callback: (exists: boolean) => void) {
+  //   const img = new Image();
+
+  //   // Si l'image est chargée avec succès
+  //   img.onload = function () {
+  //     callback(true); // L'image existe
+  //   };
+
+  //   // Si l'image échoue à charger (404 ou autre erreur)
+  //   img.onerror = function () {
+  //     callback(false); // L'image n'existe pas
+  //   };
+
+  //   // Assigner l'URL de l'image à l'objet `Image` pour tenter de la charger
+  //   img.src = url;
+  // }
+  // Méthode pour vérifier l'existence de l'image sans générer d'erreur 404 visible dans la console
+  // Méthode pour vérifier l'existence de l'image sans générer d'erreur visible dans la console
   checkImageExists(url: string, callback: (exists: boolean) => void) {
-    const http = new XMLHttpRequest();
-    http.open("HEAD", url, true);
-    http.onreadystatechange = function () {
-      if (this.readyState === this.DONE) {
-        callback(this.status === 200);
-      }
+    const img = new Image();
+
+    // Si l'image est chargée avec succès
+    img.onload = () => {
+      callback(true); // L'image existe
     };
-    http.send();
+
+    // Si l'image échoue à charger (404 ou autre erreur)
+    img.onerror = () => {
+      callback(false); // L'image n'existe pas
+    };
+
+    // Désactiver la mise en cache pour éviter les erreurs dues à des images précédemment manquantes
+    img.src = `${url}?t=${new Date().getTime()}`;
   }
 
   sweetAlertDelete(id: string) {

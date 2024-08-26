@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -208,5 +208,21 @@ export class ClientService {
   UploadProfileImage(formData: FormData) {
     const url = `${environment.url}/UploadProfileImage`; // Remplacez par votre URL API
     return this.http.post(url, formData);
+  }
+  // DeleteProfileImage(clientId: string) {
+  //   const url = `${environment.url}/deleteProfileImage/${clientId}`;
+  //   return this.http.delete(url); // Envoie une requête DELETE avec seulement le ClientId
+  // }
+  checkImageExists(clientId: string, extension: string) {
+    const url = `${environment.url}/Pieces/${clientId}/profile.${extension}`;
+    return this.http.head(url).pipe(
+      map(() => true), // Si la requête HEAD réussit, l'image existe
+      catchError(() => of(false)) // Si erreur, l'image n'existe pas
+    );
+  }
+
+  DeleteProfileImage(clientId: string, extension: string) {
+    const url = `${environment.url}/deleteProfileImage/${clientId}/profile.${extension}`;
+    return this.http.delete(url); // Supprime l'image avec l'extension spécifiée
   }
 }

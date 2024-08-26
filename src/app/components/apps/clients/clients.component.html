@@ -82,7 +82,7 @@
                                   <img *ngIf="CurrentClient.ImgSrc == null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/user.png" alt="" />
                                   <!-- <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" /> -->
                                   <!-- <input class="updateimg" type="file" name="img" /> -->
-                                  <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" />
+                                  <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" />
                                   <div class="media-body mt-0">
                                     <h5>
                                       <span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span>
