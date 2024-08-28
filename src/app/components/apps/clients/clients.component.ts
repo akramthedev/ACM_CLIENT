@@ -221,30 +221,36 @@ export class ClientsComponent implements OnInit {
 
         // Charger tous les clients
         this.Clients = response.map((client) => {
-          const imageUrlJpg = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
-          const imageUrlJpeg = `${environment.url}/Pieces/${client.ClientId}/profile.jpeg`;
-          const imageUrlPng = `${environment.url}/Pieces/${client.ClientId}/profile.png`;
 
-          // Vérifie si l'image existe (.jpg, .jpeg, puis .png)
-          this.checkImageExists(imageUrlJpg, (existsJpg: boolean) => {
-            if (existsJpg) {
-              client.ImgSrc = imageUrlJpg; // Si le fichier .jpg existe
-            } else {
-              this.checkImageExists(imageUrlJpeg, (existsJpeg: boolean) => {
-                if (existsJpeg) {
-                  client.ImgSrc = imageUrlJpeg; // Si le fichier .jpeg existe
-                } else {
-                  this.checkImageExists(imageUrlPng, (existsPng: boolean) => {
-                    if (existsPng) {
-                      client.ImgSrc = imageUrlPng; // Si le fichier .png existe
-                    } else {
-                      client.ImgSrc = "assets/images/user/user.png"; // Sinon, afficher l'image par défaut
-                    }
-                  });
-                }
-              });
-            }
-          });
+          if (client.Photo == null)
+            client.ImgSrc = "assets/images/user/user.png";
+          else
+            client.ImgSrc = `${environment.url}/${client.Photo}`;
+
+          // const imageUrlJpg = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
+          // const imageUrlJpeg = `${environment.url}/Pieces/${client.ClientId}/profile.jpeg`;
+          // const imageUrlPng = `${environment.url}/Pieces/${client.ClientId}/profile.png`;
+
+          // // Vérifie si l'image existe (.jpg, .jpeg, puis .png)
+          // this.checkImageExists(imageUrlJpg, (existsJpg: boolean) => {
+          //   if (existsJpg) {
+          //     client.ImgSrc = imageUrlJpg; // Si le fichier .jpg existe
+          //   } else {
+          //     this.checkImageExists(imageUrlJpeg, (existsJpeg: boolean) => {
+          //       if (existsJpeg) {
+          //         client.ImgSrc = imageUrlJpeg; // Si le fichier .jpeg existe
+          //       } else {
+          //         this.checkImageExists(imageUrlPng, (existsPng: boolean) => {
+          //           if (existsPng) {
+          //             client.ImgSrc = imageUrlPng; // Si le fichier .png existe
+          //           } else {
+          //             client.ImgSrc = "assets/images/user/user.png"; // Sinon, afficher l'image par défaut
+          //           }
+          //         });
+          //       }
+          //     });
+          //   }
+          // });
 
           return client;
         });
@@ -302,28 +308,28 @@ export class ClientsComponent implements OnInit {
         item.IsSelected = true;
         this.CurrentClient = item;
 
-        // Gérer plusieurs extensions d'images
-        const extensions = ["jpg", "jpeg", "png"];
-        let imageFound = false;
+        // // Gérer plusieurs extensions d'images
+        // const extensions = ["jpg", "jpeg", "png"];
+        // let imageFound = false;
 
-        extensions.forEach((ext) => {
-          const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${ext}`;
+        // extensions.forEach((ext) => {
+        //   const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${ext}`;
 
-          // Vérifie si l'image existe sur le serveur
-          this.checkImageExists(imageUrl, (exists: boolean) => {
-            if (exists && !imageFound) {
-              this.CurrentClient.ImgSrc = imageUrl;
-              imageFound = true; // Marque comme trouvé pour éviter d'écraser
-              console.log("Image found:", imageUrl);
-            }
-          });
-        });
+        //   // Vérifie si l'image existe sur le serveur
+        //   this.checkImageExists(imageUrl, (exists: boolean) => {
+        //     if (exists && !imageFound) {
+        //       this.CurrentClient.ImgSrc = imageUrl;
+        //       imageFound = true; // Marque comme trouvé pour éviter d'écraser
+        //       console.log("Image found:", imageUrl);
+        //     }
+        //   });
+        // });
 
-        // Si aucune image n'est trouvée, assigner l'image par défaut
-        if (!imageFound) {
-          this.CurrentClient.ImgSrc = "assets/images/user/user.png";
-          console.log("Image not found, using default.");
-        }
+        // // Si aucune image n'est trouvée, assigner l'image par défaut
+        // if (!imageFound) {
+        //   this.CurrentClient.ImgSrc = "assets/images/user/user.png";
+        //   console.log("Image not found, using default.");
+        // }
       }
       return item;
     });
