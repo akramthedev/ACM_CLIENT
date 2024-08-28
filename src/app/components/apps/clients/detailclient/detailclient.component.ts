@@ -1346,15 +1346,38 @@ export class DetailclientComponent {
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
             this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
 
+            // // Check if profile image exists
+            // const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
+            // this.checkImageExists(profileImageUrl, (exists: boolean) => {
+            //   if (exists) {
+            //     this.currentClient.ImgSrc = profileImageUrl;
+            //   } else {
+            //     this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+            //   }
+            // });
             // Check if profile image exists
-            const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
-            this.checkImageExists(profileImageUrl, (exists: boolean) => {
-              if (exists) {
-                this.currentClient.ImgSrc = profileImageUrl;
-              } else {
-                this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+            const extensions = ["jpg", "jpeg", "png"];
+            let imageFound = false;
+
+            extensions.forEach((ext) => {
+              if (!imageFound) {
+                // Arrêter la vérification après avoir trouvé une image
+                const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.${ext}`;
+                this.checkImageExists(profileImageUrl, (exists: boolean) => {
+                  if (exists) {
+                    this.currentClient.ImgSrc = profileImageUrl;
+                    imageFound = true; // Marque comme trouvé pour éviter d'autres vérifications
+                  }
+                });
               }
             });
+
+            // Si aucune image n'est trouvée, utiliser l'image par défaut
+            setTimeout(() => {
+              if (!imageFound) {
+                this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+              }
+            }, 100); // Timeout pour permettre aux vérifications asynchrones de s'exécuter
 
             // get liste pieces
             this.enumService.GetPieces().subscribe(
