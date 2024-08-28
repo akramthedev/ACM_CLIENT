@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Clients'" [items]="['Apps']" [active_item]="'Clients'"></app-breadcrumb>
+<app-breadcrumb [title]="'Clients'" [active_item]="'Clients'"></app-breadcrumb>
 <!-- Container-fluid starts-->
 <div class="container-fluid">
   <div class="email-wrap bookmark-wrap">
@@ -57,11 +57,13 @@
                         <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12' : 'col-xl-4 xl-50 col-md-5'">
                           <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <!-- href="#v-pills-user"  -->
-                            <a *ngFor="let client of Clients" class="contact-tab-0 nav-link active" [id]="client.ClientId" data-bs-toggle="pill" href="javascript:void(0)" role="tab" aria-controls="v-pills-user" aria-selected="false" [class.active]="client.IsSelected != null && client.IsSelected" (click)="OnClientSelected(client.ClientId)">
+                            <a *ngFor="let client of Clients" class="contact-tab-0 nav-link active" [id]="client.ClientId" data-bs-toggle="pill" href="javascript:void(0)"
+                              role="tab" aria-controls="v-pills-user" aria-selected="false" [class.active]="client.IsSelected != null && client.IsSelected"
+                              (click)="OnClientSelected(client.ClientId)">
                               <div class="media">
                                 <!-- Photo -->
-                                <img *ngIf="client.ImgSrc != null" class="img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
-                                <img *ngIf="client.ImgSrc == null" class="img-50 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/2.png" alt="" />
+                                <img class="img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
+                                <!-- <img *ngIf="client.ImgSrc == null" class="img-50 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/2.png" alt="" /> -->
                                 <div class="media-body">
                                   <h6>
                                     <span class="first_name_0">{{ client.Prenom }} </span><span class="last_name_0">{{ client.Nom }}</span>
@@ -78,8 +80,8 @@
                             <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
                               <div class="profile-mail">
                                 <div class="media">
-                                  <img *ngIf="CurrentClient.ImgSrc != null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" />
-                                  <img *ngIf="CurrentClient.ImgSrc == null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/user.png" alt="" />
+                                  <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" style="cursor: pointer;" />
+                                  <!-- <img *ngIf="CurrentClient.ImgSrc == null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/user.png" alt="" /> -->
                                   <!-- <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" /> -->
                                   <!-- <input class="updateimg" type="file" name="img" /> -->
                                   <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" />
@@ -113,10 +115,12 @@
                                     <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
                                     <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
                                     <li>
-                                      Téléphone <span class="font-primary mobile_num_0"> {{ CurrentClient.Telephone1 }}{{ CurrentClient.Telephone1 != null && CurrentClient.Telephone1 != "" ? " / " + CurrentClient.Telephone1 : "" }} </span>
+                                      Téléphone <span class="font-primary mobile_num_0"> {{ CurrentClient.Telephone1 }}{{ CurrentClient.Telephone1 != null &&
+                                        CurrentClient.Telephone1 != "" ? " / " + CurrentClient.Telephone1 : "" }} </span>
                                     </li>
                                     <li>
-                                      Email <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / " + CurrentClient.Email2 : "" }} </span>
+                                      Email <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / "
+                                        + CurrentClient.Email2 : "" }} </span>
                                     </li>
                                     <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
                                     <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->
@@ -187,31 +191,35 @@
                       <div class="row list-persons">
                         <div class="col-xl-4 xl-50 col-md-5">
                           <div class="nav flex-column nav-pills" id="v-pills-tab1" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-iduser-tab" data-bs-toggle="pill" href="#v-pills-iduser" role="tab" aria-controls="v-pills-iduser" aria-selected="true">
+                            <a class="nav-link active" id="v-pills-iduser-tab" data-bs-toggle="pill" href="#v-pills-iduser" role="tab" aria-controls="v-pills-iduser"
+                              aria-selected="true">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/user.png" alt="" />
                                 <div class="media-body">
                                   <h6>Mark jecno</h6>
                                   <p>markjecno&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser1-tab" data-bs-toggle="pill" href="#v-pills-iduser1" role="tab" aria-controls="v-pills-iduser1" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser1-tab" data-bs-toggle="pill" href="#v-pills-iduser1" role="tab" aria-controls="v-pills-iduser1"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/3.jpg" alt="" />
                                 <div class="media-body">
                                   <h6>Jason Borne</h6>
                                   <p>jasonb&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser2-tab" data-bs-toggle="pill" href="#v-pills-iduser2" role="tab" aria-controls="v-pills-iduser2" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser2-tab" data-bs-toggle="pill" href="#v-pills-iduser2" role="tab" aria-controls="v-pills-iduser2"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/4.jpg" alt="" />
                                 <div class="media-body">
                                   <h6>Sarah Loren</h6>
                                   <p>barnes&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser3-tab" data-bs-toggle="pill" href="#v-pills-iduser3" role="tab" aria-controls="v-pills-iduser3" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser3-tab" data-bs-toggle="pill" href="#v-pills-iduser3" role="tab" aria-controls="v-pills-iduser3"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/10.jpg" alt="" />
                                 <div class="media-body">
@@ -328,31 +336,35 @@
                       <div class="row list-persons">
                         <div class="col-xl-4 xl-50 col-md-5">
                           <div class="nav flex-column nav-pills" id="v-pills-tab1" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-iduser-tab" data-bs-toggle="pill" href="#v-pills-iduser" role="tab" aria-controls="v-pills-iduser" aria-selected="true">
+                            <a class="nav-link active" id="v-pills-iduser-tab" data-bs-toggle="pill" href="#v-pills-iduser" role="tab" aria-controls="v-pills-iduser"
+                              aria-selected="true">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/user.png" alt="" />
                                 <div class="media-body">
                                   <h6>Mark jecno</h6>
                                   <p>markjecno&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser1-tab" data-bs-toggle="pill" href="#v-pills-iduser1" role="tab" aria-controls="v-pills-iduser1" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser1-tab" data-bs-toggle="pill" href="#v-pills-iduser1" role="tab" aria-controls="v-pills-iduser1"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/3.jpg" alt="" />
                                 <div class="media-body">
                                   <h6>Jason Borne</h6>
                                   <p>jasonb&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser2-tab" data-bs-toggle="pill" href="#v-pills-iduser2" role="tab" aria-controls="v-pills-iduser2" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser2-tab" data-bs-toggle="pill" href="#v-pills-iduser2" role="tab" aria-controls="v-pills-iduser2"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/4.jpg" alt="" />
                                 <div class="media-body">
                                   <h6>Sarah Loren</h6>
                                   <p>barnes&#64;gmail.com</p>
                                 </div>
-                              </div> </a
-                            ><a class="nav-link" id="v-pills-iduser3-tab" data-bs-toggle="pill" href="#v-pills-iduser3" role="tab" aria-controls="v-pills-iduser3" aria-selected="false">
+                              </div>
+                            </a><a class="nav-link" id="v-pills-iduser3-tab" data-bs-toggle="pill" href="#v-pills-iduser3" role="tab" aria-controls="v-pills-iduser3"
+                              aria-selected="false">
                               <div class="media">
                                 <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/10.jpg" alt="" />
                                 <div class="media-body">
@@ -462,9 +474,7 @@
                 <div id="right-history" [class.show]="history">
                   <div class="modal-header p-20" (click)="showHistory()">
                     <h6 class="modal-title w-100">
-                      Contact History<span class="pull-right"
-                        ><a class="closehistory" href="javascript:void(0)"><i class="icofont icofont-close"></i></a
-                      ></span>
+                      Contact History<span class="pull-right"><a class="closehistory" href="javascript:void(0)"><i class="icofont icofont-close"></i></a></span>
                     </h6>
                   </div>
                   <div class="history-details">
