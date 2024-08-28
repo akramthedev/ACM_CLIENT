@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import * as data from "../../../shared/data/todo/todo";
 import { ClientService } from "src/app/shared/services/client.service";
 import { NgxSpinnerService } from "ngx-spinner";
+import DataTables from "datatables.net";
 
 const Months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -27,7 +28,6 @@ export class TachesComponent implements OnInit {
   public isOpen: boolean = false;
   filter = "all"; // 'all', 'completed', 'pending', 'inProgress', 'trash'
   filteredTodos: any[] = [];
-
   public objToAdd: object = {
     text: "",
     client: "",
@@ -37,6 +37,7 @@ export class TachesComponent implements OnInit {
     badgeClass: "",
   };
   Clients: any[] = [];
+  AllClientTaches: any[] = [];
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
   constructor(private title: Title, private clientService: ClientService, private loader: NgxSpinnerService) {
@@ -62,10 +63,66 @@ export class TachesComponent implements OnInit {
     );
   }
 
+  getTasks() {
+    this.loader.show();
+    this.clientService.GetAllClientTaches().subscribe(
+      (response) => {
+        console.log("response getAllClientTaches: ", response);
+        this.loader.hide();
+        this.AllClientTaches = response;
+        this.initializeDataTable();
+      },
+      (error) => {
+        console.error("Error fetching allclienttaches: ", error);
+        this.loader.hide();
+      }
+    );
+  }
+  // initializeDataTable() {
+  //   setTimeout(() => {
+  //     $("#example").DataTable(); // Initialize DataTables on your table
+  //   }, 0);
+  // }
+  // initializeDataTable() {
+  //   setTimeout(() => {
+  //     if ($.fn.DataTable.isDataTable("#example")) {
+  //       $("#example").DataTable().destroy(); // Destroy existing DataTable instance
+  //     }
+  //     $("#example").DataTable(); // Initialize DataTables on your table
+  //   }, 0);
+  // }
+  initializeDataTable() {
+    setTimeout(() => {
+      // Détruire l'ancienne instance si elle existe
+      if ($.fn.DataTable.isDataTable("#example")) {
+        $("#example").DataTable().destroy();
+      }
+
+      // Initialiser DataTables avec les nouvelles données
+      $("#example").DataTable({
+        data: this.AllClientTaches,
+        columns: [
+          { data: "ClientNom", title: "Nom" },
+          { data: "ClientPrenom", title: "Prenom" },
+          { data: "TacheIntitule", title: "Tache" },
+          { data: "Numero_Ordre", title: "Numero Ordre" },
+          { data: "PrestationDesignation", title: "Prestation" },
+          { data: "MissionDesignation", title: "Mission" },
+          { data: "Status", title: "Status" },
+          { data: "AgentNom", title: "Agent" },
+        ],
+      });
+    }, 0);
+  }
   ngOnInit() {
     this.getClients();
+    this.getTasks();
     this.filteredTodos = this.todos;
   }
+  // ngAfterViewInit() {
+  //   // Initialize DataTables
+  //   $("#example").DataTable();
+  // }
   setFilter(status: string): void {
     this.filter = status;
     this.filterTodos();

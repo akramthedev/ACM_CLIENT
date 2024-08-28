@@ -28,12 +28,12 @@
                   <!-- <li>
                     <button class="btn btn-category" type="button" (click)="AddCategory.openModal()"><span class="title"> + Add Category</span></button>
                   </li> -->
-                  <li>
+                  <!-- <li>
                     <a class="show" id="pills-maroc-tab" data-bs-toggle="pill" href="#pills-maroc" role="tab" aria-controls="pills-maroc" aria-selected="false"><span class="title"> Installation maroc</span></a>
                   </li>
                   <li>
                     <a class="show" id="pills-france-tab" data-bs-toggle="pill" href="#pills-france" role="tab" aria-controls="pills-france" aria-selected="false"><span class="title">Retour en france</span></a>
-                  </li>
+                  </li> -->
                   <!-- <li><a href="javascript:void(0)"><span class="title">Favorites</span></a></li> -->
                 </ul>
               </div>
@@ -80,7 +80,9 @@
                                 <div class="media">
                                   <img *ngIf="CurrentClient.ImgSrc != null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" />
                                   <img *ngIf="CurrentClient.ImgSrc == null" class="img-100 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/user.png" alt="" />
-                                  <input class="updateimg" type="file" name="img" />
+                                  <!-- <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" /> -->
+                                  <!-- <input class="updateimg" type="file" name="img" /> -->
+                                  <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" />
                                   <div class="media-body mt-0">
                                     <h5>
                                       <span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span>
@@ -89,8 +91,8 @@
                                     <ul>
                                       <li><a href="javascript:void(0)" (click)="StartUpdateClient()">Modifier</a></li>
                                       <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
-                                      <li><a href="javascript:void(0)" (click)="showHistory()">Historique</a></li>
-                                      <li><a href="javascript:void(0)" (click)="Print.openModal()">Imprimer</a></li>
+                                      <!-- <li><a href="javascript:void(0)" (click)="showHistory()">Historique</a></li> -->
+                                      <!-- <li><a href="javascript:void(0)" (click)="Print.openModal()">Imprimer</a></li> -->
                                       <li><a href="javascript:void(0)" (click)="navigateToDetails(CurrentClient.ClientId)">Détails</a></li>
                                     </ul>
                                   </div>

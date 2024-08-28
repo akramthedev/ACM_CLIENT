@@ -42,6 +42,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     config.keyboard = false;
     this.ssnForm = this.fb.group({
       NumeroSS: ["", [Validators.required, ssnValidator()]],
+      ConjointNumeroSS: ["", [ssnValidator()]], // Champ pour le conjoint
     });
   }
   telInputObject(obj) {
@@ -148,7 +149,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     if (isChecked) {
       // Add task if it does not already exist
-      const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === tacheId);
+      const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === tacheId);
 
       if (!existingTache) {
         this.startAddClientTache(tacheId, prestationId);
@@ -156,11 +157,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
       }
     } else {
       // Remove task
-      this.clientData.ClientTache = this.clientData.ClientTache.filter((tache) => tache.TacheId !== tacheId);
+      this.clientData.ClientTaches = this.clientData.ClientTaches.filter((tache) => tache.TacheId !== tacheId);
       console.log("Removed tache with TacheId: ", tacheId);
     }
 
-    console.log("Updated ClientTache: ", this.clientData.ClientTache);
+    console.log("Updated ClientTache: ", this.clientData.ClientTaches);
   }
   getServices() {
     this.loader.show();
@@ -226,17 +227,47 @@ export class AddClientComponent implements OnInit, OnDestroy {
       }
     );
   }
+  formatNom() {
+    if (this.clientData.Nom) {
+      this.clientData.Nom = this.clientData.Nom.toUpperCase();
+    }
+  }
+
+  formatPrenom() {
+    if (this.clientData.Prenom) {
+      this.clientData.Prenom = this.clientData.Prenom.charAt(0).toUpperCase() + this.clientData.Prenom.slice(1).toLowerCase();
+    }
+  }
+
+  validatePhoneNumber(country: string, event: any) {
+    let value = event.target.value;
+
+    // Pour le Maroc, vérifier si le numéro comporte 9 chiffres après l'indicatif
+    if (country === "maroc" && value.length > 9) {
+      this.toastr.warning("Le numéro de téléphone pour le Maroc doit comporter 9 chiffres après l'indicatif.");
+      event.target.value = value.slice(0, 9); // Limiter à 9 chiffres
+    }
+
+    // Pour la France, vérifier si le numéro comporte 9 chiffres après l'indicatif
+    if (country === "france" && value.length > 9) {
+      this.toastr.warning("Le numéro de téléphone pour la France doit comporter 9 chiffres après l'indicatif.");
+      event.target.value = value.slice(0, 9); // Limiter à 9 chiffres
+    }
+  }
   openModal() {
     console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
+      // Réinitialiser les variables
+      this.selectedMission = null;
+      this.showPrestations = false;
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
       this.clientData.Conjoint = [];
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
       this.clientData.ClientMissionPrestation = [];
-      this.clientData.ClientTache = [];
+      this.clientData.ClientTaches = [];
       console.log("this.clientData: ", this.clientData);
 
       this.modalService
@@ -278,16 +309,111 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+  // nextStep() {
+  //   // if (this.currentStep < 5) {
+  //   //   if (this.currentStep < 2) {
+  //   //     this.submitAddClientMission();
+  //   //   }
+
+  //   //   this.currentStep++;
+  //   // }
+  //   //celui ci marche
+  //   if (this.currentStep < 5) {
+  //     if (this.currentStep === 1 && !this.selectedMission) {
+  //       this.toastr.warning("Veuillez sélectionner une mission avant de continuer");
+  //       return; // Empêche de passer à l'étape suivante si la mission n'est pas sélectionnée
+  //     }
+
+  //     if (this.currentStep === 2) {
+  //       this.submitAddClientMission();
+  //     }
+
+  //     this.currentStep++;
+  //   }
+  // }
   nextStep() {
     if (this.currentStep < 5) {
-      if (this.currentStep < 2) {
+      // Étape 1 : Validation de la mission sélectionnée
+      if (this.currentStep === 1) {
+        if (!this.selectedMission) {
+          this.toastr.warning("Veuillez sélectionner une mission avant de continuer");
+          return; // Arrête l'exécution ici si la mission n'est pas sélectionnée
+        }
+
+        // Soumettre la mission seulement si elle est sélectionnée
         this.submitAddClientMission();
       }
 
+      // Étape 2 : Validation des champs nom, prénom, et numéro SS du client
+      if (this.currentStep === 2) {
+        const nomRempli = this.clientData?.Nom?.trim() !== "";
+        const prenomRempli = this.clientData?.Prenom?.trim() !== "";
+        //const numeroSSRempli = this.ssnForm.get("NumeroSS").valid;
+        const numeroSSRempli = this.clientData?.NumeroSS?.trim() !== "";
+
+        if (!this.clientData.Nom || !this.clientData.Prenom) {
+          this.toastr.warning("Veuillez remplir le nom, prénom avant de continuer");
+          return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
+        }
+        // if (!nomRempli || !prenomRempli || !numeroSSRempli) {
+        //   this.toastr.warning("Veuillez remplir le nom, prénom avant de continuer");
+        //   return; // Empêche le passage à l'étape suivante si ces champs ne sont pas remplis
+        // }
+
+        // Vérification du format du numéro SS si saisi
+        if (this.clientData.NumeroSS && !this.isValidSSN(this.clientData.NumeroSS)) {
+          this.toastr.warning("Le format du numéro SS est invalide. Il doit comporter 13 chiffres suivis de 2 chiffres de clé.");
+          return; // Empêche le passage à l'étape suivante si le format du numéro SS est incorrect
+        }
+        // Vérifier que les emails ne sont pas identiques ou vides
+        if (!this.validateEmails()) {
+          return; // Empêche le passage à l'étape suivante si les emails sont identiques
+        }
+        // Si "Oui" est sélectionné pour hasConjoint, valider les champs du conjoint
+        if (this.clientData.HasConjoint === "oui") {
+          // const conjointNomRempli = this.newConjoint?.Nom?.trim() !== "";
+          // const conjointPrenomRempli = this.newConjoint?.Prenom?.trim() !== "";
+          // const conjointNumeroSSRempli = this.newConjoint?.NumeroSS?.trim() !== "";
+
+          // if (!conjointNomRempli || !conjointPrenomRempli || !conjointNumeroSSRempli) {
+          //   this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
+          //   return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
+          // }
+          if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+            this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
+            return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
+          }
+
+          // Ajouter le conjoint si tous les champs sont valides
+          this.submitAddConjoint();
+        }
+
+        // Si "Non" est sélectionné pour hasConjoint, réinitialiser les données du conjoint
+        if (this.clientData.HasConjoint === "non") {
+          this.newConjoint = null;
+        }
+      }
+
+      // Seulement si toutes les validations passent, incrémenter l'étape
       this.currentStep++;
     }
   }
 
+  validateEmails() {
+    // Si les deux emails sont vides ou nulls, permettre de passer
+    if ((!this.clientData.Email1 || this.clientData.Email1.trim() === "") && (!this.clientData.Email2 || this.clientData.Email2.trim() === "")) {
+      return true;
+    }
+
+    // Si les deux emails ne sont pas vides et identiques, afficher un message d'erreur
+    if (this.clientData.Email1 === this.clientData.Email2) {
+      this.toastr.warning("Les adresses email 1 et email 2 ne doivent pas être identiques.");
+      return false;
+    }
+
+    // Si les emails sont différents ou l'un d'eux est vide, continuer
+    return true;
+  }
   previousStep() {
     if (this.currentStep > 1) {
       this.currentStep--;
@@ -314,17 +440,53 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     console.log("Start add conjoint : ", this.newConjoint);
   }
+  // submitAddConjoint() {
+  //   if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
+  //     this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
+  //     return;
+  //   }
+  //   console.log("submit add conjoint : ", this.newConjoint);
+  //   this.clientData.Conjoint.push(this.newConjoint);
+  //   this.newConjoint = null;
+  // }
+  //marche submitAddConjoint() {
+  //   if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+  //     this.toastr.warning("Veuillez saisir le nom, prénom, et numéro SS du conjoint");
+  //     return;
+  //   }
+
+  //   console.log("submit add conjoint : ", this.newConjoint);
+  //   this.clientData.Conjoint.push(this.newConjoint);
+  //   this.newConjoint = null; // Réinitialiser le formulaire conjoint après ajout
+  // }
   submitAddConjoint() {
-    if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
-      this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
+    if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+      this.toastr.warning("Veuillez remplir toutes les informations du conjoint avant de continuer.");
       return;
     }
-    console.log("submit add conjoint : ", this.newConjoint);
+    // Vérification du numéro SS du conjoint à travers le validateur de ssnForm
+    if (this.ssnForm.get("ConjointNumeroSS").invalid) {
+      this.toastr.warning("Le numéro SS du conjoint est invalide.");
+      return;
+    }
+    // Ajouter le conjoint au clientData
+    if (!this.clientData.Conjoint) {
+      this.clientData.Conjoint = [];
+    }
     this.clientData.Conjoint.push(this.newConjoint);
-    this.newConjoint = null;
   }
+
   cancelAddConjoint() {
     this.newConjoint = null;
+  }
+  onHasConjointChange(value: string) {
+    if (value === "non") {
+      // Réinitialiser les données du conjoint lorsque "Non" est sélectionné
+      this.cancelAddConjoint();
+    } else if (value === "oui") {
+      // Initialiser un nouveau conjoint s'il n'y en a pas déjà un
+      this.startAddConjoint();
+    }
   }
   startAddProche() {
     this.newProche = {
@@ -364,15 +526,38 @@ export class AddClientComponent implements OnInit, OnDestroy {
       ClientId: this.clientData.ClientId,
     };
   }
+  // submitAddClientMission() {
+  //   if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
+  //     this.toastr.warning("Veuillez verifier submitClient du ClientMission");
+  //     return;
+  //   }
+  //   console.log(this.newClientMission);
+  //   this.clientData.ClientMission.push(this.newClientMission);
+  //   console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
+  //   this.newClientMission = null;
+  // }
   submitAddClientMission() {
-    if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
-      this.toastr.warning("Veuillez verifier submitClient du ClientMission");
-      return;
+    // Vérifie si clientData et ClientId sont définis
+    if (!this.clientData || !this.clientData.ClientId) {
+      this.toastr.warning("Erreur : Le ClientId n'est pas défini. Veuillez vérifier les informations du client.");
+      return; // Arrêter si ClientId est null ou undefined
     }
-    console.log(this.newClientMission);
+
+    if (!this.newClientMission) {
+      this.newClientMission = {
+        ClientMissionId: uuidv4(),
+        MissionId: this.selectedMission,
+        ClientId: this.clientData.ClientId,
+      };
+    }
+
+    // Ajouter la nouvelle mission au tableau des missions du client
+    if (!this.clientData.ClientMission) {
+      this.clientData.ClientMission = [];
+    }
+
     this.clientData.ClientMission.push(this.newClientMission);
-    console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
-    this.newClientMission = null;
+    this.newClientMission = null; // Réinitialiser après ajout
   }
   cancelAddClientMission() {
     this.newClientMission = null;
@@ -420,10 +605,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
     // if (!this.clientData.ClientTache) {
     //   this.clientData.ClientTache = [];
     // }
-    const existingTache = this.clientData.ClientTache.find((tache) => tache.TacheId === this.newClientTache.TacheId);
+    const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === this.newClientTache.TacheId);
     console.log(this.newClientTache);
     if (!existingTache) {
-      this.clientData.ClientTache.push(this.newClientTache);
+      this.clientData.ClientTaches.push(this.newClientTache);
       console.log("Submit AddClientTache: ", this.newClientTache);
     } else {
       console.log("Tache already exists: ", existingTache);
@@ -435,9 +620,31 @@ export class AddClientComponent implements OnInit, OnDestroy {
   cancelAddClientTache() {
     this.newClientTache = null;
   }
-
+  isValidSSN(ssn: string): boolean {
+    const ssnRegex = /^\d{13}\/\d{2}$/; // Exige 13 chiffres suivis de '/2 chiffres'
+    return ssnRegex.test(ssn);
+  }
   onSave() {
     if (this.isFormValid()) {
+      this.loader.show();
+      // // Ajouter l'indicatif téléphonique pour le Maroc (+212) et la France (+33)
+      // const phone1WithCode = `+212${this.clientData.Telephone1}`;
+      // const phone2WithCode = `+33${this.clientData.Telephone2}`;
+      // // Mettre à jour les champs Téléphone1 et Téléphone2 avec les indicatifs
+      // this.clientData.Telephone1 = phone1WithCode;
+      // this.clientData.Telephone2 = phone2WithCode;
+      // Check if the phone number fields are not empty before adding the country code
+      if (this.clientData.Telephone1 && this.clientData.Telephone1.trim() !== "") {
+        this.clientData.Telephone1 = `+212${this.clientData.Telephone1}`;
+      } else {
+        this.clientData.Telephone1 = ""; // Leave empty if not provided
+      }
+
+      if (this.clientData.Telephone2 && this.clientData.Telephone2.trim() !== "") {
+        this.clientData.Telephone2 = `+33${this.clientData.Telephone2}`;
+      } else {
+        this.clientData.Telephone2 = ""; // Leave empty if not provided
+      }
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
       }
@@ -450,14 +657,17 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
+          console.log(this.clientData);
           console.log("Client ajouté avec succès", response);
           this.toastr.success("Client ajouté avec succès");
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
+          this.loader.hide();
         },
         (error) => {
+          this.loader.hide();
           console.error("Erreur lors de l'ajout du client", error);
           Swal.fire("Erreur", "Erreur lors de l'ajout du client", "error");
         }
@@ -512,5 +722,40 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   private resetForm() {
     this.currentStep = 1;
+    this.prestationStates = {};
+    this.tacheStates = {};
+    this.selectedMission = null; // Réinitialiser la mission sélectionnée
+    this.showPrestations = false; // Réinitialiser l'affichage des prestations
+    this.newProche = null;
+    this.newConjoint = null;
+    this.newClientMission = null;
+    this.newClientMissionPrestation = null;
+    this.newClientTache = null;
+    // Réinitialiser les données client
+    this.clientData = {
+      CabinetId: null,
+      ClientId: null,
+      HasConjoint: null,
+      Nom: null,
+      Prenom: null,
+      DateNaissance: null,
+      DateResidence: null,
+      Profession: null,
+      DateRetraite: null,
+      NumeroSS: null,
+      SituationFamiliale: null,
+      RegimeMatrimonial: null,
+      Adresse: null,
+      Email1: null,
+      Email2: null,
+      Telephone1: null,
+      Telephone2: null,
+      ClientMission: [],
+      ClientMissionPrestation: [],
+      ClientTaches: [],
+      Conjoint: [],
+      Proches: [],
+    };
+    this.ssnForm.reset();
   }
 }

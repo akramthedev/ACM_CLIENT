@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -167,8 +167,62 @@ export class ClientService {
     let url = `${environment.url}/GetClientTaches?ClientId=${clientId}`;
     return this.http.get(url);
   }
+  GetClientTachesSimple(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientTachesSimple?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  GetAllClientTaches(): Observable<any> {
+    let url = `${environment.url}/GetAllClientTaches?`;
+    return this.http.get(url);
+  }
   GetLettreMission(clientMissionId: string): Observable<Blob> {
     let url = `${environment.url}/GetLettreMission/${clientMissionId}`;
     return this.http.get(url, { responseType: "blob" });
+  }
+  CreateClientTache(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientTache?`;
+    return this.http.post(url, data);
+  }
+  CreateClientTacheCustom(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientTacheCustom?`;
+    return this.http.post(url, data);
+  }
+  UpdateClientTache(data: any): Observable<any> {
+    console.log("UpdateClientTache.data: ", data);
+    let url = `${environment.url}/UpdateClientTache?`;
+    return this.http.put<any>(url, data);
+  }
+  DeleteClientTache(ClientTacheId: string) {
+    let url = `${environment.url}/DeleteClientTache/${ClientTacheId}`;
+    return this.http.delete(url);
+  }
+  SentEmail() {
+    let url = `${environment.url}/email?`;
+    return this.http.get(url, { responseType: "text" });
+  }
+  SentEmail2(to: string, subject: string, html: string) {
+    const url = `${environment.url}/email2?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}&html=${encodeURIComponent(html)}`;
+    return this.http.get(url, { responseType: "text" });
+  }
+
+  UploadProfileImage(formData: FormData) {
+    const url = `${environment.url}/UploadProfileImage`; // Remplacez par votre URL API
+    return this.http.post(url, formData);
+  }
+  // DeleteProfileImage(clientId: string) {
+  //   const url = `${environment.url}/deleteProfileImage/${clientId}`;
+  //   return this.http.delete(url); // Envoie une requête DELETE avec seulement le ClientId
+  // }
+  checkImageExists(clientId: string, extension: string) {
+    const url = `${environment.url}/Pieces/${clientId}/profile.${extension}`;
+    return this.http.head(url).pipe(
+      map(() => true), // Si la requête HEAD réussit, l'image existe
+      catchError(() => of(false)) // Si erreur, l'image n'existe pas
+    );
+  }
+
+  DeleteProfileImage(clientId: string, extension: string) {
+    const url = `${environment.url}/deleteProfileImage/${clientId}/profile.${extension}`;
+    return this.http.delete(url); // Supprime l'image avec l'extension spécifiée
   }
 }

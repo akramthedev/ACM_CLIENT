@@ -878,8 +878,8 @@ export let orders: ChartOptions | any = {
 
 export let purchase = {
   icon: "cart",
-  counter: "10,000",
-  name: "Purchase",
+  counter: "4507",
+  name: "Tache",
   font: "secondary",
   pr: "-20",
 };
@@ -895,7 +895,7 @@ export let salesReturn = {
 export let sales = {
   icon: "tag",
   counter: "4,200",
-  name: "Sales",
+  name: "Client",
   font: "primary",
   pr: "+70",
 };

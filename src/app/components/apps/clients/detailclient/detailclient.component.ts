@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Client, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
+import { Client, ClientTache, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
 import { CustomTable, CustomTableColumn, CustomTableColumnInputOption } from "src/app/shared/model/models.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
@@ -13,6 +13,7 @@ import { ClientService } from "src/app/shared/services/client.service";
 import { EnumService } from "src/app/shared/services/enum.service";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-detailclient",
@@ -28,6 +29,7 @@ export class DetailclientComponent {
   filtredClientPieces: any[] = [];
   filterPiecesText: string = "";
   Pieces: Piece[] = [];
+  ClientTaches: ClientTache[] = [];
 
   constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
     config.backdrop = "static";
@@ -90,7 +92,7 @@ export class DetailclientComponent {
         { field: "DateAchat", header: "Date d'achat", dataType: "date", inputOptions: { type: "date", required: false } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Duree", header: "Durée (Année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, max: 1, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, max: 1, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -126,7 +128,7 @@ export class DetailclientComponent {
         { field: "Charges", header: "Charges (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "Duree", header: "Durée (année)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -176,7 +178,7 @@ export class DetailclientComponent {
         //     ],
         //   },
         // },
-        { field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
+        //{ field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
 
         { field: "Particularite", header: "Dividende", dataType: "number", inputOptions: { type: "number", required: false } },
         { field: "action", header: "Action", dataType: null },
@@ -340,7 +342,7 @@ export class DetailclientComponent {
         { field: "Designation", header: "Désignation", dataType: "string", inputOptions: { type: "text", required: true } },
         { field: "CapitalEmprunte", header: "Capital emprunté", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "DureeMois", header: "Durée (Mois)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "Taux", header: "Taux", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "Taux", header: "Taux (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         {
           field: "AGarantieDeces",
           header: "Garantie Décès",
@@ -419,7 +421,7 @@ export class DetailclientComponent {
         { field: "Detenteur", header: "Détenteur", dataType: "string", inputOptions: { type: "text", required: false } },
         { field: "RevenusDistribue", header: "Revenus distribués", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "FiscaliteOuRevenue", header: "Fiscalité ou revenu", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "TauxRevalorisation", header: "Taux de révalorisation", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
+        { field: "TauxRevalorisation", header: "Taux de révalorisation (%)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 0.1 } },
         { field: "action", header: "Action", dataType: null },
       ],
     },
@@ -603,7 +605,7 @@ export class DetailclientComponent {
       columns: [
         {
           field: "Sexe",
-          header: "Sexe",
+          header: "Personne",
           dataType: "string",
           inputOptions: {
             type: "select",
@@ -611,8 +613,8 @@ export class DetailclientComponent {
             selectValue: "key",
             selectLibelle: "libelle",
             selectData: [
-              { key: "homme", libelle: "Homme" },
-              { key: "femme", libelle: "Femme" },
+              { key: "Monsieur", libelle: "Monsieur" },
+              { key: "Madame", libelle: "Madame" },
             ],
           },
         },
@@ -639,7 +641,7 @@ export class DetailclientComponent {
             ],
           },
         },
-        { field: "Montant", header: "Montant", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+        { field: "Montant", header: "Montant (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
         { field: "action", header: "Action", dataType: null },
       ],
     },
@@ -780,9 +782,37 @@ export class DetailclientComponent {
   //#region Fiscale
   oldParticulariteFiscale: string = null;
   particulariteFiscaleChanged: boolean = false;
-  //situationAdministrativeChanged: boolean = false;
+  situationAdministrativeChanged: boolean = false;
 
   //#endregion Fiscale
+
+  //#region SituationAdministrative
+  areAllRadioValuesNull(): boolean {
+    return (
+      this.currentClient.CFE == null &&
+      this.currentClient.PASSEPORT == null &&
+      this.currentClient.Cotisation == null &&
+      this.currentClient.CarteSejour == null &&
+      this.currentClient.Reversion == null &&
+      this.currentClient.PermisConduire == null &&
+      this.currentClient.CNSS == null &&
+      this.currentClient.AssuranceAuto == null &&
+      this.currentClient.CNAREFE == null &&
+      this.currentClient.AssuranceHabitation == null &&
+      this.currentClient.CAPITONE == null &&
+      this.currentClient.InscriptionConsulat == null &&
+      this.currentClient.AssuranceRapatriement == null &&
+      this.currentClient.CPAM == null &&
+      this.currentClient.MutuelleFrancaise == null &&
+      this.currentClient.CSG_CRDS == null
+    );
+  }
+
+  shouldShowModifyButton(): boolean {
+    return this.situationAdministrativeChanged || this.areAllRadioValuesNull();
+  }
+
+  //#endregion SituationAdministrative
 
   //#region Proche
   @ViewChild("DialogProche") public DialogProche!: any;
@@ -974,6 +1004,7 @@ export class DetailclientComponent {
     //{ field: "Charge", header: "A Charge fiscalement", dataType: "bool", TextTrue: "Oui", TextFalse: "Non", visible: true, inputOptions: { type: "checkbox", required: true, selectValue: "key", selectLibelle: "libelle", selectData: [{ key: true, libelle: "Oui" }, { key: false, libelle: "Non" },], }, },
     { field: "NumeroSS", header: "Numéro SS", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
     { field: "DateRetraite", header: "Date de Retraite", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
+    { field: "DateResidence", header: "Date de Residence fiscale", dataType: "date", visible: false, inputOptions: { type: "date", required: false } },
     {
       field: "SituationFamiliale",
       header: "Situation Familiale",
@@ -986,9 +1017,12 @@ export class DetailclientComponent {
         selectLibelle: "libelle",
         selectData: [
           { key: "Marié", libelle: "Marié" },
+          { key: "Mariée", libelle: "Mariée" },
           { key: "Célibataire", libelle: "Célibataire" },
           { key: "Divorcé", libelle: "Divorcé" },
+          { key: "Divorcée", libelle: "Divorcée" },
           { key: "Veuf", libelle: "Veuf" },
+          { key: "Veuve", libelle: "Veuve" },
           { key: "Union libre", libelle: "Union libre" },
           { key: "PACS", libelle: "PACS" },
         ],
@@ -1225,6 +1259,7 @@ export class DetailclientComponent {
     if (!data.DateNaissance) data.DateNaissance = null;
     if (!data.DateRetraite) data.DateRetraite = null;
     if (!data.DateMariage) data.DateMariage = null;
+    if (!data.DateResidence) data.DateResidence = null;
   }
   onNavChange(changeEvent: NgbNavChangeEvent) {
     // console.log("onNavChange changeEvent: ", changeEvent)
@@ -1309,6 +1344,40 @@ export class DetailclientComponent {
             this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
             this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
+            this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
+
+            // // Check if profile image exists
+            // const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
+            // this.checkImageExists(profileImageUrl, (exists: boolean) => {
+            //   if (exists) {
+            //     this.currentClient.ImgSrc = profileImageUrl;
+            //   } else {
+            //     this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+            //   }
+            // });
+            // Check if profile image exists
+            const extensions = ["jpg", "jpeg", "png"];
+            let imageFound = false;
+
+            extensions.forEach((ext) => {
+              if (!imageFound) {
+                // Arrêter la vérification après avoir trouvé une image
+                const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.${ext}`;
+                this.checkImageExists(profileImageUrl, (exists: boolean) => {
+                  if (exists) {
+                    this.currentClient.ImgSrc = profileImageUrl;
+                    imageFound = true; // Marque comme trouvé pour éviter d'autres vérifications
+                  }
+                });
+              }
+            });
+
+            // Si aucune image n'est trouvée, utiliser l'image par défaut
+            setTimeout(() => {
+              if (!imageFound) {
+                this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+              }
+            }, 100); // Timeout pour permettre aux vérifications asynchrones de s'exécuter
 
             // get liste pieces
             this.enumService.GetPieces().subscribe(
@@ -1320,6 +1389,12 @@ export class DetailclientComponent {
                 this.loader.hide();
               }
             );
+
+            //get ClientTache
+            this.clientService.GetClientTachesSimple(clientId).subscribe((responseClientTache) => {
+              console.log("responseClientTache : ", responseClientTache);
+              this.ClientTaches = responseClientTache;
+            });
           }
         },
         (error) => {
@@ -1332,6 +1407,17 @@ export class DetailclientComponent {
         }
       );
     });
+  }
+  // Méthode pour vérifier l'existence de l'image
+  checkImageExists(url: string, callback: (exists: boolean) => void) {
+    const http = new XMLHttpRequest();
+    http.open("HEAD", url, true);
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        callback(this.status === 200);
+      }
+    };
+    http.send();
   }
 
   //#region ImportPiece
@@ -1420,6 +1506,246 @@ export class DetailclientComponent {
   };
   //#endregion ImportPiece
 
+  //#region Task
+  @ViewChild("DialogTask") public DialogTask!: any;
+  tablesTasks: CustomTable[] = [
+    {
+      title: "Taches",
+      type: null,
+      noDataMessage: "Aucune tache affecter",
+      columns: [
+        { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Commentaire", header: "Commentaire", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
+        {
+          field: "Status",
+          header: "Status",
+          dataType: "string",
+          visible: true,
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "En attente", libelle: "En attente" },
+              { key: "En cours", libelle: "En cours" },
+              { key: "Terminé", libelle: "Terminé" },
+            ],
+          },
+        },
+        {
+          field: "AgentResposable",
+          header: "Agent",
+          dataType: "string",
+          visible: true,
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "3d9d1ac0-ac20-469e-be24-97cb3c8c5187", libelle: "Radouane" },
+              { key: "a4d50d3f-cdfb-44f4-86e7-411f9428fff7", libelle: "Cecile" },
+              { key: "c1fa6c8b-ed6a-4416-8f1d-7b8ed980575b", libelle: "Manal" },
+              { key: "8ea98a14-b480-4743-b214-25eeba35a4e8", libelle: "Magali" },
+            ],
+          },
+        },
+        { field: "action", header: "Action", visible: true, dataType: null },
+      ],
+    },
+  ];
+  getAgentValueByKey(key: string, options: any[]): string {
+    const normalizedKey = key.toLowerCase();
+    const option = options.find((opt) => opt.key.toLowerCase() === normalizedKey);
+    return option ? option.libelle : "Inconnu";
+  }
+  getAgentLibelleByKey(key: string): string {
+    const agentOptions = this.tablesTasks.find((x) => x.title === "Taches").columns.find((col) => col.field === "AgentResposable").inputOptions.selectData;
+
+    if (!key) {
+      console.warn("La clé est manquante ou invalide:", key);
+      return "Inconnu";
+    }
+
+    const normalizedKey = key.trim().toLowerCase(); // Normaliser la clé en minuscules
+    const agent = agentOptions.find((item) => item.key.trim().toLowerCase() === normalizedKey);
+
+    if (agent) {
+      return agent.libelle; // Retourne le libellé si une correspondance est trouvée
+    } else {
+      console.warn("Aucune correspondance trouvée pour la clé:", normalizedKey);
+      return "Inconnu";
+    }
+  }
+  GetTasks() {
+    this.currentClient.ClientTaches = this.ClientTaches;
+    return this.currentClient.ClientTaches;
+    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))  this.currentClient.
+  }
+  dialogTask: {
+    data: ClientTache;
+    isEditing: boolean;
+    title: string;
+    Inputs: any[];
+    Open: Function;
+    Submit: Function;
+    Close: Function;
+    Clear: Function;
+  } = {
+    data: null,
+    isEditing: null,
+    title: null,
+    Inputs: [],
+    Open: (id: string | null) => {
+      if (id == null) {
+        // create task
+        this.dialogTask.title = "Creation de la tache";
+        this.dialogTask.isEditing = false;
+        this.dialogTask.data = {
+          ClientTacheId: uuidv4(),
+          ClientMissionPrestationId: null,
+          ClientMissionId: null,
+          TacheId: null,
+        };
+
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
+        console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));
+      } else {
+        // edit task
+        this.dialogTask.isEditing = true;
+        // get task data
+        let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
+        this.dialogTask.title = "Modifer la Tache";
+        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
+        this.dialogTask.data = structuredClone(p);
+        console.log("la valeur de Agent", this.dialogTask.data.AgentResposable);
+        if (this.dialogTask.data.AgentResposable) {
+          this.dialogTask.data.AgentResposable = this.dialogTask.data.AgentResposable.toLowerCase();
+        }
+      }
+      this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+      console.log("this.dialogTask.data: ", this.dialogTask.data);
+    },
+    Submit: () => {
+      console.log("sublit: this.dialogTask.data: ", this.dialogTask.data);
+      // return;
+      if (!this.dialogTask.isEditing) {
+        // submit create
+        this.loader.show();
+        this.clientService.CreateClientTacheCustom(this.dialogTask.data).subscribe(
+          (response) => {
+            console.log("response CreateTask: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de création du task");
+            } else {
+              this.toastr.success("Task ajouté avec succès");
+              this.currentClient.ClientTaches.push(this.dialogTask.data);
+              this.dialogTask.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur CreateTask: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de creation du task");
+          }
+        );
+      } else {
+        // submit update
+
+        const originalTask = this.currentClient.ClientTaches.find((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+        const originalStatus = originalTask ? originalTask.Status : null; // Save original status
+
+        this.loader.show();
+        this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
+          (response) => {
+            console.log("response UpdateClientTache: ", response);
+            this.loader.hide();
+            if (response == null && response == false) {
+              this.toastr.error("Erreur de modification du CleintTache");
+            } else {
+              this.toastr.success("ClientTache modifié avec succès");
+              // this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
+              //   if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
+              //   return item;
+              // });
+              // Update the task in the list
+              const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+              if (index !== -1) {
+                this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
+              }
+
+              // Check if the status changed from something else to "Terminé" and send an email
+              if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
+                this.clientService.SentEmail2("amine.laghlabi@e-polytechnique.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
+                  (emailResponse) => {
+                    console.log("Email sent successfully: ", emailResponse);
+                  },
+                  (emailError) => {
+                    console.error("Error sending email: ", emailError);
+                  }
+                );
+              }
+              this.dialogTask.Close();
+              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            }
+          },
+          (error) => {
+            console.error("Erreur UpdateClientTask: ", error);
+            this.loader.hide();
+            this.toastr.error(error?.error, "Erreur de modification du clientTask");
+          }
+        );
+      }
+    },
+    Close: () => {
+      this.modalService.dismissAll();
+      this.dialogTask.Clear();
+    },
+    Clear: () => {
+      this.dialogTask.title = null;
+      this.dialogTask.data = null;
+      this.dialogTask.Inputs = [];
+      this.dialogTask.isEditing = null;
+    },
+  };
+  DeleteTask(id: string) {
+    console.log("delete task cliquer");
+    // Utilisez une boîte de dialogue de confirmation si nécessaire
+    if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+      this.clientService.DeleteClientTache(id).subscribe(
+        (response) => {
+          console.log("Delete ClientTache response : ", response);
+          this.toastr.success("Task supprimé avec succès");
+          //this.currentClient.ClientTaches = this.currentClient.ClientTaches.filter((x) => x.ClientTacheId !== id);
+          const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === id);
+
+          // Si l'élément est trouvé, le supprimer
+          if (index !== -1) {
+            this.currentClient.ClientTaches.splice(index, 1);
+          }
+        },
+        (error) => {
+          console.error("Erreur lors de la suppression du task", error);
+          this.toastr.error("Erreur lors de la suppression du task");
+        }
+      );
+    } else {
+      console.log("error lors de la suppression");
+    }
+  }
+  //#endregion Task
   UpdateClient() {
     this.loader.show();
     this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
@@ -1433,7 +1759,7 @@ export class DetailclientComponent {
         } else {
           this.toastr.success("Enregisté");
           this.particulariteFiscaleChanged = false;
-          //this.situationAdministrativeChanged = false;
+          this.situationAdministrativeChanged = false;
           this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
         }

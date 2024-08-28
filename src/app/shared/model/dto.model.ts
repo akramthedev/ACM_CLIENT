@@ -7,16 +7,17 @@ export class Client {
   Photo?: string;
   Profession?: string;
   DateRetraite?: string;
+  DateResidence?: string;
   NumeroSS?: string;
   Adresse?: string;
   Email1?: string;
   Email2?: string;
   Telephone1?: string;
   Telephone2?: string;
-  HasConjoint: boolean;
-
+  HasConjoint: string;
+  ImgSrc?: string;
   SituationFamiliale: "Marié" | "Célibataire" | "Divorcé" | "Veuf" | "Union" | "PACS";
-
+  RegimeMatrimonial?: string;
   ParticulariteFiscale?: string;
 
   AssuranceAuto?: string;
@@ -47,7 +48,7 @@ export class Client {
   Prestation?: Prestation[];
   ClientMission?: ClientMission[];
   ClientMissionPrestation?: ClientMissionPrestation[];
-  ClientTache?: ClientTache[];
+  ClientTaches?: ClientTache[];
 }
 
 export class Proche {
@@ -193,5 +194,5 @@ export class ClientTache {
   DateButoir?: string;
   Date_Execution?: string;
   Status?: string;
-  AgentResponsable?: string;
+  AgentResposable?: string;
 }
