@@ -44,8 +44,6 @@
           <div class="cartoon"><img class="img-fluid" src="assets/images/dashboard/cartoon.svg" alt="vector women with leptop" /></div>
         </div>
       </div>
-
-
     </div>
     <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6">
       <div class="row">
@@ -100,26 +98,52 @@
         </div>
       </div>
     </div>
-    <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6">
+    <!-- <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6">
       <div class="row">
         <div class="col-xl-12">
-          <!-- <app-product-status-chart-box [data]="salesReturn"></app-product-status-chart-box> -->
+          <app-product-status-chart-box [data]="salesReturn"></app-product-status-chart-box>
           <div class="col-xl-12">
-            <!-- <app-product-status-chart-box [data]="purchaseRate"></app-product-status-chart-box> -->
+            <app-product-status-chart-box [data]="purchaseRate"></app-product-status-chart-box>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <!-- <div class="col-xxl-auto col-xl-12 col-sm-6 box-col-6">
+      <app-orders-profit></app-orders-profit>
+    </div>
+    <div class="col-xxl-8 col-lg-12 box-col-12">
+      <app-overall-balance></app-overall-balance>
+    </div>
+    <div class="col-xxl-4 col-xl-7 col-md-6 col-sm-5 box-col-6">
+      <app-recent-orders></app-recent-orders>
+    </div> -->
+
+    <div class="col-xxl-6 col-xl-6 col-md-12 col-sm-12 box-col-6">
+      <!-- <app-timeline></app-timeline> -->
+      <div class="card">
+        <div class="card-header card-no-border">
+          <div class="header-top">
+            <h5 class="m-0">Timeline</h5>
+            <div class="card-header-right-icon">
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" (click)="show = !show">Today</button>
+                <div class="dropdown-menu dropdown-menu-end" [class.show]="show"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a
+                    class="dropdown-item" href="#">Yesterday</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <div class="schedule-container">
+            <div id="schedulechart">
+              <apx-chart [series]="timeLine.series" [chart]="timeLine.chart" [plotOptions]="timeLine.plotOptions" [dataLabels]="timeLine.dataLabels" [xaxis]="timeLine.xaxis"
+                [yaxis]="timeLine.yaxis" [grid]="timeLine.grid" [responsive]="timeLine.responsive"></apx-chart>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xxl-auto col-xl-12 col-sm-6 box-col-6">
-      <!-- <app-orders-profit></app-orders-profit> -->
-    </div>
-    <div class="col-xxl-8 col-lg-12 box-col-12">
-      <!-- <app-overall-balance></app-overall-balance> -->
-    </div>
-    <div class="col-xxl-4 col-xl-7 col-md-6 col-sm-5 box-col-6">
-      <!-- <app-recent-orders></app-recent-orders> -->
-    </div>
-    <div class="col-xxl-5 col-xl-5 col-md-6 col-sm-7 notification box-col-6">
+    <div class="col-xxl-6 col-xl-6 col-md-12 col-sm-12 notification box-col-6">
       <!-- <app-activity></app-activity> -->
       <div class="card height-equal">
         <div class="card-header card-no-border">
@@ -152,46 +176,23 @@
     <!-- <div class="col-xxl-4 col-md-6 appointment-sec box-col-6">
       <app-recent-sales></app-recent-sales>
     </div> -->
-    <div class="col-xxl-7 col-md-7 box-col-6">
-      <!-- <app-timeline></app-timeline> -->
-      <div class="card">
-        <div class="card-header card-no-border">
-          <div class="header-top">
-            <h5 class="m-0">Timeline</h5>
-            <div class="card-header-right-icon">
-              <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" (click)="show = !show">Today</button>
-                <div class="dropdown-menu dropdown-menu-end" [class.show]="show"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a
-                    class="dropdown-item" href="#">Yesterday</a></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body pt-0">
-          <div class="schedule-container">
-            <div id="schedulechart">
-              <apx-chart [series]="timeLine.series" [chart]="timeLine.chart" [plotOptions]="timeLine.plotOptions" [dataLabels]="timeLine.dataLabels" [xaxis]="timeLine.xaxis"
-                [yaxis]="timeLine.yaxis" [grid]="timeLine.grid" [responsive]="timeLine.responsive"></apx-chart>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xxl-3 col-md-6 box-col-6 col-ed-none wow zoomIn">
-      <!-- <app-purchase-account></app-purchase-account> -->
+
+  </div>
+  <!-- <div class="col-xxl-3 col-md-6 box-col-6 col-ed-none wow zoomIn">
+      <app-purchase-account></app-purchase-account>
     </div>
     <div class="col-xxl-4 col-md-6 box-col-6 col-ed-6">
       <div class="row">
         <div class="col-xl-12">
-          <!-- <app-total-users></app-total-users> -->
+          <app-total-users></app-total-users>
         </div>
         <div class="col-xl-12">
-          <!-- <app-followers-growth></app-followers-growth> -->
+          <app-followers-growth></app-followers-growth>
         </div>
       </div>
-    </div>
+    </div> 
     <div class="col-xxl-5 col-lg-8 col-md-11 box-col-8 col-ed-6">
-      <!-- <app-paper-note></app-paper-note> -->
+      <app-paper-note></app-paper-note>
     </div>
-  </div>
+    -->
 </div>
