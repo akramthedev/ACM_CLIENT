@@ -1,5 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { keycloakUser } from "src/app/shared/model/models.model";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-my-account",
@@ -10,19 +13,30 @@ export class MyAccountComponent implements OnInit {
   public userName: string;
   public profileImg: "assets/images/dashboard/profile.jpg";
 
-  constructor(public router: Router) {
-    let user = JSON.parse(localStorage.getItem("user"))
-    console.log("user: ", user);
+  user: keycloakUser = null;
+  constructor(public router: Router,
+    private authService: AuthService,
+  ) {
+    // let user = JSON.parse(localStorage.getItem("user"))
+    // console.log("user: ", user);
 
-    if (user) {
-    } else {
-    }
+    this.authService.GetCurrentUser()
+      .then((user: any) => {
+        console.log("user: ", user)
+        this.user = user;
+        if ((this.user.firstName == null || this.user.firstName == "") && (this.user.lastName == null || this.user.lastName == ""))
+          this.user.FullName = this.user.email;
+        else this.user.FullName = this.user.firstName + " " + this.user.lastName;
+      })
   }
 
   ngOnInit() { }
 
   logoutFunc() {
-    localStorage.clear();
-    this.router.navigateByUrl('auth/login');
+    this.authService.Logout();
+  }
+
+  userProfile() {
+    window.open(`${environment.keycloak.serverUrl}/realms/${environment.keycloak.realm}/account/#/personal-info`, '_blank')
   }
 }

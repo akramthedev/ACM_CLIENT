@@ -12,6 +12,8 @@ import { Client } from "src/app/shared/model/dto.model";
 import { environment } from "src/environments/environment";
 import { forkJoin, of } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { keycloakUser } from "src/app/shared/model/models.model";
 
 @Component({
   selector: "app-clients",
@@ -28,10 +30,27 @@ export class ClientsComponent implements OnInit {
   CurrentClient: any = null;
   titre: String;
   Clients: any[] = [];
+  User: keycloakUser = null;
 
-  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2) {
+  constructor(
+    private title: Title,
+    private router: Router,
+    private clientService: ClientService,
+    private loader: NgxSpinnerService,
+    private toastr: ToastrService,
+    private renderer: Renderer2,
+    private authService: AuthService,
+  ) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
+
+    this.authService.GetCurrentUser()
+      .then((user: any) => {
+        this.User = user;
+        if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == ""))
+          this.User.FullName = this.User.email;
+        else this.User.FullName = this.User.firstName + " " + this.User.lastName;
+      })
   }
   // onProfileImageChange(event: any) {
   //   if (event.target.files && event.target.files[0]) {
@@ -263,7 +282,7 @@ export class ClientsComponent implements OnInit {
   }
 
   navigateToDetails(clientId: string) {
-    this.router.navigate(["/clients/details/", clientId]);
+    this.router.navigate(["/app/clients/details/", clientId]);
   }
   showHistory() {
     this.history = !this.history;

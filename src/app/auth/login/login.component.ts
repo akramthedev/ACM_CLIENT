@@ -38,34 +38,34 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.loader.show();
-    this.authService.Login(this.params)
-      .subscribe((response) => {
-        console.log("response login: ", response);
-        this.loader.hide();
+    // this.loader.show();
+    // this.authService.Login(this.params)
+    //   .subscribe((response) => {
+    //     console.log("response login: ", response);
+    //     this.loader.hide();
 
-        localStorage.setItem("user", JSON.stringify(response));
-        this.router.navigate(["/home"]);
+    //     localStorage.setItem("user", JSON.stringify(response));
+    //     this.router.navigate(["/home"]);
 
-      }, (error) => {
-        console.error("Error login: ", error);
-        this.toastr.error(error?.error);
-        this.loader.hide();
+    //   }, (error) => {
+    //     console.error("Error login: ", error);
+    //     this.toastr.error(error?.error);
+    //     this.loader.hide();
 
-      });
-    return;
-    console.log(this.loginForm.value);
-    let email = this.loginForm.value["email"];
-    let username = email;
-    if (email.includes("@"))
-      username = email.split("@")[0];
-    let user = {
-      email: this.loginForm.value["email"],
-      password: this.loginForm.value["password"],
-      name: username,
-      username: username,
-    };
-    localStorage.setItem("user", JSON.stringify(user));
-    this.router.navigate(["/home"]);
+    //   });
+    // return;
+    // console.log(this.loginForm.value);
+    // let email = this.loginForm.value["email"];
+    // let username = email;
+    // if (email.includes("@"))
+    //   username = email.split("@")[0];
+    // let user = {
+    //   email: this.loginForm.value["email"],
+    //   password: this.loginForm.value["password"],
+    //   name: username,
+    //   username: username,
+    // };
+    // localStorage.setItem("user", JSON.stringify(user));
+    // this.router.navigate(["/home"]);
   }
 }

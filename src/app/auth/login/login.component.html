@@ -1,9 +1,10 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xl-7" [ngStyle]="{'background':'linear-gradient(180deg, rgba(5,117,230,1) 0%, rgba(2,41,138,1) 85%, rgba(2,27,121,1) 100%)',
+    <!-- <div class="col-xl-7" [ngStyle]="{'background':'linear-gradient(180deg, rgba(5,117,230,1) 0%, rgba(2,41,138,1) 85%, rgba(2,27,121,1) 100%)',
                                      'background-size': 'cover',
                                      'background-position': 'center center',
-                                     'display': 'block','position': 'relative'}">
+                                     'display': 'block','position': 'relative'}"> -->
+    <div class="col-xl-7">
       <img class="bg-img-cover bg-center" src="assets/images/login/ACM-logo.png" alt="looginpage"
         style="position: absolute; top: 50%; left: 50%;transform: translate(-50%, -50%); width: 40%; height: 30%; opacity: 0.7;">
     </div>
@@ -24,21 +25,21 @@
               <!-- <p>Enter your email & password to login</p> -->
               <div class="form-group">
                 <label class="col-form-label">Username / Email</label>
-                <input class="form-control" type="text" [(ngModel)]="params.Login" required="" placeholder="Login">
+                <!-- <input class="form-control" type="text" [(ngModel)]="params.Login" required="" placeholder="Login"> -->
               </div>
               <div class="form-group">
                 <label class="col-form-label">Mot de passe</label>
-                <input class="form-control" [type]="show ? 'text' : 'password'" [(ngModel)]="params.Password" required="" placeholder="*********">
+                <!-- <input class="form-control" [type]="show ? 'text' : 'password'" [(ngModel)]="params.Password" required="" placeholder="*********"> -->
                 <div class="show-hide" (click)="show =! show" *ngIf="!show"><span class="show"></span></div>
                 <div class="show-hide" (click)="show =! show" *ngIf="show"><span class="Hide"></span></div>
               </div>
               <div class="form-group mb-0">
                 <div class="checkbox p-0">
-                  <input id="checkbox1" type="checkbox" [(ngModel)]="params.StayConnected">
+                  <!-- <input id="checkbox1" type="checkbox" [(ngModel)]="params.StayConnected"> -->
                   <label class="" for="checkbox1">Rester connecté</label>
                   <!-- <label class="text-muted" for="checkbox1">Rester connecté</label> -->
                 </div>
-                <a [routerLink]="'/authentication/forgot-password'" class="link">Mot de passe oublié?</a>
+                <!-- <a [routerLink]="'/authentication/forgot-password'" class="link">Mot de passe oublié?</a> -->
                 <button class="btn btn-primary d-block w-100" type="submit" (click)="login()">Se connecter</button>
               </div>
               <!-- <h6 class="text-muted mt-4 or">Or Sign in with</h6>

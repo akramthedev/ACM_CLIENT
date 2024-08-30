@@ -1334,7 +1334,7 @@ export class DetailclientComponent {
           if (response == null) {
             this.toastr.error("Erreur de récuperation du client");
             setTimeout(() => {
-              this.router.navigate(["/clients"]);
+              this.router.navigate(["/app/clients"]);
             }, 2000);
           } else {
             //this.isComponentReady = true;
@@ -1397,7 +1397,7 @@ export class DetailclientComponent {
           this.loader.hide();
           this.toastr.error("Erreur de récuperation du client");
           setTimeout(() => {
-            this.router.navigate(["/clients"]);
+            this.router.navigate(["/app/clients"]);
           }, 2000);
         }
       );

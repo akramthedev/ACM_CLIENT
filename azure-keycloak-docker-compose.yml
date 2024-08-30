@@ -1,0 +1,23 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.4
+    # image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev --transaction-xa-enabled=false
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: NetW@ciil@2021
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/keycloak.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/keycloak.pem
+      KC_HOSTNAME: acm-keycloak.azurewebsites.net
+      KC_HOSTNAME_STRICT: true
+      KC_PROXY: edge
+    volumes:
+      # - 'C:/DockerVolumes/key33/certs/keycloak.crt:/opt/keycloak/conf/keycloak.crt'
+      # - 'C:/DockerVolumes/key33/certs/keycloak.pem:/opt/keycloak/conf/keycloak.pem'
+      - '${WEBAPP_STORAGE_HOME}/certs/keycloak.crt:/opt/keycloak/conf/keycloak.crt'
+      - '${WEBAPP_STORAGE_HOME}/certs/keycloak.pem:/opt/keycloak/conf/keycloak.pem'
+      - '${WEBAPP_STORAGE_HOME}/h2_data/:/opt/keycloak/data/'
+volumes:
+  h2_data:

@@ -11,15 +11,12 @@ import { AdminGuard } from './shared/guard/admin.guard';
 import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'clients', pathMatch: 'full' },
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
-  // { path: '/taches', redirectTo: 'taches', pathMatch: 'full', },
-  // { path: '', redirectTo: 'dashboard/default', pathMatch: 'full' },
+  { path: '', redirectTo: 'app/home', pathMatch: 'full' },
 
-  { path: 'auth/login', component: LoginComponent },
-  { path: 'auth/register', component: RegisterComponent },
+  // { path: 'auth/login', component: LoginComponent },
+  // { path: 'auth/register', component: RegisterComponent },
 
-  { path: '', component: ContentComponent, canActivate: [AdminGuard], children: content },
+  { path: 'app', component: ContentComponent,  children: content },
   { path: '', component: FullComponent, canActivate: [AdminGuard], children: full },
   { path: '**', redirectTo: '' },
 ];

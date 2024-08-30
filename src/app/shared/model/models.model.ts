@@ -26,3 +26,17 @@ export class CustomTable {
   total?: number;
   columns?: CustomTableColumn[];
 }
+
+export class keycloakUser {
+  id: string;
+  attributes: any;
+  email: string;
+  emailVerified: boolean;
+  firstName: string;
+  lastName: string;
+  username: string;
+  userProfileMetadata: {
+    attributes: any[],
+  };
+  FullName: string;
+}

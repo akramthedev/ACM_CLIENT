@@ -8,12 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BreadcrumbComponent implements OnInit {
 
   @Input() title: string;
-  @Input() items: any[];
+  // @Input() items: any[];
+  @Input() items: { link: string, libelle: string }[];
   @Input() active_item: string;
 
   constructor() {
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
 }

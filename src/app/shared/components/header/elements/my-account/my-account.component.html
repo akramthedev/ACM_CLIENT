@@ -1,13 +1,15 @@
 <div class="media profile-media">
-  <img class="b-r-10" src="assets/images/dashboard/profile.png" alt="">
-  <div class="media-body"><span>Cecile Hugon</span>
-    <p class="mb-0 font-roboto">Admin <i class="middle fa fa-angle-down"></i></p>
+  <!-- <img class="b-r-10" src="assets/images/dashboard/profile.png" alt=""> -->
+  <img class="b-r-10" src="assets/images/user/user.png" alt="">  
+  <div class="media-body"><span>{{ user?.FullName }}</span>
+    &nbsp;<i class="middle fa fa-angle-down"></i>
+    <!-- <p class="mb-0 font-roboto">Admin </p> -->
   </div>
 </div>
 <ul class="profile-dropdown onhover-show-div">
-  <li><a href="/user/profile"><app-feather-icons [icon]="'user'"></app-feather-icons><span>Account </span></a></li>
-  <li><a href="email"><app-feather-icons [icon]="'mail'"></app-feather-icons><span>Inbox</span></a></li>
-  <li><a href="/to-do"><app-feather-icons [icon]="'file-text'"></app-feather-icons><span>Taskboard</span></a></li>
-  <li><a href="/faq"><app-feather-icons [icon]="'settings'"></app-feather-icons><span>Settings</span></a></li>
-  <li (click)="logoutFunc()"><app-feather-icons [icon]="'log-in'"></app-feather-icons><span>Log out</span></li>
+  <li (click)="userProfile()"><app-feather-icons [icon]="'user'"></app-feather-icons><span>Compte</span></li>
+  <!-- <li><a href="email"><app-feather-icons [icon]="'mail'"></app-feather-icons><span>Inbox</span></a></li> -->
+  <!-- <li><a href="/to-do"><app-feather-icons [icon]="'file-text'"></app-feather-icons><span>Taskboard</span></a></li> -->
+  <!-- <li><a href="/faq"><app-feather-icons [icon]="'settings'"></app-feather-icons><span>Settings</span></a></li> -->
+  <li (click)="logoutFunc()"><app-feather-icons [icon]="'log-in'"></app-feather-icons><span>Se déconnecter</span></li>
 </ul>
