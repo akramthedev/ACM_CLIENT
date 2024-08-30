@@ -111,6 +111,7 @@ export class Patrimoine {
   Particularite?: string;
   Commentaire?: string;
   QuestionComplementaire?: string;
+  StatusDocumentPath?: string;
 }
 
 export class Passif {

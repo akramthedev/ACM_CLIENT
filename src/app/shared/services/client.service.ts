@@ -58,8 +58,11 @@ export class ClientService {
     // data.CabinetId = "0E06E5A4-6246-415D-B119-C47077180755";
     return this.http.put<any>(url, data);
   }
-  DeletePatrimoine(PatrimoineId: string) {
-    let url = `${environment.url}/DeletePatrimoine/${PatrimoineId}`;
+  DeletePatrimoine(PatrimoineId: string, ClientId: string) {
+    console.log("DeletePatrimoine: ", PatrimoineId, "  ", ClientId);
+    let url = `${environment.url}/DeletePatrimoine?`;
+    if (PatrimoineId != null) url += `PatrimoineId=${PatrimoineId}&`;
+    if (ClientId != null) url += `ClientId=${ClientId}&`;
     return this.http.delete(url);
   }
 
@@ -224,5 +227,9 @@ export class ClientService {
   DeleteProfileImage(clientId: string, extension: string) {
     const url = `${environment.url}/deleteProfileImage/${clientId}/profile.${extension}`;
     return this.http.delete(url); // Supprime l'image avec l'extension spécifiée
+  }
+  UploadStatusDocument(formData: FormData) {
+    const url = `${environment.url}/uploadStatusDocument`;
+    return this.http.post(url, formData);
   }
 }

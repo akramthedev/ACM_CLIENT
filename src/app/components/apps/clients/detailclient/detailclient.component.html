@@ -273,15 +273,14 @@
                                 </tbody>
                                 <tbody *ngIf="GetPatrimoines(patrimoineType.type).length > 0">
                                   <tr *ngFor="let patrimoine of GetPatrimoines(patrimoineType.type)">
-                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
-                                      <!-- <ng-template> -->
+                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <span *ngIf="column.dataType == 'string'">{{ patrimoine[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ patrimoine[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ patrimoine[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
                                       <span *ngIf="column.dataType == 'number'">{{ patrimoine[column.field] }}</span>
-                                      <span *ngIf="column.dataType == 'bool'">{{ patrimoine[column.field] == true ? column.TextTrue : column.TextFalse }}</span>
+                                      <span *ngIf="column.field == 'StatusDocumentPath' && patrimoine.StatusDocumentPath">
+                                        <a [href]="patrimoine.StatusDocumentPath" target="_blank" download>Télécharger le document</a>
+                                      </span>
                                       <span *ngIf="column.field == 'action'">
                                         <div class="d-flex justify-content-around">
                                           <a class="text-warning" (click)="dialogPatrimoine.Open(patrimoine.PatrimoineId)">
@@ -292,7 +291,6 @@
                                           </a>
                                         </div>
                                       </span>
-                                      <!-- </ng-template> -->
                                     </td>
                                   </tr>
                                 </tbody>
@@ -1222,6 +1220,19 @@
               <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
                 [(ngModel)]="dialogPatrimoine.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
+            </div>
+          </span>
+          <span *ngIf="['link'].includes(input.inputOptions.type)">
+            <!-- Champ pour l'upload du document de statut -->
+            <div class="form-group mb-3 col-md-6">
+              <label for="statusDocument">Document de statut</label>
+              <input type="file" id="statusDocument" accept=".pdf" (change)="onStatusDocumentChange($event)" />
+            </div>
+
+            <!-- Lien pour télécharger le document s'il existe -->
+            <div *ngIf="dialogPatrimoine.data.StatusDocumentPath">
+              <label>Document de statut actuel: {{ dialogPatrimoine.data.StatusDocumentPath }}</label>
+              <a [href]="dialogPatrimoine.data.StatusDocumentPath" target="_blank">Télécharger le document</a>
             </div>
           </span>
         </div>

@@ -1,5 +1,5 @@
 export class CustomTableColumnInputOption {
-  type: "text" | "number" | "date" | "select" | "checkbox" | "datetime";
+  type: "text" | "number" | "date" | "select" | "checkbox" | "datetime" | "link";
   required: boolean;
   min?: number;
   max?: number;
@@ -13,7 +13,7 @@ export class CustomTableColumn {
   field: string;
   header: string;
   visible?: boolean;
-  dataType: "string" | "number" | "date" | "datetime" | "bool";
+  dataType: "string" | "number" | "date" | "datetime" | "bool" | "link";
   TextTrue?: string;
   TextFalse?: string;
   inputOptions?: CustomTableColumnInputOption;
