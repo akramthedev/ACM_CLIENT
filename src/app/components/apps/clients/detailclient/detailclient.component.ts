@@ -245,7 +245,6 @@ export class DetailclientComponent {
           PatrimoineId: uuidv4(),
           ClientId: this.currentClient.ClientId,
           TypePatrimoine: type,
-          StatusDocumentPath: null,
         };
         //DialogPatrimoineLabel
         this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
@@ -284,8 +283,6 @@ export class DetailclientComponent {
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du patrimoine");
             } else {
-              console.log("response : dsds", response);
-              // this.dialogPatrimoine.data.StatusDocumentPath = response.StatusDocumentPath;
               this.toastr.success("Patrimoine ajouté avec succès");
               this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
               this.dialogPatrimoine.Close();
@@ -308,7 +305,6 @@ export class DetailclientComponent {
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du patrimoine");
             } else {
-              this.dialogPatrimoine.data.StatusDocumentPath = response.StatusDocumentPath;
               this.toastr.success("Patrimoine modifié avec succès");
               this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
                 if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
@@ -1378,38 +1374,31 @@ export class DetailclientComponent {
               item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
               return item;
             });
-            // // Check if profile image exists
-            // const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
-            // this.checkImageExists(profileImageUrl, (exists: boolean) => {
-            //   if (exists) {
-            //     this.currentClient.ImgSrc = profileImageUrl;
-            //   } else {
-            //     this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+
+            if (this.currentClient.Photo == null) this.currentClient.ImgSrc = "assets/images/user/user.png";
+            else this.currentClient.ImgSrc = `${environment.url}/${this.currentClient.Photo}`;
+
+            // const extensions = ["jpg", "jpeg", "png"];
+            // let imageFound = false;
+            // extensions.forEach((ext) => {
+            //   if (!imageFound) {
+            //     // Arrêter la vérification après avoir trouvé une image
+            //     const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.${ext}`;
+            //     this.checkImageExists(profileImageUrl, (exists: boolean) => {
+            //       if (exists) {
+            //         this.currentClient.ImgSrc = profileImageUrl;
+            //         imageFound = true; // Marque comme trouvé pour éviter d'autres vérifications
+            //       }
+            //     });
             //   }
             // });
-            // Check if profile image exists
-            const extensions = ["jpg", "jpeg", "png"];
-            let imageFound = false;
-
-            extensions.forEach((ext) => {
-              if (!imageFound) {
-                // Arrêter la vérification après avoir trouvé une image
-                const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.${ext}`;
-                this.checkImageExists(profileImageUrl, (exists: boolean) => {
-                  if (exists) {
-                    this.currentClient.ImgSrc = profileImageUrl;
-                    imageFound = true; // Marque comme trouvé pour éviter d'autres vérifications
-                  }
-                });
-              }
-            });
 
             // Si aucune image n'est trouvée, utiliser l'image par défaut
-            setTimeout(() => {
-              if (!imageFound) {
-                this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
-              }
-            }, 100); // Timeout pour permettre aux vérifications asynchrones de s'exécuter
+            // setTimeout(() => {
+            //   if (!imageFound) {
+            //     this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
+            //   }
+            // }, 100); // Timeout pour permettre aux vérifications asynchrones de s'exécuter
 
             // get liste pieces
             this.enumService.GetPieces().subscribe(
