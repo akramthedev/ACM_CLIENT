@@ -337,7 +337,8 @@ export class DetailclientComponent {
     console.log("delete patrimoine cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
     if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
-      this.clientService.DeletePatrimoine(id).subscribe(
+      console.log(this.currentClient.ClientId);
+      this.clientService.DeletePatrimoine(id, this.currentClient.ClientId).subscribe(
         (response) => {
           console.log("Delete client response : ", response);
           this.toastr.success("Patrimoine supprimé avec succès");
