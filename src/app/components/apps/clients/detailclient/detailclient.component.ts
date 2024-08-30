@@ -40,6 +40,30 @@ export class DetailclientComponent {
   //   let formatedDate = new DatePipe().transform(this.Students.dob, 'dd/mm/yyyy')
   //   console.log(formatedDate);
   // }
+  onStatusDocumentChange(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      if (file.type !== "application/pdf") {
+        this.toastr.error("Seuls les fichiers PDF sont autorisés");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("ClientId", this.currentClient.ClientId);
+      formData.append("PatrimoineId", this.dialogPatrimoine.data.PatrimoineId);
+
+      this.clientService.UploadStatusDocument(formData).subscribe(
+        (response: any) => {
+          this.dialogPatrimoine.data.StatusDocumentPath = response.documentUrl;
+          this.toastr.success("Document de statut importé avec succès");
+        },
+        (error: any) => {
+          this.toastr.error("Erreur lors de l'importation du document de statut");
+        }
+      );
+    }
+  }
 
   //#region Patrimoine
   @ViewChild("DialogPatrimoine") public DialogPatrimoine!: any;
@@ -179,7 +203,7 @@ export class DetailclientComponent {
         //   },
         // },
         //{ field: "Status", header: "Statut", dataType: "string", inputOptions: { type: "text", required: false } },
-
+        { field: "StatusDocumentPath", header: "Document Statut", dataType: "link", inputOptions: { type: "link", required: false } },
         { field: "Particularite", header: "Dividende", dataType: "number", inputOptions: { type: "number", required: false } },
         { field: "action", header: "Action", dataType: null },
       ],
@@ -221,6 +245,7 @@ export class DetailclientComponent {
           PatrimoineId: uuidv4(),
           ClientId: this.currentClient.ClientId,
           TypePatrimoine: type,
+          StatusDocumentPath: null,
         };
         //DialogPatrimoineLabel
         this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
@@ -259,6 +284,8 @@ export class DetailclientComponent {
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du patrimoine");
             } else {
+              console.log("response : dsds", response);
+              // this.dialogPatrimoine.data.StatusDocumentPath = response.StatusDocumentPath;
               this.toastr.success("Patrimoine ajouté avec succès");
               this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
               this.dialogPatrimoine.Close();
@@ -281,6 +308,7 @@ export class DetailclientComponent {
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du patrimoine");
             } else {
+              this.dialogPatrimoine.data.StatusDocumentPath = response.StatusDocumentPath;
               this.toastr.success("Patrimoine modifié avec succès");
               this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
                 if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
@@ -1346,6 +1374,10 @@ export class DetailclientComponent {
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
             this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
 
+            this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
+              item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
+              return item;
+            });
             // // Check if profile image exists
             // const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.jpg`;
             // this.checkImageExists(profileImageUrl, (exists: boolean) => {

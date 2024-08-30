@@ -225,4 +225,8 @@ export class ClientService {
     const url = `${environment.url}/deleteProfileImage/${clientId}/profile.${extension}`;
     return this.http.delete(url); // Supprime l'image avec l'extension spécifiée
   }
+  UploadStatusDocument(formData: FormData) {
+    const url = `${environment.url}/uploadStatusDocument`;
+    return this.http.post(url, formData);
+  }
 }
