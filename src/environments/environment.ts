@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // url: 'http://localhost:3000',
-  url: 'https://acm-backend.azurewebsites.net',
+  url: "http://localhost:3000",
+  // url: "https://acm-backend.azurewebsites.net",
 
   // keycloak: {
   //   // serverUrl: "https://upulse-keycloak.azurewebsites.net",
@@ -16,14 +16,13 @@ export const environment = {
   //   redirectUri: 'http://localhost:4200/',
   // },
 
-
   keycloak: {
     // serverUrl: 'http://localhost:8080',
-    serverUrl: 'https://acm-keycloak.azurewebsites.net',    
-    redirectUri: 'http://localhost:4200',
-    postLogoutRedirectUri: 'http://localhost:4200/logout',
-    realm: 'acm',
-    clientId: 'acm-client',
+    serverUrl: "https://acm-keycloak.azurewebsites.net",
+    redirectUri: "http://localhost:4200",
+    postLogoutRedirectUri: "http://localhost:4200/logout",
+    realm: "acm",
+    clientId: "acm-client",
   },
   idleConfig: { idle: 1000 * 60 * 4, timeout: 60, ping: 10 },
 };

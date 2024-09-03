@@ -44,6 +44,12 @@ export class ClientService {
     return this.http.delete(url);
   }
 
+  UpdateClientPiece(data: any): Observable<any> {
+    console.log("UpdateClientPiece.data: ", data);
+    let url = `${environment.url}/UpdateClientPiece?`;
+    return this.http.put<any>(url, data);
+  }
+
   CreatePatrimoine(data: any) {
     let url = `${environment.url}/CreatePatrimoine?`;
     return this.http.post(url, data);
@@ -230,6 +236,10 @@ export class ClientService {
   }
   UploadStatusDocument(formData: FormData) {
     const url = `${environment.url}/uploadStatusDocument`;
+    return this.http.post(url, formData);
+  }
+  UploadClientPieceFile(formData: FormData) {
+    let url = `${environment.url}/UploadClientPieceFile`;
     return this.http.post(url, formData);
   }
 }

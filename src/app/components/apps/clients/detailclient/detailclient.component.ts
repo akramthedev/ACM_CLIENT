@@ -238,8 +238,10 @@ export class DetailclientComponent {
     Inputs: [],
     Open: (id: string | null, type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel") => {
       if (id == null) {
-        // create patrimoine
-        this.dialogPatrimoine.title = "Creation de " + type;
+        // // create patrimoine
+        // this.dialogPatrimoine.title = "Creation de " + type;
+        let typeTitle = type === "Immobilier de rapport" ? "d'" + type : "de " + type;
+        this.dialogPatrimoine.title = "Création " + typeTitle;
         this.dialogPatrimoine.isEditing = false;
         this.dialogPatrimoine.data = {
           PatrimoineId: uuidv4(),
@@ -485,8 +487,10 @@ export class DetailclientComponent {
     isEditing: null,
     Open: (id: string | null, type?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité") => {
       if (id == null) {
-        // create passif
-        this.dialogPassif.title = "Creation de " + type;
+        // // create passif
+        // this.dialogPassif.title = "Creation de " + type;
+        let typeTitle = type === "Assurance" || type === "Epargne" ? "d'" + type : "de " + type;
+        this.dialogPassif.title = "Création " + typeTitle;
         this.dialogPassif.isEditing = false;
         this.dialogPassif.data = {
           PassifsId: uuidv4(),
@@ -694,7 +698,7 @@ export class DetailclientComponent {
     Open: (id: string | null) => {
       if (id == null) {
         // create budget
-        this.dialogBudget.title = "Creation de Budget";
+        this.dialogBudget.title = "Création de Budget";
         this.dialogBudget.isEditing = false;
         this.dialogBudget.data = {
           BudgetsId: uuidv4(),
@@ -1443,6 +1447,60 @@ export class DetailclientComponent {
   }
 
   //#region ImportPiece
+  DirectImportForPiece(clientPieceId: string) {
+    const clientPiece = this.currentClient.ClientPieces.find((x) => x.ClientPieceId == clientPieceId);
+
+    if (!clientPiece) {
+      this.toastr.error("La pièce sélectionnée est introuvable.");
+      return;
+    }
+
+    // Create a file input element dynamically
+    const inputElement = document.createElement("input");
+    inputElement.type = "file";
+    inputElement.accept = ".pdf"; // Accept PDF files, modify as needed
+    inputElement.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        this.uploadFileForSelectedPiece(clientPiece, file);
+      }
+    };
+
+    // Trigger the file input dialog
+    inputElement.click();
+  }
+
+  uploadFileForSelectedPiece(clientPiece: any, file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("ClientPieceId", clientPiece.ClientPieceId);
+    formData.append("ClientId", this.currentClient.ClientId);
+    formData.append("Extension", file.name.split(".").pop());
+
+    this.loader.show();
+    this.clientService.UploadClientPieceFile(formData).subscribe(
+      (response: any) => {
+        console.log("response UploadClientPieceFile: ", response);
+        this.loader.hide();
+
+        if (response == null || response == false) {
+          this.toastr.error("Erreur d'importation du fichier.");
+        } else {
+          this.toastr.success("Importation réussie");
+          clientPiece.Extension = file.name.split(".").pop(); // Update the piece with the file extension
+          // formDataUpdate.append("ClientId", this.currentClient.ClientId);
+          // formDataUpdate.append("PieceId", clientPiece.PieceId);
+          this.clientService.UpdateClientPiece(formData);
+        }
+      },
+      (error: any) => {
+        console.error("error UploadClientPieceFile: ", error);
+        this.loader.hide();
+        this.toastr.error("Erreur d'importation du fichier.");
+      }
+    );
+  }
+
   dialogImportPiece: any = {
     PiecesToChoose: [],
     SelectedPiece: null,
@@ -1580,6 +1638,11 @@ export class DetailclientComponent {
     },
   ];
   getAgentValueByKey(key: string, options: any[]): string {
+    if (!key) {
+      console.warn("Invalid key provided:", key);
+      return "Inconnu"; // Return a default value if the key is invalid
+    }
+
     const normalizedKey = key.toLowerCase();
     const option = options.find((opt) => opt.key.toLowerCase() === normalizedKey);
     return option ? option.libelle : "Inconnu";
