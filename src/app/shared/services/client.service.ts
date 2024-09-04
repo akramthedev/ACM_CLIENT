@@ -242,4 +242,7 @@ export class ClientService {
     let url = `${environment.url}/UploadClientPieceFile`;
     return this.http.post(url, formData);
   }
+  getDownloadUrl(clientPieceId: string): string {
+    return `${environment.url}/DownloadClientPiece/${clientPieceId}`;
+  }
 }

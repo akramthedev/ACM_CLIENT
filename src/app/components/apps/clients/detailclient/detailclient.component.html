@@ -1037,7 +1037,9 @@
                           <li class="file-box me-1" *ngFor="let clientPiece of filtredClientPieces; let index = index">
                             <div class="file-top">
                               <i *ngIf="['png', 'jpg', 'jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
-                              <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-text-o txt-primary"></i>
+                              <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-pdf-o txt-primary"></i>
+                              <i *ngIf="['xls', 'xlsx'].includes(clientPiece.Extension)" class="fa fa-file-excel-o txt-primary"></i>
+                              <i *ngIf="['doc', 'docx'].includes(clientPiece.Extension)" class="fa fa-file-word-o txt-primary"></i>
                               <i *ngIf="!clientPiece.Extension" class="fa fa-upload txt-primary" (click)="DirectImportForPiece(clientPiece.ClientPieceId)"></i>
                               <i class="fa fa-ellipsis-v f-14 ellips" (click)="OpenPieceTools(clientPiece.ClientPieceId)"></i>
                             </div>
@@ -1109,9 +1111,7 @@
               <div class="mb-3">
                 <label for="piece">Pièce</label>
                 <select class="form-control" placeholder="Piece" [(ngModel)]="dialogImportPiece.SelectedPiece">
-                  <option *ngFor="let piece of dialogImportPiece.PiecesToChoose" [value]="piece.PieceId">
-                    {{ piece.Libelle }}
-                  </option>
+                  <option *ngFor="let piece of dialogImportPiece.PiecesToChoose" [value]="piece.PieceId">{{ piece.Numero_Ordre }} - {{ piece.Libelle }}</option>
                 </select>
               </div>
             </div>
@@ -1120,7 +1120,7 @@
             <div class="col">
               <div class="mb-3">
                 <label for="piece">Fichier</label>
-                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile" (change)="dialogImportPiece.OnFileChange($event)" />
+                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf, .xls, .xlsx, .doc, .docx, .jpg, .jpeg, .png" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile" (change)="dialogImportPiece.OnFileChange($event)" />
               </div>
             </div>
           </div>

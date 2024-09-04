@@ -1296,6 +1296,47 @@ export class DetailclientComponent {
       changeEvent.preventDefault();
     }
   }
+
+  downloadFile(clientPiece: any): Promise<void> {
+    this.loader.show();
+    return new Promise((resolve, reject) => {
+      const fileUrl = `${environment.url}/DownloadClientPiece/${clientPiece.ClientPieceId}`;
+
+      fetch(fileUrl)
+        .then((response) => {
+          if (response.ok) {
+            return response.blob(); // File found, proceed with download
+          } else if (response.status === 404) {
+            // Handle file not found (404) error
+            throw new Error("File not found");
+          } else {
+            throw new Error("Unexpected error occurred during file download");
+          }
+        })
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${clientPiece.Libelle}.${clientPiece.Extension}`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          resolve(); // Successfully downloaded
+        })
+        .catch((error) => {
+          if (error.message === "File not found") {
+            console.warn("Download failed: File not found on server.");
+          } else {
+            console.error("Download error:", error);
+          }
+          reject(error);
+        })
+        .finally(() => {
+          this.loader.hide(); // Hide loader after download completes (success or fail)
+        });
+    });
+  }
+
   OpenPieceTools(clientpieceid: string) {
     const swalWithBootstrapButtons = Swal.mixin({ customClass: { confirmButton: "btn btn-danger", cancelButton: "btn btn-light me-2", denyButton: "btn btn-primary me-2" }, buttonsStyling: false });
     let clientPiece = this.currentClient.ClientPieces.find((x) => x.ClientPieceId == clientpieceid);
@@ -1337,8 +1378,22 @@ export class DetailclientComponent {
           );
         } else if (result.isDenied) {
           // Action lorsque l'utilisateur clique sur "Télécharger"
+          // this.downloadFile(clientPiece);
+          // Swal.fire("Téléchargement!", "Votre fichier est en cours de téléchargement.", "info");
+          this.downloadFile(clientPiece)
+            .then(() => {
+              this.loader.hide();
+              Swal.fire("Téléchargement réussi!", "Votre fichier a été téléchargé avec succès.", "success");
+            })
+            .catch((error) => {
+              this.loader.hide();
 
-          Swal.fire("Téléchargement!", "Votre fichier est en cours de téléchargement.", "info");
+              if (error.message === "File not found") {
+                Swal.fire("Erreur!", "Le fichier n'a pas été trouvé sur le serveur.", "error");
+              } else {
+                Swal.fire("Erreur!", "Le téléchargement du fichier a échoué.", "error");
+              }
+            });
         } else {
           // Action lorsque l'utilisateur clique sur "Annuler" ou ferme la boîte de dialogue
           // Swal.fire('Annulé', 'Votre action a été annulée :)', 'info');
@@ -1347,7 +1402,8 @@ export class DetailclientComponent {
   }
   OnSearchPieceKeyUp(event) {
     // console.log("OnSearchPieceKeyUp: ", event, "this.filterPiecesText: ", this.filterPiecesText);
-    this.filtredClientPieces = this.currentClient.ClientPieces.filter((x) => x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) || x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
+    // this.filtredClientPieces = this.currentClient.ClientPieces.filter((x) => x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) || x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
+    this.filtredClientPieces = this.currentClient.ClientPieces.filter((x) => x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
   }
   ngOnInit() {
     this.activeTabId = 1;
@@ -1458,7 +1514,7 @@ export class DetailclientComponent {
     // Create a file input element dynamically
     const inputElement = document.createElement("input");
     inputElement.type = "file";
-    inputElement.accept = ".pdf"; // Accept PDF files, modify as needed
+    inputElement.accept = ".pdf, .xls, .xlsx, .doc, .docx, .jpg, .jpeg, .png"; // Accept PDF files, modify as needed
     inputElement.onchange = (event: any) => {
       const file = event.target.files[0];
       if (file) {
