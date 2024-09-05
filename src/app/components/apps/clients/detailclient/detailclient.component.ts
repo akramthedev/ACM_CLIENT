@@ -912,7 +912,7 @@ export class DetailclientComponent {
     Open: (id: string | null) => {
       if (id == null) {
         // create proche
-        this.dialogProche.title = "Creation de Proche";
+        this.dialogProche.title = "Création de Proche";
         this.dialogProche.isEditing = false;
         this.dialogProche.data = {
           ProcheId: uuidv4(),
@@ -1117,7 +1117,7 @@ export class DetailclientComponent {
         { field: "RegimeMatrimonial", header: "Régime matrimonial", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         {
           field: "DonationEpoux",
-          header: "Donation epoux",
+          header: "DDV",
           dataType: "bool",
           TextTrue: "Oui",
           TextFalse: "Non",
@@ -1162,7 +1162,7 @@ export class DetailclientComponent {
     Open: (id: string | null) => {
       if (id == null) {
         // create conjoint
-        this.dialogConjoint.title = "Creation du Conjoint";
+        this.dialogConjoint.title = "Création de Conjoint";
         this.dialogConjoint.isEditing = false;
         this.dialogConjoint.data = {
           ConjointId: uuidv4(),
@@ -1616,7 +1616,7 @@ export class DetailclientComponent {
     },
     Submit: () => {
       if (this.dialogImportPiece.SelectedPiece == null || this.dialogImportPiece.SelectedPiece == "") {
-        this.toastr.warning("Veuillez choisir une piece.");
+        this.toastr.warning("Veuillez choisir une pièce.");
         return;
       }
       let newClientPiece = {
@@ -1676,7 +1676,7 @@ export class DetailclientComponent {
         { field: "Commentaire", header: "Commentaire", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         {
           field: "Status",
-          header: "Status",
+          header: "Statut",
           dataType: "string",
           visible: true,
           inputOptions: {
@@ -1763,7 +1763,7 @@ export class DetailclientComponent {
     Open: (id: string | null) => {
       if (id == null) {
         // create task
-        this.dialogTask.title = "Creation de la tache";
+        this.dialogTask.title = "Création de la tache";
         this.dialogTask.isEditing = false;
         this.dialogTask.data = {
           ClientTacheId: uuidv4(),
