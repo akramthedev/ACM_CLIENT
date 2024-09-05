@@ -837,43 +837,6 @@
             <li [ngbNavItem]="3">
               <a ngbNavLink>Tâches</a>
               <ng-template ngbNavContent>
-                <!-- <div class="table-responsive edit-table">
-                  <table class="table card-table table-vcenter text-nowrap">
-                    <thead>
-                      <tr>
-                        <th>Tâche</th>
-                        <th>Numéro Ordre</th>
-                        <th>Prestation</th>
-                        <th>Status</th>
-                        <th>Commentaire</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let task of ClientTaches">
-                        <td>{{ task.Intitule }}</td>
-                        <td>{{ task.Numero_Ordre }}</td>
-                        <td>{{ task.PrestationDesignation }}</td>
-                        <td>
-                          <span *ngIf="task.Status === 'En attente'" [class]="'badge badge-light-danger'">{{ task.Status }}</span>
-                          <span *ngIf="task.Status === 'En cours'" [class]="'badge badge-light-primary'">{{ task.Status }}</span>
-                          <span *ngIf="task.Status === 'Terminé'" [class]="'badge badge-light-success'">{{ task.Status }}</span>
-                        </td>
-                        <td>{{ task.Commentaire }}</td>
-                        <td class="text-start">
-                          <div class="d-flex justify-content-around">
-                            <a class="fs-2 text-warning" href="javascript:void(0)">
-                              <i class="fa fa-pencil"></i>
-                            </a>
-                            <a class="fs-2 text-danger" href="javascript:void(0)">
-                              <i class="fa fa-trash"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> -->
                 <div class="table-responsive edit-table" *ngFor="let taskType of tablesTasks">
                   <table class="table card-table table-vcenter text-nowrap">
                     <thead>
@@ -943,65 +906,6 @@
                   </table>
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">Total: {{ GetTasks().length }}</div>
                 </div>
-
-                <!-- <div class="mb-4 mt-3" *ngFor="let taskType of tablesTasks">
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th [attr.colspan]="getVisibleColumns(taskType.columns).length - 1">
-                          <b>{{ taskType.title }}</b>
-                        </th>
-                        <th>
-                          <button (click)="dialogTask.Open(null, taskType.type)" type="button" class="btn btn-primary">
-                            <i class="fa fa-plus"></i>
-                          </button>
-                        </th>
-                      </tr> -->
-                <!-- table columns -->
-                <!-- <tr class="bg-primary-subtle">
-                        <td *ngFor="let column of getVisibleColumns(taskType.columns)">{{ column.header }}</td>
-                      </tr>
-                    </thead>
-                    <tbody *ngIf="GetTasks().length === 0">
-                      <tr>
-                        <td [attr.colspan]="getVisibleColumns(taskType.columns).length" align="center">
-                          <i>{{ taskType.noDataMessage }}</i>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody *ngIf="GetTasks().length > 0">
-                      <tr *ngFor="let task of GetTasks()">
-                        <td *ngFor="let column of getVisibleColumns(taskType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'"> -->
-                <!-- Affichage conditionnel des données selon leur type -->
-                <!-- <span *ngIf="column.dataType == 'string' && column.field !== 'AgentResposable'">
-                            {{ task[column.field] }}
-                          </span> -->
-
-                <!-- Affichage du nom de l'agent pour la colonne 'AgentResposable' -->
-                <!-- <span *ngIf="column.field === 'AgentResposable'">
-                            {{ getAgentValueByKey(task[column.field], column.inputOptions.selectData) }}
-                          </span> -->
-                <!-- <span *ngIf="column.dataType == 'string'">{{ task[column.field] }}</span> -->
-                <!-- <span *ngIf="column.dataType == 'date'">{{ task[column.field] | date : "dd/MM/yyyy" }}</span>
-                          <span *ngIf="column.dataType == 'datetime'">{{ task[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
-                          <span *ngIf="column.dataType == 'number'">{{ task[column.field] }}</span>
-                          <span *ngIf="column.dataType == 'bool'">{{ task[column.field] ? column.TextTrue : column.TextFalse }}</span>
-                          <span *ngIf="column.field == 'action'">
-                            <div class="d-flex justify-content-around">
-                              <a class="text-warning" (click)="dialogTask.Open(task.ClientTacheId)">
-                                <i class="fa fa-pencil"></i>
-                              </a>
-                              <a class="text-danger" (click)="DeleteTask(task.ClientTacheId)">
-                                <i class="fa fa-trash"></i>
-                              </a>
-                            </div>
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">Total: {{ GetTasks().length }}</div>
-                </div> -->
               </ng-template>
             </li>
             <li [ngbNavItem]="4">
@@ -1036,16 +940,17 @@
                         <ul class="files">
                           <li class="file-box me-1" *ngFor="let clientPiece of filtredClientPieces; let index = index">
                             <div class="file-top">
-                              <i *ngIf="['png', 'jpg', 'jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-primary"></i>
-                              <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-pdf-o txt-primary"></i>
-                              <i *ngIf="['xls', 'xlsx'].includes(clientPiece.Extension)" class="fa fa-file-excel-o txt-primary"></i>
+                              <i *ngIf="['png', 'jpg', 'jpeg'].includes(clientPiece.Extension)" class="fa fa-file-image-o txt-info"></i>
+                              <i *ngIf="['pdf'].includes(clientPiece.Extension)" class="fa fa-file-pdf-o txt-danger"></i>
+                              <i *ngIf="['xls', 'xlsx'].includes(clientPiece.Extension)" class="fa fa-file-excel-o txt-success"></i>
                               <i *ngIf="['doc', 'docx'].includes(clientPiece.Extension)" class="fa fa-file-word-o txt-primary"></i>
-                              <i *ngIf="!clientPiece.Extension" class="fa fa-upload txt-primary" (click)="DirectImportForPiece(clientPiece.ClientPieceId)"></i>
+                              <i *ngIf="!clientPiece.Extension" class="fa fa-upload txt-warning" (click)="DirectImportForPiece(clientPiece.ClientPieceId)"></i>
                               <i class="fa fa-ellipsis-v f-14 ellips" (click)="OpenPieceTools(clientPiece.ClientPieceId)"></i>
                             </div>
                             <div class="file-bottom">
                               <h6>{{ clientPiece.Libelle }}</h6>
-                              <p class="mb-1">{{ clientPiece.Extension }}</p>
+                              <p *ngIf="clientPiece.Extension" class="mb-1">{{ clientPiece.Extension }}</p>
+                              <p *ngIf="!clientPiece.Extension" class="mb-1">Aucun fichier</p>
                             </div>
                           </li>
                         </ul>
@@ -1058,38 +963,87 @@
             <li [ngbNavItem]="5">
               <a ngbNavLink>Missions</a>
               <ng-template ngbNavContent>
-                <div class="table-responsive edit-table">
-                  <table class="table card-table table-vcenter text-nowrap">
-                    <thead>
-                      <tr>
-                        <th>Designation</th>
-                        <th>Description</th>
-                        <th>Date Affectation</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody *ngIf="currentClient.ClientMissions.length === 0">
-                      <tr>
-                        <td colspan="4" align="center">
-                          <i>Aucune mission affecter</i>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody>
-                      <tr *ngFor="let mission of currentClient.ClientMissions">
-                        <td>{{ mission.Designation }}</td>
-                        <td>{{ mission.Description }}</td>
-                        <td>{{ mission.DateAffectation | date : "dd/MM/yyyy" }}</td>
-                        <td class="text-start">
-                          <div class="d-flex justify-content-around">
-                            <a class="fs-2 text-warning print-btn" (click)="generatePdf(mission.ClientMissionId)">
-                              <i class="fa fa-print"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <br />
+                <h4 class="mb-3" *ngIf="currentClient.ClientMissions.length > 0">Lettres de Missions</h4>
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="table-responsive edit-table">
+                      <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>Designation</th>
+                            <th>Description</th>
+                            <th>Date Affectation</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="currentClient.ClientMissions.length === 0">
+                          <tr>
+                            <td colspan="4" align="center">
+                              <i>Aucune mission affecter</i>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody>
+                          <tr *ngFor="let mission of currentClient.ClientMissions">
+                            <td>{{ mission.Designation }}</td>
+                            <td>{{ mission.Description }}</td>
+                            <td>{{ mission.DateAffectation | date : "dd/MM/yyyy" }}</td>
+                            <td class="text-start">
+                              <div class="d-flex justify-content-around">
+                                <a class="fs-2 text-warning print-btn" (click)="generatePdf(mission.ClientMissionId)">
+                                  <i class="fa fa-print"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <br />
+                <h4 class="mb-3">Prestations</h4>
+                <div *ngIf="ClientMissionPrestations && ClientMissionPrestations.length > 0">
+                  <!-- Affichage de la mission mère -->
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h4 class="card-title">{{ ClientMissionPrestations[0]?.MissionDesignation }}</h4>
+                    </div>
+
+                    <!-- Table des prestations -->
+                    <div class="table-responsive edit-table">
+                      <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>Prestation</th>
+                            <th>Date Affectation</th>
+                            <th>Description Prestation</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let prestation of ClientMissionPrestations">
+                            <td>{{ prestation.PrestationDesignation }}</td>
+                            <td>{{ prestation.DateAffectation | date : "dd/MM/yyyy" }}</td>
+                            <td>{{ prestation.PrestationDescription }}</td>
+                            <td class="text-start">
+                              <div class="d-flex justify-content-around">
+                                <a class="fs-2 text-danger" href="javascript:void(0)" (click)="deletePrestation(prestation.ClientMissionPrestationId)">
+                                  <i class="fa fa-trash"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <!-- Si aucune prestation n'est trouvée -->
+                          <tr *ngIf="ClientMissionPrestations.length === 0">
+                            <td colspan="4" class="text-center">Aucune prestation affectée</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </ng-template>
             </li>

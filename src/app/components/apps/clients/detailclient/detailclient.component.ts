@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal, NgbModalConfig, NgbNavChangeEvent } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
-import { Client, ClientTache, Conjoint, Passif, Piece, Proche } from "src/app/shared/model/dto.model";
+import { Client, ClientTache, Conjoint, Passif, Piece, Proche, ClientMission, ClientMissionPrestation } from "src/app/shared/model/dto.model";
 import { CustomTable, CustomTableColumn, CustomTableColumnInputOption } from "src/app/shared/model/models.model";
 import { Patrimoine } from "src/app/shared/model/dto.model";
 import { Budget } from "src/app/shared/model/dto.model";
@@ -30,7 +30,10 @@ export class DetailclientComponent {
   filterPiecesText: string = "";
   Pieces: Piece[] = [];
   ClientTaches: ClientTache[] = [];
-
+  ClientMissionPrestations: ClientMissionPrestation[] = [];
+  availablePrestations: any[];
+  prestationsManquantes: any[] = [];
+  selectedPrestationId: string = "";
   constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
     config.backdrop = "static";
     config.keyboard = false;
@@ -1438,29 +1441,6 @@ export class DetailclientComponent {
 
             if (this.currentClient.Photo == null) this.currentClient.ImgSrc = "assets/images/user/user.png";
             else this.currentClient.ImgSrc = `${environment.url}/${this.currentClient.Photo}`;
-
-            // const extensions = ["jpg", "jpeg", "png"];
-            // let imageFound = false;
-            // extensions.forEach((ext) => {
-            //   if (!imageFound) {
-            //     // Arrêter la vérification après avoir trouvé une image
-            //     const profileImageUrl = `${environment.url}/Pieces/${this.currentClient.ClientId}/profile.${ext}`;
-            //     this.checkImageExists(profileImageUrl, (exists: boolean) => {
-            //       if (exists) {
-            //         this.currentClient.ImgSrc = profileImageUrl;
-            //         imageFound = true; // Marque comme trouvé pour éviter d'autres vérifications
-            //       }
-            //     });
-            //   }
-            // });
-
-            // Si aucune image n'est trouvée, utiliser l'image par défaut
-            // setTimeout(() => {
-            //   if (!imageFound) {
-            //     this.currentClient.ImgSrc = "assets/images/user/user.png"; // Image par défaut
-            //   }
-            // }, 100); // Timeout pour permettre aux vérifications asynchrones de s'exécuter
-
             // get liste pieces
             this.enumService.GetPieces().subscribe(
               (responsePieces) => {
@@ -1474,8 +1454,13 @@ export class DetailclientComponent {
 
             //get ClientTache
             this.clientService.GetClientTachesSimple(clientId).subscribe((responseClientTache) => {
-              console.log("responseClientTache : ", responseClientTache);
+              console.log("responseClientTacheSimple : ", responseClientTache);
               this.ClientTaches = responseClientTache;
+            });
+            //get ClientMissionPrestation
+            this.clientService.GetClientMissionPrestationSimple(clientId).subscribe((responseClientMissionPrestation) => {
+              console.log("responseClientMissionPrestationSimple : ", responseClientMissionPrestation);
+              this.ClientMissionPrestations = responseClientMissionPrestation;
             });
           }
         },
@@ -1488,6 +1473,41 @@ export class DetailclientComponent {
           }, 2000);
         }
       );
+    });
+  }
+  deletePrestation(clientMissionPrestationId: string) {
+    Swal.fire({
+      title: "Êtes-vous sûr ?",
+      text: "Les tâches liées à cette prestation seront également supprimées !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Supprimer",
+      cancelButtonText: "Annuler",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Ici, tu peux ajouter ta logique de suppression réelle
+        console.log("ID de la prestation à supprimer : ", clientMissionPrestationId);
+
+        // Appeler le service de suppression si nécessaire
+        this.clientService.DeleteClientMissionPrestation(clientMissionPrestationId).subscribe(
+          (response) => {
+            // Afficher un message de succès
+            Swal.fire("Supprimé !", "La prestation et ses tâches liées ont été supprimées.", "success");
+
+            // Mise à jour de la liste des prestations après suppression
+            this.ClientMissionPrestations = this.ClientMissionPrestations.filter((prestation) => prestation.ClientMissionPrestationId !== clientMissionPrestationId);
+            // Filtrer les tâches pour exclure celles liées à la prestation supprimée
+            this.ClientTaches = this.ClientTaches.filter((task) => task.ClientMissionPrestationId !== clientMissionPrestationId);
+            this.GetTasks();
+          },
+          (error) => {
+            console.error("Erreur lors de la suppression : ", error);
+            Swal.fire("Erreur", "La suppression a échoué.", "error");
+          }
+        );
+      }
     });
   }
   // Méthode pour vérifier l'existence de l'image

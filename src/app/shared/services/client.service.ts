@@ -171,6 +171,14 @@ export class ClientService {
     let url = `${environment.url}/CreateClientMission?`;
     return this.http.post(url, data);
   }
+  GetClientMissionPrestationSimple(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientMissionPrestationSimple?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  DeleteClientMissionPrestation(ClientMissionPrestationId: string) {
+    let url = `${environment.url}/DeleteClientMissionPrestation/${ClientMissionPrestationId}`;
+    return this.http.delete(url);
+  }
 
   GetClientTaches(clientId: string): Observable<any> {
     let url = `${environment.url}/GetClientTaches?ClientId=${clientId}`;
