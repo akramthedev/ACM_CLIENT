@@ -21,6 +21,7 @@ import { environment } from "src/environments/environment";
   styleUrl: "./detailclient.component.scss",
 })
 export class DetailclientComponent {
+  @ViewChild("dialogPrestation") dialogPrestation: any;
   date = new Date();
   isCompReadyeee: boolean = false;
   activeTabId: number = 1;
@@ -31,9 +32,8 @@ export class DetailclientComponent {
   Pieces: Piece[] = [];
   ClientTaches: ClientTache[] = [];
   ClientMissionPrestations: ClientMissionPrestation[] = [];
-  availablePrestations: any[];
-  prestationsManquantes: any[] = [];
-  selectedPrestationId: string = "";
+  UnassignedClientMissionPrestation: ClientMissionPrestation[] = [];
+  selectedPrestationId: string;
   constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
     config.backdrop = "static";
     config.keyboard = false;
@@ -1438,7 +1438,6 @@ export class DetailclientComponent {
               item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
               return item;
             });
-
             if (this.currentClient.Photo == null) this.currentClient.ImgSrc = "assets/images/user/user.png";
             else this.currentClient.ImgSrc = `${environment.url}/${this.currentClient.Photo}`;
             // get liste pieces
@@ -1462,6 +1461,11 @@ export class DetailclientComponent {
               console.log("responseClientMissionPrestationSimple : ", responseClientMissionPrestation);
               this.ClientMissionPrestations = responseClientMissionPrestation;
             });
+            //get UnassignedClientMissionPrestation
+            this.clientService.GetUnassignedClientMissionPrestationSimple(clientId, this.currentClient.ClientMissions[0].MissionId).subscribe((responseClientMissionPrestation) => {
+              console.log("responseUnassignedClientMissionPrestationSimple : ", responseClientMissionPrestation);
+              this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
+            });
           }
         },
         (error) => {
@@ -1475,6 +1479,24 @@ export class DetailclientComponent {
       );
     });
   }
+  openDialog() {
+    this.modalService.open(this.dialogPrestation, { ariaLabelledBy: "modal-basic-title" });
+  }
+
+  addPrestation() {
+    console.log("Selected Prestation ID:", this.selectedPrestationId);
+    this.selectedPrestationId = null;
+    this.modalService.dismissAll(); // Close the modal after selection
+  }
+  onCancelPrestation(modal: any) {
+    // Annuler la sélection temporaire et fermer le modal
+    this.selectedPrestationId = null;
+    this.modalService.dismissAll(); // Fermer le modal sans enregistrer
+  }
+  filteredTaches(prestationId: string) {
+    return this.ClientTaches.filter((tache) => tache.ClientMissionPrestationId === prestationId);
+  }
+
   deletePrestation(clientMissionPrestationId: string) {
     Swal.fire({
       title: "Êtes-vous sûr ?",

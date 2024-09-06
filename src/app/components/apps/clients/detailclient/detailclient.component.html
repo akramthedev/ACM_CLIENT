@@ -964,7 +964,7 @@
               <a ngbNavLink>Missions</a>
               <ng-template ngbNavContent>
                 <br />
-                <h4 class="mb-3" *ngIf="currentClient.ClientMissions.length > 0">Lettres de Missions</h4>
+                <!-- <h4 class="mb-3" *ngIf="currentClient.ClientMissions.length > 0">Les Missions</h4> -->
                 <div class="card mb-3">
                   <div class="card-body">
                     <div class="table-responsive edit-table">
@@ -1003,12 +1003,14 @@
                   </div>
                 </div>
                 <br />
-                <h4 class="mb-3">Prestations</h4>
+                <h4 class="mb-3">Les Prestations</h4>
+
                 <div *ngIf="ClientMissionPrestations && ClientMissionPrestations.length > 0">
                   <!-- Affichage de la mission mère -->
                   <div class="card mb-3">
                     <div class="card-body">
                       <h4 class="card-title">{{ ClientMissionPrestations[0]?.MissionDesignation }}</h4>
+                      <div class="text-end"><div class="btn btn-outline-primary" (click)="openDialog()">Ajouter prestation</div></div>
                     </div>
 
                     <!-- Table des prestations -->
@@ -1045,6 +1047,41 @@
                     </div>
                   </div>
                 </div>
+                <!-- Prestation -->
+                <!-- <div class="card-body default-accordion">
+                  <div ngbAccordion>
+                    <div ngbAccordionItem *ngFor="let prestation of ClientMissionPrestations">
+                      <h3 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white">
+                          <ng-container *ngIf="prestation.PrestationId">
+                            <input class="checkbox_animated" type="checkbox" (click)="$event.stopPropagation()" />
+                            {{ prestation.PrestationDesignation }}
+                          </ng-container>
+                        </button>
+                      </h3>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-container *ngFor="let tache of filteredTaches(prestation.ClientMissionPrestationId)">
+                            <div class="card-body animate-chk fw-normal">
+                              <div class="row fw-normal">
+                                <div class="col fw-normal">
+                                  <label *ngIf="tache?.ClientTacheId" class="d-block fw-normal" [for]="tache.ClientTacheId">
+                                    <input class="checkbox_animated fw-normal" [id]="tache.ClientTacheId" [name]="tache.ClientTacheId" type="checkbox" />
+                                    {{ tache.Intitule }}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <div *ngIf="filteredTaches(prestation.ClientMissionPrestationId).length === 0">
+                            <p>No tasks available for this prestation.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <!-- Button to open the dialogPRestation -->
               </ng-template>
             </li>
           </ul>
@@ -1329,5 +1366,25 @@
     </ng-template>
 
     <!-- #endregion DialogTask -->
+    <!--region DialogPrestation template -->
+    <ng-template #dialogPrestation let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">Sélectionner une Prestation</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <label for="prestationSelect">Sélectionnez une prestation :</label>
+        <select id="prestationSelect" [(ngModel)]="selectedPrestationId" class="form-control">
+          <option *ngFor="let prestation of UnassignedClientMissionPrestation" [value]="prestation.PrestationId">
+            {{ prestation.PrestationDesignation }}
+          </option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addPrestation()">Ajouter</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancelPrestation('dialogPrestation')">Annuler</button>
+      </div>
+    </ng-template>
+    <!-- #endregion DialogPrestation -->
   </div>
 </div>

@@ -47,6 +47,7 @@ export class Client {
   Mission?: Mission[];
   Prestation?: Prestation[];
   ClientMission?: ClientMission[];
+  ClientMissions?: ClientMission[]; //pour la parti add prestation dans detail client
   ClientMissionPrestation?: ClientMissionPrestation[];
   ClientTaches?: ClientTache[];
 }
