@@ -1645,6 +1645,7 @@ export class DetailclientComponent {
             inputElem.value = "";
 
             this.currentClient.ClientPieces.push(newClientPiece);
+            this.filtredClientPieces.push(newClientPiece);
             this.dialogImportPiece.Close();
           }
         },
