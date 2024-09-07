@@ -1277,13 +1277,6 @@ export class DetailclientComponent {
   //#endregion Conjoint
 
   private formatDate(date: string | null): string | null {
-    //console.log("before date: ", date);
-    //if (date.includes("T")) date = date.split("T")[0];
-    // if (!date.includes("T")) date = `${date}T12:00:00.000`;
-    //console.log("after date: ", date);
-    //let formated = formatDate(date, "YYYY-MM-dd", "en-US");
-    //console.log("formated: ", formated);
-    //return formated;
     return date ? formatDate(date, "yyyy-MM-dd", "en-US") : null;
   }
 
