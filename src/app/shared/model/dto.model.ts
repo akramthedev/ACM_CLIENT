@@ -181,6 +181,8 @@ export class ClientMissionPrestation {
   ClientMissionId: string;
   PrestationId: string;
   DateAffectation?: string;
+  Designation?: string;
+  Description?: string;
 }
 
 export class ClientTache {

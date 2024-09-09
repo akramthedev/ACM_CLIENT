@@ -1047,41 +1047,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- Prestation -->
-                <!-- <div class="card-body default-accordion">
-                  <div ngbAccordion>
-                    <div ngbAccordionItem *ngFor="let prestation of ClientMissionPrestations">
-                      <h3 ngbAccordionHeader>
-                        <button ngbAccordionButton class="bg-primary text-white">
-                          <ng-container *ngIf="prestation.PrestationId">
-                            <input class="checkbox_animated" type="checkbox" (click)="$event.stopPropagation()" />
-                            {{ prestation.PrestationDesignation }}
-                          </ng-container>
-                        </button>
-                      </h3>
-                      <div ngbAccordionCollapse>
-                        <div ngbAccordionBody>
-                          <ng-container *ngFor="let tache of filteredTaches(prestation.ClientMissionPrestationId)">
-                            <div class="card-body animate-chk fw-normal">
-                              <div class="row fw-normal">
-                                <div class="col fw-normal">
-                                  <label *ngIf="tache?.ClientTacheId" class="d-block fw-normal" [for]="tache.ClientTacheId">
-                                    <input class="checkbox_animated fw-normal" [id]="tache.ClientTacheId" [name]="tache.ClientTacheId" type="checkbox" />
-                                    {{ tache.Intitule }}
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </ng-container>
-                          <div *ngIf="filteredTaches(prestation.ClientMissionPrestationId).length === 0">
-                            <p>No tasks available for this prestation.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <!-- Button to open the dialogPRestation -->
               </ng-template>
             </li>
           </ul>

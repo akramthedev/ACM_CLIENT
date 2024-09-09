@@ -33,6 +33,7 @@ export class DetailclientComponent {
   ClientTaches: ClientTache[] = [];
   ClientMissionPrestations: ClientMissionPrestation[] = [];
   UnassignedClientMissionPrestation: ClientMissionPrestation[] = [];
+  UnassignedClientTache: ClientTache[] = [];
   selectedPrestationId: string;
   constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
     config.backdrop = "static";
@@ -1478,9 +1479,68 @@ export class DetailclientComponent {
 
   addPrestation() {
     console.log("Selected Prestation ID:", this.selectedPrestationId);
-    this.selectedPrestationId = null;
+    const newClientMissionPrestationId = uuidv4();
+    const newPrestationData = {
+      ClientMissionPrestationId: newClientMissionPrestationId,
+      ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
+      PrestationId: this.selectedPrestationId,
+    };
+    this.clientService.CreateClientMissionPrestation(newPrestationData).subscribe(
+      (response) => {
+        this.clientService.GetUnassignedClientTache(this.currentClient.ClientId, newPrestationData.PrestationId).subscribe((response) => {
+          console.log("GetUnassignedClientTache : ", response);
+          this.UnassignedClientTache = response;
+          this.UnassignedClientTache.forEach((tache) => {
+            const newClientTacheId = uuidv4();
+            const taskData = {
+              ClientTacheId: newClientTacheId,
+              ClientMissionPrestationId: newClientMissionPrestationId,
+              ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
+              TacheId: tache.TacheId,
+            };
+            console.log("taskData : ", taskData);
+            // Appeler le service pour créer la tâche
+            this.clientService.CreateClientTache(taskData).subscribe(
+              (response) => {
+                console.log("Tâche ajoutée avec succès:", taskData);
+                this.clientService.GetClientTachesSimple(this.currentClient.ClientId).subscribe((responseClientTache) => {
+                  console.log("responseClientTacheSimple : ", responseClientTache);
+                  this.ClientTaches = responseClientTache;
+                });
+                this.GetTasks(); // Actualiser les tâches affichées
+              },
+              (error) => {
+                console.error("Erreur lors de la création de la tâche:", error);
+              }
+            );
+          });
+
+          this.clientService.GetUnassignedClientMissionPrestationSimple(this.currentClient.ClientId, this.currentClient.ClientMissions[0].MissionId).subscribe((responseClientMissionPrestation) => {
+            console.log("Mise à jour des prestations non affectées : ", responseClientMissionPrestation);
+            this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
+          });
+          // Recharger la liste complète des prestations depuis le backend
+          this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((updatedPrestations) => {
+            this.ClientMissionPrestations = updatedPrestations;
+          });
+        });
+        this.toastr.success("ajout de la prestation effectué");
+
+        //get ClientMissionPrestation
+        this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((responseClientMissionPrestation) => {
+          console.log("responseClientMissionPrestationSimple : ", responseClientMissionPrestation);
+          this.ClientMissionPrestations = responseClientMissionPrestation;
+        });
+      },
+      (error) => {
+        console.error("Erreur lors de la création de la prestation:", error);
+      }
+    );
+
     this.modalService.dismissAll(); // Close the modal after selection
+    this.selectedPrestationId = null;
   }
+
   onCancelPrestation(modal: any) {
     // Annuler la sélection temporaire et fermer le modal
     this.selectedPrestationId = null;
@@ -1515,6 +1575,10 @@ export class DetailclientComponent {
             this.ClientMissionPrestations = this.ClientMissionPrestations.filter((prestation) => prestation.ClientMissionPrestationId !== clientMissionPrestationId);
             // Filtrer les tâches pour exclure celles liées à la prestation supprimée
             this.ClientTaches = this.ClientTaches.filter((task) => task.ClientMissionPrestationId !== clientMissionPrestationId);
+            this.clientService.GetUnassignedClientMissionPrestationSimple(this.currentClient.ClientId, this.currentClient.ClientMissions[0].MissionId).subscribe((responseClientMissionPrestation) => {
+              console.log("Mise à jour des prestations non affectées : ", responseClientMissionPrestation);
+              this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
+            });
             this.GetTasks();
           },
           (error) => {
@@ -1760,7 +1824,6 @@ export class DetailclientComponent {
   GetTasks() {
     this.currentClient.ClientTaches = this.ClientTaches;
     return this.currentClient.ClientTaches;
-    // .filter((x) => (type != null ? x.TypePatrimoine === type : true))  this.currentClient.
   }
   dialogTask: {
     data: ClientTache;

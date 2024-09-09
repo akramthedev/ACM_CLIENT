@@ -196,6 +196,10 @@ export class ClientService {
     let url = `${environment.url}/GetLettreMission/${clientMissionId}`;
     return this.http.get(url, { responseType: "blob" });
   }
+  CreateClientMissionPrestation(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientMissionPrestation?`;
+    return this.http.post(url, data);
+  }
   CreateClientTache(data: any): Observable<any> {
     let url = `${environment.url}/CreateClientTache?`;
     return this.http.post(url, data);
@@ -256,6 +260,10 @@ export class ClientService {
 
   GetUnassignedClientMissionPrestationSimple(clientId: string, MissionId: string): Observable<any> {
     let url = `${environment.url}/GetUnassignedClientMissionPrestationSimple?ClientId=${clientId}&MissionId=${MissionId}`;
+    return this.http.get(url);
+  }
+  GetUnassignedClientTache(clientId: string, PrestationId: string): Observable<any> {
+    let url = `${environment.url}/GetUnassignedClientTache?ClientId=${clientId}&PrestationId=${PrestationId}`;
     return this.http.get(url);
   }
 }
