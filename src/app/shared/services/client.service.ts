@@ -258,8 +258,8 @@ export class ClientService {
     return `${environment.url}/DownloadClientPiece/${clientPieceId}`;
   }
 
-  GetUnassignedClientMissionPrestationSimple(clientId: string, MissionId: string): Observable<any> {
-    let url = `${environment.url}/GetUnassignedClientMissionPrestationSimple?ClientId=${clientId}&MissionId=${MissionId}`;
+  GetUnassignedClientMissionPrestationSimple(ClientMissionId: string): Observable<any> {
+    let url = `${environment.url}/GetUnassignedClientMissionPrestationSimple?ClientMissionId=${ClientMissionId}`;
     return this.http.get(url);
   }
   GetUnassignedClientTache(clientId: string, PrestationId: string): Observable<any> {
