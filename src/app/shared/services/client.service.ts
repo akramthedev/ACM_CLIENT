@@ -200,6 +200,10 @@ export class ClientService {
     let url = `${environment.url}/CreateClientMissionPrestation?`;
     return this.http.post(url, data);
   }
+  CreateClientMissionPrestationCustom(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientMissionPrestationCustom?`;
+    return this.http.post(url, data);
+  }
   CreateClientTache(data: any): Observable<any> {
     let url = `${environment.url}/CreateClientTache?`;
     return this.http.post(url, data);

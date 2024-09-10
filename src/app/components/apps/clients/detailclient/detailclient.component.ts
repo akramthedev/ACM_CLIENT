@@ -1545,47 +1545,9 @@ export class DetailclientComponent {
       // ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
       PrestationId: this.selectedPrestationId,
     };
-    this.clientService.CreateClientMissionPrestation(newPrestationData).subscribe(
+    this.clientService.CreateClientMissionPrestationCustom(newPrestationData).subscribe(
       (response) => {
-        this.clientService.GetUnassignedClientTache(this.currentClient.ClientId, newPrestationData.PrestationId).subscribe((response) => {
-          console.log("GetUnassignedClientTache : ", response);
-          this.UnassignedClientTache = response;
-          this.UnassignedClientTache.forEach((tache) => {
-            const newClientTacheId = uuidv4();
-            const taskData = {
-              ClientTacheId: newClientTacheId,
-              ClientMissionPrestationId: newClientMissionPrestationId,
-              ClientMissionId: this.selectedMissionId,
-
-              // ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
-              TacheId: tache.TacheId,
-            };
-            console.log("taskData : ", taskData);
-            // Appeler le service pour créer la tâche
-            this.clientService.CreateClientTache(taskData).subscribe(
-              (response) => {
-                console.log("Tâche ajoutée avec succès:", taskData);
-                this.clientService.GetClientTachesSimple(this.currentClient.ClientId).subscribe((responseClientTache) => {
-                  console.log("responseClientTacheSimple : ", responseClientTache);
-                  this.ClientTaches = responseClientTache;
-                });
-                this.GetTasks(); // Actualiser les tâches affichées
-              },
-              (error) => {
-                console.error("Erreur lors de la création de la tâche:", error);
-              }
-            );
-          });
-
-          this.clientService.GetUnassignedClientMissionPrestationSimple(this.selectedMissionId).subscribe((responseClientMissionPrestation) => {
-            console.log("Mise à jour des prestations non affectées : ", responseClientMissionPrestation);
-            this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
-          });
-          // Recharger la liste complète des prestations depuis le backend
-          this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((updatedPrestations) => {
-            this.ClientMissionPrestations = updatedPrestations;
-          });
-        });
+        console.log("response of CreateClientMissionPrestationCustom", response);
         this.toastr.success("ajout de la prestation effectué");
         //get ClientMissionPrestation
         this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((responseClientMissionPrestation) => {
@@ -1606,6 +1568,11 @@ export class DetailclientComponent {
           });
           this.ClientMissionPrestations = responseClientMissionPrestation;
           console.log("ClientMissionPrestations:", this.ClientMissionPrestationss);
+        });
+        //get ClientTache
+        this.clientService.GetClientTachesSimple(this.currentClient.ClientId).subscribe((responseClientTache) => {
+          console.log("responseClientTacheSimple : ", responseClientTache);
+          this.ClientTaches = responseClientTache;
         });
         this.selectedPrestationId = null;
       },
