@@ -966,6 +966,9 @@
                 <br />
                 <!-- <h4 class="mb-3" *ngIf="currentClient.ClientMissions.length > 0">Les Missions</h4> -->
                 <div class="card mb-3">
+                  <div class="text-end">
+                    <button class="btn btn-outline-primary" (click)="openDialogMission(currentClient.ClientId)">Ajouter mission</button>
+                  </div>
                   <div class="card-body">
                     <div class="table-responsive edit-table">
                       <table class="table card-table table-vcenter text-nowrap">
@@ -1002,7 +1005,6 @@
                     </div>
                   </div>
                 </div>
-                <br />
                 <!-- <div class="card-body default-accordion">
                   <div ngbAccordion #acc="ngbAccordion">
                     <div ngbAccordionItem *ngFor="let mission of currentClient.ClientMissions">
@@ -1068,21 +1070,101 @@
                     </div>
                   </div>
                 </div> -->
+                <div class="card-body default-accordion">
+                  <div ngbAccordion>
+                    <div ngbAccordionItem class="mt-3" *ngFor="let mission of currentClient.ClientMissions">
+                      <!-- <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white"><i class="flag-icon flag-icon-ma fs-3 px-3"></i> {{ mission.Designation }} du {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</button>
+                      </h2> -->
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton class="bg-primary text-white">
+                          <!-- Ensure both 'flag-icon' and the specific flag class are applied -->
+                          <i
+                            [ngClass]="{
+                              'flag-icon': true,
+                              'flag-icon-ma': mission.Designation === 'Installation au Maroc',
+                              'flag-icon-fr': mission.Designation === 'Retour en France'
+                            }"
+                            class="fs-3 px-3"
+                          >
+                          </i>
+                          <!-- Add some spacing after the icon -->
+                          <span class="ms-2">{{ mission.Designation }} du {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</span>
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <div class="card-body animate-chk fw-normal">
+                              <!-- Add Prestation Button -->
+                              <div class="text-end">
+                                <button class="btn btn-outline-primary" (click)="openDialog(mission.ClientMissionId)">Ajouter prestation</button>
+                              </div>
+                            </div>
 
-                <br />
-                <ng-container *ngFor="let mission of currentClient.ClientMissions">
-                  <div class="card mb-3">
+                            <!-- Table of Prestations for each mission -->
+                            <div *ngIf="ClientMissionPrestationss[mission.ClientMissionId] && ClientMissionPrestationss[mission.ClientMissionId].length > 0">
+                              <table class="table card-table table-vcenter text-nowrap">
+                                <thead>
+                                  <tr>
+                                    <th>Prestation</th>
+                                    <th>Date Affectation</th>
+                                    <th>Description Prestation</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let prestation of ClientMissionPrestationss[mission.ClientMissionId]">
+                                    <td>{{ prestation.PrestationDesignation }}</td>
+                                    <td>{{ prestation.DateAffectation | date : "dd/MM/yyyy" }}</td>
+                                    <td>{{ prestation.PrestationDescription }}</td>
+                                    <td class="text-start">
+                                      <div class="d-flex justify-content-around">
+                                        <a class="fs-2 text-danger" href="javascript:void(0)" (click)="deletePrestation(prestation.ClientMissionPrestationId)">
+                                          <i class="fa fa-trash"></i>
+                                        </a>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <!-- If no prestations are assigned -->
+                            <div *ngIf="!ClientMissionPrestationss[mission.ClientMissionId] || ClientMissionPrestationss[mission.ClientMissionId].length === 0">
+                              <table class="table card-table table-vcenter text-nowrap">
+                                <thead>
+                                  <tr>
+                                    <th>Prestation</th>
+                                    <th>Date Affectation</th>
+                                    <th>Description Prestation</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td colspan="4" class="text-center">Aucune prestation affectée</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- colors <div class="col-sm-12 col-xl-12" *ngFor="let mission of currentClient.ClientMissions">
+                  <div class="card">
+                    <div class="card-header bg-primary">
+                      <h5 class="text-white">{{ mission.Designation }} du {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</h5>
+                    </div>
                     <div class="card-body">
-                      <h4 class="card-title">{{ mission.Designation }} {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</h4>
-                      <p>{{ mission.Description }}</p>
-
-                      <!-- Add Prestation Button -->
                       <div class="text-end">
                         <button class="btn btn-outline-primary" (click)="openDialog(mission.ClientMissionId)">Ajouter prestation</button>
                       </div>
                     </div>
 
-                    <!-- Table of Prestations for each mission -->
                     <div *ngIf="ClientMissionPrestationss[mission.ClientMissionId] && ClientMissionPrestationss[mission.ClientMissionId].length > 0">
                       <table class="table card-table table-vcenter text-nowrap">
                         <thead>
@@ -1110,7 +1192,6 @@
                       </table>
                     </div>
 
-                    <!-- If no prestations are assigned -->
                     <div *ngIf="!ClientMissionPrestationss[mission.ClientMissionId] || ClientMissionPrestationss[mission.ClientMissionId].length === 0">
                       <table class="table card-table table-vcenter text-nowrap">
                         <thead>
@@ -1129,18 +1210,19 @@
                       </table>
                     </div>
                   </div>
-                </ng-container>
-
-                <!-- <h4 class="mb-3">Les Prestations [0]</h4>
-
-                <div *ngIf="ClientMissionPrestations && ClientMissionPrestations.length > 0">
-                  <div class="card mb-3">
+                </div> -->
+                <!-- <div class="col-sm-12 col-xl-12" *ngFor="let mission of currentClient.ClientMissions">
+                  <div class="card card-absolute">
+                    <div class="card-header bg-primary">
+                      <h5 class="text-white">{{ mission.Designation }} {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</h5>
+                    </div>
                     <div class="card-body">
-                      <h4 class="card-title">{{ ClientMissionPrestations[0]?.MissionDesignation }}</h4>
-                      <div class="text-end"><div class="btn btn-outline-primary" (click)="openDialog()">Ajouter prestation</div></div>
+                      <div class="text-end">
+                        <button class="btn btn-outline-primary" (click)="openDialog(mission.ClientMissionId)">Ajouter prestation</button>
+                      </div>
                     </div>
 
-                    <div class="table-responsive edit-table">
+                    <div *ngIf="ClientMissionPrestationss[mission.ClientMissionId] && ClientMissionPrestationss[mission.ClientMissionId].length > 0">
                       <table class="table card-table table-vcenter text-nowrap">
                         <thead>
                           <tr>
@@ -1151,7 +1233,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let prestation of ClientMissionPrestations">
+                          <tr *ngFor="let prestation of ClientMissionPrestationss[mission.ClientMissionId]">
                             <td>{{ prestation.PrestationDesignation }}</td>
                             <td>{{ prestation.DateAffectation | date : "dd/MM/yyyy" }}</td>
                             <td>{{ prestation.PrestationDescription }}</td>
@@ -1163,8 +1245,22 @@
                               </div>
                             </td>
                           </tr>
+                        </tbody>
+                      </table>
+                    </div>
 
-                          <tr *ngIf="ClientMissionPrestations.length === 0">
+                    <div *ngIf="!ClientMissionPrestationss[mission.ClientMissionId] || ClientMissionPrestationss[mission.ClientMissionId].length === 0">
+                      <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>Prestation</th>
+                            <th>Date Affectation</th>
+                            <th>Description Prestation</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
                             <td colspan="4" class="text-center">Aucune prestation affectée</td>
                           </tr>
                         </tbody>
@@ -1172,6 +1268,63 @@
                     </div>
                   </div>
                 </div> -->
+                <!-- <ng-container *ngFor="let mission of currentClient.ClientMissions">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h4 class="card-title">{{ mission.Designation }} {{ mission.DateAffectation | date : "dd/MM/yyyy" }}</h4>
+                      <p>{{ mission.Description }}</p>
+
+                      <div class="text-end">
+                        <button class="btn btn-outline-primary" (click)="openDialog(mission.ClientMissionId)">Ajouter prestation</button>
+                      </div>
+                    </div>
+
+                    <div *ngIf="ClientMissionPrestationss[mission.ClientMissionId] && ClientMissionPrestationss[mission.ClientMissionId].length > 0">
+                      <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>Prestation</th>
+                            <th>Date Affectation</th>
+                            <th>Description Prestation</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let prestation of ClientMissionPrestationss[mission.ClientMissionId]">
+                            <td>{{ prestation.PrestationDesignation }}</td>
+                            <td>{{ prestation.DateAffectation | date : "dd/MM/yyyy" }}</td>
+                            <td>{{ prestation.PrestationDescription }}</td>
+                            <td class="text-start">
+                              <div class="d-flex justify-content-around">
+                                <a class="fs-2 text-danger" href="javascript:void(0)" (click)="deletePrestation(prestation.ClientMissionPrestationId)">
+                                  <i class="fa fa-trash"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div *ngIf="!ClientMissionPrestationss[mission.ClientMissionId] || ClientMissionPrestationss[mission.ClientMissionId].length === 0">
+                      <table class="table card-table table-vcenter text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>Prestation</th>
+                            <th>Date Affectation</th>
+                            <th>Description Prestation</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td colspan="4" class="text-center">Aucune prestation affectée</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </ng-container> -->
               </ng-template>
             </li>
           </ul>
@@ -1476,5 +1629,27 @@
       </div>
     </ng-template>
     <!-- #endregion DialogPrestation -->
+    <!--region DialogMission template -->
+    <ng-template #dialogMission let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">Sélectionner une Mission</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <label for="missionSelect">Sélectionnez une Mission :</label>
+        <select id="missionSelect" [(ngModel)]="selectedMissionId" class="form-control">
+          <ng-container *ngFor="let mission of MissionWithPrestationCount">
+            <option *ngIf="mission.NumberOfPrestations > 0" [value]="mission.MissionId">
+              {{ mission.MissionDesignation }}
+            </option>
+          </ng-container>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addMission()">Ajouter</button>
+        <button type="button" class="btn btn-secondary" (click)="onCancelMission('dialogMission')">Annuler</button>
+      </div>
+    </ng-template>
+    <!-- #endregion DialogMission -->
   </div>
 </div>

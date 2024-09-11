@@ -38,7 +38,8 @@
                 <h6>Missions</h6>
                 <div class="mb-3 m-t-15 custom-radio-ml">
                   <div *ngFor="let mission of Missions" class="radio radio-primary">
-                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Retour en France'" (change)="onSelectionChange($event, mission.MissionId)" />
+                    <!-- && mission.Designation !== 'Retour en France' -->
+                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc'" (change)="onSelectionChange($event, mission.MissionId)" />
                     <label class="form-check-label fw-normal" [for]="mission.MissionId">{{ mission.Designation }}</label>
                   </div>
                 </div>

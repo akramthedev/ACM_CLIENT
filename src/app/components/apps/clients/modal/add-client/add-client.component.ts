@@ -263,6 +263,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.showPrestations = false;
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
+      this.clientData.ImgSrc = "assets/images/user/user.png";
       this.clientData.Conjoint = [];
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
