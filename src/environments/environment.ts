@@ -16,14 +16,13 @@ export const environment = {
   //   redirectUri: 'http://localhost:4200/',
   // },
 
-
   keycloak: {
     // serverUrl: 'http://localhost:8080',
-    serverUrl: 'https://acm-keycloak.azurewebsites.net',    
-    redirectUri: 'http://localhost:4200',
-    postLogoutRedirectUri: 'http://localhost:4200/logout',
-    realm: 'acm',
-    clientId: 'acm-client',
+    serverUrl: "https://acm-keycloak.azurewebsites.net",
+    redirectUri: "http://localhost:4200",
+    postLogoutRedirectUri: "http://localhost:4200/logout",
+    realm: "acm",
+    clientId: "acm-client",
   },
   idleConfig: { idle: 1000 * 60 * 4, timeout: 60, ping: 10 },
 };

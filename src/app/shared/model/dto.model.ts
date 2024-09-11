@@ -47,6 +47,7 @@ export class Client {
   Mission?: Mission[];
   Prestation?: Prestation[];
   ClientMission?: ClientMission[];
+  ClientMissions?: ClientMission[]; //pour la parti add prestation dans detail client
   ClientMissionPrestation?: ClientMissionPrestation[];
   ClientTaches?: ClientTache[];
 }
@@ -180,6 +181,8 @@ export class ClientMissionPrestation {
   ClientMissionId: string;
   PrestationId: string;
   DateAffectation?: string;
+  Designation?: string;
+  Description?: string;
 }
 
 export class ClientTache {
@@ -196,4 +199,5 @@ export class ClientTache {
   Date_Execution?: string;
   Status?: string;
   AgentResposable?: string;
+  PrestationId?: string;
 }

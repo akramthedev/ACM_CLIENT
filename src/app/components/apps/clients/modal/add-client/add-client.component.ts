@@ -526,16 +526,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       ClientId: this.clientData.ClientId,
     };
   }
-  // submitAddClientMission() {
-  //   if (this.newClientMission.ClientId == null || this.newClientMission.ClientMissionId == null || this.newClientMission.MissionId == null) {
-  //     this.toastr.warning("Veuillez verifier submitClient du ClientMission");
-  //     return;
-  //   }
-  //   console.log(this.newClientMission);
-  //   this.clientData.ClientMission.push(this.newClientMission);
-  //   console.log("Submit AddClientMission (ClientData.ClientMission)", this.clientData);
-  //   this.newClientMission = null;
-  // }
+
   submitAddClientMission() {
     // Vérifie si clientData et ClientId sont définis
     if (!this.clientData || !this.clientData.ClientId) {

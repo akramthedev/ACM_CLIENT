@@ -32,83 +32,16 @@ export class ClientsComponent implements OnInit {
   Clients: any[] = [];
   User: keycloakUser = null;
 
-  constructor(
-    private title: Title,
-    private router: Router,
-    private clientService: ClientService,
-    private loader: NgxSpinnerService,
-    private toastr: ToastrService,
-    private renderer: Renderer2,
-    private authService: AuthService,
-  ) {
+  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2, private authService: AuthService) {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
 
-    this.authService.GetCurrentUser()
-      .then((user: any) => {
-        this.User = user;
-        if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == ""))
-          this.User.FullName = this.User.email;
-        else this.User.FullName = this.User.firstName + " " + this.User.lastName;
-      })
+    this.authService.GetCurrentUser().then((user: any) => {
+      this.User = user;
+      if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == "")) this.User.FullName = this.User.email;
+      else this.User.FullName = this.User.firstName + " " + this.User.lastName;
+    });
   }
-  // onProfileImageChange(event: any) {
-  //   if (event.target.files && event.target.files[0]) {
-  //     const formData = new FormData();
-  //     formData.append("file", event.target.files[0], event.target.files[0].name);
-  //     formData.append("ClientId", this.CurrentClient.ClientId);
-
-  //     this.clientService.UploadProfileImage(formData).subscribe(
-  //       (response: any) => {
-  //         // Utilisez le chemin complet et ajoutez le timestamp pour forcer le rechargement de l'image
-  //         const timestamp = new Date().getTime();
-  //         const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.jpg?t=${timestamp}`;
-
-  //         // Assignez cette URL avec le timestamp à ImgSrc
-  //         this.CurrentClient.ImgSrc = imageUrl;
-  //         console.log(this.CurrentClient.ImgSrc);
-  //         this.toastr.success("Image de profil mise à jour avec succès");
-  //       },
-  //       (error: any) => {
-  //         this.toastr.error("Erreur lors de l'upload de l'image de profil");
-  //       }
-  //     );
-  //   }
-  // }
-  // onProfileImageChange(event: any) {
-  //   if (event.target.files && event.target.files[0]) {
-  //     const formData = new FormData();
-  //     formData.append("file", event.target.files[0], event.target.files[0].name);
-  //     formData.append("ClientId", this.CurrentClient.ClientId);
-
-  //     // Supprimer les anciennes images (jpg, jpeg, png) avant d'uploader la nouvelle
-  //     const oldExtensions = ["jpg", "jpeg", "png"];
-  //     oldExtensions.forEach((ext) => {
-  //       const oldFilePath = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${ext}`;
-  //       this.clientService.DeleteProfileImage(oldFilePath).subscribe(
-  //         () => console.log(`Deleted old image: ${oldFilePath}`),
-  //         (err) => console.log(`No previous image found to delete: ${oldFilePath}`, err)
-  //       );
-  //     });
-
-  //     this.clientService.UploadProfileImage(formData).subscribe(
-  //       (response: any) => {
-  //         // Utilisez le chemin complet avec un timestamp pour forcer le rechargement de l'image
-  //         const timestamp = new Date().getTime();
-  //         const newExtension = event.target.files[0].name.split(".").pop().toLowerCase();
-  //         const imageUrl = `${environment.url}/Pieces/${this.CurrentClient.ClientId}/profile.${newExtension}?t=${timestamp}`;
-
-  //         // Mettre à jour l'URL de l'image de profil
-  //         this.CurrentClient.ImgSrc = imageUrl;
-  //         console.log("Image updated:", this.CurrentClient.ImgSrc);
-  //         this.toastr.success("Image de profil mise à jour avec succès");
-  //       },
-  //       (error: any) => {
-  //         this.toastr.error("Erreur lors de l'upload de l'image de profil");
-  //       }
-  //     );
-  //   }
-  // }
   onProfileImageChange(event: any) {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -240,11 +173,8 @@ export class ClientsComponent implements OnInit {
 
         // Charger tous les clients
         this.Clients = response.map((client) => {
-
-          if (client.Photo == null)
-            client.ImgSrc = "assets/images/user/user.png";
-          else
-            client.ImgSrc = `${environment.url}/${client.Photo}`;
+          if (client.Photo == null) client.ImgSrc = "assets/images/user/user.png";
+          else client.ImgSrc = `${environment.url}/${client.Photo}`;
 
           // const imageUrlJpg = `${environment.url}/Pieces/${client.ClientId}/profile.jpg`;
           // const imageUrlJpeg = `${environment.url}/Pieces/${client.ClientId}/profile.jpeg`;

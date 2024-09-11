@@ -108,7 +108,7 @@ export class TachesComponent implements OnInit {
           { data: "Numero_Ordre", title: "Numero Ordre" },
           { data: "PrestationDesignation", title: "Prestation" },
           { data: "MissionDesignation", title: "Mission" },
-          { data: "Status", title: "Status" },
+          { data: "Status", title: "Statut" },
           { data: "AgentNom", title: "Agent" },
         ],
       });

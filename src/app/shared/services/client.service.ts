@@ -44,6 +44,12 @@ export class ClientService {
     return this.http.delete(url);
   }
 
+  UpdateClientPiece(data: any): Observable<any> {
+    console.log("UpdateClientPiece.data: ", data);
+    let url = `${environment.url}/UpdateClientPiece?`;
+    return this.http.put<any>(url, data);
+  }
+
   CreatePatrimoine(data: any) {
     let url = `${environment.url}/CreatePatrimoine?`;
     return this.http.post(url, data);
@@ -165,6 +171,14 @@ export class ClientService {
     let url = `${environment.url}/CreateClientMission?`;
     return this.http.post(url, data);
   }
+  GetClientMissionPrestationSimple(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientMissionPrestationSimple?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  DeleteClientMissionPrestation(ClientMissionPrestationId: string) {
+    let url = `${environment.url}/DeleteClientMissionPrestation/${ClientMissionPrestationId}`;
+    return this.http.delete(url);
+  }
 
   GetClientTaches(clientId: string): Observable<any> {
     let url = `${environment.url}/GetClientTaches?ClientId=${clientId}`;
@@ -181,6 +195,14 @@ export class ClientService {
   GetLettreMission(clientMissionId: string): Observable<Blob> {
     let url = `${environment.url}/GetLettreMission/${clientMissionId}`;
     return this.http.get(url, { responseType: "blob" });
+  }
+  CreateClientMissionPrestation(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientMissionPrestation?`;
+    return this.http.post(url, data);
+  }
+  CreateClientMissionPrestationCustom(data: any): Observable<any> {
+    let url = `${environment.url}/CreateClientMissionPrestationCustom?`;
+    return this.http.post(url, data);
   }
   CreateClientTache(data: any): Observable<any> {
     let url = `${environment.url}/CreateClientTache?`;
@@ -231,5 +253,21 @@ export class ClientService {
   UploadStatusDocument(formData: FormData) {
     const url = `${environment.url}/uploadStatusDocument`;
     return this.http.post(url, formData);
+  }
+  UploadClientPieceFile(formData: FormData) {
+    let url = `${environment.url}/UploadClientPieceFile`;
+    return this.http.post(url, formData);
+  }
+  getDownloadUrl(clientPieceId: string): string {
+    return `${environment.url}/DownloadClientPiece/${clientPieceId}`;
+  }
+
+  GetUnassignedClientMissionPrestationSimple(ClientMissionId: string): Observable<any> {
+    let url = `${environment.url}/GetUnassignedClientMissionPrestationSimple?ClientMissionId=${ClientMissionId}`;
+    return this.http.get(url);
+  }
+  GetUnassignedClientTache(clientId: string, PrestationId: string): Observable<any> {
+    let url = `${environment.url}/GetUnassignedClientTache?ClientId=${clientId}&PrestationId=${PrestationId}`;
+    return this.http.get(url);
   }
 }
