@@ -11,7 +11,7 @@ import { AdminGuard } from './shared/guard/admin.guard';
 import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'app/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/app/home', pathMatch: 'full' },
 
   // { path: 'auth/login', component: LoginComponent },
   // { path: 'auth/register', component: RegisterComponent },

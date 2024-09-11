@@ -274,80 +274,80 @@ export class DetailclientComponent {
         this.dialogPatrimoine.data.DateAchat = this.formatDate(this.dialogPatrimoine.data.DateAchat);
       }
 
-      this.modalService.open(this.DialogPatrimoine, { ariaLabelledBy: "DialogPatrimoineLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.modalService.open(this.DialogPatrimoine, { ariaLabelledBy: "DialogPatrimoineLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+        console.log("this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
+        //return;
+        if (!this.dialogPatrimoine.isEditing) {
+          // submit create
+          // this.dialogPatrimoine.data.AGarantieDeces = this.dialogPatrimoine.data.AGarantieDeces.includes("true") ? true : false;
+          this.loader.show();
+          this.clientService.CreatePatrimoine(this.dialogPatrimoine.data).subscribe(
+            (response) => {
+              console.log("response CreatePatrimoine: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du patrimoine");
+              } else {
+                this.toastr.success("Patrimoine ajouté avec succès");
+                this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
+                this.dialogPatrimoine.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur CreatePatrimoine: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du patrimoine");
+            }
+          );
+        } else {
+          // submit update
+          this.loader.show();
+          this.clientService.UpdatePatrimoine(this.dialogPatrimoine.data).subscribe(
+            (response) => {
+              console.log("response UpdatePatrimoine: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du patrimoine");
+              } else {
+                this.toastr.success("Patrimoine modifié avec succès");
+                this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
+                  if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
+                  return item;
+                });
+                this.dialogPatrimoine.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdatePatrimoine: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du patrimoine");
+            }
+          );
         }
-      );
-      console.log("this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogPatrimoine.data: ", this.dialogPatrimoine.data);
-      //return;
-      if (!this.dialogPatrimoine.isEditing) {
-        // submit create
-        // this.dialogPatrimoine.data.AGarantieDeces = this.dialogPatrimoine.data.AGarantieDeces.includes("true") ? true : false;
-        this.loader.show();
-        this.clientService.CreatePatrimoine(this.dialogPatrimoine.data).subscribe(
-          (response) => {
-            console.log("response CreatePatrimoine: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du patrimoine");
-            } else {
-              this.toastr.success("Patrimoine ajouté avec succès");
-              this.currentClient.Patrimoines.push(this.dialogPatrimoine.data);
-              this.dialogPatrimoine.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
-          },
-          (error) => {
-            console.error("Erreur CreatePatrimoine: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du patrimoine");
-          }
-        );
-      } else {
-        // submit update
-        this.loader.show();
-        this.clientService.UpdatePatrimoine(this.dialogPatrimoine.data).subscribe(
-          (response) => {
-            console.log("response UpdatePatrimoine: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du patrimoine");
-            } else {
-              this.toastr.success("Patrimoine modifié avec succès");
-              this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
-                if (item.PatrimoineId == this.dialogPatrimoine.data.PatrimoineId) item = this.dialogPatrimoine.data;
-                return item;
-              });
-              this.dialogPatrimoine.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
-          },
-          (error) => {
-            console.error("Erreur UpdatePatrimoine: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du patrimoine");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogPatrimoine.Clear();
-    },
-    Clear: () => {
-      this.dialogPatrimoine.title = null;
-      this.dialogPatrimoine.data = null;
-      this.dialogPatrimoine.Inputs = [];
-      this.dialogPatrimoine.isEditing = null;
-    },
-  };
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogPatrimoine.Clear();
+      },
+      Clear: () => {
+        this.dialogPatrimoine.title = null;
+        this.dialogPatrimoine.data = null;
+        this.dialogPatrimoine.Inputs = [];
+        this.dialogPatrimoine.isEditing = null;
+      },
+    };
   DeletePatrimoine(id: string) {
     console.log("delete patrimoine cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -640,54 +640,54 @@ export class DetailclientComponent {
       };
     }[];
   }[] = [
-    {
-      title: "Budget",
-      noDataMessage: "Aucun budget enregistré",
-      total: 1553548.52,
-      columns: [
-        {
-          field: "Sexe",
-          header: "Personne",
-          dataType: "string",
-          inputOptions: {
-            type: "select",
-            required: true,
-            selectValue: "key",
-            selectLibelle: "libelle",
-            selectData: [
-              { key: "Monsieur", libelle: "Monsieur" },
-              { key: "Madame", libelle: "Madame" },
-            ],
+      {
+        title: "Budget",
+        noDataMessage: "Aucun budget enregistré",
+        total: 1553548.52,
+        columns: [
+          {
+            field: "Sexe",
+            header: "Personne",
+            dataType: "string",
+            inputOptions: {
+              type: "select",
+              required: true,
+              selectValue: "key",
+              selectLibelle: "libelle",
+              selectData: [
+                { key: "Monsieur", libelle: "Monsieur" },
+                { key: "Madame", libelle: "Madame" },
+              ],
+            },
           },
-        },
-        {
-          field: "Designation",
-          header: "Désignation",
-          dataType: "string",
-          inputOptions: {
-            type: "select",
-            required: false,
-            selectValue: "key",
-            selectLibelle: "libelle",
-            selectData: [
-              { key: "Salaire", libelle: "Salaire" },
-              { key: "Retraite", libelle: "Retraite" },
-              { key: "CARSAT", libelle: "CARSAT" },
-              { key: "CNAV", libelle: "CNAV" },
-              { key: "AGIRC-ARCCO", libelle: "AGIRC-ARCCO" },
-              { key: "CIPAV", libelle: "CIPAV" },
-              { key: "CARMF", libelle: "CARMF" },
-              { key: "IRCANTEC", libelle: "IRCANTEC" },
-              { key: "IRP", libelle: "IRP" },
-              { key: "Autres", libelle: "Autres" },
-            ],
+          {
+            field: "Designation",
+            header: "Désignation",
+            dataType: "string",
+            inputOptions: {
+              type: "select",
+              required: false,
+              selectValue: "key",
+              selectLibelle: "libelle",
+              selectData: [
+                { key: "Salaire", libelle: "Salaire" },
+                { key: "Retraite", libelle: "Retraite" },
+                { key: "CARSAT", libelle: "CARSAT" },
+                { key: "CNAV", libelle: "CNAV" },
+                { key: "AGIRC-ARCCO", libelle: "AGIRC-ARCCO" },
+                { key: "CIPAV", libelle: "CIPAV" },
+                { key: "CARMF", libelle: "CARMF" },
+                { key: "IRCANTEC", libelle: "IRCANTEC" },
+                { key: "IRP", libelle: "IRP" },
+                { key: "Autres", libelle: "Autres" },
+              ],
+            },
           },
-        },
-        { field: "Montant", header: "Montant (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
-        { field: "action", header: "Action", dataType: null },
-      ],
-    },
-  ];
+          { field: "Montant", header: "Montant (Annuel)", dataType: "number", inputOptions: { type: "number", required: false, min: 0, step: 1 } },
+          { field: "action", header: "Action", dataType: null },
+        ],
+      },
+    ];
 
   GetBudgets() {
     return this.currentClient.Budgets;
@@ -1075,20 +1075,24 @@ export class DetailclientComponent {
 
   //#region LettreMission
   generatePdf(clientMissionId: string) {
+    this.loader.show();
     this.clientService.GetLettreMission(clientMissionId).subscribe(
       (response) => {
         console.log("response GetLettreMission: ", response);
+        this.loader.hide();
         if (response) {
           // Créer un URL Blob à partir de la réponse et ouvrir dans un nouvel onglet
           const fileURL = URL.createObjectURL(response);
           window.open(fileURL, "_blank");
           this.toastr.success("Impression de la lettre de mission du client réussie");
         } else {
-          this.toastr.error("Erreur d'imprimer la lettre de mission du client");
+          this.toastr.error("Erreur de génération de la lettre de mission.");
         }
       },
       (error) => {
         console.error("Erreur GetLettreMission: ", error);
+        this.loader.hide();
+        this.toastr.error("Erreur de génération de la lettre de mission.");
         // this.handleBlobError(error);
       }
     );
@@ -1439,7 +1443,7 @@ export class DetailclientComponent {
             this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
 
             this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
-              item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
+              if (item.StatusDocumentPath != null && item.StatusDocumentPath != "") item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
               return item;
             });
             if (this.currentClient.Photo == null) this.currentClient.ImgSrc = "assets/images/user/user.png";
@@ -1975,115 +1979,115 @@ export class DetailclientComponent {
           TacheId: null,
         };
 
-        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
-        console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));
-      } else {
-        // edit task
-        this.dialogTask.isEditing = true;
-        // get task data
-        let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
-        this.dialogTask.title = "Modifer la Tache";
-        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
-        this.dialogTask.data = structuredClone(p);
-        console.log("la valeur de Agent", this.dialogTask.data.AgentResposable);
-        if (this.dialogTask.data.AgentResposable) {
-          this.dialogTask.data.AgentResposable = this.dialogTask.data.AgentResposable.toLowerCase();
+          this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
+          console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));
+        } else {
+          // edit task
+          this.dialogTask.isEditing = true;
+          // get task data
+          let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
+          this.dialogTask.title = "Modifer la Tache";
+          this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
+          this.dialogTask.data = structuredClone(p);
+          console.log("la valeur de Agent", this.dialogTask.data.AgentResposable);
+          if (this.dialogTask.data.AgentResposable) {
+            this.dialogTask.data.AgentResposable = this.dialogTask.data.AgentResposable.toLowerCase();
+          }
         }
-      }
-      this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
-      console.log("this.dialogTask.data: ", this.dialogTask.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogTask.data: ", this.dialogTask.data);
-      // return;
-      if (!this.dialogTask.isEditing) {
-        // submit create
-        this.loader.show();
-        this.clientService.CreateClientTacheCustom(this.dialogTask.data).subscribe(
-          (response) => {
-            console.log("response CreateTask: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du task");
-            } else {
-              this.toastr.success("Task ajouté avec succès");
-              this.currentClient.ClientTaches.push(this.dialogTask.data);
-              this.dialogTask.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
+        this.modalService.open(this.DialogTask, { ariaLabelledBy: "DialogTaskLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
-          (error) => {
-            console.error("Erreur CreateTask: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du task");
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-      } else {
-        // submit update
-
-        const originalTask = this.currentClient.ClientTaches.find((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
-        const originalStatus = originalTask ? originalTask.Status : null; // Save original status
-
-        this.loader.show();
-        this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
-          (response) => {
-            console.log("response UpdateClientTache: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du CleintTache");
-            } else {
-              this.toastr.success("ClientTache modifié avec succès");
-              // this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
-              //   if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
-              //   return item;
-              // });
-              // Update the task in the list
-              const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
-              if (index !== -1) {
-                this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
+        console.log("this.dialogTask.data: ", this.dialogTask.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogTask.data: ", this.dialogTask.data);
+        // return;
+        if (!this.dialogTask.isEditing) {
+          // submit create
+          this.loader.show();
+          this.clientService.CreateClientTacheCustom(this.dialogTask.data).subscribe(
+            (response) => {
+              console.log("response CreateTask: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du task");
+              } else {
+                this.toastr.success("Task ajouté avec succès");
+                this.currentClient.ClientTaches.push(this.dialogTask.data);
+                this.dialogTask.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
               }
-
-              // Check if the status changed from something else to "Terminé" and send an email
-              if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
-                this.clientService.SentEmail2("amine.laghlabi@e-polytechnique.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
-                  (emailResponse) => {
-                    console.log("Email sent successfully: ", emailResponse);
-                  },
-                  (emailError) => {
-                    console.error("Error sending email: ", emailError);
-                  }
-                );
-              }
-              this.dialogTask.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+            },
+            (error) => {
+              console.error("Erreur CreateTask: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du task");
             }
-          },
-          (error) => {
-            console.error("Erreur UpdateClientTask: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du clientTask");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogTask.Clear();
-    },
-    Clear: () => {
-      this.dialogTask.title = null;
-      this.dialogTask.data = null;
-      this.dialogTask.Inputs = [];
-      this.dialogTask.isEditing = null;
-    },
-  };
+          );
+        } else {
+          // submit update
+
+          const originalTask = this.currentClient.ClientTaches.find((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+          const originalStatus = originalTask ? originalTask.Status : null; // Save original status
+
+          this.loader.show();
+          this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
+            (response) => {
+              console.log("response UpdateClientTache: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du CleintTache");
+              } else {
+                this.toastr.success("ClientTache modifié avec succès");
+                // this.currentClient.ClientTaches = this.currentClient.ClientTaches.map((item) => {
+                //   if (item.ClientTacheId == this.dialogTask.data.ClientTacheId) item = this.dialogTask.data;
+                //   return item;
+                // });
+                // Update the task in the list
+                const index = this.currentClient.ClientTaches.findIndex((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
+                if (index !== -1) {
+                  this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
+                }
+
+                // Check if the status changed from something else to "Terminé" and send an email
+                if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
+                  this.clientService.SentEmail2("amine.laghlabi@e-polytechnique.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
+                    (emailResponse) => {
+                      console.log("Email sent successfully: ", emailResponse);
+                    },
+                    (emailError) => {
+                      console.error("Error sending email: ", emailError);
+                    }
+                  );
+                }
+                this.dialogTask.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdateClientTask: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du clientTask");
+            }
+          );
+        }
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogTask.Clear();
+      },
+      Clear: () => {
+        this.dialogTask.title = null;
+        this.dialogTask.data = null;
+        this.dialogTask.Inputs = [];
+        this.dialogTask.isEditing = null;
+      },
+    };
   DeleteTask(id: string) {
     console.log("delete task cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire

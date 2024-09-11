@@ -31,7 +31,7 @@ export class AppComponent {
     private toastr: ToastrService,
   ) {
 
-    console.log("app comp ready !!!")
+    // console.log("app comp ready !!!")
     // if (isPlatformBrowser(this.platformId)) {
     //   translate.setDefaultLang('en');
     //   translate.addLangs(['en', 'de', 'es', 'fr', 'pt', 'cn', 'ae']);
