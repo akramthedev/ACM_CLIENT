@@ -3,13 +3,21 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { KeycloakService } from "keycloak-angular";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
 
-  constructor(private readonly keycloak: KeycloakService) { }
+  constructor(
+    private readonly keycloak: KeycloakService,
+    private toastr: ToastrService,
+  ) { 
+
+    let roles = this.keycloak.getUserRoles();
+    console.log("roles: ", roles)
+  }
 
   redirectToLoginPage(): Promise<void> {
     return this.keycloak.login();
@@ -39,5 +47,13 @@ export class AuthService {
 
   GetCurrentUser() {
     return this.keycloak.loadUserProfile();
+  }
+
+  CurrentUserHasRole(role: string, showMessage?: boolean) {
+    let hasRole = this.keycloak.getUserRoles().includes(role);
+    if (showMessage && !hasRole) {
+      this.toastr.error("Vous n'avez pas les privilèges nécessaires pour accéder à cette action. <br>Contacter l'Administrateur.", "Accès interdit");
+    }
+    return hasRole;
   }
 }

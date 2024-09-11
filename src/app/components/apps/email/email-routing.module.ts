@@ -5,12 +5,8 @@ import { EmailComponent } from './email.component';
 
 const routes: Routes = [
   {
-    path: '',
-    children: [
-      {
-        path: '',
-        component: EmailComponent
-      }
+    path: '', children: [
+      { path: '', component: EmailComponent }
     ]
   }
 ];

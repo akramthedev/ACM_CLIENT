@@ -8,20 +8,11 @@ import { AddPostComponent } from './add-post/add-post.component';
 
 const routes: Routes = [
   {
-    path:'',
-    children:[
-      {
-        path:'details',
-        component:DetailsComponent
-      },
-      {
-        path:'single',
-        component:SingleComponent
-      },
-      {
-        path:'add-post',
-        component:AddPostComponent
-      }
+    path: '',
+    children: [
+      { path: 'details', component: DetailsComponent, },
+      { path: 'single', component: SingleComponent, },
+      { path: 'add-post', component: AddPostComponent, }
     ]
   }
 ];
