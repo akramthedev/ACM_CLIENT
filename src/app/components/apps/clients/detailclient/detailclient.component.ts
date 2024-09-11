@@ -23,6 +23,7 @@ import { AuthService } from "src/app/shared/services/auth.service";
 })
 export class DetailclientComponent {
   @ViewChild("dialogPrestation") dialogPrestation: any;
+  @ViewChild("dialogMission") dialogMission: any;
   date = new Date();
   isCompReadyeee: boolean = false;
   activeTabId: number = 1;
@@ -32,6 +33,7 @@ export class DetailclientComponent {
   filterPiecesText: string = "";
   Pieces: Piece[] = [];
   ClientTaches: ClientTache[] = [];
+  ClientMissions: ClientMission[] = [];
   ClientMissionPrestations: ClientMissionPrestation[] = [];
   ClientMissionPrestationss: { [key: string]: any[] } = {};
 
@@ -39,6 +41,8 @@ export class DetailclientComponent {
   UnassignedClientTache: ClientTache[] = [];
   selectedPrestationId: string;
   selectedMissionId: string;
+  selectedClientMissionId: string;
+  MissionWithPrestationCount: any[] = [];
   filteredPrestations: { [clientMissionId: string]: any[] } = {};
 
   canViewBp: boolean = false;
@@ -1429,6 +1433,7 @@ export class DetailclientComponent {
     // this.filtredClientPieces = this.currentClient.ClientPieces.filter((x) => x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()) || x.Extension.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
     this.filtredClientPieces = this.currentClient.ClientPieces.filter((x) => x.Libelle.toLowerCase().includes(this.filterPiecesText.toLowerCase()));
   }
+  //#region ngOnInit
   ngOnInit() {
     this.activeTabId = 1;
 
@@ -1492,11 +1497,17 @@ export class DetailclientComponent {
               this.ClientMissionPrestations = responseClientMissionPrestation;
               console.log("ClientMissionPrestations:", this.ClientMissionPrestationss);
             });
-            // //get UnassignedClientMissionPrestation
-            // this.clientService.GetUnassignedClientMissionPrestationSimple(clientId, this.selectedMissionId).subscribe((responseClientMissionPrestation) => {
-            //   console.log("responseUnassignedClientMissionPrestationSimple : ", responseClientMissionPrestation);
-            //   this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
-            // });
+            //get MissionsWithPrestationsCount
+
+            this.clientService.getMissionsWithPrestationsCount().subscribe(
+              (response) => {
+                this.MissionWithPrestationCount = response;
+                console.log(this.MissionWithPrestationCount);
+              },
+              (error: any) => {
+                this.toastr.error("Erreur lors de l'importation des missions");
+              }
+            );
           }
         },
         (error) => {
@@ -1510,32 +1521,89 @@ export class DetailclientComponent {
       );
     });
   }
-  // openDialog(clientMissionId: string) {
-  //   this.selectedMissionId = clientMissionId;
-  //   console.log("selected ClientMissionId", this.selectedMissionId); // This should log the correct ClientMissionId
-  //   if (this.selectedMissionId) {
-  //     // Make sure this method is called with a valid selectedMissionId
-  //     this.clientService.GetUnassignedClientMissionPrestationSimple(this.selectedMissionId).subscribe(
-  //       (responseClientMissionPrestation) => {
-  //         console.log("responseUnassignedClientMissionPrestationSimple : ", responseClientMissionPrestation);
-  //         this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
-  //       },
-  //       (error) => {
-  //         console.error("Error fetching unassigned prestations:", error);
-  //       }
-  //     );
-  //     this.modalService.open(this.dialogPrestation, { ariaLabelledBy: "modal-basic-title" });
-  //   } else {
-  //     console.error("ClientMissionId is undefined");
-  //   }
-  // }
-  openDialog(clientMissionId: string) {
-    this.selectedMissionId = clientMissionId;
-    console.log("selected ClientMissionId", this.selectedMissionId);
+  //#endregion ngOnInit
+  openDialogMission(ClientId: string) {
+    console.log("selected ClientId ", ClientId);
+    this.clientService.getMissionsWithPrestationsCount().subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error: any) => {
+        this.toastr.error("Erreur lors de l'importation des missions");
+      }
+    );
+    this.modalService.open(this.dialogMission, { ariaLabelledBy: "modal-basic-title" });
+  }
+  addMission() {
+    console.log("Selected Mission ID:", this.selectedMissionId);
 
-    if (this.selectedMissionId) {
+    const newClientMissionId = uuidv4();
+    const newMissionData = {
+      ClientMissionId: newClientMissionId,
+      ClientId: this.currentClient.ClientId,
+
+      // ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
+      MissionId: this.selectedMissionId,
+    };
+    this.clientService.CreateClientMission(newMissionData).subscribe(
+      (response) => {
+        console.log("response of CreateClientMission", response);
+        this.toastr.success("ajout de la mission effectué");
+        //get ClientMissionPrestation
+        this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((responseClientMissionPrestation) => {
+          console.log("responseClientMissionPrestationSimple : ", responseClientMissionPrestation);
+          this.ClientMissionPrestations = responseClientMissionPrestation;
+        });
+        //get ClientMissionPrestationss
+        this.clientService.GetClientMissionPrestationSimple(this.currentClient.ClientId).subscribe((responseClientMissionPrestation) => {
+          console.log("responseClientMissionPrestationSimple : ", responseClientMissionPrestation);
+          this.ClientMissionPrestationss = {}; // Initialize as an empty object
+
+          responseClientMissionPrestation.forEach((prestation) => {
+            // Group prestations by ClientMissionId
+            if (!this.ClientMissionPrestationss[prestation.ClientMissionId]) {
+              this.ClientMissionPrestationss[prestation.ClientMissionId] = [];
+            }
+            this.ClientMissionPrestationss[prestation.ClientMissionId].push(prestation);
+          });
+          this.ClientMissionPrestations = responseClientMissionPrestation;
+          console.log("ClientMissionPrestations:", this.ClientMissionPrestationss);
+        });
+        //get ClientTache
+        this.clientService.GetClientTachesSimple(this.currentClient.ClientId).subscribe((responseClientTache) => {
+          console.log("responseClientTacheSimple : ", responseClientTache);
+          this.ClientTaches = responseClientTache;
+        });
+        //get ClientMission
+        this.clientService.GetClientMissions(this.currentClient.ClientId).subscribe((responseClientMission) => {
+          console.log("responseClientMissions : ", responseClientMission);
+          this.currentClient.ClientMissions = responseClientMission;
+        });
+        //get ClientPieces
+        this.clientService.GetClientPiecess(this.currentClient.ClientId).subscribe((responseClientPieces) => {
+          console.log("responseClientPiecess : ", responseClientPieces);
+          this.currentClient.ClientPieces = responseClientPieces;
+          this.filtredClientPieces = this.currentClient.ClientPieces;
+        });
+
+        this.selectedMissionId = null;
+        this.GetMissions();
+      },
+      (error) => {
+        console.error("Erreur lors de la création de la mission:", error);
+      }
+    );
+
+    this.modalService.dismissAll(); // Close the modal after selection
+    this.selectedMissionId = null;
+  }
+  openDialog(clientMissionId: string) {
+    this.selectedClientMissionId = clientMissionId;
+    console.log("selected ClientMissionId", this.selectedClientMissionId);
+
+    if (this.selectedClientMissionId) {
       // Fetch the latest unassigned prestations for the selected mission
-      this.clientService.GetUnassignedClientMissionPrestationSimple(this.selectedMissionId).subscribe(
+      this.clientService.GetUnassignedClientMissionPrestationSimple(this.selectedClientMissionId).subscribe(
         (responseClientMissionPrestation) => {
           console.log("responseUnassignedClientMissionPrestationSimple:", responseClientMissionPrestation);
           this.UnassignedClientMissionPrestation = responseClientMissionPrestation;
@@ -1562,7 +1630,7 @@ export class DetailclientComponent {
     const newClientMissionPrestationId = uuidv4();
     const newPrestationData = {
       ClientMissionPrestationId: newClientMissionPrestationId,
-      ClientMissionId: this.selectedMissionId,
+      ClientMissionId: this.selectedClientMissionId,
 
       // ClientMissionId: this.currentClient.ClientMissions[0].ClientMissionId,
       PrestationId: this.selectedPrestationId,
@@ -1608,6 +1676,11 @@ export class DetailclientComponent {
   }
 
   onCancelPrestation(modal: any) {
+    // Annuler la sélection temporaire et fermer le modal
+    this.selectedPrestationId = null;
+    this.modalService.dismissAll(); // Fermer le modal sans enregistrer
+  }
+  onCancelMission(modal: any) {
     // Annuler la sélection temporaire et fermer le modal
     this.selectedPrestationId = null;
     this.modalService.dismissAll(); // Fermer le modal sans enregistrer
@@ -1893,6 +1966,10 @@ export class DetailclientComponent {
   GetTasks() {
     this.currentClient.ClientTaches = this.ClientTaches;
     return this.currentClient.ClientTaches;
+  }
+  GetMissions() {
+    this.currentClient.ClientMissions = this.ClientMissions;
+    return this.currentClient.ClientMissions;
   }
   dialogTask: {
     data: ClientTache;

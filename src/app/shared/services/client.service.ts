@@ -34,7 +34,10 @@ export class ClientService {
   deleteClient(clientId: string): Observable<any> {
     return this.http.delete<any>(`${environment.url}/DeleteClient/${clientId}`);
   }
-
+  GetClientPiecess(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientPiecess?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
   CreateClientPiece(formData: any) {
     let url = `${environment.url}/CreateClientPiece?`;
     return this.http.post(url, formData);
@@ -157,7 +160,14 @@ export class ClientService {
     let url = `${environment.url}/GetMissions?ServiceId=66eb9acf-02e0-44e8-bfe3-5686873e8761`;
     return this.http.get<any[]>(url);
   }
-
+  GetClientMissions(clientId: string): Observable<any> {
+    let url = `${environment.url}/GetClientMissions?ClientId=${clientId}`;
+    return this.http.get(url);
+  }
+  getMissionsWithPrestationsCount(): Observable<any[]> {
+    let url = `${environment.url}/GetMissionsWithPrestationsCount`;
+    return this.http.get<any[]>(url);
+  }
   getPrestations(): Observable<any[]> {
     let url = `${environment.url}/GetPrestations?MissionId=a83dcad0-3a14-4523-a5c5-30e1baa232d0`;
     return this.http.get<any[]>(url);
