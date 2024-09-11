@@ -42,7 +42,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     config.keyboard = false;
     this.ssnForm = this.fb.group({
       NumeroSS: ["", [Validators.required, ssnValidator()]],
-      ConjointNumeroSS: ["", [ssnValidator()]], // Champ pour le conjoint
+      ConjointNumeroSS: ["", [Validators.required, ssnValidator()]], // Champ pour le conjoint
     });
   }
   telInputObject(obj) {
@@ -380,9 +380,16 @@ export class AddClientComponent implements OnInit, OnDestroy {
           //   this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
           //   return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
           // }
-          if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
-            this.toastr.warning("Veuillez remplir le nom, prénom, et numéro SS du conjoint avant de continuer");
+          if (!this.newConjoint.Nom || !this.newConjoint.Prenom) {
+            this.toastr.warning("Veuillez remplir le nom, prénom du conjoint avant de continuer");
             return; // Empêche le passage à l'étape suivante si les champs du conjoint sont vides
+          }
+          // Vérification du numéro SS du conjoint à travers le validateur de ssnForm
+          if (this.newConjoint.NumeroSS) {
+            if (this.ssnForm.get("ConjointNumeroSS").invalid) {
+              this.toastr.warning("Le numéro SS du conjoint est invalide.");
+              return;
+            }
           }
 
           // Ajouter le conjoint si tous les champs sont valides
@@ -461,15 +468,18 @@ export class AddClientComponent implements OnInit, OnDestroy {
   //   this.newConjoint = null; // Réinitialiser le formulaire conjoint après ajout
   // }
   submitAddConjoint() {
-    if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
+    if (!this.newConjoint.Nom || !this.newConjoint.Prenom) {
       this.toastr.warning("Veuillez remplir toutes les informations du conjoint avant de continuer.");
       return;
     }
     // Vérification du numéro SS du conjoint à travers le validateur de ssnForm
-    if (this.ssnForm.get("ConjointNumeroSS").invalid) {
-      this.toastr.warning("Le numéro SS du conjoint est invalide.");
-      return;
+    if (this.newConjoint.NumeroSS) {
+      if (this.ssnForm.get("ConjointNumeroSS").invalid) {
+        this.toastr.warning("Le numéro SS du conjoint est invalide.");
+        return;
+      }
     }
+
     // Ajouter le conjoint au clientData
     if (!this.clientData.Conjoint) {
       this.clientData.Conjoint = [];
