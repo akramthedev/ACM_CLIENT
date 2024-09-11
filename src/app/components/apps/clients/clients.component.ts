@@ -42,6 +42,11 @@ export class ClientsComponent implements OnInit {
       else this.User.FullName = this.User.firstName + " " + this.User.lastName;
     });
   }
+  triggerFileInput() {
+    const fileInput = document.querySelector(".updateimg") as HTMLInputElement;
+    fileInput.click();
+  }
+
   onProfileImageChange(event: any) {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
