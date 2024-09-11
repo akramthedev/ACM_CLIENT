@@ -279,7 +279,7 @@
                                       <span *ngIf="column.dataType == 'datetime'">{{ patrimoine[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
                                       <span *ngIf="column.dataType == 'number'">{{ patrimoine[column.field] }}</span>
                                       <span *ngIf="column.field == 'StatusDocumentPath' && patrimoine.StatusDocumentPath">
-                                        <a [href]="patrimoine.StatusDocumentPath" target="_blank" download>Télécharger le document</a>
+                                        <a [href]="patrimoine.StatusDocumentPath" target="_blank">Télécharger le document</a>
                                       </span>
                                       <span *ngIf="column.field == 'action'">
                                         <div class="d-flex justify-content-around">
