@@ -81,9 +81,9 @@ export class NavService implements OnDestroy {
   }
 
   MENUITEMS: Menu[] = [
-    { path: "/app/home", title: "Accueil", icon: "home", type: "link", bookmark: true, active: false },
-    { path: "/app/clients", title: "Clients", icon: "user", type: "link", bookmark: true, active: false },
-    { path: "/app/taches", title: "Dossiers Actifs", icon: "task", type: "link", bookmark: true, active: false },
+    { path: "/home", title: "Accueil", icon: "home", type: "link", bookmark: true, active: false },
+    { path: "/clients", title: "Clients", icon: "user", type: "link", bookmark: true, active: false },
+    { path: "/taches", title: "Dossiers Actifs", icon: "task", type: "link", bookmark: true, active: false },
   ];
 
   otherRoutes: Menu[] = [

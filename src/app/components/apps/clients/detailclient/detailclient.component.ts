@@ -14,6 +14,7 @@ import { EnumService } from "src/app/shared/services/enum.service";
 import Swal from "sweetalert2";
 import { v4 as uuidv4 } from "uuid";
 import { environment } from "src/environments/environment";
+import { AuthService } from "src/app/shared/services/auth.service";
 
 @Component({
   selector: "app-detailclient",
@@ -44,9 +45,26 @@ export class DetailclientComponent {
   MissionWithPrestationCount: any[] = [];
   filteredPrestations: { [clientMissionId: string]: any[] } = {};
 
-  constructor(private route: ActivatedRoute, private clientService: ClientService, private enumService: EnumService, private loader: NgxSpinnerService, private toastr: ToastrService, private router: Router, private title: Title, private modalService: NgbModal, config: NgbModalConfig) {
+  canViewBp: boolean = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private clientService: ClientService,
+    private enumService: EnumService,
+    private loader: NgxSpinnerService,
+    private toastr: ToastrService,
+    private router: Router,
+    private title: Title,
+    private modalService: NgbModal,
+    private config: NgbModalConfig,
+    private authService: AuthService,
+  ) {
     config.backdrop = "static";
     config.keyboard = false;
+
+    if (this.authService.CurrentUserHasRole("bp_afficher", false)) {
+      this.canViewBp = true;
+    };
   }
 
   // checkDate() {
@@ -245,34 +263,34 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    title: null,
-    data: null,
-    isEditing: null,
-    Inputs: [],
-    Open: (id: string | null, type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel") => {
-      if (id == null) {
-        // // create patrimoine
-        // this.dialogPatrimoine.title = "Creation de " + type;
-        let typeTitle = type === "Immobilier de rapport" ? "d'" + type : "de " + type;
-        this.dialogPatrimoine.title = "Création " + typeTitle;
-        this.dialogPatrimoine.isEditing = false;
-        this.dialogPatrimoine.data = {
-          PatrimoineId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-          TypePatrimoine: type,
-        };
-        //DialogPatrimoineLabel
-        this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
-      } else {
-        // edit patrimoine
-        this.dialogPatrimoine.isEditing = true;
-        // get patrimoie data
-        let p = this.currentClient.Patrimoines.find((x) => x.PatrimoineId == id);
-        this.dialogPatrimoine.title = p.Designation;
-        this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == p.TypePatrimoine).columns.filter((x) => x.field != "action");
-        this.dialogPatrimoine.data = structuredClone(p);
-        this.dialogPatrimoine.data.DateAchat = this.formatDate(this.dialogPatrimoine.data.DateAchat);
-      }
+      title: null,
+      data: null,
+      isEditing: null,
+      Inputs: [],
+      Open: (id: string | null, type?: "Bien d'usage" | "Immobilier de rapport" | "Bien professionnel") => {
+        if (id == null) {
+          // // create patrimoine
+          // this.dialogPatrimoine.title = "Creation de " + type;
+          let typeTitle = type === "Immobilier de rapport" ? "d'" + type : "de " + type;
+          this.dialogPatrimoine.title = "Création " + typeTitle;
+          this.dialogPatrimoine.isEditing = false;
+          this.dialogPatrimoine.data = {
+            PatrimoineId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+            TypePatrimoine: type,
+          };
+          //DialogPatrimoineLabel
+          this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == type).columns.filter((x) => x.field != "action");
+        } else {
+          // edit patrimoine
+          this.dialogPatrimoine.isEditing = true;
+          // get patrimoie data
+          let p = this.currentClient.Patrimoines.find((x) => x.PatrimoineId == id);
+          this.dialogPatrimoine.title = p.Designation;
+          this.dialogPatrimoine.Inputs = this.tablesPatrimoines.find((x) => x.type == p.TypePatrimoine).columns.filter((x) => x.field != "action");
+          this.dialogPatrimoine.data = structuredClone(p);
+          this.dialogPatrimoine.data.DateAchat = this.formatDate(this.dialogPatrimoine.data.DateAchat);
+        }
 
         this.modalService.open(this.DialogPatrimoine, { ariaLabelledBy: "DialogPatrimoineLabel", fullscreen: false, size: "xl" }).result.then(
           (result) => {
@@ -494,107 +512,107 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    title: null,
-    Inputs: [],
-    isEditing: null,
-    Open: (id: string | null, type?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité") => {
-      if (id == null) {
-        // // create passif
-        // this.dialogPassif.title = "Creation de " + type;
-        let typeTitle = type === "Assurance" || type === "Epargne" ? "d'" + type : "de " + type;
-        this.dialogPassif.title = "Création " + typeTitle;
-        this.dialogPassif.isEditing = false;
-        this.dialogPassif.data = {
-          PassifsId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-          TypePassifs: type,
-        };
-        this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == type).columns.filter((x) => x.field != "action");
-      } else {
-        // edit passif
-        this.dialogPassif.isEditing = true;
-        // get passif data
-        let p = this.currentClient.Passifs.find((x) => x.PassifsId == id);
-        this.dialogPassif.title = p.Designation;
-        this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == p.TypePassifs).columns.filter((x) => x.field != "action");
-        this.dialogPassif.data = structuredClone(p);
-        this.dialogPassif.data.DateOuverture = this.formatDate(this.dialogPassif.data.DateOuverture);
-        this.dialogPassif.data.DateSouscription = this.formatDate(this.dialogPassif.data.DateSouscription);
-      }
-      this.modalService.open(this.DialogPassif, { ariaLabelledBy: "DialogPassifLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      data: null,
+      title: null,
+      Inputs: [],
+      isEditing: null,
+      Open: (id: string | null, type?: "Passif" | "Assurance" | "Epargne" | "Valeurs mobilières" | "Disponibilité") => {
+        if (id == null) {
+          // // create passif
+          // this.dialogPassif.title = "Creation de " + type;
+          let typeTitle = type === "Assurance" || type === "Epargne" ? "d'" + type : "de " + type;
+          this.dialogPassif.title = "Création " + typeTitle;
+          this.dialogPassif.isEditing = false;
+          this.dialogPassif.data = {
+            PassifsId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+            TypePassifs: type,
+          };
+          this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == type).columns.filter((x) => x.field != "action");
+        } else {
+          // edit passif
+          this.dialogPassif.isEditing = true;
+          // get passif data
+          let p = this.currentClient.Passifs.find((x) => x.PassifsId == id);
+          this.dialogPassif.title = p.Designation;
+          this.dialogPassif.Inputs = this.tablesPassifs.find((x) => x.type == p.TypePassifs).columns.filter((x) => x.field != "action");
+          this.dialogPassif.data = structuredClone(p);
+          this.dialogPassif.data.DateOuverture = this.formatDate(this.dialogPassif.data.DateOuverture);
+          this.dialogPassif.data.DateSouscription = this.formatDate(this.dialogPassif.data.DateSouscription);
         }
-      );
-      console.log("this.dialogPassif.data: ", this.dialogPassif.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogPassif.data: ", this.dialogPassif.data);
-      // return;
-      if (!this.dialogPassif.isEditing) {
-        // submit create
-        this.loader.show();
-        this.clientService.CreatePassif(this.dialogPassif.data).subscribe(
-          (response) => {
-            console.log("response CreatePassif: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du passif");
-            } else {
-              this.toastr.success("Passif ajouté avec succès");
-              this.currentClient.Passifs.push(this.dialogPassif.data);
-              this.dialogPassif.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
+        this.modalService.open(this.DialogPassif, { ariaLabelledBy: "DialogPassifLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
-          (error) => {
-            console.error("Erreur CreatePassif: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du passif");
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-      } else {
-        // submit update
-        this.loader.show();
-        this.clientService.UpdatePassif(this.dialogPassif.data).subscribe(
-          (response) => {
-            console.log("response UpdatePassif: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du passif");
-            } else {
-              this.toastr.success("Passif modifié avec succès");
-              this.currentClient.Passifs = this.currentClient.Passifs.map((item) => {
-                if (item.PassifsId == this.dialogPassif.data.PassifsId) item = this.dialogPassif.data;
-                return item;
-              });
-              this.dialogPassif.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+        console.log("this.dialogPassif.data: ", this.dialogPassif.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogPassif.data: ", this.dialogPassif.data);
+        // return;
+        if (!this.dialogPassif.isEditing) {
+          // submit create
+          this.loader.show();
+          this.clientService.CreatePassif(this.dialogPassif.data).subscribe(
+            (response) => {
+              console.log("response CreatePassif: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du passif");
+              } else {
+                this.toastr.success("Passif ajouté avec succès");
+                this.currentClient.Passifs.push(this.dialogPassif.data);
+                this.dialogPassif.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur CreatePassif: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du passif");
             }
-          },
-          (error) => {
-            console.error("Erreur UpdatePassif: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du passif");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogPassif.Clear();
-    },
-    Clear: () => {
-      this.dialogPassif.title = null;
-      this.dialogPassif.data = null;
-      this.dialogPassif.Inputs = [];
-      this.dialogPassif.isEditing = null;
-    },
-  };
+          );
+        } else {
+          // submit update
+          this.loader.show();
+          this.clientService.UpdatePassif(this.dialogPassif.data).subscribe(
+            (response) => {
+              console.log("response UpdatePassif: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du passif");
+              } else {
+                this.toastr.success("Passif modifié avec succès");
+                this.currentClient.Passifs = this.currentClient.Passifs.map((item) => {
+                  if (item.PassifsId == this.dialogPassif.data.PassifsId) item = this.dialogPassif.data;
+                  return item;
+                });
+                this.dialogPassif.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdatePassif: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du passif");
+            }
+          );
+        }
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogPassif.Clear();
+      },
+      Clear: () => {
+        this.dialogPassif.title = null;
+        this.dialogPassif.data = null;
+        this.dialogPassif.Inputs = [];
+        this.dialogPassif.isEditing = null;
+      },
+    };
   DeletePassif(id: string) {
     console.log("delete passif cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -704,102 +722,102 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    isEditing: null,
-    title: null,
-    Inputs: [],
-    Open: (id: string | null) => {
-      if (id == null) {
-        // create budget
-        this.dialogBudget.title = "Création de Budget";
-        this.dialogBudget.isEditing = false;
-        this.dialogBudget.data = {
-          BudgetsId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-        };
-        this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
-      } else {
-        // edit budget
-        this.dialogBudget.isEditing = true;
-        // get budget data
-        let p = this.currentClient.Budgets.find((x) => x.BudgetsId == id);
-        this.dialogBudget.title = p.Designation;
-        this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
-        this.dialogBudget.data = structuredClone(p);
-      }
-      this.modalService.open(this.DialogBudget, { ariaLabelledBy: "DialogBudgetLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      data: null,
+      isEditing: null,
+      title: null,
+      Inputs: [],
+      Open: (id: string | null) => {
+        if (id == null) {
+          // create budget
+          this.dialogBudget.title = "Création de Budget";
+          this.dialogBudget.isEditing = false;
+          this.dialogBudget.data = {
+            BudgetsId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+          };
+          this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
+        } else {
+          // edit budget
+          this.dialogBudget.isEditing = true;
+          // get budget data
+          let p = this.currentClient.Budgets.find((x) => x.BudgetsId == id);
+          this.dialogBudget.title = p.Designation;
+          this.dialogBudget.Inputs = this.tablesBudgets.find((x) => x.title == "Budget").columns.filter((x) => x.field != "action");
+          this.dialogBudget.data = structuredClone(p);
         }
-      );
-      console.log("this.dialogBudget.data: ", this.dialogBudget.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogBudget.data: ", this.dialogBudget.data);
-      // return;
-      if (!this.dialogBudget.isEditing) {
-        // submit create
-        this.loader.show();
-        this.clientService.CreateBudget(this.dialogBudget.data).subscribe(
-          (response) => {
-            console.log("response CreateBudget: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du budget");
-            } else {
-              this.toastr.success("Budget ajouté avec succès");
-              this.currentClient.Budgets.push(this.dialogBudget.data);
-              this.dialogBudget.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
+        this.modalService.open(this.DialogBudget, { ariaLabelledBy: "DialogBudgetLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
-          (error) => {
-            console.error("Erreur CreateBudget: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du budget");
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-      } else {
-        // submit update
-        this.loader.show();
-        this.clientService.UpdateBudget(this.dialogBudget.data).subscribe(
-          (response) => {
-            console.log("response UpdateBudget: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du budget");
-            } else {
-              this.toastr.success("Budget modifié avec succès");
-              this.currentClient.Budgets = this.currentClient.Budgets.map((item) => {
-                if (item.BudgetsId == this.dialogBudget.data.BudgetsId) item = this.dialogBudget.data;
-                return item;
-              });
-              this.dialogBudget.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+        console.log("this.dialogBudget.data: ", this.dialogBudget.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogBudget.data: ", this.dialogBudget.data);
+        // return;
+        if (!this.dialogBudget.isEditing) {
+          // submit create
+          this.loader.show();
+          this.clientService.CreateBudget(this.dialogBudget.data).subscribe(
+            (response) => {
+              console.log("response CreateBudget: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du budget");
+              } else {
+                this.toastr.success("Budget ajouté avec succès");
+                this.currentClient.Budgets.push(this.dialogBudget.data);
+                this.dialogBudget.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur CreateBudget: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du budget");
             }
-          },
-          (error) => {
-            console.error("Erreur UpdateBudget: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du budget");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogBudget.Clear();
-    },
-    Clear: () => {
-      this.dialogBudget.title = null;
-      this.dialogBudget.data = null;
-      this.dialogBudget.Inputs = [];
-      this.dialogBudget.isEditing = null;
-    },
-  };
+          );
+        } else {
+          // submit update
+          this.loader.show();
+          this.clientService.UpdateBudget(this.dialogBudget.data).subscribe(
+            (response) => {
+              console.log("response UpdateBudget: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du budget");
+              } else {
+                this.toastr.success("Budget modifié avec succès");
+                this.currentClient.Budgets = this.currentClient.Budgets.map((item) => {
+                  if (item.BudgetsId == this.dialogBudget.data.BudgetsId) item = this.dialogBudget.data;
+                  return item;
+                });
+                this.dialogBudget.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdateBudget: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du budget");
+            }
+          );
+        }
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogBudget.Clear();
+      },
+      Clear: () => {
+        this.dialogBudget.title = null;
+        this.dialogBudget.data = null;
+        this.dialogBudget.Inputs = [];
+        this.dialogBudget.isEditing = null;
+      },
+    };
   DeleteBudget(id: string) {
     console.log("delete budget cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -915,103 +933,103 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    isEditing: null,
-    title: null,
-    Inputs: [],
-    Open: (id: string | null) => {
-      if (id == null) {
-        // create proche
-        this.dialogProche.title = "Création de Proche";
-        this.dialogProche.isEditing = false;
-        this.dialogProche.data = {
-          ProcheId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-        };
-        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
-      } else {
-        // edit proche
-        this.dialogProche.isEditing = true;
-        // get proche data
-        let p = this.currentClient.Proches.find((x) => x.ProcheId == id);
-        this.dialogProche.title = p.Nom;
-        this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
-        this.dialogProche.data = structuredClone(p);
-        this.dialogProche.data.DateNaissance = this.formatDate(this.dialogProche.data.DateNaissance);
-      }
-      this.modalService.open(this.DialogProche, { ariaLabelledBy: "DialogProcheLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      data: null,
+      isEditing: null,
+      title: null,
+      Inputs: [],
+      Open: (id: string | null) => {
+        if (id == null) {
+          // create proche
+          this.dialogProche.title = "Création de Proche";
+          this.dialogProche.isEditing = false;
+          this.dialogProche.data = {
+            ProcheId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+          };
+          this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+        } else {
+          // edit proche
+          this.dialogProche.isEditing = true;
+          // get proche data
+          let p = this.currentClient.Proches.find((x) => x.ProcheId == id);
+          this.dialogProche.title = p.Nom;
+          this.dialogProche.Inputs = this.tablesProches.find((x) => x.title == "Proche").columns.filter((x) => x.field != "action");
+          this.dialogProche.data = structuredClone(p);
+          this.dialogProche.data.DateNaissance = this.formatDate(this.dialogProche.data.DateNaissance);
         }
-      );
-      console.log("this.dialogProche.data: ", this.dialogProche.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogProche.data: ", this.dialogProche.data);
-      // return;
-      if (!this.dialogProche.isEditing) {
-        // submit create
-        this.loader.show();
-        this.clientService.CreateProche(this.dialogProche.data).subscribe(
-          (response) => {
-            console.log("response CreateProche: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du proche");
-            } else {
-              this.toastr.success("Proche ajouté avec succès");
-              this.currentClient.Proches.push(this.dialogProche.data);
-              this.dialogProche.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
+        this.modalService.open(this.DialogProche, { ariaLabelledBy: "DialogProcheLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
-          (error) => {
-            console.error("Erreur CreateProche: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du proche");
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-      } else {
-        // submit update
-        this.loader.show();
-        this.clientService.UpdateProche(this.dialogProche.data).subscribe(
-          (response) => {
-            console.log("response UpdateProche: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du proche");
-            } else {
-              this.toastr.success("Proche modifié avec succès");
-              this.currentClient.Proches = this.currentClient.Proches.map((item) => {
-                if (item.ProcheId == this.dialogProche.data.ProcheId) item = this.dialogProche.data;
-                return item;
-              });
-              this.dialogProche.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+        console.log("this.dialogProche.data: ", this.dialogProche.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogProche.data: ", this.dialogProche.data);
+        // return;
+        if (!this.dialogProche.isEditing) {
+          // submit create
+          this.loader.show();
+          this.clientService.CreateProche(this.dialogProche.data).subscribe(
+            (response) => {
+              console.log("response CreateProche: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du proche");
+              } else {
+                this.toastr.success("Proche ajouté avec succès");
+                this.currentClient.Proches.push(this.dialogProche.data);
+                this.dialogProche.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur CreateProche: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du proche");
             }
-          },
-          (error) => {
-            console.error("Erreur UpdateProche: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du proche");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogProche.Clear();
-    },
-    Clear: () => {
-      this.dialogProche.title = null;
-      this.dialogProche.data = null;
-      this.dialogProche.Inputs = [];
-      this.dialogProche.isEditing = null;
-    },
-  };
+          );
+        } else {
+          // submit update
+          this.loader.show();
+          this.clientService.UpdateProche(this.dialogProche.data).subscribe(
+            (response) => {
+              console.log("response UpdateProche: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du proche");
+              } else {
+                this.toastr.success("Proche modifié avec succès");
+                this.currentClient.Proches = this.currentClient.Proches.map((item) => {
+                  if (item.ProcheId == this.dialogProche.data.ProcheId) item = this.dialogProche.data;
+                  return item;
+                });
+                this.dialogProche.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdateProche: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du proche");
+            }
+          );
+        }
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogProche.Clear();
+      },
+      Clear: () => {
+        this.dialogProche.title = null;
+        this.dialogProche.data = null;
+        this.dialogProche.Inputs = [];
+        this.dialogProche.isEditing = null;
+      },
+    };
   DeleteProche(id: string) {
     console.log("delete proche cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -1169,106 +1187,106 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    isEditing: null,
-    title: null,
-    Inputs: [],
-    Open: (id: string | null) => {
-      if (id == null) {
-        // create conjoint
-        this.dialogConjoint.title = "Création de Conjoint";
-        this.dialogConjoint.isEditing = false;
-        this.dialogConjoint.data = {
-          ConjointId: uuidv4(),
-          ClientId: this.currentClient.ClientId,
-        };
-        this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
-      } else {
-        // edit conjoint
-        this.dialogConjoint.isEditing = true;
-        // get conjoint data
-        let p = this.currentClient.Conjoint.find((x) => x.ConjointId == id);
-        this.dialogConjoint.title = p.Nom + " " + p.Prenom;
-        this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
-        this.dialogConjoint.data = structuredClone(p);
-        this.dialogConjoint.data.DateNaissance = this.formatDate(this.dialogConjoint.data.DateNaissance);
-        this.dialogConjoint.data.DateRetraite = this.formatDate(this.dialogConjoint.data.DateRetraite);
-        this.dialogConjoint.data.DateMariage = this.formatDate(this.dialogConjoint.data.DateMariage);
-      }
-      this.modalService.open(this.DialogConjoint, { ariaLabelledBy: "DialogConjointLabel", fullscreen: false, size: "xl" }).result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      data: null,
+      isEditing: null,
+      title: null,
+      Inputs: [],
+      Open: (id: string | null) => {
+        if (id == null) {
+          // create conjoint
+          this.dialogConjoint.title = "Création de Conjoint";
+          this.dialogConjoint.isEditing = false;
+          this.dialogConjoint.data = {
+            ConjointId: uuidv4(),
+            ClientId: this.currentClient.ClientId,
+          };
+          this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
+        } else {
+          // edit conjoint
+          this.dialogConjoint.isEditing = true;
+          // get conjoint data
+          let p = this.currentClient.Conjoint.find((x) => x.ConjointId == id);
+          this.dialogConjoint.title = p.Nom + " " + p.Prenom;
+          this.dialogConjoint.Inputs = this.tablesConjoints.find((x) => x.title == "Conjoint").columns.filter((x) => x.field != "action");
+          this.dialogConjoint.data = structuredClone(p);
+          this.dialogConjoint.data.DateNaissance = this.formatDate(this.dialogConjoint.data.DateNaissance);
+          this.dialogConjoint.data.DateRetraite = this.formatDate(this.dialogConjoint.data.DateRetraite);
+          this.dialogConjoint.data.DateMariage = this.formatDate(this.dialogConjoint.data.DateMariage);
         }
-      );
-      console.log("this.dialogConjoint.data: ", this.dialogConjoint.data);
-    },
-    Submit: () => {
-      console.log("sublit: this.dialogConjoint.data: ", this.dialogConjoint.data);
-      this.cleanDateFields(this.dialogConjoint.data);
-      // return;
-      if (!this.dialogConjoint.isEditing) {
-        // submit create
-        this.loader.show();
-        this.clientService.CreateConjoint(this.dialogConjoint.data).subscribe(
-          (response) => {
-            console.log("response CreateConjoint: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de création du conjoint");
-            } else {
-              this.toastr.success("Conjoint ajouté avec succès");
-              this.currentClient.Conjoint.push(this.dialogConjoint.data);
-              this.dialogConjoint.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
-            }
+        this.modalService.open(this.DialogConjoint, { ariaLabelledBy: "DialogConjointLabel", fullscreen: false, size: "xl" }).result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
-          (error) => {
-            console.error("Erreur CreateConjoint: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de creation du conjoint");
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
-      } else {
-        // submit update
-        this.loader.show();
-        this.clientService.UpdateConjoint(this.dialogConjoint.data).subscribe(
-          (response) => {
-            console.log("response UpdateConjoint: ", response);
-            this.loader.hide();
-            if (response == null && response == false) {
-              this.toastr.error("Erreur de modification du conjoint");
-            } else {
-              this.toastr.success("Conjoint modifié avec succès");
-              this.currentClient.Conjoint = this.currentClient.Conjoint.map((item) => {
-                if (item.ConjointId == this.dialogConjoint.data.ConjointId) item = this.dialogConjoint.data;
-                return item;
-              });
-              this.dialogConjoint.Close();
-              // Swal.fire("Succès", "Client ajouté avec succès", "success");
+        console.log("this.dialogConjoint.data: ", this.dialogConjoint.data);
+      },
+      Submit: () => {
+        console.log("sublit: this.dialogConjoint.data: ", this.dialogConjoint.data);
+        this.cleanDateFields(this.dialogConjoint.data);
+        // return;
+        if (!this.dialogConjoint.isEditing) {
+          // submit create
+          this.loader.show();
+          this.clientService.CreateConjoint(this.dialogConjoint.data).subscribe(
+            (response) => {
+              console.log("response CreateConjoint: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de création du conjoint");
+              } else {
+                this.toastr.success("Conjoint ajouté avec succès");
+                this.currentClient.Conjoint.push(this.dialogConjoint.data);
+                this.dialogConjoint.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur CreateConjoint: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de creation du conjoint");
             }
-          },
-          (error) => {
-            console.error("Erreur UpdateConjoint: ", error);
-            this.loader.hide();
-            this.toastr.error(error?.error, "Erreur de modification du conjoint");
-          }
-        );
-      }
-    },
-    Close: () => {
-      this.modalService.dismissAll();
-      this.dialogConjoint.Clear();
-    },
-    Clear: () => {
-      this.dialogConjoint.title = null;
-      this.dialogConjoint.data = null;
-      this.dialogConjoint.Inputs = [];
-      this.dialogConjoint.isEditing = null;
-    },
-  };
+          );
+        } else {
+          // submit update
+          this.loader.show();
+          this.clientService.UpdateConjoint(this.dialogConjoint.data).subscribe(
+            (response) => {
+              console.log("response UpdateConjoint: ", response);
+              this.loader.hide();
+              if (response == null && response == false) {
+                this.toastr.error("Erreur de modification du conjoint");
+              } else {
+                this.toastr.success("Conjoint modifié avec succès");
+                this.currentClient.Conjoint = this.currentClient.Conjoint.map((item) => {
+                  if (item.ConjointId == this.dialogConjoint.data.ConjointId) item = this.dialogConjoint.data;
+                  return item;
+                });
+                this.dialogConjoint.Close();
+                // Swal.fire("Succès", "Client ajouté avec succès", "success");
+              }
+            },
+            (error) => {
+              console.error("Erreur UpdateConjoint: ", error);
+              this.loader.hide();
+              this.toastr.error(error?.error, "Erreur de modification du conjoint");
+            }
+          );
+        }
+      },
+      Close: () => {
+        this.modalService.dismissAll();
+        this.dialogConjoint.Clear();
+      },
+      Clear: () => {
+        this.dialogConjoint.title = null;
+        this.dialogConjoint.data = null;
+        this.dialogConjoint.Inputs = [];
+        this.dialogConjoint.isEditing = null;
+      },
+    };
   DeleteConjoint(id: string) {
     console.log("delete conjoint cliquer");
     // Utilisez une boîte de dialogue de confirmation si nécessaire
@@ -1430,7 +1448,7 @@ export class DetailclientComponent {
           if (response == null) {
             this.toastr.error("Erreur de récuperation du client");
             setTimeout(() => {
-              this.router.navigate(["/app/clients"]);
+              this.router.navigate(["/clients"]);
             }, 2000);
           } else {
             //this.isComponentReady = true;
@@ -1497,7 +1515,7 @@ export class DetailclientComponent {
           this.loader.hide();
           this.toastr.error("Erreur de récuperation du client");
           setTimeout(() => {
-            this.router.navigate(["/app/clients"]);
+            this.router.navigate(["/clients"]);
           }, 2000);
         }
       );
@@ -1963,21 +1981,21 @@ export class DetailclientComponent {
     Close: Function;
     Clear: Function;
   } = {
-    data: null,
-    isEditing: null,
-    title: null,
-    Inputs: [],
-    Open: (id: string | null) => {
-      if (id == null) {
-        // create task
-        this.dialogTask.title = "Création de la tache";
-        this.dialogTask.isEditing = false;
-        this.dialogTask.data = {
-          ClientTacheId: uuidv4(),
-          ClientMissionPrestationId: null,
-          ClientMissionId: null,
-          TacheId: null,
-        };
+      data: null,
+      isEditing: null,
+      title: null,
+      Inputs: [],
+      Open: (id: string | null) => {
+        if (id == null) {
+          // create task
+          this.dialogTask.title = "Création de la tache";
+          this.dialogTask.isEditing = false;
+          this.dialogTask.data = {
+            ClientTacheId: uuidv4(),
+            ClientMissionPrestationId: null,
+            ClientMissionId: null,
+            TacheId: null,
+          };
 
           this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
           console.log(this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action"));

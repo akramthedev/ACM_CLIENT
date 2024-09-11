@@ -6,10 +6,7 @@ import { BookmarksComponent } from './bookmarks.component';
 const routes: Routes = [{
   path: '',
   children: [
-    {
-      path: '',
-      component: BookmarksComponent
-    }
+    { path: '', component: BookmarksComponent }
   ]
 }];
 

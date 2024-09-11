@@ -143,7 +143,7 @@ export class ClientsComponent implements OnInit {
   }
 
   navigateToDetails(clientId: string) {
-    this.router.navigate(["/app/clients/details/", clientId]);
+    this.router.navigate(["/clients/details/", clientId]);
   }
   showHistory() {
     this.history = !this.history;
