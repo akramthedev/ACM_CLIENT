@@ -1,5 +1,4 @@
-<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="[{ link: '/clients', libelle: 'Clients' }]"
-  [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
+<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="[{ link: '/clients', libelle: 'Clients' }]" [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
 <div class="container-fluid" *ngIf="currentClient != null">
   <div class="edit-profile">
     <div class="row">
@@ -52,22 +51,17 @@
                                   <div class="form-group mb-3 col-md-6" *ngFor="let input of formClientInputs">
                                     <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
                                       <label [for]="input.field">{{ input.header }}</label>
-                                      <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type"
-                                        [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max"
-                                        [step]="input.inputOptions.step" [(ngModel)]="currentClient[input.field]" />
+                                      <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="currentClient[input.field]" />
                                     </span>
                                     <span *ngIf="['select'].includes(input.inputOptions.type)">
                                       <label [for]="input.field">{{ input.header }}</label>
-                                      <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field"
-                                        [(ngModel)]="currentClient[input.field]">
-                                        <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{
-                                          item[input.inputOptions.selectLibelle] }}</option>
+                                      <select class="form-control" [id]="input.field" [required]="input.inputOptions.required" [name]="input.field" [(ngModel)]="currentClient[input.field]">
+                                        <option *ngFor="let item of input.inputOptions.selectData" [value]="item[input.inputOptions.selectValue]">{{ item[input.inputOptions.selectLibelle] }}</option>
                                       </select>
                                     </span>
                                     <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
                                       <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-                                        <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                                          [(ngModel)]="currentClient[input.field]" />
+                                        <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="currentClient[input.field]" />
                                         <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
                                       </div>
                                     </span>
@@ -121,9 +115,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetConjoints().length > 0">
                                   <tr *ngFor="let conjoint of GetConjoints()">
-                                    <td *ngFor="let column of getVisibleColumns(conjointType.columns)" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of getVisibleColumns(conjointType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <span *ngIf="column.dataType == 'string'">{{ conjoint[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ conjoint[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ conjoint[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
@@ -190,9 +182,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetProches().length > 0">
                                   <tr *ngFor="let proche of GetProches()">
-                                    <td *ngFor="let column of getVisibleColumns(procheType.columns)" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of getVisibleColumns(procheType.columns)" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <span *ngIf="column.dataType == 'string'">{{ proche[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ proche[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ proche[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
@@ -228,13 +218,10 @@
                 </div>
               </ng-template>
             </li>
-            <li [ngbNavItem]="2" >
+            <li [ngbNavItem]="2">
               <a ngbNavLink>BP</a>
               <ng-template ngbNavContent>
-
-                <div class="card-body default-accordion" *ngIf="canViewBp == false">
-                  Vous n'avez pas le droit de consulter le BP
-                </div>
+                <div class="card-body default-accordion" *ngIf="canViewBp == false">Vous n'avez pas le droit de consulter le BP</div>
 
                 <div class="card-body default-accordion" *ngIf="canViewBp == true">
                   <div ngbAccordion>
@@ -278,9 +265,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetPatrimoines(patrimoineType.type).length > 0">
                                   <tr *ngFor="let patrimoine of GetPatrimoines(patrimoineType.type)">
-                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of patrimoineType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <span *ngIf="column.dataType == 'string'">{{ patrimoine[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ patrimoine[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ patrimoine[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
@@ -357,9 +342,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetPassifs(passifsType.type).length > 0">
                                   <tr *ngFor="let passif of GetPassifs(passifsType.type)">
-                                    <td *ngFor="let column of passifsType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of passifsType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ passif[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ passif[column.field] | date : "dd/MM/yyyy" }}</span>
@@ -434,9 +417,7 @@
                                 </tbody>
                                 <tbody *ngIf="GetBudgets().length > 0">
                                   <tr *ngFor="let budget of GetBudgets()">
-                                    <td *ngFor="let column of budgetType.columns" [class.text-start]="column.dataType == 'string'"
-                                      [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null"
-                                      [class.text-end]="column.dataType == 'number'">
+                                    <td *ngFor="let column of budgetType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
                                       <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ budget[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ budget[column.field] | date : "dd/MM/yyyy" }}</span>
@@ -482,11 +463,9 @@
                               <!-- Fields for usage goods -->
                               <div class="form-group mb-3 col-md-12">
                                 <label for="ParticulariteFiscale">Particularités fiscales</label>
-                                <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale"
-                                  [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
+                                <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale" [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
                               </div>
-                              <div class="d-grid gap-2 d-md-flex justify-content-center"
-                                *ngIf="(particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale) || currentClient.ParticulariteFiscale == null">
+                              <div class="d-grid gap-2 d-md-flex justify-content-center" *ngIf="(particulariteFiscaleChanged && currentClient.ParticulariteFiscale != oldParticulariteFiscale) || currentClient.ParticulariteFiscale == null">
                                 <button class="btn btn-primary" (click)="UpdateClient()">Enregistrer</button>
                               </div>
                             </div>
@@ -512,18 +491,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFEOui" value="oui" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFEOui" value="oui" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFEOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFENon" value="non" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFENon" value="non" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFENon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CFE" id="CFEAFaire" value="afaire" [(ngModel)]="currentClient.CFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CFE" id="CFEAFaire" value="afaire" [(ngModel)]="currentClient.CFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CFEAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -536,18 +512,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportOui" value="oui" [(ngModel)]="currentClient.PASSEPORT"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportOui" value="oui" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportNon" value="non" [(ngModel)]="currentClient.PASSEPORT"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportNon" value="non" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportAFaire" value="afaire" [(ngModel)]="currentClient.PASSEPORT"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Passeport" id="PasseportAFaire" value="afaire" [(ngModel)]="currentClient.PASSEPORT" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PasseportAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -560,18 +533,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationOui" value="oui" [(ngModel)]="currentClient.Cotisation"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationOui" value="oui" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationNon" value="non" [(ngModel)]="currentClient.Cotisation"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationNon" value="non" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationAFaire" value="afaire" [(ngModel)]="currentClient.Cotisation"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Cotisation" id="CotisationAFaire" value="afaire" [(ngModel)]="currentClient.Cotisation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CotisationAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -584,18 +554,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourOui" value="oui" [(ngModel)]="currentClient.CarteSejour"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourOui" value="oui" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourNon" value="non" [(ngModel)]="currentClient.CarteSejour"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourNon" value="non" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire" [(ngModel)]="currentClient.CarteSejour"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CarteSejour" id="CarteSejourAFaire" value="afaire" [(ngModel)]="currentClient.CarteSejour" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CarteSejourAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -608,18 +575,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionOui" value="oui" [(ngModel)]="currentClient.Reversion"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionOui" value="oui" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionNon" value="non" [(ngModel)]="currentClient.Reversion"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionNon" value="non" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionAFaire" value="afaire" [(ngModel)]="currentClient.Reversion"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="Reversion" id="ReversionAFaire" value="afaire" [(ngModel)]="currentClient.Reversion" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="ReversionAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -632,18 +596,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisOui" value="oui" [(ngModel)]="currentClient.PermisConduire"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisOui" value="oui" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisNon" value="non" [(ngModel)]="currentClient.PermisConduire"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisNon" value="non" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire" [(ngModel)]="currentClient.PermisConduire"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="PermisConduire" id="PermisAFaire" value="afaire" [(ngModel)]="currentClient.PermisConduire" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="PermisAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -656,18 +617,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSOui" value="oui" [(ngModel)]="currentClient.CNSS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSOui" value="oui" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSNon" value="non" [(ngModel)]="currentClient.CNSS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSNon" value="non" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSAFaire" value="afaire" [(ngModel)]="currentClient.CNSS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNSS" id="CNSSAFaire" value="afaire" [(ngModel)]="currentClient.CNSS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNSSAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -680,18 +638,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoOui" value="oui" [(ngModel)]="currentClient.AssuranceAuto"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoOui" value="oui" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoNon" value="non" [(ngModel)]="currentClient.AssuranceAuto"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoNon" value="non" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceAuto" id="AssurAutoAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceAuto" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurAutoAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -704,18 +659,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEOui" value="oui" [(ngModel)]="currentClient.CNAREFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEOui" value="oui" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFEOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFENon" value="non" [(ngModel)]="currentClient.CNAREFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFENon" value="non" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFENon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEAFaire" value="afaire" [(ngModel)]="currentClient.CNAREFE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CNAREFE" id="CNAREFEAFaire" value="afaire" [(ngModel)]="currentClient.CNAREFE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CNAREFEAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -728,18 +680,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiOui" value="oui" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiNon" value="non" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceHabitation" id="AssurHabiAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceHabitation" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="AssurHabiAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -752,18 +701,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneOui" value="oui" [(ngModel)]="currentClient.CAPITONE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneOui" value="oui" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneNon" value="non" [(ngModel)]="currentClient.CAPITONE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneNon" value="non" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneAFaire" value="afaire" [(ngModel)]="currentClient.CAPITONE"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CAPITONE" id="CapitoneAFaire" value="afaire" [(ngModel)]="currentClient.CAPITONE" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CapitoneAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -776,18 +722,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatOui" value="oui" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatNon" value="non" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="InscriptionConsulat" id="InscriConsulatAFaire" value="afaire" [(ngModel)]="currentClient.InscriptionConsulat" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="InscriConsulatAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -800,18 +743,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementOui" value="oui" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementNon" value="non" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="AssuranceRapatriement" id="RapatriementAFaire" value="afaire" [(ngModel)]="currentClient.AssuranceRapatriement" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="RapatriementAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -824,18 +764,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMOui" value="oui" [(ngModel)]="currentClient.CPAM"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMOui" value="oui" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMNon" value="non" [(ngModel)]="currentClient.CPAM"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMNon" value="non" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMAFaire" value="afaire" [(ngModel)]="currentClient.CPAM"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CPAM" id="CPAMAFaire" value="afaire" [(ngModel)]="currentClient.CPAM" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CPAMAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -848,18 +785,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleOui" value="oui" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleNon" value="non" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire"
-                                        [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="MutuelleFrancaise" id="MutuelleAFaire" value="afaire" [(ngModel)]="currentClient.MutuelleFrancaise" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="MutuelleAFaire"> A faire </label>
                                     </div>
                                   </div>
@@ -872,18 +806,15 @@
                                   </div>
                                   <div class="col-lg-6 col-sm-12">
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGOui" value="oui" [(ngModel)]="currentClient.CSG_CRDS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGOui" value="oui" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGOui"> Oui </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGNon" value="non" [(ngModel)]="currentClient.CSG_CRDS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGNon" value="non" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGNon"> Non </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGAFaire" value="afaire" [(ngModel)]="currentClient.CSG_CRDS"
-                                        (change)="situationAdministrativeChanged = true" />
+                                      <input class="form-check-input" type="radio" name="CSG_CRDS" id="CSGAFaire" value="afaire" [(ngModel)]="currentClient.CSG_CRDS" (change)="situationAdministrativeChanged = true" />
                                       <label class="form-check-label" for="CSGAFaire">A faire</label>
                                     </div>
                                   </div>
@@ -982,7 +913,8 @@
             <li [ngbNavItem]="4">
               <a ngbNavLink>Pièces</a>
               <ng-template ngbNavContent>
-                <div class="col-xl-12 col-md-12 box-col-12">
+                <div class="col-xl-12 col-md-12 box-col-12" *ngIf="canViewPiece == false">Vous n'avez pas le droit de consulter les pièces</div>
+                <div class="col-xl-12 col-md-12 box-col-12" *ngIf="canViewPiece == true">
                   <div class="file-content">
                     <div class="card">
                       <div class="card-header">
@@ -1000,8 +932,7 @@
                                 <input id="upfile" type="file" onchange="sub(this)" />
                               </div>
                             </form> -->
-                            <div class="btn btn-outline-primary" (click)="dialogImportPiece.Open(modalUploadClientPiece)"><app-feather-icons [icon]="'upload'">
-                              </app-feather-icons>Importer</div>
+                            <div class="btn btn-outline-primary" (click)="dialogImportPiece.Open(modalUploadClientPiece)"><app-feather-icons [icon]="'upload'"> </app-feather-icons>Importer</div>
                           </div>
                         </div>
                       </div>
@@ -1426,8 +1357,7 @@
             <div class="col">
               <div class="mb-3">
                 <label for="piece">Fichier</label>
-                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf, .xls, .xlsx, .doc, .docx, .jpg, .jpeg, .png" title="Importer le fichier"
-                  [(ngModel)]="dialogImportPiece.SelectedFile" (change)="dialogImportPiece.OnFileChange($event)" />
+                <input class="form-control" type="file" id="importFile" name="importFile" accept=".pdf, .xls, .xlsx, .doc, .docx, .jpg, .jpeg, .png" title="Importer le fichier" [(ngModel)]="dialogImportPiece.SelectedFile" (change)="dialogImportPiece.OnFileChange($event)" />
               </div>
             </div>
           </div>
@@ -1454,9 +1384,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogPatrimoine.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step"
-              [(ngModel)]="dialogPatrimoine.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPatrimoine.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1466,8 +1394,7 @@
           </span>
           <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogPatrimoine.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPatrimoine.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1510,8 +1437,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogPassif.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPassif.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogPassif.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1523,8 +1449,7 @@
             <!-- <label [for]="input.field">{{ input.header }}</label> -->
             <!-- <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPatrimoine.data[input.field]" /> -->
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogPassif.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogPassif.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1554,8 +1479,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogBudget.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogBudget.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogBudget.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1589,8 +1513,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogProche.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogProche.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogProche.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1600,8 +1523,7 @@
           </span>
           <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogProche.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogProche.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1631,8 +1553,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogConjoint.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control digits" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogConjoint.data[input.field]" />
+            <input class="form-control digits" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogConjoint.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
@@ -1642,8 +1563,7 @@
           </span>
           <span *ngIf="['checkbox'].includes(input.inputOptions.type)">
             <div class="form-check form-check-inline checkbox checkbox-dark mb-0">
-              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field"
-                [(ngModel)]="dialogConjoint.data[input.field]" />
+              <input class="form-check-input" [id]="input.field" [required]="input.inputOptions.required" type="checkbox" [name]="input.field" [(ngModel)]="dialogConjoint.data[input.field]" />
               <label class="form-check-label" [for]="input.field">{{ input.header }}</label>
             </div>
           </span>
@@ -1672,8 +1592,7 @@
         <div class="form-group mb-3 col-md-6" *ngFor="let input of dialogTask.Inputs">
           <span *ngIf="['text', 'number', 'date'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
-            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header"
-              [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogTask.data[input.field]" />
+            <input class="form-control" [id]="input.field" [required]="input.inputOptions.required" [type]="input.inputOptions.type" [placeholder]="input.header" [name]="input.field" [min]="input.inputOptions.min" [max]="input.inputOptions.max" [step]="input.inputOptions.step" [(ngModel)]="dialogTask.data[input.field]" />
           </span>
           <span *ngIf="['select'].includes(input.inputOptions.type)">
             <label [for]="input.field">{{ input.header }}</label>
