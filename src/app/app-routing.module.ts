@@ -9,14 +9,14 @@ import { content } from "./shared/routes/routes";
 import { AdminGuard } from './shared/guard/admin.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  // { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   // { path: 'auth/login', component: LoginComponent },
   // { path: 'auth/register', component: RegisterComponent },
 
   { path: '', component: ContentComponent, children: content },
   { path: '', component: FullComponent, canActivate: [AdminGuard], children: full },
-  { path: '**', redirectTo: '/home' },
+  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({
