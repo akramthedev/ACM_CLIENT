@@ -3,7 +3,7 @@ import { AuthGuard } from "../guard/auth.guard";
 
 export const content: Routes = [
 
-  { path: "home", loadChildren: () => import("../../components/apps/home/home.module").then((m) => m.ClientsModule), canActivate: [AuthGuard], },
+  { path: "", loadChildren: () => import("../../components/apps/home/home.module").then((m) => m.ClientsModule), canActivate: [AuthGuard], },
   { path: "clients", loadChildren: () => import("../../components/apps/clients/clients.module").then((m) => m.ClientsModule), },
   { path: "taches", loadChildren: () => import("../../components/apps/taches/taches.module").then((m) => m.TachesModule), canActivate: [AuthGuard], },
 

@@ -7,8 +7,8 @@ export const environment = {
   keycloak: {
     // serverUrl: 'http://localhost:8080',
     serverUrl: 'https://acm-keycloak.azurewebsites.net',
-    redirectUri: 'https://acm-0.azurewebsites.net/',
-    postLogoutRedirectUri: 'https://acm-0.azurewebsites.net/',
+    redirectUri: 'http://universiapulse-001-site34.ltempurl.com',
+    postLogoutRedirectUri: 'http://universiapulse-001-site34.ltempurl.com',
     realm: 'acm',
     clientId: 'acm-client',
   },
