@@ -64,7 +64,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("this.PrestationsDynamique affecter a this.Prestations : ", this.Prestations);
       },
       (error) => {
-        console.error("Error fetching Prestation: ", error);
+        console.error("Error fetching Prestation Dynamique: ", error);
         this.loader.hide();
       }
     );
