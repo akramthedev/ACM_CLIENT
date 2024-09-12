@@ -55,6 +55,19 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.startAddClientMission(MissionId);
     console.log(MissionId, " ", value);
     this.showPrestations = value === "Installation au Maroc";
+    this.clientService.getPrestationsDynamique(MissionId).subscribe(
+      (response) => {
+        console.log("response getPrestations: ", response);
+        this.loader.hide();
+        let i = 0;
+        this.Prestations = response;
+        console.log("this.PrestationsDynamique affecter a this.Prestations : ", this.Prestations);
+      },
+      (error) => {
+        console.error("Error fetching Prestation: ", error);
+        this.loader.hide();
+      }
+    );
   }
 
   ngOnInit(): void {
