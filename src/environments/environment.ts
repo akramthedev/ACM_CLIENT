@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // url: 'http://localhost:3000',
-  url: 'https://acm-backend.azurewebsites.net',
+  url: "http://localhost:3000",
+  // url: 'https://acm-backend.azurewebsites.net',
 
   // keycloak: {
   //   // serverUrl: "https://upulse-keycloak.azurewebsites.net",

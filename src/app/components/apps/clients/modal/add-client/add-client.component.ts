@@ -54,7 +54,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.selectedMission = value; // Enregistrer la mission sélectionnée
     this.startAddClientMission(MissionId);
     console.log(MissionId, " ", value);
-    this.showPrestations = value === "Installation au Maroc";
+    // this.showPrestations = value === "Installation au Maroc";
+    this.showPrestations = value === "Installation au Maroc" || value === "Retour en France";
     this.clientService.getPrestationsDynamique(MissionId).subscribe(
       (response) => {
         console.log("response getPrestations: ", response);
@@ -79,7 +80,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.getTaches();
     //this.startAddMission();
     // Restaurer la mission sélectionnée si elle existe
-    if (this.selectedMission === "Installation au Maroc") {
+    if (this.selectedMission === "Installation au Maroc" || this.selectedMission === "Retour en France") {
       this.showPrestations = true;
     }
   }
