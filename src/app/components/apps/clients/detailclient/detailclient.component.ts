@@ -2065,17 +2065,17 @@ export class DetailclientComponent {
                 this.currentClient.ClientTaches[index] = { ...this.dialogTask.data };
               }
 
-              // Check if the status changed from something else to "Terminé" and send an email
-              if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
-                this.clientService.SentEmail2("amine.laghlabi@e-polytechnique.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
-                  (emailResponse) => {
-                    console.log("Email sent successfully: ", emailResponse);
-                  },
-                  (emailError) => {
-                    console.error("Error sending email: ", emailError);
-                  }
-                );
-              }
+              // // Check if the status changed from something else to "Terminé" and send an email
+              // if (originalStatus !== "Terminé" && this.dialogTask.data.Status === "Terminé") {
+              //   this.clientService.SentEmail2("elmahdi.boulloul@netwaciila.ma", "Test Custom", "<p>Hello from custom</p>").subscribe(
+              //     (emailResponse) => {
+              //       console.log("Email sent successfully: ", emailResponse);
+              //     },
+              //     (emailError) => {
+              //       console.error("Error sending email: ", emailError);
+              //     }
+              //   );
+              // }
               this.dialogTask.Close();
               // Swal.fire("Succès", "Client ajouté avec succès", "success");
             }
