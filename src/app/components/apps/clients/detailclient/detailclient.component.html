@@ -269,7 +269,7 @@
                                       <span *ngIf="column.dataType == 'string'">{{ patrimoine[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ patrimoine[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ patrimoine[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
-                                      <span *ngIf="column.dataType == 'number'">{{ patrimoine[column.field] }}</span>
+                                      <span *ngIf="column.dataType == 'number'">{{ patrimoine[column.field] | number : "1.0-4" }}</span>
                                       <span *ngIf="column.field == 'StatusDocumentPath' && patrimoine.StatusDocumentPath">
                                         <a [href]="patrimoine.StatusDocumentPath" target="_blank">Télécharger le document</a>
                                       </span>
@@ -347,7 +347,7 @@
                                       <span *ngIf="column.dataType == 'string'">{{ passif[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ passif[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ passif[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
-                                      <span *ngIf="column.dataType == 'number'">{{ passif[column.field] }}</span>
+                                      <span *ngIf="column.dataType == 'number'">{{ passif[column.field] | number : "1.0-4" }}</span>
                                       <span *ngIf="column.dataType == 'bool'">{{ passif[column.field] ? column.TextTrue : column.TextFalse }}</span>
                                       <span *ngIf="column.field == 'action'">
                                         <div class="d-flex justify-content-around">
@@ -422,7 +422,7 @@
                                       <span *ngIf="column.dataType == 'string'">{{ budget[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ budget[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ budget[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
-                                      <span *ngIf="column.dataType == 'number'">{{ budget[column.field] }}</span>
+                                      <span *ngIf="column.dataType == 'number'">{{ budget[column.field] | number : "1.0-4" }}</span>
                                       <span *ngIf="column.dataType == 'bool'">{{ budget[column.field] ? column.TextTrue : column.TextFalse }}</span>
                                       <span *ngIf="column.field == 'action'">
                                         <div class="d-flex justify-content-around">
