@@ -462,25 +462,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     console.log("Start add conjoint : ", this.newConjoint);
   }
-  // submitAddConjoint() {
-  //   if (this.newConjoint.ConjointId == null || this.newConjoint.ClientId == null || this.newConjoint.Nom == null || this.newConjoint.Prenom == null) {
-  //     this.toastr.warning("Veuillez saisir le nom, prénom du conjoint");
-  //     return;
-  //   }
-  //   console.log("submit add conjoint : ", this.newConjoint);
-  //   this.clientData.Conjoint.push(this.newConjoint);
-  //   this.newConjoint = null;
-  // }
-  //marche submitAddConjoint() {
-  //   if (!this.newConjoint.Nom || !this.newConjoint.Prenom || !this.newConjoint.NumeroSS) {
-  //     this.toastr.warning("Veuillez saisir le nom, prénom, et numéro SS du conjoint");
-  //     return;
-  //   }
 
-  //   console.log("submit add conjoint : ", this.newConjoint);
-  //   this.clientData.Conjoint.push(this.newConjoint);
-  //   this.newConjoint = null; // Réinitialiser le formulaire conjoint après ajout
-  // }
   submitAddConjoint() {
     if (!this.newConjoint.Nom || !this.newConjoint.Prenom) {
       this.toastr.warning("Veuillez remplir toutes les informations du conjoint avant de continuer.");

@@ -39,7 +39,7 @@
                 <div class="mb-3 m-t-15 custom-radio-ml">
                   <div *ngFor="let mission of Missions" class="radio radio-primary">
                     <!-- && mission.Designation !== 'Retour en France' -->
-                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc' && mission.Designation !== 'Retour en France'" (change)="onSelectionChange($event, mission.MissionId)" />
+                    <input class="form-check-input fw-normal" [id]="mission.MissionId" type="radio" name="radio1" [checked]="selectedMission === mission.Designation" [value]="mission.Designation" [disabled]="mission.Designation !== 'Installation au Maroc'" (change)="onSelectionChange($event, mission.MissionId)" />
                     <label class="form-check-label fw-normal" [for]="mission.MissionId">{{ mission.Designation }}</label>
                   </div>
                 </div>
@@ -293,7 +293,19 @@
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-date">Date de naissance</label>
-                <input class="form-control" id="child-date" type="date" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.Date" />
+                <input class="form-control" id="child-date" type="date" placeholder="Date de naissance" name="ChildDate" [(ngModel)]="newProche.DateNaissance" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-tel">Téléphone 1</label>
+                <input class="form-control" id="child-tel" type="text" placeholder="Téléphone 1" name="ChildTel" [(ngModel)]="newProche.Telephone1" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-email">Email 1</label>
+                <input class="form-control" id="child-email" type="text" placeholder="Email 1" name="ChildEmail" [(ngModel)]="newProche.Email1" />
+              </div>
+              <div class="form-group mb-3 col-md-6">
+                <label for="child-adresse">Adresse</label>
+                <input class="form-control" id="child-adresse" type="text" placeholder="Email 1" name="ChildAdresse" [(ngModel)]="newProche.Adresse" />
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-parent">Lien de parenté *</label>
@@ -305,8 +317,10 @@
                 </select>
               </div>
               <div class="form-group mb-3 col-md-6">
+                <!-- <label for="child-charge">A charge fiscalement</label>
+                <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" /> -->
                 <label for="child-charge">A charge fiscalement</label>
-                <input class="form-control" id="child-charge" type="text" placeholder="Oui / Non" name="ChildCharge" [(ngModel)]="newProche.Charge" />
+                <input class="form-control form-check-input" id="child-charge" type="checkbox" name="ChildCharge" [(ngModel)]="newProche.Charge" />
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-particularite">Particularités *</label>
@@ -318,8 +332,10 @@
                 </select>
               </div>
               <div class="form-group mb-3 col-md-6">
-                <label for="child-nchild">Nombres d'enfants</label>
-                <input class="form-control" type="number" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" />
+                <!-- <label for="child-nchild">Nombres d'enfants</label> -->
+                <!-- <input class="form-control" type="text" placeholder="Nombres d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" /> -->
+                <label for="nombre-enfant">Nombre d'enfants</label>
+                <input class="form-control" id="nombre-enfant" type="number" placeholder="Nombre d'enfants" name="NombreEnfant" [(ngModel)]="newProche.NombreEnfant" (ngModelChange)="newProche.NombreEnfant = $event.toString()" min="0" step="1" required />
               </div>
               <div class="form-group mb-3 col-md-6">
                 <label for="child-comment">Commentaire</label>
@@ -361,7 +377,7 @@
                   <td>{{ proche.Nom }}</td>
                   <td>{{ proche.Prenom }}</td>
                   <td>{{ proche.DateNaissance | date : "dd/MM/yyyy" }}</td>
-                  <td>{{ proche.Parent }}</td>
+                  <td>{{ proche.LienParente }}</td>
                   <td>{{ proche.Charge == true ? "Oui" : "Non" }}</td>
                   <td>{{ proche.Particularite }}</td>
                   <td>{{ proche.NombreEnfant }}</td>
