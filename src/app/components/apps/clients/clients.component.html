@@ -65,7 +65,7 @@
                                 <!-- <img *ngIf="client.ImgSrc == null" class="img-50 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/2.png" alt="" /> -->
                                 <div class="media-body">
                                   <h6>
-                                    <span class="first_name_0">{{ client.Prenom }} </span><span class="last_name_0">{{ client.Nom }}</span>
+                                    <span class="first_name_0">{{ client.Nom }} </span><span class="last_name_0">{{ client.Prenom }}</span>
                                   </h6>
                                   <p class="email_add_0">{{ client.Email }}</p>
                                 </div>
@@ -117,7 +117,11 @@
                                     <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
                                     <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
                                     <li>
-                                      Téléphone <span class="font-primary mobile_num_0"> {{ CurrentClient.Telephone1 }}{{ CurrentClient.Telephone1 != null && CurrentClient.Telephone1 != "" ? " / " + CurrentClient.Telephone1 : "" }} </span>
+                                      Téléphone
+                                      <span class="font-primary mobile_num_0">
+                                        {{ formatPhoneNumber(CurrentClient.Telephone1) }}
+                                        {{ CurrentClient.Telephone2 ? " / " + formatPhoneNumber(CurrentClient.Telephone2) : "" }}
+                                      </span>
                                     </li>
                                     <li>
                                       Email <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / " + CurrentClient.Email2 : "" }} </span>

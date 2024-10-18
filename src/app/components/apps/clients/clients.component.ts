@@ -141,7 +141,26 @@ export class ClientsComponent implements OnInit {
       }
     );
   }
+  // Function to format Moroccan and French phone numbers
+  formatPhoneNumber(phone: string): string {
+    if (!phone) return "";
 
+    // Check if the phone number starts with the Moroccan or French code
+    if (phone.startsWith("+212")) {
+      // Format for Moroccan numbers: +212 6 01 01 00 46
+      return phone.replace(/^(\+212)(\d{1})(\d{2})(\d{2})(\d{2})(\d{2})$/, "$1 $2 $3 $4 $5 $6");
+    } else if (phone.startsWith("+33")) {
+      // Format for French numbers: +33 6 25 00 25 04
+      return phone.replace(/^(\+33)(\d{1})(\d{2})(\d{2})(\d{2})(\d{2})$/, "$1 $2 $3 $4 $5 $6");
+    }
+
+    // Return the phone as-is if it doesn't match either format
+    return phone;
+  }
+  // Unformat the phone number before saving to remove spaces (optional)
+  unformatPhoneNumber(phone: string): string {
+    return phone.replace(/\s/g, ""); // Remove all spaces
+  }
   navigateToDetails(clientId: string) {
     this.router.navigate(["/clients/details/", clientId]);
   }
@@ -231,6 +250,9 @@ export class ClientsComponent implements OnInit {
   ClientToUpdate: Client = null;
   StartUpdateClient() {
     this.ClientToUpdate = structuredClone(this.CurrentClient);
+    // Format phone numbers for display
+    this.ClientToUpdate.Telephone1 = this.formatPhoneNumber(this.ClientToUpdate.Telephone1);
+    this.ClientToUpdate.Telephone2 = this.formatPhoneNumber(this.ClientToUpdate.Telephone2);
     console.log("ClientToUpdate: ", this.ClientToUpdate);
 
     this.IsEditingClient = true;
@@ -240,7 +262,9 @@ export class ClientsComponent implements OnInit {
       this.toastr.warning("Veuillez saisir le nom et prénom du client.");
       return;
     }
-
+    // Format phone numbers before saving
+    this.ClientToUpdate.Telephone1 = this.formatPhoneNumber(this.ClientToUpdate.Telephone1);
+    this.ClientToUpdate.Telephone2 = this.formatPhoneNumber(this.ClientToUpdate.Telephone2);
     this.loader.show();
     this.clientService.UpdateClient(this.ClientToUpdate).subscribe(
       (response) => {

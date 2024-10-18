@@ -1119,7 +1119,18 @@ export class DetailclientComponent {
     },
   ];
   //#endregion Client
+  // Format NumeroSS when it's retrieved or displayed
+  formatNumeroSS(num: string): string {
+    if (!num) return "";
+    // Use regex to format the NumeroSS
+    const regex = /^(\d{1})(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})\/(\d{2})$/;
+    return num.replace(regex, "$1 $2 $3 $4 $5 $6/$7");
+  }
 
+  // Unformat the NumeroSS to its raw form if needed (optional for backend)
+  unformatNumeroSS(num: string): string {
+    return num.replace(/\s/g, ""); // Remove all spaces
+  }
   //#region LettreMission
   generatePdf(clientMissionId: string) {
     this.loader.show();
@@ -1488,7 +1499,17 @@ export class DetailclientComponent {
             this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
             this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
             this.currentClient.DateResidence = this.formatDate(this.currentClient.DateResidence);
-
+            // If currentClient.NumeroSS is retrieved from the backend in raw format
+            if (this.currentClient.NumeroSS) {
+              this.currentClient.NumeroSS = this.formatNumeroSS(this.currentClient.NumeroSS);
+            }
+            // Apply formatting to the phone numbers if they exist
+            if (this.currentClient.Telephone1) {
+              this.currentClient.Telephone1 = this.formatPhoneNumber(this.currentClient.Telephone1);
+            }
+            if (this.currentClient.Telephone2) {
+              this.currentClient.Telephone2 = this.formatPhoneNumber(this.currentClient.Telephone2);
+            }
             this.currentClient.Patrimoines = this.currentClient.Patrimoines.map((item) => {
               if (item.StatusDocumentPath != null && item.StatusDocumentPath != "") item.StatusDocumentPath = `${environment.url}/${item.StatusDocumentPath}`;
               return item;
@@ -2161,8 +2182,35 @@ export class DetailclientComponent {
     }
   }
   //#endregion Task
+  // Function to format Moroccan and French phone numbers
+  formatPhoneNumber(phone: string): string {
+    if (!phone) return "";
+
+    // Check if the phone number starts with the Moroccan or French code
+    if (phone.startsWith("+212")) {
+      // Format for Moroccan numbers: +212 6 01 01 00 46
+      return phone.replace(/^(\+212)(\d{1})(\d{2})(\d{2})(\d{2})(\d{2})$/, "$1 $2 $3 $4 $5 $6");
+    } else if (phone.startsWith("+33")) {
+      // Format for French numbers: +33 6 25 00 25 04
+      return phone.replace(/^(\+33)(\d{1})(\d{2})(\d{2})(\d{2})(\d{2})$/, "$1 $2 $3 $4 $5 $6");
+    }
+
+    // Return the phone as-is if it doesn't match either format
+    return phone;
+  }
+  // Unformat the phone number before saving to remove spaces (optional)
+  unformatPhoneNumber(phone: string): string {
+    return phone.replace(/\s/g, ""); // Remove all spaces
+  }
+
   UpdateClient() {
     this.loader.show();
+    // Unformat before sending to backend
+    this.currentClient.NumeroSS = this.unformatNumeroSS(this.currentClient.NumeroSS);
+    // Unformat both phone numbers before saving
+    this.currentClient.Telephone1 = this.unformatPhoneNumber(this.currentClient.Telephone1);
+    this.currentClient.Telephone2 = this.unformatPhoneNumber(this.currentClient.Telephone2);
+
     this.currentClient.DateNaissance = this.formatDate(this.currentClient.DateNaissance);
     this.currentClient.DateRetraite = this.formatDate(this.currentClient.DateRetraite);
     this.clientService.UpdateClient(this.currentClient).subscribe(
@@ -2176,6 +2224,17 @@ export class DetailclientComponent {
           this.particulariteFiscaleChanged = false;
           this.situationAdministrativeChanged = false;
           this.oldParticulariteFiscale = structuredClone(this.currentClient.ParticulariteFiscale);
+          // If currentClient.NumeroSS is retrieved from the backend in raw format
+          if (this.currentClient.NumeroSS) {
+            this.currentClient.NumeroSS = this.formatNumeroSS(this.currentClient.NumeroSS);
+          }
+          // Apply formatting to the phone numbers if they exist
+          if (this.currentClient.Telephone1) {
+            this.currentClient.Telephone1 = this.formatPhoneNumber(this.currentClient.Telephone1);
+          }
+          if (this.currentClient.Telephone2) {
+            this.currentClient.Telephone2 = this.formatPhoneNumber(this.currentClient.Telephone2);
+          }
           // Swal.fire("Succès", "Client ajouté avec succès", "success");
         }
       },
