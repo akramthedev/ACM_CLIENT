@@ -6,7 +6,8 @@ import { ContentComponent } from "./shared/components/layout/content/content.com
 import { FullComponent } from "./shared/components/layout/full/full.component";
 import { full } from "./shared/routes/full.routes";
 import { content } from "./shared/routes/routes";
-import { AdminGuard } from "./shared/guard/admin.guard";
+// import { AdminGuard } from "./shared/guard/admin.guard";
+import { AuthGuard } from "./shared/guard/auth.guard";
 
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,8 +15,8 @@ const routes: Routes = [
   // { path: 'auth/login', component: LoginComponent },
   // { path: 'auth/register', component: RegisterComponent },
 
-  { path: "", component: ContentComponent, canActivate: [AdminGuard], children: content },
-  { path: "", component: FullComponent, canActivate: [AdminGuard], children: full },
+  { path: "", component: ContentComponent, canActivate: [AuthGuard], children: content },
+  { path: "", component: FullComponent, canActivate: [AuthGuard], children: full },
   { path: "**", redirectTo: "/" },
 ];
 
@@ -31,4 +32,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
