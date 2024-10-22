@@ -36,10 +36,39 @@ export class ClientsComponent implements OnInit {
     this.title.setTitle("Clients | CRM");
     this.titre = this.title.getTitle();
 
+    // this.authService.GetCurrentUser().then((user: any) => {
+    //   this.User = user;
+    //   if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == "")) this.User.FullName = this.User.email;
+    //   else this.User.FullName = this.User.firstName + " " + this.User.lastName;
+    // });
     this.authService.GetCurrentUser().then((user: any) => {
       this.User = user;
-      if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == "")) this.User.FullName = this.User.email;
-      else this.User.FullName = this.User.firstName + " " + this.User.lastName;
+      
+      // if ((this.User.firstName == null || this.User.firstName == "") && (this.User.lastName == null || this.User.lastName == "")) {
+      //   this.User.FullName = this.User.email;
+      // } else if (this.User.lastName == null || this.User.lastName == "") {
+      //   this.User.FullName = this.User.firstName;
+      // } else {
+      //   this.User.FullName = this.User.firstName + " " + this.User.lastName;
+      // }
+      if (
+        (this.User.firstName == null || this.User.firstName == "") &&
+        (this.User.lastName == null || this.User.lastName == "")
+      ) {
+        this.User.FullName = this.User.email;
+      } else
+        this.User.FullName =
+          (this.User.firstName != null &&
+          this.User.firstName != "" &&
+          this.User.firstName != "undefined"
+            ? this.User.firstName
+            : "") +
+          " " +
+          (this.User.lastName != null &&
+          this.User.lastName != "" &&
+          this.User.lastName != "undefined"
+            ? this.User.lastName
+            : "");
     });
   }
   triggerFileInput() {

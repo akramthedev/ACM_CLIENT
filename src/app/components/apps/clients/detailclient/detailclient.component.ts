@@ -915,6 +915,8 @@ export class DetailclientComponent {
             selectData: [
               { key: "Père", libelle: "Père" },
               { key: "Mère", libelle: "Mère" },
+              { key: "Enfant", libelle: "Enfant" },
+              { key: "Époux", libelle: "Époux" },
               { key: "Adoption simple", libelle: "Adoption simple" },
               { key: "Adoption plénière", libelle: "Adoption plénière" },
             ],
@@ -937,6 +939,7 @@ export class DetailclientComponent {
               { key: "À charge", libelle: "À charge" },
               { key: "Tutelle", libelle: "Tutelle" },
               { key: "Curatelle", libelle: "Curatelle" },
+              { key: "Aucune", libelle: "Aucune" },
             ],
           },
         },

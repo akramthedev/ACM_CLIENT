@@ -805,7 +805,7 @@
                         </div>
                       </div>
                     </div>
-                    <div ngbAccordionItem class="mt-3">
+                    <!-- <div ngbAccordionItem class="mt-3">
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white">
                           <i class="icofont icofont-money-bag fs-3 px-2"></i>
@@ -815,9 +815,7 @@
                       <div ngbAccordionCollapse>
                         <div ngbAccordionBody>
                           <ng-template>
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            
 
                             <div class="mb-4 mt-3" *ngFor="let budgetType of tablesBudgets">
                               <table class="table table-bordered">
@@ -834,7 +832,6 @@
                                       </div>
                                     </th>
                                   </tr>
-                                  <!-- table columns -->
                                   <tr class="bg-primary-subtle">
                                     <td *ngFor="let column of budgetType.columns">{{ column.header }}</td>
                                   </tr>
@@ -849,7 +846,6 @@
                                 <tbody *ngIf="GetBudgets().length > 0">
                                   <tr *ngFor="let budget of GetBudgets()">
                                     <td *ngFor="let column of budgetType.columns" [class.text-start]="column.dataType == 'string'" [class.text-center]="column.dataType == 'date' || column.dataType == 'bool' || column.dataType == null" [class.text-end]="column.dataType == 'number'">
-                                      <!-- <ng-template> -->
                                       <span *ngIf="column.dataType == 'string'">{{ budget[column.field] }}</span>
                                       <span *ngIf="column.dataType == 'date'">{{ budget[column.field] | date : "dd/MM/yyyy" }}</span>
                                       <span *ngIf="column.dataType == 'datetime'">{{ budget[column.field] | date : "dd/MM/yyyy hh:mm:ss" }}</span>
@@ -865,21 +861,17 @@
                                           </a>
                                         </div>
                                       </span>
-                                      <!-- </ng-template> -->
                                     </td>
                                   </tr>
                                 </tbody>
                               </table>
-                              <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="budgetType.total != null">Total: {{ budgetType.total | currency : "MAD " : "symbol" : "4.2-2" }}</div> -->
-                              <!--output '0 001,35 CA$'-->
+                             
                             </div>
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-                            <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+                            
                           </ng-template>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div ngbAccordionItem class="mt-3">
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white">
@@ -891,7 +883,6 @@
                         <div ngbAccordionBody>
                           <ng-template>
                             <div class="row">
-                              <!-- Fields for usage goods -->
                               <div class="form-group mb-3 col-md-12">
                                 <label for="ParticulariteFiscale">Particularités fiscales</label>
                                 <textarea class="form-control" id="ParticulariteFiscale" placeholder="Particularités fiscales" name="ParticulariteFiscale" [(ngModel)]="currentClient.ParticulariteFiscale" (keyup)="particulariteFiscaleChanged = true"></textarea>
@@ -904,7 +895,7 @@
                         </div>
                       </div>
                     </div>
-                    <div ngbAccordionItem class="mt-3">
+                    <!-- <div ngbAccordionItem class="mt-3">
                       <h2 ngbAccordionHeader>
                         <button ngbAccordionButton class="bg-primary text-white">
                           <i class="icofont icofont-briefcase-alt-1 fs-2 px-2"></i>
@@ -1259,7 +1250,7 @@
                           </ng-template>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   <!-- <div class="mt-3">
                     <button class="btn btn-primary" type="submit">Enregistrer le dossier</button>

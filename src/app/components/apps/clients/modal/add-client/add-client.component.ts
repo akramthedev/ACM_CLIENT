@@ -407,7 +407,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
           }
 
           // Ajouter le conjoint si tous les champs sont valides
-          this.submitAddConjoint();
+          // this.submitAddConjoint();
         }
 
         // Si "Non" est sélectionné pour hasConjoint, réinitialiser les données du conjoint
