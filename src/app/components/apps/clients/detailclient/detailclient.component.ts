@@ -906,7 +906,7 @@ export class DetailclientComponent {
           field: "LienParente",
           header: "Lien de parenté",
           dataType: "string",
-          visible: false,
+          visible: true,
           inputOptions: {
             type: "select",
             required: true,
@@ -916,6 +916,8 @@ export class DetailclientComponent {
               { key: "Père", libelle: "Père" },
               { key: "Mère", libelle: "Mère" },
               { key: "Enfant", libelle: "Enfant" },
+              { key: "Neveu", libelle: "Neveu" },
+              { key: "Nièce", libelle: "Nièce" },
               { key: "Époux", libelle: "Époux" },
               { key: "Adoption simple", libelle: "Adoption simple" },
               { key: "Adoption plénière", libelle: "Adoption plénière" },
