@@ -117,9 +117,9 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
               "extractLicenses": false,
               "vendorChunk": true,
@@ -142,7 +142,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "cuba:build"
+            "buildTarget": "cuba:build",
+            "hmr": true
           },
           "configurations": {
             "production": {
@@ -164,7 +165,11 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss",
+              "node_modules/@fullcalendar/core/main.css",   
+              "node_modules/@fullcalendar/daygrid/main.css" 
+            ],
             "scripts": []
           }
         },

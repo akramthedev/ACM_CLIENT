@@ -7,3 +7,7 @@ svg-icon {
      fill: orange;
    }
  }
+
+ .logo-wrapper, .sidebar-main, .logo-icon-wrapper{
+  z-index: 33 !important;
+ }

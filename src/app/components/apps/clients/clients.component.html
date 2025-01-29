@@ -3,17 +3,18 @@
 <div class="container-fluid">
   <div class="email-wrap bookmark-wrap">
     <div class="row">
-      <div class="col-xl-3 box-col-3">
+
+
+      <div class="col-xl-3 box-col-3 ">
         <div class="email-left-aside">
           <div class="card">
             <div class="card-body">
               <div class="email-app-sidebar left-bookmark">
                 <div class="media">
-                  <div class="media-size-email"><img class="me-3 rounded-circle" src="assets/images/user/user.png" alt="" /></div>
+                  <div class="media-size-email"><img class="me-3 rounded-circle swduhuwhgohuswghosudgwhusd" src="assets/images/user/user.png" alt="" /></div>
                   <div class="media-body">
                     <h6 class="f-w-600">{{ User?.FullName }}</h6>
                     <p>{{ User?.email }}</p>
-                    <!-- <p>cecile&#64;acm-maroc.com</p> -->
                   </div>
                 </div>
                 <ul class="nav main-menu contact-options" role="tablist">
@@ -23,7 +24,7 @@
                   <li class="nav-item mt-3"><span class="main-title">Prestation</span></li>
                   <li>
                     <a id="pills-personal-tab" data-bs-toggle="pill" href="#pills-personal" role="tab" aria-controls="pills-personal" aria-selected="true" (click)="LoadTous()">
-                      <span class="title">Tous</span>
+                      <span class="title">Nombre de Clients:&nbsp;{{ Clients.length }}</span>
                     </a>
                   </li>
                   <!-- <li>
@@ -42,27 +43,136 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-9 col-md-12 box-col-9">
-        <div class="email-right-aside bookmark-tabcontent contacts-tabs">
-          <div class="card email-body radius-left">
+      
+      <div class="col-xl-9 col-md-12 box-col-9 sfugusghsd">
+        
+
+
+
+            <div class="col-xl-8 xl-50 col-md-7 client-detailsx" *ngIf="CurrentClient != null">
+              <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ display: IsEditingClient ? 'none' : '' }">
+                <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
+                  <div class="profile-mail">
+                    <div class="media">
+                      <div class="position-relative d-inline-block">
+                        <img class="swduhuwhgohuswghosudgwhusd img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" />
+                        <i class="fa fa-pencil position-absolute" style="top: 10px; right: 10px; font-size: 20px; width: 28.5px; height: 28.5px; color: white; background-color: #5e52e8; padding: 5px; border-radius: 50%; cursor: pointer" (click)="triggerFileInput()"></i>
+                        <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" style="display: none" #fileInput />
+                      </div>
+
+                      <div class="media-body wiwiwi mt-0 sdfok">
+                        <h5>
+                          <span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span>
+                        </h5>
+                        <ul>
+                          <li><a href="javascript:void(0)" (click)="navigateToDetails(CurrentClient.ClientId)">Voir Détails</a></li>
+                          <li><a href="javascript:void(0)" (click)="StartUpdateClient()">Modifier</a></li>
+                          <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="email-general kikoolm">
+                      <h6 class="mb-3 jdsf">Information Générale</h6>
+                      <ul>
+                        <li>
+                          <span>Nom</span> <span class="font-primary first_name_0">{{ CurrentClient.Nom }}</span>
+                        </li>
+                        <li>
+                          <span>Prénom</span> <span class="font-primary last_name_0">{{ CurrentClient.Prenom }}</span>
+                        </li>
+                        <!-- <li>Gender <span class="font-primary">Male</span></li> -->
+                        <li>
+                          <span>Date De Naissance</span> <span class="font-primary">{{ CurrentClient.DateNaissance | date : "dd/MM/yyyy" }} </span>
+                        </li>
+                        <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
+                        <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
+                        <li>
+                          <span>Téléphone</span>
+                          <span class="font-primary mobile_num_0">
+                            {{ formatPhoneNumber(CurrentClient.Telephone1) }}
+                            {{ CurrentClient.Telephone2 ? " / " + formatPhoneNumber(CurrentClient.Telephone2) : "" }}
+                          </span>
+                        </li>
+                        <li>
+                          <span>Email</span> <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / " + CurrentClient.Email2 : "" }} </span>
+                        </li>
+                        <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
+                        <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- #region EditClient -->
+              <div class="contact-editform ps-0" [ngStyle]="{ display: !IsEditingClient ? 'none' : '' }">
+                <div *ngIf="ClientToUpdate != null">
+                  <div class="row g-2">
+                    <div class="mt-0 mb-3 col-md-12">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label>Nom</label>
+                          <input class="form-control" id="Nom" type="text" required="" placeholder="Nom" [(ngModel)]="ClientToUpdate.Nom" />
+                        </div>
+                        <div class="col-sm-6">
+                          <label>Prénom</label>
+                          <input class="form-control" id="Prenom" type="text" required="" placeholder="Prénom" [(ngModel)]="ClientToUpdate.Prenom" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Date de naissance</label>
+                      <input class="form-control" id="DateNaissance" type="date" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.DateNaissance" />
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Email 1</label>
+                      <input class="form-control" id="Email1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email1" />
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Email 2</label>
+                      <input class="form-control" id="Email2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email2" />
+                    </div>
+                    <div class="mt-0 mb-3 col-md-12">
+                      <label>Téléphone</label>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <input class="form-control" id="Telephone1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone1" />
+                        </div>
+                        <div class="col-sm-6">
+                          <input class="form-control" id="Telephone2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone2" />
+                        </div>
+                        <!-- <div class="col-sm-6"><select class="form-control"><option>Mobile</option><option>Work</option><option>Others</option></select></div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-secondary soufhusduwghsuowhguosdhwgo" type="button" (click)="CancelUpdateClient()">Annuler</button>&nbsp;&nbsp;&nbsp;
+                  <button class="btn btn-primary  update-contact" type="button" (click)="SubmitUpdateClient()">Modifier</button>
+                </div>
+              </div>
+              <!-- #endregion EditClient -->
+            </div>
+
+
+
+
+        <div class="email-right-aside bookmark-tabcontent contacts-tabs ">
+          <div class="card email-body radius-left sfugusghsd">
+
             <div class="ps-0">
               <div class="tab-content">
                 <div class="tab-pane fade active show" id="pills-personal" role="tabpanel" aria-labelledby="pills-personal-tab">
                   <div class="card mb-0">
-                    <div class="card-header d-flex">
-                      <h5>Tous</h5>
-                      <span class="f-14 pull-right mt-0">{{ Clients.length }} Clients</span>
-                    </div>
                     <div class="card-body p-0">
                       <div class="row list-persons" id="addcon">
-                        <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12' : 'col-xl-4 xl-50 col-md-5'">
-                          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        
+                        
+                        <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12 addScrollBar' : 'col-xl-4 xl-50 col-md-5 addScrollBar'">
+                          <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <!-- href="#v-pills-user"  -->
                             <a *ngFor="let client of Clients" class="contact-tab-0 nav-link active" [id]="client.ClientId" data-bs-toggle="pill" href="javascript:void(0)" role="tab" aria-controls="v-pills-user" aria-selected="false" [class.active]="client.IsSelected != null && client.IsSelected" (click)="OnClientSelected(client.ClientId)">
                               <div class="media">
                                 <!-- Photo -->
-                                <img class="img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
-                                <!-- <img *ngIf="client.ImgSrc == null" class="img-50 img-fluid m-r-20 rounded-circle update_img_0" src="assets/images/user/2.png" alt="" /> -->
+                                <img class="swduhuwhgohuswghosudgwhusd img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
                                 <div class="media-body">
                                   <h6>
                                     <span class="first_name_0">{{ client.Nom }} </span><span class="last_name_0">{{ client.Prenom }}</span>
@@ -74,113 +184,7 @@
                           </div>
                         </div>
 
-                        <div class="col-xl-8 xl-50 col-md-7" *ngIf="CurrentClient != null">
-                          <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ display: IsEditingClient ? 'none' : '' }">
-                            <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
-                              <div class="profile-mail">
-                                <div class="media">
-                                  <!-- <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" style="cursor: pointer;" />
-                                  <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" /> -->
-                                  <div class="position-relative d-inline-block">
-                                    <img class="img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" />
-                                    <i class="fa fa-pencil position-absolute" style="top: 10px; right: 10px; font-size: 20px; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 5px; border-radius: 50%; cursor: pointer" (click)="triggerFileInput()"></i>
-                                    <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" style="display: none" #fileInput />
-                                  </div>
-
-                                  <div class="media-body mt-0">
-                                    <h5>
-                                      <span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span>
-                                    </h5>
-                                    <p class="email_add_0">{{ CurrentClient.Email }}</p>
-                                    <ul>
-                                      <li><a href="javascript:void(0)" (click)="StartUpdateClient()">Modifier</a></li>
-                                      <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
-                                      <!-- <li><a href="javascript:void(0)" (click)="showHistory()">Historique</a></li> -->
-                                      <!-- <li><a href="javascript:void(0)" (click)="Print.openModal()">Imprimer</a></li> -->
-                                      <li><a href="javascript:void(0)" (click)="navigateToDetails(CurrentClient.ClientId)">Détails</a></li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div class="email-general">
-                                  <h6 class="mb-3">Information Générale</h6>
-                                  <ul>
-                                    <li>
-                                      Nom <span class="font-primary first_name_0">{{ CurrentClient.Nom }}</span>
-                                    </li>
-                                    <li>
-                                      Prénom <span class="font-primary last_name_0">{{ CurrentClient.Prenom }}</span>
-                                    </li>
-                                    <!-- <li>Gender <span class="font-primary">Male</span></li> -->
-                                    <li>
-                                      Date De Naissance <span class="font-primary">{{ CurrentClient.DateNaissance | date : "dd/MM/yyyy" }} </span>
-                                    </li>
-                                    <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
-                                    <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
-                                    <li>
-                                      Téléphone
-                                      <span class="font-primary mobile_num_0">
-                                        {{ formatPhoneNumber(CurrentClient.Telephone1) }}
-                                        {{ CurrentClient.Telephone2 ? " / " + formatPhoneNumber(CurrentClient.Telephone2) : "" }}
-                                      </span>
-                                    </li>
-                                    <li>
-                                      Email <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / " + CurrentClient.Email2 : "" }} </span>
-                                    </li>
-                                    <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
-                                    <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <!-- #region EditClient -->
-                          <div class="contact-editform ps-0" [ngStyle]="{ display: !IsEditingClient ? 'none' : '' }">
-                            <div *ngIf="ClientToUpdate != null">
-                              <div class="row g-2">
-                                <div class="mt-0 mb-3 col-md-12">
-                                  <div class="row">
-                                    <div class="col-sm-6">
-                                      <label>Nom</label>
-                                      <input class="form-control" id="Nom" type="text" required="" placeholder="Nom" [(ngModel)]="ClientToUpdate.Nom" />
-                                    </div>
-                                    <div class="col-sm-6">
-                                      <label>Prénom</label>
-                                      <input class="form-control" id="Prenom" type="text" required="" placeholder="Prénom" [(ngModel)]="ClientToUpdate.Prenom" />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="mt-0 mb-3 col-md-12">
-                                  <label>Date de naissance</label>
-                                  <input class="form-control" id="DateNaissance" type="date" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.DateNaissance" />
-                                </div>
-                                <div class="mt-0 mb-3 col-md-12">
-                                  <label>Email 1</label>
-                                  <input class="form-control" id="Email1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email1" />
-                                </div>
-                                <div class="mt-0 mb-3 col-md-12">
-                                  <label>Email 2</label>
-                                  <input class="form-control" id="Email2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Email2" />
-                                </div>
-                                <div class="mt-0 mb-3 col-md-12">
-                                  <label>Téléphone</label>
-                                  <div class="row">
-                                    <div class="col-sm-6">
-                                      <input class="form-control" id="Telephone1" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone1" />
-                                    </div>
-                                    <div class="col-sm-6">
-                                      <input class="form-control" id="Telephone2" type="text" required="" autocomplete="off" [(ngModel)]="ClientToUpdate.Telephone2" />
-                                    </div>
-                                    <!-- <div class="col-sm-6"><select class="form-control"><option>Mobile</option><option>Work</option><option>Others</option></select></div> -->
-                                  </div>
-                                </div>
-                              </div>
-                              <button class="btn btn-secondary update-contact" type="button" (click)="SubmitUpdateClient()">Modifier</button>
-                              <button class="btn btn-primary" type="button" (click)="CancelUpdateClient()">Annuler</button>
-                            </div>
-                          </div>
-                          <!-- #endregion EditClient -->
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -197,7 +201,7 @@
                           <div class="nav flex-column nav-pills" id="v-pills-tab1" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="v-pills-iduser-tab" data-bs-toggle="pill" href="#v-pills-iduser" role="tab" aria-controls="v-pills-iduser" aria-selected="true">
                               <div class="media">
-                                <img class="img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/user.png" alt="" />
+                                <img class="swduhuwhgohuswghosudgwhusd img-50 img-fluid m-r-20 rounded-circle" src="assets/images/user/user.png" alt="" />
                                 <div class="media-body">
                                   <h6>Mark jecno</h6>
                                   <p>markjecno&#64;gmail.com</p>

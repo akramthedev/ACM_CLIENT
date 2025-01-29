@@ -190,6 +190,11 @@ export class ClientTache {
   ClientMissionPrestationId: string;
   ClientMissionId: string;
   TacheId: string;
+  Start_date: string;
+  End_date : string;
+  Color : string;
+  IsDone : Boolean; 
+  IsReminder : Boolean;
   DateAffectation?: string;
   Intitule?: string;
   Numero_Ordre?: string;
@@ -200,4 +205,5 @@ export class ClientTache {
   Status?: string;
   AgentResposable?: string;
   PrestationId?: string;
+  
 }

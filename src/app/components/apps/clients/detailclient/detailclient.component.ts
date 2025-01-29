@@ -2050,6 +2050,11 @@ export class DetailclientComponent {
           ClientMissionPrestationId: null,
           ClientMissionId: null,
           TacheId: null,
+          Start_date : null, 
+          End_date : null, 
+          Color : null, 
+          IsDone : false, 
+          IsReminder : false
         };
 
         this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");

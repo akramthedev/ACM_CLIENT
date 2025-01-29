@@ -9,6 +9,57 @@ import { ClientService } from "src/app/shared/services/client.service";
 import { Client, ClientMission, ClientMissionPrestation, ClientTache, Conjoint, Mission, Prestation, Proche, Service } from "../../../../../shared/model/dto.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
+
+
+function getRandomColor() {
+  const colors = ['#7366fe', '#eab308', '#22c55e', '#ec4899'];
+  const randomIndex = Math.floor(Math.random() * colors.length); 
+  return colors[randomIndex];
+}
+
+
+function getFutureDateTime() {
+  const now = new Date();
+  const futureDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
+
+  const year = futureDate.getFullYear();
+  const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(futureDate.getDate()).padStart(2, '0');
+  const hours = '00'; // Fixed time
+  const minutes = '00';
+  const seconds = '00';
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function getFutureDateTime2() {
+  const now = new Date();
+  const futureDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
+
+  const year = futureDate.getFullYear();
+  const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(futureDate.getDate()).padStart(2, '0');
+  const hours = '00'; // Fixed time
+  const minutes = '00';
+  const seconds = '00';
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function getCurrentDateAndTime() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+
+
 @Component({
   selector: "app-add-client",
   templateUrl: "./add-client.component.html",
@@ -177,6 +228,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     console.log("Updated ClientTache: ", this.clientData.ClientTaches);
   }
+
+
+  
   getServices() {
     this.loader.show();
     this.clientService.getServices().subscribe(
@@ -324,28 +378,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
-  // nextStep() {
-  //   // if (this.currentStep < 5) {
-  //   //   if (this.currentStep < 2) {
-  //   //     this.submitAddClientMission();
-  //   //   }
-
-  //   //   this.currentStep++;
-  //   // }
-  //   //celui ci marche
-  //   if (this.currentStep < 5) {
-  //     if (this.currentStep === 1 && !this.selectedMission) {
-  //       this.toastr.warning("Veuillez sélectionner une mission avant de continuer");
-  //       return; // Empêche de passer à l'étape suivante si la mission n'est pas sélectionnée
-  //     }
-
-  //     if (this.currentStep === 2) {
-  //       this.submitAddClientMission();
-  //     }
-
-  //     this.currentStep++;
-  //   }
-  // }
   nextStep() {
     if (this.currentStep < 5) {
       // Étape 1 : Validation de la mission sélectionnée
@@ -557,6 +589,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.clientData.ClientMission.push(this.newClientMission);
     this.newClientMission = null; // Réinitialiser après ajout
   }
+
+
+
+
   cancelAddClientMission() {
     this.newClientMission = null;
   }
@@ -588,33 +624,62 @@ export class AddClientComponent implements OnInit, OnDestroy {
       console.error(`No ClientMissionPrestation found for PrestationId: ${prestationId}`);
       return;
     }
+
+    let desc = `Client ayant le numéro de passeport: ${this.clientData.PASSEPORT ? this.clientData.PASSEPORT : '---'}`;
+    let title = `Préparation des documents de ${this.clientData.Nom} ${this.clientData.Prenom}`;
+    
     this.newClientTache = {
       ClientTacheId: uuidv4(),
       ClientMissionPrestationId: clientMissionPrestation.ClientMissionPrestationId,
       ClientMissionId: this.clientData.ClientMission[0].ClientMissionId,
       TacheId: TacheId,
+      Intitule : title ,
+      Commentaire : desc ,
+      Start_date : getCurrentDateAndTime(),
+      End_date : getFutureDateTime(), 
+      Color : getRandomColor() ,
+      IsReminder : false, 
+      IsDone : false
     };
   }
+
+
+
+
+
   submitAddClientTache() {
+    
     if (this.newClientTache.ClientMissionId == null || this.newClientTache.ClientMissionPrestationId == null || this.newClientTache.TacheId == null || this.newClientTache.ClientTacheId == null) {
       this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
       return;
     }
-    // if (!this.clientData.ClientTache) {
-    //   this.clientData.ClientTache = [];
-    // }
+    else{
+      console.warn("------------------");
+      console.log('A')
+      console.log(this.newClientTache);
+      console.warn("------------------");
+    }
+
     const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === this.newClientTache.TacheId);
-    console.log(this.newClientTache);
     if (!existingTache) {
       this.clientData.ClientTaches.push(this.newClientTache);
-      console.log("Submit AddClientTache: ", this.newClientTache);
+      console.log("B Test");
+      console.log(this.clientData.ClientTaches);
     } else {
-      console.log("Tache already exists: ", existingTache);
+      console.log("C");
     }
-    console.log("Submit AddClientTache (ClientData.ClientTache)", this.clientData);
 
+    console.log("D");
+    console.log(this.newClientTache);
+    
     this.newClientTache = null;
+    
   }
+
+
+
+
+
   cancelAddClientTache() {
     this.newClientTache = null;
   }
@@ -622,16 +687,18 @@ export class AddClientComponent implements OnInit, OnDestroy {
     const ssnRegex = /^\d{13}\/\d{2}$/; // Exige 13 chiffres suivis de '/2 chiffres'
     return ssnRegex.test(ssn);
   }
+
+
+
+
   onSave() {
     if (this.isFormValid()) {
       this.loader.show();
-      // // Ajouter l'indicatif téléphonique pour le Maroc (+212) et la France (+33)
-      // const phone1WithCode = `+212${this.clientData.Telephone1}`;
-      // const phone2WithCode = `+33${this.clientData.Telephone2}`;
-      // // Mettre à jour les champs Téléphone1 et Téléphone2 avec les indicatifs
-      // this.clientData.Telephone1 = phone1WithCode;
-      // this.clientData.Telephone2 = phone2WithCode;
-      // Check if the phone number fields are not empty before adding the country code
+
+      console.log("Begin F");
+      console.log(this.clientData.ClientTaches);
+      console.log("End F")
+
       if (this.clientData.Telephone1 && this.clientData.Telephone1.trim() !== "") {
         this.clientData.Telephone1 = `+212${this.clientData.Telephone1}`;
       } else {
@@ -650,15 +717,15 @@ export class AddClientComponent implements OnInit, OnDestroy {
         this.submitAddClientMissionPrestation();
       }
       if (this.newClientTache) {
+        console.log("E");
         this.submitAddClientTache();
       }
-
+      
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
           console.log(this.clientData);
           console.log("Client ajouté avec succès", response);
           this.toastr.success("Client ajouté avec succès");
-          // Swal.fire("Succès", "Client ajouté avec succès", "success");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
@@ -675,6 +742,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+
+
   onSaveDiss() {
     if (this.isFormValid()) {
       console.log("addClient.OnSaveDiss: ", this.clientData);
@@ -683,7 +754,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.resetForm();
     } else {
       this.sweetAlertDiss();
-    }
+    }    
   }
 
   sweetAlertDiss() {

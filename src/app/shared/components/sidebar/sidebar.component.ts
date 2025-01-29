@@ -8,108 +8,137 @@ import { environment } from 'src/environments/environment';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SidebarComponent {
-
-
-  public iconSidebar;
-  public menuItems: Menu[];
-
-  // For Horizontal Menu
-  public margin: any = 0;
-  public width: any = window.innerWidth;
+  public iconSidebar: boolean = false;
+  public menuItems: Menu[] = [];
+  public margin: number = 0; // For horizontal menu scrolling
+  public width: number = window.innerWidth;
   public leftArrowNone: boolean = true;
   public rightArrowNone: boolean = false;
 
   constructor(
     private router: Router,
     public navServices: NavService,
-    public layout: LayoutService) {
-
+    public layout: LayoutService
+  ) {
+    // Subscribe to menu items and handle route changes
     this.navServices.items.subscribe((menuItems) => {
       this.menuItems = menuItems;
+
+      // Watch for navigation events
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          menuItems.filter(items => {
-            if (items.path === event.url) {
-              this.setNavActive(items);
-            }
-            if (!items.children) { return false; }
-            items.children.filter(subItems => {
-              if (subItems.path === event.url) {
-                this.setNavActive(subItems);
-              }
-              if (!subItems.children) { return false; }
-              subItems.children.filter(subSubItems => {
-                if (subSubItems.path === event.url) {
-                  this.setNavActive(subSubItems);
-                }
-              });
-            });
-          });
+          this.activateMenuByRoute(event.urlAfterRedirects);
         }
       });
     });
 
-    if (!environment.production)
+    // Load additional items if not in production
+    if (!environment.production) {
       setTimeout(() => {
         this.navServices.otherItems.subscribe((menuItems) => {
           this.menuItems = this.menuItems.concat(menuItems);
         });
       }, 1000);
-
+    }
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: any) {
+    // Adjust width on window resize
     this.width = event.target.innerWidth - 500;
   }
 
+  // Helper to determine if margin should be applied
+  shouldAddMargin(): boolean {
+    const layouts = ['Rome', 'Singapore', 'Barcelona'];
+    return layouts.includes(this.layout.config?.settings?.layout || '');
+  }
+
+  // Toggle the sidebar
   sidebarToggle() {
     this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
   }
 
-  // Active Nave state
-  setNavActive(item) {
-    this.menuItems.filter(menuItem => {
-      if (menuItem !== item) {
-        menuItem.active = false;
+  // Activate the menu item based on the current route
+  activateMenuByRoute(url: string) {
+    // Deactivate all items first
+    this.menuItems.forEach((menuItem) => this.deactivateMenu(menuItem));
+
+    // Find and activate the correct item
+    this.menuItems.forEach((menuItem) => {
+      if (menuItem.path && menuItem.path === url) {
+        this.setNavActive(menuItem);
       }
-      if (menuItem.children && menuItem.children.includes(item)) {
-        menuItem.active = true;
-      }
+
+      // Check children for active state
       if (menuItem.children) {
-        menuItem.children.filter(submenuItems => {
-          if (submenuItems.children && submenuItems.children.includes(item)) {
-            menuItem.active = true;
-            submenuItems.active = true;
+        menuItem.children.forEach((subItem) => {
+          if (subItem.path && subItem.path === url) {
+            this.setNavActive(subItem);
+          }
+
+          // Check deeper levels of children
+          if (subItem.children) {
+            subItem.children.forEach((subSubItem) => {
+              if (subSubItem.path && subSubItem.path === url) {
+                this.setNavActive(subSubItem);
+              }
+            });
           }
         });
       }
     });
   }
 
-  // Click Toggle menu
-  toggletNavActive(item) {
-    if (!item.active) {
-      this.menuItems.forEach(a => {
-        if (this.menuItems.includes(item)) {
-          a.active = false;
-        }
-        if (!a.children) { return false; }
-        a.children.forEach(b => {
-          if (a.children.includes(item)) {
-            b.active = false;
-          }
-        });
-      });
-    }
-    item.active = !item.active;
+  // Set active menu item
+  setNavActive(item: Menu) {
+    item.active = true; // Activate the item
+
+    // Activate parent items (if any)
+    this.menuItems.forEach((menuItem) => {
+      if (menuItem.children && menuItem.children.includes(item)) {
+        menuItem.active = true;
+      }
+    });
   }
 
+  // Check if a submenu is active based on the current route
+  isSubmenuActive(menuItem: Menu): boolean {
+    // Only check children if the menuItem has children
+    if (menuItem.children) {
+      return menuItem.children.some(
+        (child) => child.path && this.router.url.includes(child.path)
+      );
+    }
+    return false;
+  }
 
-  // For Horizontal Menu
+  // Check if the current route matches a specific path
+  isCurrentRoute(path: string): boolean {
+    return this.router.url === path;
+  }
+
+  // Toggle submenu items
+  toggleSubMenu(menuItem: Menu): void {
+    // Close all submenus
+    this.menuItems.forEach((item) => this.deactivateMenu(item));
+
+    // Toggle the clicked submenu
+    menuItem.active = !menuItem.active;
+  }
+
+  // Deactivate a menu item and its children
+  deactivateMenu(item: Menu) {
+    item.active = false; // Deactivate the item
+    if (item.children) {
+      item.children.forEach((subItem) => this.deactivateMenu(subItem));
+    }
+  }
+
+  // Scroll the horizontal menu to the left
   scrollToLeft() {
     if (this.margin >= -this.width) {
       this.margin = 0;
@@ -121,13 +150,14 @@ export class SidebarComponent {
     }
   }
 
+  // Scroll the horizontal menu to the right
   scrollToRight() {
     if (this.margin <= -3051) {
       this.margin = -3464;
       this.leftArrowNone = false;
       this.rightArrowNone = true;
     } else {
-      this.margin += -this.width;
+      this.margin -= this.width;
       this.leftArrowNone = false;
     }
   }

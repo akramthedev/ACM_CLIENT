@@ -33,8 +33,19 @@ label {
 .print-btn {
   cursor: pointer;
 }
+
+
+
 .text-wrap-column {
-  max-width: 450px; /* Définit une largeur maximale pour la colonne */
-  white-space: normal; /* Permet le retour à la ligne si le texte dépasse la largeur */
-  word-wrap: break-word; /* Retourne à la ligne même au milieu d'un mot si nécessaire */
+  max-width: 450px;  
+  white-space: normal;  
+  word-wrap: break-word;  
+}
+
+
+
+.swduhuwhgohuswghosudgwhusd{
+  object-fit: cover !important;
+  height: 111px !important;
+  width: 111px !important;
 }

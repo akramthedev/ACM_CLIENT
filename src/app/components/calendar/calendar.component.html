@@ -1,0 +1,126 @@
+<div class="calendar-container">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</div>
+
+<div
+  [ngClass]="{ 'visible': showPopup }"
+  class="popup-overlay"
+  (click)="closePopup()"
+>
+  <div
+    class="popup-modal"
+    (click)="preventClose($event)"
+    [ngClass]="{ 'visible': showPopup }"
+  >
+    <h3 style="
+      margin-bottom: 30px;
+    ">{{ selectedEvent?.title }}</h3>
+    <p style="
+        height: 27px;
+        margin: 0;
+      "
+    >
+      <strong>Start:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.start?.toLocaleString() }}</p>
+    <p style="
+        height: 27px;
+        margin: 0;
+      "
+    ><strong>End:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.end?.toLocaleString() || 'N/A' }}</p>
+    
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>Description:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps?.Commentaire || '---' }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>ClientTacheId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientTacheId  }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>ClientMissionPrestationId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientMissionPrestationId  }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>ClientMissionId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientMissionId }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>TacheId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.TacheId  }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>isDone : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.isDone }}
+    </p>
+    <p style="
+        height: auto;
+        margin: 0;
+        margin-bottom: 30px;
+      "
+    >
+      <strong>isReminder : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.isReminder  }}
+    </p>
+
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <button
+        (click)="closePopup()"
+        style="
+          background: white;
+          color: #5a4edf;
+          width: 30%;
+          border: 1px solid #7366fe;
+          padding: 8px 16px;
+          font-weight: 500;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        Fermer
+      </button>
+        <button
+        (click)="closePopup()"
+        style="
+          background: #7366fe;
+          color: white;
+          width: 67%;
+          font-weight: 500;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        Marquer comme fait
+      </button>
+    </div>
+  </div>
+</div>
