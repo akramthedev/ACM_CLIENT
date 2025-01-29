@@ -1,9 +1,74 @@
 <div *ngIf="isLoading" class="loading-overlay">
   <div class="loader"></div>
 </div>
+
+
+
+
+
+
+
+
+
+
 <div class="calendar-container">
-  <full-calendar [options]="calendarOptions"></full-calendar>
+  <div class="filtrageX">
+    <div class="filtrageY">
+      <h4>Filtre personnalisé</h4>
+
+      <div class="sfodshdgf"></div>
+
+      <h6>Trier par personne:</h6>
+      <div class="scrolling-list">
+        <div *ngFor="let person of allPersons" class="filter-item">
+          <input 
+            type="checkbox" 
+            [id]="'person-' + person.id" 
+            [value]="person.id"
+            [checked]="filters.persons.includes(person.id)" 
+            (change)="updateFilter('persons', person.id, $event.target.checked)" 
+          />
+          <div class="filter-label">
+            <label [for]="'person-' + person.id">
+              {{ person.prenom }} {{ person.nom }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sfodshdgf2"></div>
+
+      <h6>Trier par tâche:</h6>
+      <div class="scrolling-list">
+        <div *ngFor="let task of allTasks" class="filter-item">
+          <input 
+            type="checkbox" 
+            [id]="'task-' + task.id" 
+            [value]="task.id"
+            [checked]="filters.tasks.includes(task.id)" 
+            (change)="updateFilter('tasks', task.id, $event.target.checked)" 
+          />
+          <div class="filter-label">
+            <label [for]="'task-' + task.id">
+              {{ task.nom }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+  
+  <full-calendar #calendar [options]="calendarOptions"></full-calendar>
 </div>
+
+
+
+
+
+
+
 
 <div
   [ngClass]="{ 'visible': showPopup }"

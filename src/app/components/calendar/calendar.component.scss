@@ -1,6 +1,6 @@
 .calendar-container {
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: space-between; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: calc(100vh - 91px); /* Full viewport height */
   width: 100%;
@@ -10,14 +10,17 @@
 }
 
 full-calendar {
-  width: 100%; /* Optional: Control the calendar's size */
+  width: calc(100% - 350px); /* Optional: Control the calendar's size */
   height: 95%;
   overflow: hidden !important;
   background-color: white !important;
-  border: 1px solid #c9c5ff; /* Optional: Add a border around the calendar */
-  border-radius: .9rem; /* Optional: Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for styling */
+  border: 1px solid #dfdcff; /* Optional: Add a border around the calendar */
+  border-radius: 1.8rem; /* Optional: Rounded corners */
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
 
 
 
@@ -184,3 +187,205 @@ full-calendar {
   color: #5a4edf !important;
   font-weight: bold !important;
 }
+
+
+
+
+
+
+.filtrageX{
+  width: 350px;
+  height: 95%;
+  padding-right: .92rem !important;
+}
+
+
+.filtrageY{
+  width: 100%;
+  overflow-y: scroll !important;
+  height: 100%;
+  padding: 0.4rem 0;
+  padding-left: 1rem;
+  background-color: white !important;
+  border-radius: 1.8rem; /* Optional: Rounded corners */
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: 1px solid #dfdcff !important; /* Optional: Add a border around the calendar */
+
+}
+
+
+
+.scrolling-list {
+  background: white;
+  border-radius: 4px;
+}
+.scrolling-list div {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  min-height: 20px;
+  justify-content: left;
+  padding-left: .666rem;
+}
+
+.scrolling-list div label{
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+  padding-top: 7px !important;
+  margin-left: 0.777rem;
+}
+
+.scrolling-list div input{
+  height: 22px;
+  width: 22px;
+  cursor: pointer;
+}
+
+
+.filtrageY h3, .filtrageY h4 {
+  margin-bottom: 10px;
+}
+
+
+.filtrageY h6{
+  color: #151515;
+  font-size: 18px !important;
+}
+
+.sfodshdgf{
+  height: 20px !important;
+  width: 100%;
+}
+.sfodshdgf2{
+  height: 14px !important;
+  width: 94% !important;
+  margin: 0 auto !important;
+  border-bottom: 1px solid #d8d8d8 !important;
+  margin-bottom: 14px !important;
+}
+
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 4px;
+}
+
+/* Checkbox container for consistent size */
+.checkbox-container {
+  width: 22px; /* Fixed width */
+  height: 22px; /* Fixed height */
+}
+
+/* Checkbox styling */
+.checkbox-container input {
+  width: 16px; 
+  height: 16px;
+  cursor: pointer;
+  border: 2px solid #7366fe; 
+  border-radius: 4px;
+  background-color: white;
+  transition: 0.2s ease-in-out;
+}
+
+/* Checked state */
+.checkbox-container input:checked {
+  background-color: #7366fe;
+  border-color: #7366fe;
+  position: relative;
+}
+
+/* Add checkmark */
+.checkbox-container input:checked::after {
+  content: "✔";
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure text label is aligned properly */
+.filter-label {
+  width: calc(100% - 30px);
+  height: auto;
+  padding-left: 6px;
+  white-space:wrap;
+  text-overflow:ellipsis;
+}
+
+/* Label styling */
+.filter-label label {
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  height: auto;
+  text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Apply styles only to .filtrageY and full-calendar elements */
+.filtrageY,
+full-calendar {
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* Firefox scrollbar thickness */
+  scrollbar-color: #7366fe #fbfaff; /* Firefox scrollbar thumb & track color */
+}
+
+/* ✅ Fix: Correctly target both elements */
+.filtrageY::-webkit-scrollbar,
+full-calendar::-webkit-scrollbar {
+  width: 4px !important; /* Adjust width of vertical scrollbar */
+  height: 0px !important; /* Adjust width of horizontal scrollbar */
+}
+
+/* ✅ Track (background behind the thumb) */
+.filtrageY::-webkit-scrollbar-track,
+full-calendar::-webkit-scrollbar-track {
+  background: #ffffff; /* White background */
+  border-radius: 0 !important; /* Keep square edges */
+}
+
+/* ✅ Thumb (Movable part of the scrollbar) */
+.filtrageY::-webkit-scrollbar-thumb,
+full-calendar::-webkit-scrollbar-thumb {
+  background: #7366fe; /* Purple scrollbar */
+  border-radius: 0px !important; /* Round edges for a smooth look */
+  border: 2px solid #ffffff; /* Creates space around the scrollbar */
+}
+
+/* ✅ Hover effect on the thumb */
+.filtrageY::-webkit-scrollbar-thumb:hover,
+full-calendar::-webkit-scrollbar-thumb:hover {
+  background: #5a4edf; /* Darker purple when hovered */
+}
+
+/* ✅ Scrollbar Corner (Where vertical and horizontal scrollbars meet) */
+.filtrageY::-webkit-scrollbar-corner,
+full-calendar::-webkit-scrollbar-corner {
+  background: #fbfbff; /* Matches track */
+}
+
+
+
