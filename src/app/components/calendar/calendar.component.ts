@@ -60,9 +60,9 @@ export class CalendarComponent implements OnInit {
         console.log('Fetched tasks:', response); 
         this.calendarOptions.events = response.map((task: any) => ({
           title: task.TacheClientIntitule,
-          start: this.formatDate(task.start_date),
-          end: this.formatDate(task.end_date),
-          backgroundColor: task.color || '#7366fe',           
+          start: this.formatDate(task.EventStart),
+          end: this.formatDate(task.EventEnd),
+          backgroundColor: task.EventColor || '#7366fe',           
           extendedProps: {
             Commentaire: task.Commentaire,
             textColor: 'white',
@@ -81,7 +81,13 @@ export class CalendarComponent implements OnInit {
             ClientAdresse : task.ClientAdresse, 
             ClientPrenom : task.ClientPrenom, 
             ClientNom : task.ClientNom,
-            AgentNom  : task.AgentNom
+            AgentNom  : task.AgentNom, 
+            start_date : task.start_date, 
+            end_date : task.end_date, 
+            EventName : task.EventName, 
+            color : task.color, 
+            EventIsDone : task.EventIsDone, 
+            EventId : task.EventId
           }
         }));
 

@@ -20,13 +20,6 @@
     ">{{ selectedEvent?.title }}
     </h3>
 
-    
-
-
-
-
-
-
     <div class="nsdofnoqdfnqdof">
       <strong>
         Nom et prénom Client : 
@@ -64,7 +57,7 @@
         Début d'exécution : 
       </strong>
       <span>
-        {{formatDateOnly(selectedEvent?.start)}}
+        {{formatDateOnly(selectedEvent?.extendedProps?.start_date)}}
       </span>
     </div>
     <div class="nsdofnoqdfnqdof">
@@ -72,18 +65,10 @@
         Fin prévue : 
       </strong>
       <span>
-        {{formatDateOnly(selectedEvent?.end)}}
+        {{formatDateOnly(selectedEvent?.extendedProps?.end_date)}}
       </span>
     </div>
    
-
-
-
-
-
-
-
-
     
     <div class="nsdofnoqdfnqdof ">
       <strong>

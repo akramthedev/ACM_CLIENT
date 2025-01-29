@@ -15,7 +15,7 @@ import { ssnValidator } from "./ssn-validator";
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000); // deadline
+  const futureDate = new Date(now.getTime() + 54 * 24 * 60 * 60 * 1000); // deadline
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -608,8 +608,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let desc = `Client ayant le numéro de passeport: ${this.clientData.PASSEPORT ? this.clientData.PASSEPORT : '---'}`;
-    let title = `Préparation des documents de ${this.clientData.Nom} ${this.clientData.Prenom}`;
+    let desc = ``;
+    let title = `${this.clientData.Nom} ${this.clientData.Prenom}`;
     
     this.newClientTache = {
       ClientTacheId: uuidv4(),
