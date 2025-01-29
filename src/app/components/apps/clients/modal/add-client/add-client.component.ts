@@ -11,16 +11,11 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ssnValidator } from "./ssn-validator";
 
 
-function getRandomColor() {
-  const colors = ['#7366fe', '#eab308', '#22c55e', '#ec4899'];
-  const randomIndex = Math.floor(Math.random() * colors.length); 
-  return colors[randomIndex];
-}
 
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
+  const futureDate = new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -637,7 +632,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Commentaire : desc ,
       Start_date : getCurrentDateAndTime(),
       End_date : getFutureDateTime(), 
-      Color : getRandomColor() ,
+      Color : '#7265fd',
       IsReminder : false, 
       IsDone : false
     };

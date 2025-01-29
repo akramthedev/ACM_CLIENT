@@ -1,3 +1,6 @@
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="loader"></div>
+</div>
 <div class="calendar-container">
   <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
@@ -14,75 +17,114 @@
   >
     <h3 style="
       margin-bottom: 30px;
-    ">{{ selectedEvent?.title }}</h3>
-    <p style="
-        height: 27px;
-        margin: 0;
-      "
-    >
-      <strong>Start:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.start?.toLocaleString() }}</p>
-    <p style="
-        height: 27px;
-        margin: 0;
-      "
-    ><strong>End:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.end?.toLocaleString() || 'N/A' }}</p>
+    ">{{ selectedEvent?.title }}
+    </h3>
+
     
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>Description:</strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps?.Commentaire || '---' }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>ClientTacheId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientTacheId  }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>ClientMissionPrestationId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientMissionPrestationId  }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>ClientMissionId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.ClientMissionId }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>TacheId : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.TacheId  }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>isDone : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.isDone }}
-    </p>
-    <p style="
-        height: auto;
-        margin: 0;
-        margin-bottom: 30px;
-      "
-    >
-      <strong>isReminder : </strong>&nbsp;&nbsp;&nbsp;{{ selectedEvent?.extendedProps.isReminder  }}
-    </p>
+
+
+
+
+
+
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Nom et prénom Client : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.ClientNom}}&nbsp;{{selectedEvent?.extendedProps?.ClientPrenom}}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Adresse Email Client : 
+      </strong>
+      <span>
+        {{ selectedEvent?.extendedProps?.ClientEmail1 ? selectedEvent.extendedProps.ClientEmail1 : (selectedEvent?.extendedProps?.ClientEmail2 ? selectedEvent.extendedProps.ClientEmail2 : '---') }}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        N° Téléphone Client : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.ClientTelephone ? selectedEvent.extendedProps.ClientTelephone1 : '---'}}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Nom Agent : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.AgentNom ? selectedEvent.extendedProps.AgentNom : '---'}}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Début d'exécution : 
+      </strong>
+      <span>
+        {{formatDateOnly(selectedEvent?.start)}}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Fin prévue : 
+      </strong>
+      <span>
+        {{formatDateOnly(selectedEvent?.end)}}
+      </span>
+    </div>
+   
+
+
+
+
+
+
+
+
+    
+    <div class="nsdofnoqdfnqdof ">
+      <strong>
+        Tâche : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.TacheIntitule}}
+      </span>
+    </div>
+
+
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Préstation : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.PrestationDesignation}}
+      </span>
+    </div>
+
+    
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Mission : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.MissionDesignation}}
+      </span>
+    </div>
+
+
+
+    <div class="nsdofnoqdfnqdof nsdofnoqdfnqdof222">
+      <strong>Statut Tâche : </strong>
+      <span [ngClass]="selectedEvent?.extendedProps?.isDone ? 'statut-fin' : 'statut-encours'">
+        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours' }}
+      </span>
+    </div>
+
+    
+
 
     <div
       style="
@@ -93,21 +135,27 @@
     >
       <button
         (click)="closePopup()"
+        [ngStyle]="{
+          'width': selectedEvent?.extendedProps?.isDone === true ? '100%' : '30%'
+        }"
         style="
-          background: white;
-          color: #5a4edf;
-          width: 30%;
-          border: 1px solid #7366fe;
+          color:#4538d4;
+          background-color: #f1efff;
+          border: 1px solid #d0c9ff;
           padding: 8px 16px;
           font-weight: 500;
-          border-radius: 4px;
+          border: 1px solid transparent !important;
+          border-radius: 7px;
           cursor: pointer;
         "
       >
         Fermer
       </button>
-        <button
-        (click)="closePopup()"
+  
+      <button
+        *ngIf="selectedEvent?.extendedProps?.isDone === false ||selectedEvent?.extendedProps?.isDone === 0 "
+        (click)="markAsDone()"
+        [disabled]="isUpdating"
         style="
           background: #7366fe;
           color: white;
@@ -115,11 +163,11 @@
           font-weight: 500;
           border: none;
           padding: 8px 16px;
-          border-radius: 4px;
+          border-radius: 7px;
           cursor: pointer;
         "
       >
-        Marquer comme fait
+      {{ isUpdating ? 'Mise à jour...' : 'Marquer comme fait' }}
       </button>
     </div>
   </div>
