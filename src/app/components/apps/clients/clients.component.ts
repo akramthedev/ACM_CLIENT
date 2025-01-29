@@ -33,7 +33,7 @@ export class ClientsComponent implements OnInit {
   User: keycloakUser = null;
 
   constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2, private authService: AuthService) {
-    this.title.setTitle("Clients | CRM");
+    this.title.setTitle("Clients | ACM");
     this.titre = this.title.getTitle();
 
     // this.authService.GetCurrentUser().then((user: any) => {

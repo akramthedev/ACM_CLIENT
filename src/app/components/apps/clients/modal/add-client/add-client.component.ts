@@ -15,7 +15,7 @@ import { ssnValidator } from "./ssn-validator";
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
+  const futureDate = new Date(now.getTime() + 4 * 24 * 60 * 60 * 1000); // deadline
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -27,24 +27,12 @@ function getFutureDateTime() {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function getFutureDateTime2() {
-  const now = new Date();
-  const futureDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000); // Add 7 days in milliseconds
 
-  const year = futureDate.getFullYear();
-  const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(futureDate.getDate()).padStart(2, '0');
-  const hours = '00'; // Fixed time
-  const minutes = '00';
-  const seconds = '00';
-  
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
 
 function getCurrentDateAndTime() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const month = String(now.getMonth() + 1).padStart(2, '0'); 
   const day = String(now.getDate()).padStart(2, '0');
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');

@@ -37,9 +37,9 @@ export class CalendarComponent implements OnInit {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       },
-      editable: true,
+      editable: false, // turn it ot true to use drop and drag
       selectable: true,
-      eventDrop: this.handleEventDrop.bind(this),
+      // eventDrop: this.handleEventDrop.bind(this),
       eventClick: this.handleEventClick.bind(this), 
       eventDidMount: (info) => {
         info.el.style.cursor = 'pointer';
