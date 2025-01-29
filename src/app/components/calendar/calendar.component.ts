@@ -37,8 +37,9 @@ export class CalendarComponent implements OnInit {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       },
-      editable: false,
+      editable: true,
       selectable: true,
+      eventDrop: this.handleEventDrop.bind(this),
       eventClick: this.handleEventClick.bind(this), 
       eventDidMount: (info) => {
         info.el.style.cursor = 'pointer';
@@ -137,6 +138,33 @@ export class CalendarComponent implements OnInit {
   preventClose(event: MouseEvent): void {
     event.stopPropagation();  
   }
+
+
+
+
+  handleEventDrop(eventDropInfo: any): void {
+    const updatedEvent = eventDropInfo.event;
+    const taskId = updatedEvent.extendedProps.ClientTacheId;
+  
+    const updatedTask = {
+      ClientTacheId: taskId,  
+      start_date: updatedEvent.start.toISOString(),  
+      end_date: updatedEvent.end ? updatedEvent.end.toISOString() : null,
+    };
+  
+    console.log('Tâche déplacée:', updatedTask);
+  
+    this.http.put(`${environment.url}/UpdateClientTacheDates`, updatedTask).subscribe({
+      next: (response) => {
+        console.log('Mise à jour réussie:', response);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la mise à jour:', error);
+        eventDropInfo.revert(); 
+      }
+    });
+  }
+  
 
 
 
