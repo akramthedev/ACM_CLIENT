@@ -124,7 +124,9 @@ export class CalendarComponent implements OnInit {
       },
       complete: () => {
         console.log('Fetch tasks complete'); 
-        this.isLoading = false;
+        setTimeout(()=>{
+          this.isLoading = false;
+        }, 1111)
       }
     });
   }

@@ -18,8 +18,7 @@ full-calendar {
   border-radius: 1.8rem; /* Optional: Rounded corners */
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;}
 
 
 
@@ -103,7 +102,9 @@ full-calendar {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(3px) saturate(200%);
+  -webkit-backdrop-filter: blur(3px) saturate(200%);
+  background-color: rgba(148, 182, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,9 +211,8 @@ full-calendar {
   border-radius: 1.8rem; /* Optional: Rounded corners */
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border: 1px solid #dfdcff !important; /* Optional: Add a border around the calendar */
-
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  border: 1px solid #dfdcff !important; /* Optional: Add a border around the calendar */
 }
 
 
@@ -252,8 +252,8 @@ full-calendar {
 
 
 .filtrageY h6{
-  color: #151515;
-  font-size: 18px !important;
+  color: #4a4a4a !important;
+  font-size: 17px !important;
 }
 
 .sfodshdgf{
@@ -283,7 +283,7 @@ full-calendar {
 }
 
 /* Checkbox styling */
-.checkbox-container input {
+ input {
   width: 16px; 
   height: 16px;
   cursor: pointer;
@@ -294,19 +294,19 @@ full-calendar {
 }
 
 /* Checked state */
-.checkbox-container input:checked {
-  background-color: #7366fe;
-  border-color: #7366fe;
+ input:checked {
+  background-color: #6b5fee !important;
   position: relative;
 }
 
 /* Add checkmark */
-.checkbox-container input:checked::after {
+ input:checked::after {
   content: "✔";
-  font-size: 12px;
+  font-size: 20px !important;
   color: white;
   font-weight: bold;
   display: flex;
+  background-color: #6b5fee !important;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -346,46 +346,115 @@ full-calendar {
 
 
 /* Apply styles only to .filtrageY and full-calendar elements */
-.filtrageY,
-full-calendar {
+.filtrageY {
   overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-width: thin; /* Firefox scrollbar thickness */
   scrollbar-color: #7366fe #fbfaff; /* Firefox scrollbar thumb & track color */
 }
 
 /* ✅ Fix: Correctly target both elements */
-.filtrageY::-webkit-scrollbar,
-full-calendar::-webkit-scrollbar {
-  width: 4px !important; /* Adjust width of vertical scrollbar */
+.filtrageY::-webkit-scrollbar{
+  width: 2px !important; /* Adjust width of vertical scrollbar */
   height: 0px !important; /* Adjust width of horizontal scrollbar */
 }
 
 /* ✅ Track (background behind the thumb) */
-.filtrageY::-webkit-scrollbar-track,
-full-calendar::-webkit-scrollbar-track {
+.filtrageY::-webkit-scrollbar-track {
   background: #ffffff; /* White background */
   border-radius: 0 !important; /* Keep square edges */
 }
 
 /* ✅ Thumb (Movable part of the scrollbar) */
-.filtrageY::-webkit-scrollbar-thumb,
-full-calendar::-webkit-scrollbar-thumb {
+.filtrageY::-webkit-scrollbar-thumb{
   background: #7366fe; /* Purple scrollbar */
   border-radius: 0px !important; /* Round edges for a smooth look */
   border: 2px solid #ffffff; /* Creates space around the scrollbar */
 }
 
 /* ✅ Hover effect on the thumb */
-.filtrageY::-webkit-scrollbar-thumb:hover,
-full-calendar::-webkit-scrollbar-thumb:hover {
+.filtrageY::-webkit-scrollbar-thumb:hover {
   background: #5a4edf; /* Darker purple when hovered */
 }
 
 /* ✅ Scrollbar Corner (Where vertical and horizontal scrollbars meet) */
-.filtrageY::-webkit-scrollbar-corner,
-full-calendar::-webkit-scrollbar-corner {
+.filtrageY::-webkit-scrollbar-corner {
   background: #fbfbff; /* Matches track */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+full-calendar .fc-scrollgrid {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #7366fe #fbfaff;
+}
+
+full-calendar .fc-scrollgrid::-webkit-scrollbar {
+  width: 2px;
+}
+
+full-calendar .fc-scrollgrid::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+full-calendar .fc-scrollgrid::-webkit-scrollbar-thumb {
+  background: #7366fe;
+  border: 2px solid #ffffff;
+}
+
+full-calendar .fc-scrollgrid::-webkit-scrollbar-thumb:hover {
+  background: #5a4edf;
+}
+
+full-calendar .fc-scrollgrid::-webkit-scrollbar-corner {
+  background: #fbfbff;
+}
+
+
+
+
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(3px) saturate(200%);
+  -webkit-backdrop-filter: blur(3px) saturate(200%);
+  background-color: rgba(0, 0, 0, 0.5167);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999999999999999999999999;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2s ease, visibility 2s ease;
+}
+
+.loading-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+
+
 
 
 
