@@ -61,7 +61,7 @@ full-calendar {
   background-color: rgba(17, 25, 40, 0.678);
   z-index: 999;
   opacity: 0;
-  visibility: hidden;
+  visibility: hidden;   
   transition: 0.3167s ease-in-out ;
 }
 
@@ -80,9 +80,9 @@ full-calendar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   border-radius: 8px;
-  min-width: 555px;
+  min-width: 777px !important;
   height: auto;
-  max-width: 777px;
+  max-width: 999px !important;
   opacity: 0;
   visibility: hidden;
   transition: 0.3167s ease-in-out ;
@@ -252,7 +252,7 @@ full-calendar {
 
 
 .filtrageY h6{
-  color: #4a4a4a !important;
+  color: #969696 !important;
   font-size: 17px !important;
 }
 
@@ -261,11 +261,11 @@ full-calendar {
   width: 100%;
 }
 .sfodshdgf2{
-  height: 14px !important;
-  width: 94% !important;
+  height: 18px !important;
+  width: 90.167% !important;
   margin: 0 auto !important;
   border-bottom: 1px solid #d8d8d8 !important;
-  margin-bottom: 14px !important;
+  margin-bottom: 18px !important;
 }
 
 
@@ -455,6 +455,89 @@ full-calendar .fc-scrollgrid::-webkit-scrollbar-corner {
 
 
 
+.noDATAX{
+  height: 167px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  color: rgb(175, 175, 175) !important;
+}
 
 
 
+
+
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 19px;
+  width: 19px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #6b5fee;
+}
+
+input:checked + .slider:before {
+  transform: translateX(25px);
+}
+
+
+
+
+
+.srfsdsdwg{
+  display: flex !important;
+  align-items: center !important; 
+  width:96% !important;
+  margin: 0 auto !important;
+  height: auto !important;
+  justify-content: space-between !important;
+  min-height: 20px !important;
+  padding-right: 0.666rem !important;
+}
+
+.srfsdsdwg span{
+  font-size: 16px !important;
+  font-weight: 400;
+}

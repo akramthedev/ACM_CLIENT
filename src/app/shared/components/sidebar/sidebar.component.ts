@@ -11,9 +11,9 @@ import { environment } from 'src/environments/environment';
   encapsulation: ViewEncapsulation.None,
 })
 export class SidebarComponent {
-  public iconSidebar: boolean = false;
+  public iconSidebar: boolean = true;
   public menuItems: Menu[] = [];
-  public margin: number = 0; // For horizontal menu scrolling
+  public margin: number = 0; 
   public width: number = window.innerWidth;
   public leftArrowNone: boolean = true;
   public rightArrowNone: boolean = false;

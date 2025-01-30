@@ -27,6 +27,7 @@ export class CalendarComponent implements OnInit {
   isLoading: boolean = true;
   isUpdating: boolean = false;
   isDeleteTask: boolean = false;
+  showCompletedTasks: boolean = false;
 
 
   filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
@@ -65,74 +66,86 @@ export class CalendarComponent implements OnInit {
 
 
 
+
+  
+
+  
+
   fetchTasks(): void {
     this.isLoading = true;
+  
     this.http.get(`${environment.url}/GetClientTachesAllOfThem`).subscribe({
       next: (response: any) => {
-        console.log('Fetched tasks:', response); 
+        console.log('Fetched tasks:', response);
+  
         this.originalEvents = response.map((task: any) => ({
-          title: task.TacheClientIntitule,
+          title: ' ' +
+            (task.EventDescription === 'First Event' ? "1/" :
+            task.EventDescription === 'Second Event' ? '2/' :
+            task.EventDescription === 'Third Event' ? '3/' :
+            task.EventDescription === 'Fourth Event' ? '4/' :
+            task.EventDescription === 'Fifth Event' ? '5/' :
+            task.EventDescription === 'Sixth Event' ? '6/' : '-/') +
+            task.NumberEvent + ' : ' + task.TacheClientIntitule,
           start: this.formatDate(task.EventStart),
           end: this.formatDate(task.EventEnd),
-          backgroundColor: task.EventColor || '#7366fe',           
+          backgroundColor: task.EventColor || '#7366fe',
           extendedProps: {
             Commentaire: task.Commentaire,
             textColor: 'white',
-            ClientTacheId : task.ClientTacheId, 
-            ClientMissionPrestationId : task.ClientMissionPrestationId, 
-            ClientMissionId : task.ClientMissionId, 
-            PrestationDesignation : task.PrestationDesignation, 
-            MissionDesignation : task.MissionDesignation, 
-            TacheIntitule : task.TacheIntitule, 
-            TacheId : task.TacheId, 
-            isDone : task.isDone, 
-            isReminder : task.isReminder, 
-            ClientEmail1 : task.ClientEmail1, 
-            ClientEmail2 : task.ClientEmail2, 
-            ClientTelephone1 : task.ClientTelephone1, 
-            ClientAdresse : task.ClientAdresse, 
-            ClientPrenom : task.ClientPrenom, 
-            ClientNom : task.ClientNom,
-            ClientId : task.ClientId,
-            AgentNom  : task.AgentNom, 
-            start_date : task.start_date, 
-            end_date : task.end_date, 
-            EventName : task.EventName, 
-            color : task.color, 
-            EventIsDone : task.EventIsDone, 
-            EventId : task.EventId
+            ClientTacheId: task.ClientTacheId,
+            ClientMissionPrestationId: task.ClientMissionPrestationId,
+            ClientMissionId: task.ClientMissionId,
+            PrestationDesignation: task.PrestationDesignation,
+            MissionDesignation: task.MissionDesignation,
+            TacheIntitule: task.TacheIntitule,
+            TacheId: task.TacheId,
+            isDone: task.isDone,
+            isReminder: task.isReminder,
+            ClientEmail1: task.ClientEmail1,
+            ClientEmail2: task.ClientEmail2,
+            ClientTelephone1: task.ClientTelephone1,
+            ClientAdresse: task.ClientAdresse,
+            ClientPrenom: task.ClientPrenom,
+            ClientNom: task.ClientNom,
+            ClientId: task.ClientId,
+            AgentNom: task.AgentNom,
+            start_date: task.start_date,
+            end_date: task.end_date,
+            EventName: task.EventName,
+            color: task.color,
+            EventIsDone: task.EventIsDone,
+            EventIsReminder: task.EventIsReminder,
+            EventId: task.EventId
           }
         }));
-
-        
+  
         this.extractFilterOptions();
-
-
+  
         this.filters.persons = this.allPersons.map(person => person.id);
         this.filters.tasks = this.allTasks.map(task => task.id);
-        
-        this.calendarOptions.events = [...this.originalEvents];
+  
+        this.calendarOptions.events = this.getFilteredEvents();
+  
         setTimeout(() => {
           this.calendarComponent.getApi().refetchEvents();
         }, 100);
-
-        
-
       },
       error: (error) => {
-        console.error('Error fetching tasks:', error); 
+        console.error('Error fetching tasks:', error);
+        alert("Erreur interne du serveur. Cliquez sur OK pour rafraîchir.");
+        location.reload();
       },
       complete: () => {
-        console.log('Fetch tasks complete'); 
-        setTimeout(()=>{
+        console.log('Fetch tasks complete');
+        setTimeout(() => {
           this.isLoading = false;
-        }, 1111)
+        }, 450);
       }
     });
   }
 
-
-
+  
 
   
 
@@ -179,45 +192,129 @@ export class CalendarComponent implements OnInit {
 
 
 
+  
+
+
+  
+
+  
+
 
   getFilteredEvents(): any[] {
     if (this.filters.persons.length === 0 || this.filters.tasks.length === 0) {
-      return []; 
+      return [];
     }
   
-    return this.originalEvents.filter(event => {
+    const filteredEvents = this.originalEvents.filter(event => {
       let clientId = event.extendedProps.ClientId;
-      
+  
       if (Array.isArray(clientId)) {
-        clientId = clientId[0]; 
+        clientId = clientId[0];
       }
   
-      return this.filters.persons.includes(clientId) &&
-             this.filters.tasks.includes(event.extendedProps.TacheId);
-    });
-  }
+      const isDone = event.extendedProps.isDone;
   
+      // ✅ Apply the task filter
+      if (!this.filters.tasks.includes(event.extendedProps.TacheId)) {
+        return false; // Hide if task is not selected
+      }
+  
+      // ✅ Apply the person filter
+      if (!this.filters.persons.includes(clientId)) {
+        return false; // Hide if person is not selected
+      }
+  
+      // ✅ Apply the completion status filter
+      if (!this.showCompletedTasks) {
+        return !isDone; // Show only pending tasks
+      }
+  
+      return isDone; // Show only completed tasks
+    });
+  
+    // ✅ Refresh the calendar with the new filtered events
+    this.refreshCalendar(filteredEvents);
+  
+    return filteredEvents;
+  }
+
+  
+
+  refreshCalendar(filteredEvents: any[]): void {
+  setTimeout(() => {
+    this.calendarComponent.getApi().removeAllEvents(); // Clear current events
+    this.calendarComponent.getApi().addEventSource(filteredEvents); // Add filtered events
+    this.calendarComponent.getApi().refetchEvents();
+  }, 100);
+}
+
+
+
+
   
 
 
 
   updateFilter(type: 'persons' | 'tasks', value: string, isChecked: boolean): void {
     if (isChecked) {
-      this.filters[type].push(value);
+      this.filters[type].push(value); // Add to selected filters
     } else {
-      this.filters[type] = this.filters[type].filter(item => item !== value);
+      this.filters[type] = this.filters[type].filter(item => item !== value); // Remove from selected filters
     }
   
     console.log("🟢 Updated Filters:", this.filters);
   
-    this.calendarOptions.events = this.getFilteredEvents();
-    setTimeout(() => {
-      this.calendarComponent.getApi().refetchEvents();
-    }, 100);
+    // ✅ Reapply filtering immediately
+    this.updateCalendarEvents();
   }
   
   
- 
+  
+  updateCalendarEvents(): void {
+    this.calendarOptions.events = this.getFilteredEvents();
+  }
+
+  
+
+
+
+  markAsDone(): void {
+    if (!this.selectedEvent) return;
+  
+    this.isUpdating = true;
+    const taskId = this.selectedEvent.extendedProps.ClientTacheId;
+    const updateUrl = `${environment.url}/MarkAsDone/${taskId}`;
+  
+    this.http.put(updateUrl, { isDone: true, color: "#28a745" }).subscribe({
+      next: (response) => {
+        console.log("✅ Tâche marquée comme faite:", response);
+  
+        // ✅ Update the task's status locally
+        this.originalEvents.forEach(event => {
+          if (event.extendedProps.ClientTacheId === taskId) {
+            event.backgroundColor = "#28a745";
+            event.extendedProps.isDone = true;
+          }
+        });
+  
+        // ✅ Reapply filtering instead of showing all tasks
+        this.updateCalendarEvents();
+  
+        this.closePopup();
+      },
+      error: (error) => {
+        console.error("❌ Erreur lors de la mise à jour:", error);
+        alert("Erreur lors de la mise à jour. Cliquez sur OK pour rafraîchir.");
+        location.reload();
+      },
+      complete: () => {
+        this.isUpdating = false;
+      }
+    });
+  }
+
+  
+
   
 
 
@@ -253,7 +350,19 @@ export class CalendarComponent implements OnInit {
   }
 
 
+  getEventPrefix(description: string | undefined): string {
+    const eventMap: { [key: string]: string } = {
+      'First Event': '1/',
+      'Second Event': '2/',
+      'Third Event': '3/',
+      'Fourth Event': '4/',
+      'Fifth Event': '5/',
+      'Sixth Event': '6/',
+    };
+    return eventMap[description || ''] || '--/';
+  }
   
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const clickedInside = this.eRef.nativeElement.contains(event.target);
@@ -295,36 +404,14 @@ export class CalendarComponent implements OnInit {
 
 
 
-  markAsDone(): void {
-    if (!this.selectedEvent) return;
+
   
-    this.isUpdating = true;
-  
-    const taskId = this.selectedEvent.extendedProps.ClientTacheId; 
-    const updateUrl = `${environment.url}/MarkAsDone/${taskId}`;
-  
-    this.http.put(updateUrl, { isDone : true, color: "#28a745" }).subscribe({
-      next: (response) => {
-        console.log('Tâche marquée comme faite:', response);
-  
-        this.selectedEvent.setProp('backgroundColor', '#28a745'); 
-        this.selectedEvent.setExtendedProp('isDone', true);
-        
-        this.closePopup();
-      },
-      error: (error) => {
-        console.error('Erreur lors de la mise à jour:', error);
-      },
-      complete: () => {
-        this.isUpdating = false;  
-      }
-    });
 
 
-        
-    
+ 
+  
 
-  }
+
 
   
   // deleteTask(): void {
@@ -354,3 +441,4 @@ export class CalendarComponent implements OnInit {
   // }
   
 }
+

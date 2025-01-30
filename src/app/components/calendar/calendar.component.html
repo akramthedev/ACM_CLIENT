@@ -14,7 +14,32 @@
 
       <div class="sfodshdgf"></div>
 
-      <h6>Trier par personne:</h6>
+        <h6>
+          Trier par statut
+        </h6>
+        <div class="srfsdsdwg">
+          <span>
+            En cours / Finalisée
+          </span>
+          <div class="switch-container">
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="showCompletedTasks" 
+                [disabled]="allTasks.length === 0"
+                (change)="updateCalendarEvents()"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        
+        
+
+      <div class="sfodshdgf2"></div>
+
+      <h6>Trier par personne</h6>
       <div class="scrolling-list">
         <div *ngFor="let person of allPersons" class="filter-item">
           <input 
@@ -34,7 +59,7 @@
 
       <div class="sfodshdgf2"></div>
 
-      <h6>Trier par tâche:</h6>
+      <h6>Trier par tâche</h6>
       <div class="scrolling-list">
         <div *ngFor="let task of allTasks" class="filter-item">
           <input 
@@ -51,7 +76,6 @@
           </div>
         </div>
       </div>
-
       
     </div>
   </div>
@@ -76,10 +100,9 @@
     (click)="preventClose($event)"
     [ngClass]="{ 'visible': showPopup }"
   >
-    <h3 style="
-      margin-bottom: 30px;
-    ">{{ selectedEvent?.title }}
-    </h3>
+  <h3 style="margin-bottom: 30px;">
+    {{ selectedEvent?.title }}
+  </h3>
 
     <div class="nsdofnoqdfnqdof">
       <strong>
@@ -105,30 +128,11 @@
         {{selectedEvent?.extendedProps?.ClientTelephone ? selectedEvent.extendedProps.ClientTelephone1 : '---'}}
       </span>
     </div>
-    <div class="nsdofnoqdfnqdof">
-      <strong>
-        Nom Agent : 
-      </strong>
-      <span>
-        {{selectedEvent?.extendedProps?.AgentNom ? selectedEvent.extendedProps.AgentNom : '---'}}
-      </span>
-    </div>
-    <div class="nsdofnoqdfnqdof">
-      <strong>
-        Début d'exécution : 
-      </strong>
-      <span>
-        {{formatDateOnly(selectedEvent?.extendedProps?.start_date)}}
-      </span>
-    </div>
-    <div class="nsdofnoqdfnqdof">
-      <strong>
-        Fin prévue : 
-      </strong>
-      <span>
-        {{formatDateOnly(selectedEvent?.extendedProps?.end_date)}}
-      </span>
-    </div>
+
+
+
+    <div class="sfodshdgf2"></div>
+    
    
     
     <div class="nsdofnoqdfnqdof ">
@@ -139,6 +143,17 @@
         {{selectedEvent?.extendedProps?.TacheIntitule}}
       </span>
     </div>
+
+    <div class="nsdofnoqdfnqdof ">
+      <strong>Statut Tâche : </strong>
+      <span [ngClass]="selectedEvent?.extendedProps?.isDone ? 'statut-fin' : 'statut-encours'">
+        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours' }}
+      </span>
+    </div>
+
+
+    <div class="sfodshdgf2"></div>
+
 
 
     <div class="nsdofnoqdfnqdof">
@@ -161,15 +176,32 @@
     </div>
 
 
-
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Nom Agent : 
+      </strong>
+      <span>
+        {{selectedEvent?.extendedProps?.AgentNom ? selectedEvent.extendedProps.AgentNom : '---'}}
+      </span>
+    </div>
+    <div class="nsdofnoqdfnqdof">
+      <strong>
+        Début d'exécution : 
+      </strong>
+      <span>
+        {{formatDateOnly(selectedEvent?.extendedProps?.start_date)}}
+      </span>
+    </div>
     <div class="nsdofnoqdfnqdof nsdofnoqdfnqdof222">
-      <strong>Statut Tâche : </strong>
-      <span [ngClass]="selectedEvent?.extendedProps?.isDone ? 'statut-fin' : 'statut-encours'">
-        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours' }}
+      <strong>
+        Fin prévue : 
+      </strong>
+      <span>
+        {{formatDateOnly(selectedEvent?.extendedProps?.end_date)}}
       </span>
     </div>
 
-    
+
 
 
     <div

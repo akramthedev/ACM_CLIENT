@@ -38,7 +38,7 @@ export class NavService implements OnDestroy {
   public megaMenuColapse: boolean = window.innerWidth < 1199 ? true : false;
 
   // Collapse Sidebar
-  public collapseSidebar: boolean = window.innerWidth < 991 ? true : false;
+  public collapseSidebar: boolean = window.innerWidth < 991 ? false : false;
 
   // For Horizontal Layout Mobile
   public horizontal: boolean = window.innerWidth < 991 ? false : true;
