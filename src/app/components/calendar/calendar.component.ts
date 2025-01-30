@@ -80,12 +80,12 @@ export class CalendarComponent implements OnInit {
   
         this.originalEvents = response.map((task: any) => ({
           title: ' ' +
-            (task.EventDescription === 'First Event' ? "1/" :
-            task.EventDescription === 'Second Event' ? '2/' :
-            task.EventDescription === 'Third Event' ? '3/' :
-            task.EventDescription === 'Fourth Event' ? '4/' :
-            task.EventDescription === 'Fifth Event' ? '5/' :
-            task.EventDescription === 'Sixth Event' ? '6/' : '-/') +
+            (task.EventDescription === 'Event 1' ? "1/" :
+            task.EventDescription === 'Event 2' ? '2/' :
+            task.EventDescription === 'Event 3' ? '3/' :
+            task.EventDescription === 'Event 4' ? '4/' :
+            task.EventDescription === 'Event 5' ? '5/' :
+            task.EventDescription === 'Event 6' ? '6/' : '-/') +
             task.NumberEvent + ' : ' + task.TacheClientIntitule,
           start: this.formatDate(task.EventStart),
           end: this.formatDate(task.EventEnd),

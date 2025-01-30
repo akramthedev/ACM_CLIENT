@@ -55,10 +55,11 @@
             </label>
           </div>
         </div>
+        <div class="noDATAX" *ngIf="allTasks.length === 0">
+          <em>Aucune donnée</em>
+        </div>
       </div>
-
       <div class="sfodshdgf2"></div>
-
       <h6>Trier par tâche</h6>
       <div class="scrolling-list">
         <div *ngFor="let task of allTasks" class="filter-item">
@@ -75,8 +76,10 @@
             </label>
           </div>
         </div>
+        <div class="noDATAX" *ngIf="allTasks.length === 0">
+          <em>Aucune donnée</em>
+        </div>
       </div>
-      
     </div>
   </div>
   

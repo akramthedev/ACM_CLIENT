@@ -444,8 +444,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     // Si les deux emails ne sont pas vides et identiques, afficher un message d'erreur
     if (this.clientData.Email1 === this.clientData.Email2) {
-      this.toastr.warning("Les adresses email 1 et email 2 ne doivent pas être identiques.");
-      return false;
+      // this.toastr.warning("Les adresses email 1 et email 2 ne doivent pas être identiques.");
+      return true;
     }
 
     // Si les emails sont différents ou l'un d'eux est vide, continuer
