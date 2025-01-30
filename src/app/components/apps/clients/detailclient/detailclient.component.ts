@@ -1484,14 +1484,16 @@ export class DetailclientComponent {
 
     this.route.params.subscribe((params) => {
       let clientId = params["id"];
-
+      console.warn(clientId);
       this.loader.show();
       this.clientService.GetClient(clientId).subscribe(
         (response) => {
-          console.log("response GetClient: ", response);
 
-          if (response == null) {
-            this.toastr.error("Erreur de récuperation du client");
+          console.warn(response)
+
+          if (response === null) {
+            this.toastr.error("Erreur lors de la récuperation du client");
+            console.warn("ERROR FATAL");
             setTimeout(() => {
               this.router.navigate(["/clients"]);
             }, 2000);

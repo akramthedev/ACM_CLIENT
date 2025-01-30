@@ -189,7 +189,7 @@ export class ClientTache {
   ClientTacheId: string;
   ClientMissionPrestationId: string;
   ClientMissionId: string;
-  TacheId: string;
+  TacheId: string;   
   Start_date: string;
   End_date : string;
   Color : string;
@@ -205,5 +205,9 @@ export class ClientTache {
   Status?: string;
   AgentResposable?: string;
   PrestationId?: string;
-  
+  start_date?: string; 
+  end_date?: string;
+  color?:string; 
+  isDone?:Boolean;
+  isReminder?:Boolean;
 }
