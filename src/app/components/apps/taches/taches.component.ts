@@ -26,6 +26,8 @@ export class TachesComponent implements OnInit {
   public red_border: boolean = false;
   public visible: boolean = false;
   public isOpen: boolean = false;
+  isLoading: boolean = true;
+  isLoading2: boolean = true;
   filter = "all"; // 'all', 'completed', 'pending', 'inProgress', 'trash'
   filteredTodos: any[] = [];
   public objToAdd: object = {
@@ -44,7 +46,8 @@ export class TachesComponent implements OnInit {
     this.title.setTitle("Tâches | ACM");
   }
   getClients() {
-    this.loader.show();
+    this.isLoading = true;
+
     this.clientService.getClients().subscribe(
       (response) => {
         console.log("response getClients: ", response);
@@ -55,10 +58,15 @@ export class TachesComponent implements OnInit {
           i++;
           return item;
         });
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
       },
       (error) => {
         console.error("Error fetching clients: ", error);
-        this.loader.hide();
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
       }
     );
   }
@@ -70,11 +78,11 @@ export class TachesComponent implements OnInit {
 
 
   getTasks() {
-    this.loader.show();
+    this.isLoading2 = true;
     this.clientService.GetAllClientTaches().subscribe(
       (response) => {
         console.warn("API Response:", response);
-  
+      
         // Process each task in the response
         this.AllClientTaches = response.map((task) => ({
           ClientTacheIntitule: task.ClientNom || task.ClientPrenom 
@@ -89,12 +97,16 @@ export class TachesComponent implements OnInit {
   
         console.log("Processed Tasks:", this.AllClientTaches);
   
-        this.loader.hide();
+        setTimeout(() => {
+          this.isLoading2 = false;
+        }, 800);
         this.initializeDataTable();
       },
       (error) => {
         console.error("Error fetching allclienttaches: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading2 = false;
+        }, 800)
       }
     );
   }

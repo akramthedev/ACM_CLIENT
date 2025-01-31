@@ -47,6 +47,11 @@ export class ContentComponent implements OnInit, AfterViewInit {
     return outlet.isActivated ? outlet.activatedRoute : '';
   }
 
+
+
+
+  
+
   get layoutClass() {
     switch (this.layout.config.settings.layout) {
       case 'Dubai':

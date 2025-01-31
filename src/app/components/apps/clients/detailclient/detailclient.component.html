@@ -1,3 +1,9 @@
+ 
+<div class="loading-overlay" [class.show]="isLoading1 || isLoading2 || isLoading3 || isLoading4 || isLoading5 || isLoading6 || isLoading7 || isLoading8 || isLoading9 || isLoading10 || isLoading11 || isLoading12 || isLoading13 || isLoading14">
+  <div class="loader"></div>
+</div>
+
+
 <app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="[{ link: '/clients', libelle: 'Clients' }]" [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
 <div class="container-fluid" *ngIf="currentClient != null">
   <div class="edit-profile">

@@ -1,114 +1,26 @@
-<!-- Page Sidebar Start -->
-<div class="logo-wrapper">
-  <a routerLink="/">
-    <h2>ACM</h2>
-  </a>
-  <!-- Button to toggle sidebar -->
-  <div class="back-btn" (click)="sidebarToggle()">
-    <i class="fa fa-angle-left"></i>
-  </div>
-</div>
 
-<div class="logo-icon-wrapper">
-  <a href="javascript:void(0)">
+<div [ngClass]="getSidebarClass()">
+
+
+  <h2 class="logo" (click)="sidebarToggle()" >
     ACM
-  </a>
+  </h2>
+  
+
+  <ul class="menu">
+    <li [class.active]="isCurrentRoute('/')" (click)="navigateTo('/')">
+      &nbsp;<i class="fas fa-chart-simple" ></i>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span *ngIf="!iconSidebar">Tableau de Bord</span>
+    </li>
+
+    <li [class.active]="isCurrentRoute('/taches')" (click)="navigateTo('/taches')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-inbox mr-2 h-4 w-4"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+      &nbsp;<span *ngIf="!iconSidebar">Suivi des Tâches</span>
+    </li>
+
+    <li [class.active]="isCurrentRoute('/clients')" (click)="navigateTo('/clients')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round mr-2 h-4 w-4"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>
+      &nbsp;<span *ngIf="!iconSidebar">Dossiers Clients</span>
+    </li>
+  </ul>
 </div>
-
-<nav class="sidebar-main">
-  <div class="left-arrow" id="left-arrow" [class.d-none]="leftArrowNone" (click)="scrollToLeft()">
-    <app-feather-icons [icon]="'arrow-left'"></app-feather-icons>
-  </div>
-
-  <div id="sidebar-menu" [ngStyle]="{ marginLeft: shouldAddMargin() ? margin + 'px' : '0px' }">
-    <ul class="sidebar-links custom-scrollbar">
-      <div class="simplebar-wrapper">
-        <div class="simplebar-mask">
-          <div class="simplebar-offset">
-            <div class="simplebar-content-wrapper">
-              <div class="simplebar-content">
-
-                <!-- Back button for mobile -->
-                <li class="back-btn">
-                  <a href="javascript:void(0)">
-                    <img class="img-fluid" src="assets/images/logo/logo-icon.png" alt="" />
-                  </a>
-                  <div class="mobile-back text-end" (click)="sidebarToggle()"></div>
-                </li>
-
-                <!-- Sidebar items -->
-                <li 
-                  *ngFor="let menuItem of menuItems" 
-                  [class.sidebar-main-title]="menuItem.headTitle1" 
-                  [class.sidebar-list]="!menuItem.headTitle1"
-                >
-                  <!-- Section Title -->
-                  <div *ngIf="menuItem.headTitle1">
-                    <h6 class="lan-1">{{ menuItem.headTitle1 | translate }}</h6>
-                  </div>
-
-                  <!-- Badge for the menu item -->
-                  <label 
-                    *ngIf="menuItem.badgeType && menuItem.badgeValue" 
-                    class="badge badge-{{ menuItem.badgeType }}"
-                  >
-                    {{ menuItem.badgeValue }}
-                  </label>
-
-                  <!-- Submenu Item -->
-                  <a 
-                    href="javascript:void(0)" 
-                    class="sidebar-link sidebar-title" 
-                    [class.link-nav]="!menuItem.children" 
-                    [class.active]="isSubmenuActive(menuItem)"  
-                    (click)="toggleSubMenu(menuItem)"
-                    *ngIf="menuItem.type === 'sub'"
-                  >
-                    <app-svg-icon [icon]="menuItem.icon"></app-svg-icon>
-                    <span>{{ menuItem.title | translate }}</span>
-                    <div class="according-menu">
-                      <i 
-                        class="fa fa-angle-{{ menuItem.active ? 'down' : 'right' }} pull-right" 
-                        *ngIf="menuItem.children"
-                      ></i>
-                    </div>
-                  </a>
-
-                  <!-- Submenu Links -->
-                  <ul *ngIf="menuItem.active && menuItem.children">
-                    <li *ngFor="let child of menuItem.children">
-                      <a 
-                        [routerLink]="[child.path]" 
-                        routerLinkActive="active" 
-                        class="sidebar-link sidebar-sub-title"
-                      >
-                        <app-svg-icon [icon]="child.icon"></app-svg-icon>
-                        <span>{{ child.title | translate }}</span>
-                      </a>
-                    </li>
-                  </ul>
-
-                  <!-- Normal Link Item -->
-                  <a 
-                    [routerLink]="menuItem.type ? [menuItem.path] : null" 
-                    routerLinkActive="active" 
-                    class="sidebar-link sidebar-title" 
-                    [class.link-nav]="!menuItem.children"
-                    *ngIf="menuItem.type === 'link'"
-                  >
-                    <app-svg-icon [icon]="menuItem.icon"></app-svg-icon>
-                    <span>{{ menuItem.title | translate }}</span>
-                  </a>
-                </li>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ul>
-  </div>
-
-  <div class="right-arrow" id="right-arrow" [class.d-none]="rightArrowNone" (click)="scrollToRight()">
-    <app-feather-icons [icon]="'arrow-right'"></app-feather-icons>
-  </div>
-</nav>

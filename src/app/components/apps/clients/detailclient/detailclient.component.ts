@@ -29,6 +29,24 @@ export class DetailclientComponent {
   activeTabId: number = 1;
   currentClient: Client;
   closeResult: string;
+  
+  isLoading1: Boolean = false;
+  isLoading2: Boolean = false;
+  isLoading3: Boolean = false;
+  isLoading4: Boolean = false;
+  isLoading5: Boolean = false;
+  isLoading6: Boolean = false;
+  isLoading7: Boolean = false;
+  isLoading8: Boolean = false;
+  isLoading9: Boolean = false;
+  isLoading10: Boolean = false;
+  isLoading11: Boolean = false;
+  isLoading12: Boolean = false;
+  isLoading13: Boolean = false;
+  isLoading14: Boolean = false;
+
+  
+  
   filtredClientPieces: any[] = [];
   filterPiecesText: string = "";
   Pieces: Piece[] = [];
@@ -301,11 +319,13 @@ export class DetailclientComponent {
       if (!this.dialogPatrimoine.isEditing) {
         // submit create
         // this.dialogPatrimoine.data.AGarantieDeces = this.dialogPatrimoine.data.AGarantieDeces.includes("true") ? true : false;
-        this.loader.show();
+        this.isLoading1 = true;
         this.clientService.CreatePatrimoine(this.dialogPatrimoine.data).subscribe(
           (response) => {
             console.log("response CreatePatrimoine: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading1 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du patrimoine");
             } else {
@@ -317,17 +337,21 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreatePatrimoine: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading1 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du patrimoine");
           }
         );
       } else {
         // submit update
-        this.loader.show();
+        this.isLoading1 = true;
         this.clientService.UpdatePatrimoine(this.dialogPatrimoine.data).subscribe(
           (response) => {
             console.log("response UpdatePatrimoine: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading1 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du patrimoine");
             } else {
@@ -342,7 +366,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdatePatrimoine: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading1 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du patrimoine");
           }
         );
@@ -548,11 +574,13 @@ export class DetailclientComponent {
       // return;
       if (!this.dialogPassif.isEditing) {
         // submit create
-        this.loader.show();
+        this.isLoading2 = true;
         this.clientService.CreatePassif(this.dialogPassif.data).subscribe(
           (response) => {
             console.log("response CreatePassif: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading2 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du passif");
             } else {
@@ -564,17 +592,21 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreatePassif: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading2 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du passif");
           }
         );
       } else {
         // submit update
-        this.loader.show();
+        this.isLoading2 = true;
         this.clientService.UpdatePassif(this.dialogPassif.data).subscribe(
           (response) => {
             console.log("response UpdatePassif: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading2 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du passif");
             } else {
@@ -589,7 +621,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdatePassif: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading2 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du passif");
           }
         );
@@ -753,11 +787,13 @@ export class DetailclientComponent {
       // return;
       if (!this.dialogBudget.isEditing) {
         // submit create
-        this.loader.show();
+        this.isLoading3 = true;
         this.clientService.CreateBudget(this.dialogBudget.data).subscribe(
           (response) => {
             console.log("response CreateBudget: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading3 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du budget");
             } else {
@@ -769,17 +805,21 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreateBudget: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading3 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du budget");
           }
         );
       } else {
         // submit update
-        this.loader.show();
+        this.isLoading3 = true;
         this.clientService.UpdateBudget(this.dialogBudget.data).subscribe(
           (response) => {
             console.log("response UpdateBudget: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading3 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du budget");
             } else {
@@ -794,7 +834,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdateBudget: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading3 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du budget");
           }
         );
@@ -1006,11 +1048,13 @@ export class DetailclientComponent {
       // return;
       if (!this.dialogProche.isEditing) {
         // submit create
-        this.loader.show();
+        this.isLoading4 = true;
         this.clientService.CreateProche(this.dialogProche.data).subscribe(
           (response) => {
             console.log("response CreateProche: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading4 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du proche");
             } else {
@@ -1022,17 +1066,21 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreateProche: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading4 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du proche");
           }
         );
       } else {
         // submit update
-        this.loader.show();
+        this.isLoading4 = true;
         this.clientService.UpdateProche(this.dialogProche.data).subscribe(
           (response) => {
             console.log("response UpdateProche: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading4 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du proche");
             } else {
@@ -1047,7 +1095,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdateProche: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading4 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du proche");
           }
         );
@@ -1143,11 +1193,13 @@ export class DetailclientComponent {
   }
   //#region LettreMission
   generatePdf(clientMissionId: string) {
-    this.loader.show();
+    this.isLoading5 = true;
     this.clientService.GetLettreMission(clientMissionId).subscribe(
       (response) => {
         console.log("response GetLettreMission: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading5 = false;
+        }, 1500)
         if (response) {
           // Créer un URL Blob à partir de la réponse et ouvrir dans un nouvel onglet
           const fileURL = URL.createObjectURL(response);
@@ -1159,7 +1211,9 @@ export class DetailclientComponent {
       },
       (error) => {
         console.error("Erreur GetLettreMission: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading5 = false;
+        }, 1500)
         this.toastr.error("Erreur de génération de la lettre de mission.");
         // this.handleBlobError(error);
       }
@@ -1279,11 +1333,13 @@ export class DetailclientComponent {
       // return;
       if (!this.dialogConjoint.isEditing) {
         // submit create
-        this.loader.show();
+        this.isLoading6 = true;
         this.clientService.CreateConjoint(this.dialogConjoint.data).subscribe(
           (response) => {
             console.log("response CreateConjoint: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading6 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du conjoint");
             } else {
@@ -1295,17 +1351,21 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreateConjoint: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading6 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du conjoint");
           }
         );
       } else {
         // submit update
-        this.loader.show();
+        this.isLoading7 = true;
         this.clientService.UpdateConjoint(this.dialogConjoint.data).subscribe(
           (response) => {
             console.log("response UpdateConjoint: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading7 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du conjoint");
             } else {
@@ -1320,7 +1380,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdateConjoint: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading7 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du conjoint");
           }
         );
@@ -1376,7 +1438,7 @@ export class DetailclientComponent {
   }
 
   downloadFile(clientPiece: any): Promise<void> {
-    this.loader.show();
+    this.isLoading8 = true;
     return new Promise((resolve, reject) => {
       const fileUrl = `${environment.url}/DownloadClientPiece/${clientPiece.ClientPieceId}`;
 
@@ -1410,7 +1472,9 @@ export class DetailclientComponent {
           reject(error);
         })
         .finally(() => {
-          this.loader.hide(); // Hide loader after download completes (success or fail)
+          setTimeout(()=>{
+            this.isLoading8 = false;
+          }, 1500) // Hide8 loader after download completes (success or fail)
         });
     });
   }
@@ -1435,11 +1499,13 @@ export class DetailclientComponent {
         if (result.isConfirmed) {
           // Action lorsque l'utilisateur clique sur "Supprimer"
           // Swal.fire('Supprimé!', 'Votre élément a été supprimé.', 'success');
-          this.loader.show();
+          this.isLoading9 = true;
           this.clientService.DeleteClientPiece(clientpieceid).subscribe(
             (response) => {
               console.log("response DeleteClientPiece: ", response);
-              this.loader.hide();
+              setTimeout(()=>{
+                this.isLoading9 = false;
+              }, 1000)
               if (response == null || response == false) {
                 this.toastr.error("Erreur de suppression de la pièce");
               } else {
@@ -1451,7 +1517,9 @@ export class DetailclientComponent {
             (error) => {
               console.error("Erreur DeleteClientPiece: ", error);
               this.toastr.error("Erreur de suppression de la pièce");
-              this.loader.hide();
+              setTimeout(()=>{
+                this.isLoading9 = false;
+              }, 1000)
             }
           );
         } else if (result.isDenied) {
@@ -1460,11 +1528,15 @@ export class DetailclientComponent {
           // Swal.fire("Téléchargement!", "Votre fichier est en cours de téléchargement.", "info");
           this.downloadFile(clientPiece)
             .then(() => {
-              this.loader.hide();
+              setTimeout(()=>{
+                this.isLoading9 = false;
+              }, 1500)
               Swal.fire("Téléchargement réussi!", "Votre fichier a été téléchargé avec succès.", "success");
             })
             .catch((error) => {
-              this.loader.hide();
+              setTimeout(()=>{
+                this.isLoading9 = false;
+              }, 1500)
 
               if (error.message === "File not found") {
                 Swal.fire("Erreur!", "Le fichier n'a pas été trouvé sur le serveur.", "error");
@@ -1490,7 +1562,7 @@ export class DetailclientComponent {
     this.route.params.subscribe((params) => {
       let clientId = params["id"];
       console.warn(clientId);
-      this.loader.show();
+      this.isLoading10 = true;
       this.clientService.GetClient(clientId).subscribe(
         (response) => {
 
@@ -1531,11 +1603,15 @@ export class DetailclientComponent {
             // get liste pieces
             this.enumService.GetPieces().subscribe(
               (responsePieces) => {
-                this.loader.hide();
+                setTimeout(()=>{
+                  this.isLoading10 = false;
+                }, 1500)
                 this.Pieces = responsePieces;
               },
               (errorPieces) => {
-                this.loader.hide();
+                setTimeout(()=>{
+                  this.isLoading10 = false;
+                }, 1500)
               }
             );
 
@@ -1574,7 +1650,9 @@ export class DetailclientComponent {
         },
         (error) => {
           console.error("Error GetClient: ", error);
-          this.loader.hide();
+          setTimeout(()=>{
+            this.isLoading10 = false;
+          }, 1500)
           this.toastr.error("Erreur de récuperation du client");
           setTimeout(() => {
             this.router.navigate(["/clients"]);
@@ -1836,11 +1914,13 @@ export class DetailclientComponent {
     formData.append("ClientId", this.currentClient.ClientId);
     formData.append("Extension", file.name.split(".").pop());
 
-    this.loader.show();
+    this.isLoading11 = true;
     this.clientService.UploadClientPieceFile(formData).subscribe(
       (response: any) => {
         console.log("response UploadClientPieceFile: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading11 = false;
+        }, 1500)
 
         if (response == null || response == false) {
           this.toastr.error("Erreur d'importation du fichier.");
@@ -1854,7 +1934,9 @@ export class DetailclientComponent {
       },
       (error: any) => {
         console.error("error UploadClientPieceFile: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading11 = false;
+        }, 1500)
         this.toastr.error("Erreur d'importation du fichier.");
       }
     );
@@ -1913,11 +1995,13 @@ export class DetailclientComponent {
       this.dialogImportPiece.formData.append("ClientId", newClientPiece.ClientId);
       this.dialogImportPiece.formData.append("PieceId", newClientPiece.PieceId);
 
-      this.loader.show();
+      this.isLoading12 = true;
       this.clientService.CreateClientPiece(this.dialogImportPiece.formData).subscribe(
         (response: any) => {
           console.log("response CreateClientPiece: ", response);
-          this.loader.hide();
+          setTimeout(()=>{
+            this.isLoading12 = false;
+          }, 1500)
 
           if (response == null || response == false) {
             this.toastr.error("Erreur d'imporation du fichier.");
@@ -1934,7 +2018,9 @@ export class DetailclientComponent {
         },
         (error: any) => {
           console.error("error CreateClientPiece: ", error);
-          this.loader.hide();
+          setTimeout(()=>{
+            this.isLoading12 = false;
+          }, 1500)
           this.toastr.error("Erreur d'imporation du fichier.");
 
           // clear file input:
@@ -2094,11 +2180,13 @@ export class DetailclientComponent {
       // return;
       if (!this.dialogTask.isEditing) {
         // submit create
-        this.loader.show();
+        this.isLoading13 = true;
         this.clientService.CreateClientTacheCustom(this.dialogTask.data).subscribe(
           (response) => {
             console.log("response CreateTask: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading13 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de création du task");
             } else {
@@ -2110,7 +2198,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur CreateTask: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading13 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de creation du task");
           }
         );
@@ -2120,11 +2210,13 @@ export class DetailclientComponent {
         const originalTask = this.currentClient.ClientTaches.find((item) => item.ClientTacheId === this.dialogTask.data.ClientTacheId);
         const originalStatus = originalTask ? originalTask.Status : null; // Save original status
 
-        this.loader.show();
+        this.isLoading13 = true;
         this.clientService.UpdateClientTache(this.dialogTask.data).subscribe(
           (response) => {
             console.log("response UpdateClientTache: ", response);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading13 = false;
+            }, 1500)
             if (response == null && response == false) {
               this.toastr.error("Erreur de modification du CleintTache");
             } else {
@@ -2156,7 +2248,9 @@ export class DetailclientComponent {
           },
           (error) => {
             console.error("Erreur UpdateClientTask: ", error);
-            this.loader.hide();
+            setTimeout(()=>{
+              this.isLoading13 = false;
+            }, 1500)
             this.toastr.error(error?.error, "Erreur de modification du clientTask");
           }
         );
@@ -2226,7 +2320,7 @@ export class DetailclientComponent {
   }
 
   UpdateClient() {
-    this.loader.show();
+    this.isLoading14 = true;
     // Unformat before sending to backend
 
     console.log("Detail Client");
@@ -2242,7 +2336,9 @@ export class DetailclientComponent {
     this.clientService.UpdateClient(this.currentClient).subscribe(
       (response) => {
         console.log("response UpdateClient: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading14 = false;
+        }, 1500)
         if (response == null && response == false) {
           this.toastr.error("Erreur de modification du client");
         } else {
@@ -2266,7 +2362,9 @@ export class DetailclientComponent {
       },
       (error) => {
         console.error("Erreur UpdateClient: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading14 = false;
+        }, 1500)
         this.toastr.error(error?.error, "Erreur de modification du client");
       }
     );

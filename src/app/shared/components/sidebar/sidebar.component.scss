@@ -1,13 +1,128 @@
-svg-icon {
-   width: 50px;
-   height: 50px;
-   fill: red;
- 
-   &:hover {
-     fill: orange;
-   }
- }
+.sidebar {
+  width: 265px;
+  height: 100vh;
+  background: #ffffff;
+  transition: width 0.5s ease;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
- .logo-wrapper, .sidebar-main, .logo-icon-wrapper{
-  z-index: 33 !important;
- }
+
+
+  
+
+  .logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #7366ff;
+    text-align: left;
+    margin-bottom: 20px;
+    padding-left: 5px !important;
+  }
+
+  .menu {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding:16px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      font-size: 17px;
+      color: #4a4a4a;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      font-weight: 500;
+      position: relative;
+
+      .icon {
+        margin-right: 12px;
+        font-size: 18px;
+      }
+
+      &:hover {
+        background: #dad6ff;
+        color: #4a4a4a;
+      }
+
+      &.active {
+        background: #7366ff;
+        color: white;
+
+        &::before {
+          content: '';
+          position: absolute;
+          right: 6px;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 70%;
+          width: 5px;
+          background: white;
+          border-radius: 3px;
+        }
+      }
+      &.active:hover {
+        background: #7366ff;
+        color: white;
+      }
+    }
+  }
+}
+
+
+
+.sidebar h2{
+  color: #7366ff !important;
+  font-size: 1.777rem !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 80px;
+}
+
+
+.sidebar ul{
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: left !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+.sidebar ul li{
+  width: 100% !important;
+}
+
+
+.sidebar.collapsed .menu li span {
+  display: none; /* Hide text when collapsed */
+}
+
+.sidebar.collapsed .menu li svg {
+  margin-right: 0; /* Align icon properly */
+}
+
+/* You can also adjust other menu item styles for a better look when collapsed */
+.sidebar .menu li svg {
+  margin-right: 10px;
+}
+
+
+
+
+.sidebar.collapsed {
+  width: 100px !important;
+}
+
+
+
+.logo.spaced {
+  padding-left: 20px; /* Or adjust based on the amount of space you want */
+}

@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   encapsulation: ViewEncapsulation.None,
 })
 export class SidebarComponent {
-  public iconSidebar: boolean = true;
+  public iconSidebar: boolean = false;
   public menuItems: Menu[] = [];
   public margin: number = 0; 
   public width: number = window.innerWidth;
@@ -60,6 +60,7 @@ export class SidebarComponent {
   // Toggle the sidebar
   sidebarToggle() {
     this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
+    this.iconSidebar = !this.iconSidebar;
   }
 
   // Activate the menu item based on the current route
@@ -130,12 +131,23 @@ export class SidebarComponent {
     menuItem.active = !menuItem.active;
   }
 
+
+  getSidebarClass(): string {
+    return this.iconSidebar ? 'sidebar collapsed' : 'sidebar';
+  }
+  
+
   // Deactivate a menu item and its children
   deactivateMenu(item: Menu) {
     item.active = false; // Deactivate the item
     if (item.children) {
       item.children.forEach((subItem) => this.deactivateMenu(subItem));
     }
+  }
+
+
+  navigateTo(route: string) {
+    this.router.navigate([route]);
   }
 
   // Scroll the horizontal menu to the left

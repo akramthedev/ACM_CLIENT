@@ -142,7 +142,7 @@ export class CalendarComponent implements OnInit {
         console.log('Fetch tasks complete');
         setTimeout(() => {
           this.isLoading = false;
-        }, 450);
+        }, 800);
       }
     });
   }

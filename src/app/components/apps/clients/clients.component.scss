@@ -137,7 +137,7 @@
 
     border-right: 1px solid rgb(229, 229, 229) !important;
     width: 100% !important;
-    max-width: 400px !important;
+    max-width: 350px !important;
 }
 
 .sdfihdfushduhsdfohofusd88 .active{
@@ -158,10 +158,69 @@
 
 
 .container-fluid{
-    padding-top: 32px !important;
+    padding-top: 1rem !important;
 }
 
 
 .card{
-    height: calc(100vh -  133px) !important;
+    height: calc(100vh -  150px) !important;
 }
+
+
+.container-fluid .row{
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    padding-top: 1rem !important;
+}
+
+.container-fluid{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
+
+
+
+
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(8px) saturate(200%);
+    -webkit-backdrop-filter: blur(8px) saturate(200%);
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999999999999999999999999;
+  
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.88s ease, visibility 0.4s ease;
+  }
+  
+  .loading-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+
+
+  .loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #7366fe;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

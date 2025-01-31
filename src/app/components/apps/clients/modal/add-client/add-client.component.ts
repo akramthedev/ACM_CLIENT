@@ -55,6 +55,16 @@ export class AddClientComponent implements OnInit, OnDestroy {
   showPrestations = false;
   selectedMission: string | null = null;
 
+
+
+  isLoading1: Boolean = false;
+  isLoading2: Boolean = false;
+  isLoading3: Boolean = false;
+  isLoading4: Boolean = false;
+  isLoading5: Boolean = false;
+  isLoading6: Boolean = false;
+
+
   clientData: Client = null;
   newProche: Proche = null;
   newConjoint: Conjoint = null;
@@ -93,14 +103,18 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.clientService.getPrestationsDynamique(MissionId).subscribe(
       (response) => {
         console.log("response getPrestations: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading1 = false;
+        }, 800)
         let i = 0;
         this.Prestations = response;
         console.log("this.PrestationsDynamique affecter a this.Prestations : ", this.Prestations);
       },
       (error) => {
         console.error("Error fetching Prestation Dynamique: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading1 = false;
+        }, 800)
       }
     );
   }
@@ -215,66 +229,82 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   
   getServices() {
-    this.loader.show();
+    this.isLoading2 = true;
     this.clientService.getServices().subscribe(
       (response) => {
         console.log("response getServices: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading2 = false;
+        }, 800)
         let i = 0;
         this.Services = response;
         console.log("this.Services : ", this.Services);
       },
       (error) => {
         console.error("Error fetching Services: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading2 = false;
+        }, 800)
       }
     );
   }
   getMissions() {
-    this.loader.show();
+    this.isLoading3 = true;
     this.clientService.getMissions().subscribe(
       (response) => {
         console.log("response getMissions: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading3 = false;
+        }, 800)
         let i = 0;
         this.Missions = response;
         console.log("this.Missions : ", this.Missions);
       },
       (error) => {
         console.error("Error fetching Missions: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading3 = false;
+        }, 800)
       }
     );
   }
   getPrestations() {
-    this.loader.show();
+    this.isLoading4 = true;
     this.clientService.getPrestations().subscribe(
       (response) => {
         console.log("response getPrestations: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading4 = false;
+        }, 800)
         let i = 0;
         this.Prestations = response;
         console.log("this.Prestations : ", this.Prestations);
       },
       (error) => {
         console.error("Error fetching Prestation: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading4 = false;
+        }, 800)
       }
     );
   }
   getTaches() {
-    this.loader.show();
+    this.isLoading5 = true;
     this.clientService.getTaches().subscribe(
       (response) => {
         console.log("response getTaches: ", response);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading5 = false;
+        }, 800)
         let i = 0;
         this.Taches = response;
         console.log("this.Taches : ", this.Taches);
       },
       (error) => {
         console.error("Error fetching Taches: ", error);
-        this.loader.hide();
+        setTimeout(()=>{
+          this.isLoading5 = false;
+        }, 800)
       }
     );
   }
@@ -676,7 +706,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   onSave() {
     if (this.isFormValid()) {
-      this.loader.show();
+      this.isLoading6 = true;
 
       console.log("Begin F");
       console.log(this.clientData.ClientTaches);
@@ -713,10 +743,14 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.resetForm();
-          this.loader.hide();
+          setTimeout(()=>{
+            this.isLoading6 = false;
+          }, 800)
         },
         (error) => {
-          this.loader.hide();
+          setTimeout(()=>{
+            this.isLoading6 = false;
+          }, 800)
           console.error("Erreur lors de l'ajout du client", error);
           Swal.fire("Erreur", "Erreur lors de l'ajout du client", "error");
         }

@@ -31,6 +31,8 @@ export class ClientsComponent implements OnInit {
   titre: String;
   Clients: any[] = [];
   User: keycloakUser = null;
+  isLoading: boolean = true;
+
 
   constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService, private toastr: ToastrService, private renderer: Renderer2, private authService: AuthService) {
     this.title.setTitle("Clients | ACM");
@@ -149,11 +151,10 @@ export class ClientsComponent implements OnInit {
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
   getClients() {
-    this.loader.show();
+    this.isLoading = true;
     this.clientService.getClients().subscribe(
       (response) => {
         console.log("response getClients: ", response);
-        this.loader.hide();
 
         // Charger tous les clients
         this.Clients = response.map((client) => {
@@ -167,11 +168,15 @@ export class ClientsComponent implements OnInit {
         if (this.Clients.length > 0) {
           this.CurrentClient = this.Clients[0];
         }
-        
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
       },
       (error) => {
         console.error("Error fetching clients: ", error);
-        this.loader.hide();
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
       }
     );
   }
@@ -299,12 +304,14 @@ export class ClientsComponent implements OnInit {
     // Format phone numbers before saving
     this.ClientToUpdate.Telephone1 = this.formatPhoneNumber(this.ClientToUpdate.Telephone1);
     this.ClientToUpdate.Telephone2 = this.formatPhoneNumber(this.ClientToUpdate.Telephone2);
-    this.loader.show();
+    this.isLoading = true;
     this.clientService.UpdateClient(this.ClientToUpdate).subscribe(
       (response) => {
         console.log("response UpdateClient: ", response);
-        this.loader.hide();
-
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
+        
         if (response == null || response == false) {
           this.toastr.error("Erreur de modification du client");
         } else {
@@ -329,7 +336,9 @@ export class ClientsComponent implements OnInit {
       (error: any) => {
         console.log("Error UpdateClient: ", error);
         this.toastr.error(`Erreur de modification du client. ${error?.error}`);
-        this.loader.hide();
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 800);
       }
     );
   }
