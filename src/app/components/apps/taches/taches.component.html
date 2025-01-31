@@ -1,8 +1,4 @@
-<app-breadcrumb [title]="'Tâches'" [items]="['Apps']" [active_item]="'Tâches'"></app-breadcrumb>
-
-
-
-
+ 
 
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
   <div class="row">
@@ -11,12 +7,12 @@
       <table *ngIf="AllClientTaches?.length > 0" id="example" class="row-border">
         <thead>
           <tr>
-            <th class="sfuodhoushgdhsodughuosdghohgsd JKD7">Nom et Prénom</th>
+            <th class="JKD7">Nom et Prénom</th>
             <th class="JKD7">Tache</th>
             <th class="JKD7">Prestation</th>
             <th class="JKD7">Mission</th>
             <th class="JKD7">Statut</th>
-            <th class="sfuodhoushgdhsodughuosdghohgsd2 JKD7">Agent</th>
+            <th class="JKD7">Agent</th>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +28,7 @@
       </table>
 
       <div *ngIf="AllClientTaches?.length === 0">
-        <p>Pas de données disponibles</p>
+        <p>Aucune donnée disponible</p>
       </div>
 
     </div>

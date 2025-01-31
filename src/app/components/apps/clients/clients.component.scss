@@ -1,6 +1,4 @@
-.card{
-    height: 600px !important;
-}
+
 
 .email-body{
     overflow-y: scroll;
@@ -156,4 +154,14 @@
 
  .container-fluid .email-wrap .row .email-right-aside.active{
     background-color: #e8e6ff !important;
+}
+
+
+.container-fluid{
+    padding-top: 32px !important;
+}
+
+
+.card{
+    height: calc(100vh -  133px) !important;
 }

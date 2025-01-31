@@ -7,6 +7,7 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class CalendarComponent implements OnInit {
 
 
 
-  constructor(private eRef: ElementRef, private http: HttpClient) {
+  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient) {
+    this.title.setTitle("Plan de Tâches | ACM");
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
