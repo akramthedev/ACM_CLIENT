@@ -5,27 +5,32 @@
     <div class="row">
 
 
+
+
       <div class="col-xl-3 box-col-3 ">
         <div class="email-left-aside">
-          <div class="card">
+          <div class="card bsdogbsodgbsdgbodsgousdgobosdggou">
             <div class="card-body">
               <div class="email-app-sidebar left-bookmark">
                 <div class="media">
                   <div class="media-size-email"><img class="me-3 rounded-circle swduhuwhgohuswghosudgwhusd" src="assets/images/user/user.jpg" alt="" /></div>
                   <div class="media-body">
                     <h6 class="f-w-600">{{ User?.FullName }}</h6>
-                    <p>{{ User?.email }}</p>
                   </div>
                 </div>
                 <ul class="nav main-menu contact-options" role="tablist">
                   <li class="nav-item mt-3">
                     <button class="btn btn-primary w-100" type="button" (click)="AddClient.openModal()"><i class="me-2" data-feather="users"></i> Ajouter client</button>
                   </li>
-                  <li class="nav-item mt-3"><span class="main-title">Prestation</span></li>
-                  <li>
-                    <a id="pills-personal-tab" data-bs-toggle="pill" href="#pills-personal" role="tab" aria-controls="pills-personal" aria-selected="true" (click)="LoadTous()">
-                      <span class="title">Nombre de Clients:&nbsp;{{ Clients.length }}</span>
-                    </a>
+                  <li class="nav-item mt-3">
+                    <div class="main-title HElnc">
+                      <span>
+                        Total des Clients
+                      </span>
+                      <span>
+                        {{ Clients.length }}
+                      </span>
+                    </div>
                   </li>
                   <!-- <li>
                     <button class="btn btn-category" type="button" (click)="AddCategory.openModal()"><span class="title"> + Add Category</span></button>
@@ -45,10 +50,6 @@
       </div>
       
       <div class="col-xl-9 col-md-12 box-col-9 sfugusghsd">
-        
-
-
-
             <div class="col-xl-8 xl-50 col-md-7 client-detailsx" *ngIf="CurrentClient != null">
               <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ display: IsEditingClient ? 'none' : '' }">
                 <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
@@ -61,8 +62,8 @@
                       </div>
 
                       <div class="media-body wiwiwi mt-0 sdfok">
-                        <h5>
-                          <span class="first_name_0">{{ CurrentClient.Prenom }} </span><span class="last_name_0">{{ CurrentClient.Nom }}</span>
+                        <h5 class="sfdowuhuosdghsdughsd">
+                          {{ CurrentClient.Prenom }}&nbsp;&nbsp;{{ CurrentClient.Nom }} 
                         </h5>
                         <ul>
                           <li><a href="javascript:void(0)" (click)="navigateToDetails(CurrentClient.ClientId)">Voir Détails</a></li>
@@ -166,18 +167,20 @@
                       <div class="row list-persons" id="addcon">
                         
                         
-                        <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12 addScrollBar' : 'col-xl-4 xl-50 col-md-5 addScrollBar'">
+                        <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12 addScrollBar sdfihdfushduhsdfohofusd88' : ' sdfihdfushduhsdfohofusd88 col-xl-4 xl-50 col-md-5 addScrollBar'">
                           <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <!-- href="#v-pills-user"  -->
                             <a *ngFor="let client of Clients" class="contact-tab-0 nav-link active" [id]="client.ClientId" data-bs-toggle="pill" href="javascript:void(0)" role="tab" aria-controls="v-pills-user" aria-selected="false" [class.active]="client.IsSelected != null && client.IsSelected" (click)="OnClientSelected(client.ClientId)">
                               <div class="media">
                                 <!-- Photo -->
                                 <img class="swduhuwhgohuswghosudgwhusd img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
-                                <div class="media-body">
-                                  <h6>
-                                    <span class="first_name_0">{{ client.Nom }} </span><span class="last_name_0">{{ client.Prenom }}</span>
-                                  </h6>
-                                  <p class="email_add_0">{{ client.Email }}</p>
+                                <div class="ushdd8JN">
+                                  <h5 class="">
+                                    {{ client.Prenom }}&nbsp;{{ client.Nom }} 
+                                  </h5>
+                                  <h5 class="">
+                                    {{ client.Email1 }} 
+                                  </h5>
                                 </div>
                               </div>
                             </a>

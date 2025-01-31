@@ -1126,7 +1126,7 @@ export class DetailclientComponent {
   //#endregion Client
   // Format NumeroSS when it's retrieved or displayed
   formatNumeroSS(num: string): string {
-    if (!num) return "";
+    if (num === null || num === undefined || num === "") return "";
     // Use regex to format the NumeroSS
     const regex = /^(\d{1})(\d{2})(\d{2})(\d{2})(\d{3})(\d{3})\/(\d{2})$/;
     return num.replace(regex, "$1 $2 $3 $4 $5 $6/$7");
@@ -1134,7 +1134,12 @@ export class DetailclientComponent {
 
   // Unformat the NumeroSS to its raw form if needed (optional for backend)
   unformatNumeroSS(num: string): string {
-    return num.replace(/\s/g, ""); // Remove all spaces
+    if(num === null || num === undefined || num === ""){
+      return '';
+    }
+    else{
+      return num.replace(/\s/g, "");
+    }
   }
   //#region LettreMission
   generatePdf(clientMissionId: string) {
@@ -2196,7 +2201,7 @@ export class DetailclientComponent {
   //#endregion Task
   // Function to format Moroccan and French phone numbers
   formatPhoneNumber(phone: string): string {
-    if (!phone) return "";
+    if (phone === null || phone === undefined || phone === "") return "";
 
     // Check if the phone number starts with the Moroccan or French code
     if (phone.startsWith("+212")) {
@@ -2212,12 +2217,21 @@ export class DetailclientComponent {
   }
   // Unformat the phone number before saving to remove spaces (optional)
   unformatPhoneNumber(phone: string): string {
-    return phone.replace(/\s/g, ""); // Remove all spaces
+    if (phone === null || phone === undefined || phone === ""){
+      return '';
+    }
+    else{
+      return phone.replace(/\s/g, "");
+    }
   }
 
   UpdateClient() {
     this.loader.show();
     // Unformat before sending to backend
+
+    console.log("Detail Client");
+    console.warn(this.currentClient);
+
     this.currentClient.NumeroSS = this.unformatNumeroSS(this.currentClient.NumeroSS);
     // Unformat both phone numbers before saving
     this.currentClient.Telephone1 = this.unformatPhoneNumber(this.currentClient.Telephone1);

@@ -314,7 +314,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.showPrestations = false;
       this.clientData = new Client();
       this.clientData.ClientId = uuidv4();
-      this.clientData.ImgSrc = "assets/images/user/user.jpg";
+      this.clientData.ImgSrc = "assets/images/user/user.png";
       this.clientData.Conjoint = [];
       this.clientData.Proches = [];
       this.clientData.ClientMission = [];
@@ -706,8 +706,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       
       this.clientService.CreateClient(this.clientData).subscribe(
         (response) => {
-          console.log(this.clientData);
-          console.log("Client ajouté avec succès", response);
+          console.warn(this.clientData);
+          console.warn(this.clientData);
+          console.warn(this.clientData);
           this.toastr.success("Client ajouté avec succès");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();

@@ -41,7 +41,7 @@ export class TachesComponent implements OnInit {
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
   constructor(private title: Title, private clientService: ClientService, private loader: NgxSpinnerService) {
-    this.title.setTitle("Tâches | CRM");
+    this.title.setTitle("Tâches | ACM");
   }
   getClients() {
     this.loader.show();
@@ -63,13 +63,33 @@ export class TachesComponent implements OnInit {
     );
   }
 
+  
+
+
+
+
+
   getTasks() {
     this.loader.show();
     this.clientService.GetAllClientTaches().subscribe(
       (response) => {
-        console.log("response getAllClientTaches: ", response);
+        console.warn("API Response:", response);
+  
+        // Process each task in the response
+        this.AllClientTaches = response.map((task) => ({
+          ClientTacheIntitule: task.ClientNom || task.ClientPrenom 
+            ? `${task.ClientNom ?? ''} ${task.ClientPrenom ?? ''}`.trim() 
+            : '---',
+          TacheIntitule: task.TacheIntitule || '---',
+          PrestationDesignation: task.PrestationDesignation || '---',
+          MissionDesignation: task.MissionDesignation || '---',
+          Status: task.IsDone === true || task.IsDone === 1 ? 'Finalisée' : 'En cours',  
+          AgentNom: task.AgentNom && task.AgentNom.trim() !== '' ? task.AgentNom : '---'  
+        }));
+  
+        console.log("Processed Tasks:", this.AllClientTaches);
+  
         this.loader.hide();
-        this.AllClientTaches = response;
         this.initializeDataTable();
       },
       (error) => {
@@ -78,19 +98,13 @@ export class TachesComponent implements OnInit {
       }
     );
   }
-  // initializeDataTable() {
-  //   setTimeout(() => {
-  //     $("#example").DataTable(); // Initialize DataTables on your table
-  //   }, 0);
-  // }
-  // initializeDataTable() {
-  //   setTimeout(() => {
-  //     if ($.fn.DataTable.isDataTable("#example")) {
-  //       $("#example").DataTable().destroy(); // Destroy existing DataTable instance
-  //     }
-  //     $("#example").DataTable(); // Initialize DataTables on your table
-  //   }, 0);
-  // }
+
+  
+
+
+
+
+
   initializeDataTable() {
     setTimeout(() => {
       // Détruire l'ancienne instance si elle existe
@@ -102,10 +116,8 @@ export class TachesComponent implements OnInit {
       $("#example").DataTable({
         data: this.AllClientTaches,
         columns: [
-          { data: "ClientNom", title: "Nom" },
-          { data: "ClientPrenom", title: "Prenom" },
+          { data: "ClientTacheIntitule", title: "Nom et Prénom" },
           { data: "TacheIntitule", title: "Tache" },
-          { data: "Numero_Ordre", title: "Numero Ordre" },
           { data: "PrestationDesignation", title: "Prestation" },
           { data: "MissionDesignation", title: "Mission" },
           { data: "Status", title: "Statut" },

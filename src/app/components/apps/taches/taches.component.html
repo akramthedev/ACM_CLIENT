@@ -1,39 +1,40 @@
 <app-breadcrumb [title]="'Tâches'" [items]="['Apps']" [active_item]="'Tâches'"></app-breadcrumb>
-<div class="container-fluid email-wrap bookmark-wrap todo-wrap sudfhusdhfhswfhohosdfw">
+
+
+
+
+
+<div class="container-fluid email-wrap bookmark-wrap todo-wrap">
   <div class="row">
-    <div style="background-color: white;">
-      <table id="example" class="row-border">
+    <div class="sjrghushfghsfoughosufhgdou">
+      
+      <table *ngIf="AllClientTaches?.length > 0" id="example" class="row-border">
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Prenom</th>
-            <th>Tache</th>
-            <th>Numéro Ordre</th>
-            <th>Prestation</th>
-            <th>Mission</th>
-            <th>Statut</th>
-            <th>Agent</th>
+            <th class="sfuodhoushgdhsodughuosdghohgsd JKD7">Nom et Prénom</th>
+            <th class="JKD7">Tache</th>
+            <th class="JKD7">Prestation</th>
+            <th class="JKD7">Mission</th>
+            <th class="JKD7">Statut</th>
+            <th class="sfuodhoushgdhsodughuosdghohgsd2 JKD7">Agent</th>
           </tr>
         </thead>
-        <tbody *ngIf="AllClientTaches?.length != 0">
+        <tbody>
           <tr *ngFor="let clienttaches of AllClientTaches">
-            <td>{{ clienttaches.ClientNom }}</td>
-            <td>{{ clienttaches.ClientPrenom }}</td>
+            <td>{{ clienttaches.ClientTacheIntitule }}</td>
             <td>{{ clienttaches.TacheIntitule }}</td>
-            <td>{{ clienttaches.Numero_Ordre }}</td>
             <td>{{ clienttaches.PrestationDesignation }}</td>
             <td>{{ clienttaches.MissionDesignation }}</td>
             <td>{{ clienttaches.Status }}</td>
-            <td>{{ clienttaches.AgentNom }}</td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="AllClientTaches?.length == 0">
-          <tr>
-            <td colspan="8">pas de data</td>
+            <td>{{ clienttaches.AgentNom && clienttaches.AgentNom.trim() !== '' ? clienttaches.AgentNom : '---' }}</td>
           </tr>
         </tbody>
       </table>
+
+      <div *ngIf="AllClientTaches?.length === 0">
+        <p>Pas de données disponibles</p>
+      </div>
+
     </div>
   </div>
 </div>
-

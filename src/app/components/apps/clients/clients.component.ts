@@ -162,6 +162,12 @@ export class ClientsComponent implements OnInit {
 
           return client;
         });
+
+
+        if (this.Clients.length > 0) {
+          this.CurrentClient = this.Clients[0];
+        }
+        
       },
       (error) => {
         console.error("Error fetching clients: ", error);

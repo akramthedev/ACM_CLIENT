@@ -1,3 +1,164 @@
 .sudfhusdhfhswfhohosdfw{
     margin-bottom: 3rem !important;
 }
+
+
+.container-fluid .row table tbody tr td .text-blueviolet{
+    color: #7e5ae0 !important;
+    font-weight: bold;
+}
+
+.container-fluid .row table tbody tr td .text-green{
+    color: rgb(1, 136, 1) !important;
+    font-weight: bold;
+}   
+
+
+
+
+
+
+
+
+
+/* Styles généraux */
+.container-fluid {
+  }
+  
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse:collapse !important;
+    border-spacing: 0;
+    border-radius: 0px !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    overflow: hidden;
+    background-color: white;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    font-weight: '600';
+    color: #665af1 !important;     
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Boutons et interactions */
+  
+  
+ 
+  
+
+
+  .sjrghushfghsfoughosufhgdou{
+    border-radius: 1.4rem !important;
+    background-color: white !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+
+}
+
+.sjrghushfghsfoughosufhgdou table thead,.sjrghushfghsfoughosufhgdou table thead th {
+    background-color: #7366ff !important;
+}
+
+
+
+
+/* Apply full borders to table cells */
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+/* Ensure the table itself has a border */
+table {
+    width: 100%;
+    border-collapse: collapse !important; /* Ensure borders collapse into one */
+    border: 1px solid green; /* Outer border */
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* Header row styling */
+.sjrghushfghsfoughosufhgdou table thead,
+.sjrghushfghsfoughosufhgdou table thead th {
+    background-color: #ece9ff !important;
+    color: #6355fa !important;
+    border: 1px solid #4b3ddd !important; /* Ensure header cells have borders */
+}
+
+/* Ensure last row's cells still have borders */
+tr:last-child td {
+    border-bottom: 1px solid #ddd; 
+}
+
+/* Add a shadow and rounded corners to the container */
+.sjrghushfghsfoughosufhgdou {
+    border-radius: 1.4rem !important;
+    background-color: white !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+ 
+
+.dataTables_wrapper table {
+    border-collapse: collapse !important;
+}
+
+ 
+
+
+:host ::ng-deep table th{
+    border: 1px solid #7366ff !important;
+    border-bottom: 0px solid transparent !important;
+}
+
+
+:host ::ng-deep table td {
+    border: 1px solid #7366ff !important;
+}
+
+
+
+
+:host ::ng-deep table .sfuodhoushgdhsodughuosdghohgsd{
+    border-bottom: 0px solid transparent !important;
+}
+
+:host ::ng-deep table .sfuodhoushgdhsodughuosdghohgsd2{
+    border-bottom: 0px solid transparent !important;
+}
+
+
+
+
+:host ::ng-deep table .JKD7{
+    font-weight: '300' !important;
+}
+
+
+
+:host ::ng-deep table button {
+    background-color: #6A5ACD !important; /* Bleu-violet */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background-color: #5a4dbd;
+  }
