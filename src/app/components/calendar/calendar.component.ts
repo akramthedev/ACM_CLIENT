@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { Title } from '@angular/platform-browser';
-
+import { GoogleAuthService  } from "../../services/google-auth.service";
 
 @Component({
   selector: 'app-calendar',
@@ -30,17 +30,16 @@ export class CalendarComponent implements OnInit {
   isDeleteTask: boolean = false;
   showCompletedTasks: boolean = false;
 
-
   filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
 
   allPersons: { id: string; nom: string; prenom: string }[] = [];  // Unique persons
   allTasks: { id: string; nom: string }[] = [];    // Unique task types
   originalEvents: any[] = [];
+  user: any = null;
 
 
 
-
-  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient) {
+  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient,private googleAuthService: GoogleAuthService) {
     this.title.setTitle("Plan de Tâches | ACM");
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -63,13 +62,28 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    
     this.fetchTasks();
+    this.user = this.googleAuthService.getUser();
+
   }
 
 
 
 
-  
+  signIn(): void {
+    // Ici vous pouvez utiliser google.accounts.id.prompt() ou appeler la méthode d'initialisation
+    this.googleAuthService.loadGisScript(); // Cela va initialiser et déclencher One Tap
+
+    // Une fois l'utilisateur connecté, mettez à jour l'utilisateur dans le composant
+    setTimeout(() => {
+      this.user = this.googleAuthService.getUser(); // Récupérez l'utilisateur
+      console.log('Utilisateur connecté:', this.user);
+    }, 1000); // Attendre un moment pour s'assurer que l'utilisateur soit authentifié
+  }
+
+
 
   
 
@@ -135,14 +149,12 @@ export class CalendarComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching tasks:', error);
-        alert("Erreur interne du serveur. Cliquez sur OK pour rafraîchir.");
-        location.reload();
       },
       complete: () => {
         console.log('Fetch tasks complete');
         setTimeout(() => {
           this.isLoading = false;
-        }, 800);
+        }, 400);
       }
     });
   }

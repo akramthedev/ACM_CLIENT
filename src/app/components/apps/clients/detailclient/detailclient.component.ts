@@ -1573,7 +1573,7 @@ export class DetailclientComponent {
             console.warn("ERROR FATAL");
             setTimeout(() => {
               this.router.navigate(["/clients"]);
-            }, 2000);
+            }, 1000);
           } else {
             //this.isComponentReady = true;
             this.currentClient = response;
@@ -1656,7 +1656,7 @@ export class DetailclientComponent {
           this.toastr.error("Erreur de récuperation du client");
           setTimeout(() => {
             this.router.navigate(["/clients"]);
-          }, 2000);
+          }, 1000);
         }
       );
     });

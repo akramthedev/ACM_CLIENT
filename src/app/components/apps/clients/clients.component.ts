@@ -150,36 +150,53 @@ export class ClientsComponent implements OnInit {
 
   images = ["assets/images/user/2.png", "assets/images/user/user-dp.png", "assets/images/user/1.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png", "assets/images/user/2.png"];
 
+  
+  
+
+
+
+
   getClients() {
     this.isLoading = true;
     this.clientService.getClients().subscribe(
       (response) => {
         console.log("response getClients: ", response);
-
+  
         // Charger tous les clients
-        this.Clients = response.map((client) => {
+        this.Clients = response.map((client, index) => {
           if (client.Photo == null) client.ImgSrc = "assets/images/user/user.png";
           else client.ImgSrc = `${environment.url}/${client.Photo}`;
-
+  
+          // Set the first client as selected
+          if (index === 0) {
+            client.IsSelected = true;
+            this.CurrentClient = client;
+          } else {
+            client.IsSelected = false;
+          }
+  
           return client;
         });
-
-
-        if (this.Clients.length > 0) {
-          this.CurrentClient = this.Clients[0];
-        }
+  
         setTimeout(() => {
           this.isLoading = false;
-        }, 800);
+        }, 300);
       },
       (error) => {
         console.error("Error fetching clients: ", error);
         setTimeout(() => {
           this.isLoading = false;
-        }, 800);
+        }, 300);
       }
     );
   }
+
+  
+
+
+
+
+  
   // Function to format Moroccan and French phone numbers
   formatPhoneNumber(phone: string): string {
     if (!phone) return "";
@@ -310,7 +327,7 @@ export class ClientsComponent implements OnInit {
         console.log("response UpdateClient: ", response);
         setTimeout(() => {
           this.isLoading = false;
-        }, 800);
+        }, 400);
         
         if (response == null || response == false) {
           this.toastr.error("Erreur de modification du client");
@@ -338,7 +355,7 @@ export class ClientsComponent implements OnInit {
         this.toastr.error(`Erreur de modification du client. ${error?.error}`);
         setTimeout(() => {
           this.isLoading = false;
-        }, 800);
+        }, 400);
       }
     );
   }

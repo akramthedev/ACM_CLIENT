@@ -105,7 +105,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("response getPrestations: ", response);
         setTimeout(()=>{
           this.isLoading1 = false;
-        }, 800)
+        }, 300)
         let i = 0;
         this.Prestations = response;
         console.log("this.PrestationsDynamique affecter a this.Prestations : ", this.Prestations);
@@ -114,7 +114,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.error("Error fetching Prestation Dynamique: ", error);
         setTimeout(()=>{
           this.isLoading1 = false;
-        }, 800)
+        }, 300)
       }
     );
   }
@@ -235,7 +235,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("response getServices: ", response);
         setTimeout(()=>{
           this.isLoading2 = false;
-        }, 800)
+        }, 300)
         let i = 0;
         this.Services = response;
         console.log("this.Services : ", this.Services);
@@ -244,7 +244,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.error("Error fetching Services: ", error);
         setTimeout(()=>{
           this.isLoading2 = false;
-        }, 800)
+        }, 300)
       }
     );
   }
@@ -255,7 +255,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("response getMissions: ", response);
         setTimeout(()=>{
           this.isLoading3 = false;
-        }, 800)
+        }, 300)
         let i = 0;
         this.Missions = response;
         console.log("this.Missions : ", this.Missions);
@@ -264,7 +264,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.error("Error fetching Missions: ", error);
         setTimeout(()=>{
           this.isLoading3 = false;
-        }, 800)
+        }, 300)
       }
     );
   }
@@ -275,7 +275,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("response getPrestations: ", response);
         setTimeout(()=>{
           this.isLoading4 = false;
-        }, 800)
+        }, 300)
         let i = 0;
         this.Prestations = response;
         console.log("this.Prestations : ", this.Prestations);
@@ -284,7 +284,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.error("Error fetching Prestation: ", error);
         setTimeout(()=>{
           this.isLoading4 = false;
-        }, 800)
+        }, 300)
       }
     );
   }
@@ -295,7 +295,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.log("response getTaches: ", response);
         setTimeout(()=>{
           this.isLoading5 = false;
-        }, 800)
+        }, 300)
         let i = 0;
         this.Taches = response;
         console.log("this.Taches : ", this.Taches);
@@ -304,7 +304,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         console.error("Error fetching Taches: ", error);
         setTimeout(()=>{
           this.isLoading5 = false;
-        }, 800)
+        }, 300)
       }
     );
   }
@@ -745,12 +745,12 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.resetForm();
           setTimeout(()=>{
             this.isLoading6 = false;
-          }, 800)
+          }, 300)
         },
         (error) => {
           setTimeout(()=>{
             this.isLoading6 = false;
-          }, 800)
+          }, 300)
           console.error("Erreur lors de l'ajout du client", error);
           Swal.fire("Erreur", "Erreur lors de l'ajout du client", "error");
         }

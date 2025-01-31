@@ -89,10 +89,11 @@ export class TachesComponent implements OnInit {
             ? `${task.ClientNom ?? ''} ${task.ClientPrenom ?? ''}`.trim() 
             : '---',
           TacheIntitule: task.TacheIntitule || '---',
+          Numero_Ordre : task.Numero_Ordre, 
           PrestationDesignation: task.PrestationDesignation || '---',
           MissionDesignation: task.MissionDesignation || '---',
-          Status: task.IsDone === true || task.IsDone === 1 ? 'Finalisée' : 'En cours',  
-          AgentNom: task.AgentNom && task.AgentNom.trim() !== '' ? task.AgentNom : '---'  
+          AgentNom: task.AgentNom && task.AgentNom.trim() !== '' ? task.AgentNom : '---',  
+          Status: task.IsDone === true || task.IsDone === 1 ? 'Finalisée' : 'En cours'
         }));
   
         console.log("Processed Tasks:", this.AllClientTaches);
@@ -117,27 +118,48 @@ export class TachesComponent implements OnInit {
 
 
 
+
   initializeDataTable() {
     setTimeout(() => {
-      // Détruire l'ancienne instance si elle existe
+      // Destroy the old instance if it exists
       if ($.fn.DataTable.isDataTable("#example")) {
         $("#example").DataTable().destroy();
       }
-
-      // Initialiser DataTables avec les nouvelles données
-      $("#example").DataTable({
+  
+      // Initialize DataTables with new data
+      const table = $("#example").DataTable({
         data: this.AllClientTaches,
         columns: [
           { data: "ClientTacheIntitule", title: "Nom et Prénom" },
           { data: "TacheIntitule", title: "Tache" },
+          { data: "Numero_Ordre", title: "Numéro Ordre" },
           { data: "PrestationDesignation", title: "Prestation" },
           { data: "MissionDesignation", title: "Mission" },
-          { data: "Status", title: "Statut" },
           { data: "AgentNom", title: "Agent" },
+          { data: "Status", title: "Statut" },
         ],
+        // Rebuild the table after initialization
+        drawCallback: () => {
+          // Apply the finalisee-row class to rows where Status is "Finalisée"
+          $('#example tbody tr').each(function() {
+            const statusCell = $(this).find('td').last(); // Last column (Statut)
+            if (statusCell.text().trim() === 'Finalisée') {
+              $(this).addClass('finalisee-row');
+            }
+          });
+        }
       });
     }, 0);
   }
+  
+
+
+
+
+  
+
+
+
   ngOnInit() {
     this.getClients();
     this.getTasks();

@@ -61,6 +61,7 @@
     "date-fns": "^2.29.3",
     "feather-icons": "^4.29.0",
     "font-awesome": "^4.7.0",
+    "gapi-script": "^1.2.0",
     "hammerjs": "^2.0.8",
     "jquery": "^3.7.1",
     "keycloak-angular": "^15.3.0",

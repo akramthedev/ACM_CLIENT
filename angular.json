@@ -143,7 +143,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "cuba:build",
-            "hmr": true
+            "hmr": true, 
+            "proxyConfig" : "proxy.conf.json"
           },
           "configurations": {
             "production": {

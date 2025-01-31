@@ -13,20 +13,22 @@
           <tr>
             <th class="JKD7">Nom et Prénom</th>
             <th class="JKD7">Tache</th>
+            <th class="JKD7">Numéro Ordre</th>
             <th class="JKD7">Prestation</th>
             <th class="JKD7">Mission</th>
-            <th class="JKD7">Statut</th>
             <th class="JKD7">Agent</th>
+            <th class="JKD7">Statut</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let clienttaches of AllClientTaches">
+          <tr *ngFor="let clienttaches of AllClientTaches" [ngClass]="{'finalisee-row': clienttaches.Status === 'Finalisée'}">
             <td>{{ clienttaches.ClientTacheIntitule }}</td>
             <td>{{ clienttaches.TacheIntitule }}</td>
+            <td>{{ clienttaches.Numero_Ordre }}</td>
             <td>{{ clienttaches.PrestationDesignation }}</td>
             <td>{{ clienttaches.MissionDesignation }}</td>
-            <td>{{ clienttaches.Status }}</td>
             <td>{{ clienttaches.AgentNom && clienttaches.AgentNom.trim() !== '' ? clienttaches.AgentNom : '---' }}</td>
+            <td>{{ clienttaches.Status }}</td>
           </tr>
         </tbody>
       </table>

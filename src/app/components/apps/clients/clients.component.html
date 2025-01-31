@@ -73,7 +73,7 @@
                         <ul>
                           <li><a href="javascript:void(0)" (click)="navigateToDetails(CurrentClient.ClientId)">Voir Détails</a></li>
                           <li><a href="javascript:void(0)" (click)="StartUpdateClient()">Modifier</a></li>
-                          <li><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
+                          <li class="XJN_8k"><a href="javascript:void(0)" (click)="sweetAlertDelete(CurrentClient.ClientId)">Supprimer</a></li>
                         </ul>
                       </div>
                     </div>
@@ -174,18 +174,18 @@
                         
                         <div [class]="CurrentClient == null ? 'col-xl-12 col-md-12 addScrollBar sdfihdfushduhsdfohofusd88' : ' sdfihdfushduhsdfohofusd88 col-xl-4 xl-50 col-md-5 addScrollBar'">
                           <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <!-- href="#v-pills-user"  -->
+
                             <a *ngFor="let client of Clients" class="contact-tab-0 nav-link active" [id]="client.ClientId" data-bs-toggle="pill" href="javascript:void(0)" role="tab" aria-controls="v-pills-user" aria-selected="false" [class.active]="client.IsSelected != null && client.IsSelected" (click)="OnClientSelected(client.ClientId)">
-                              <div class="media">
+                              <div class="media" [class.activeXXXXX]="client.IsSelected != null && client.IsSelected">
                                 <!-- Photo -->
                                 <img class="swduhuwhgohuswghosudgwhusd img-50 img-fluid m-r-20 rounded-circle update_img_0" [src]="client.ImgSrc" alt="" />
                                 <div class="ushdd8JN">
                                   <h5 class="">
                                     {{ client.Prenom }}&nbsp;{{ client.Nom }} 
                                   </h5>
-                                  <h5 class="">
+                                  <span class="HInnohUHO">
                                     {{ client.Email1 }} 
-                                  </h5>
+                                  </span>
                                 </div>
                               </div>
                             </a>
