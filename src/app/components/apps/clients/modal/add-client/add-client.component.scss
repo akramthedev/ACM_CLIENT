@@ -83,3 +83,71 @@ label {
   color: red;
   font-size: 0.9em; /* Optionnel : pour ajuster la taille du texte */
 }
+
+
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(3.5px) saturate(200%);
+  -webkit-backdrop-filter: blur(3.5px) saturate(200%);
+  background-color: rgba(17, 25, 40, 0.678);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;   
+  transition: 0.3167s ease-in-out ;
+}
+
+.popup-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(8px) saturate(200%);
+  -webkit-backdrop-filter: blur(8px) saturate(200%);
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999999999999999999999999;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.88s ease, visibility 0.4s ease;
+}
+
+.loading-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc;
+  border-top: 5px solid #7366fe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

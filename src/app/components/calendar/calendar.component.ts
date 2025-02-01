@@ -143,17 +143,24 @@ export class CalendarComponent implements OnInit {
 
 
 
-
   gapiLoaded(): void {
     gapi.load('client', async () => {
       await gapi.client.init({
-        apiKey: this.API_KEY,
+        apiKey: '',  
         discoveryDocs: [this.DISCOVERY_DOC],
       });
+  
+      if (this.AccessTokenGoogle) {
+        gapi.client.setToken({
+          access_token: this.AccessTokenGoogle, 
+        });
+      }
+  
       this.gapiInited = true;
       this.maybeEnableButtons();
     });
   }
+  
 
 
 
@@ -180,6 +187,19 @@ export class CalendarComponent implements OnInit {
 
   async addEventToGoogleCalendar(event: any) {
     try {
+      // Get the Google access token from localStorage or another source
+      const accessToken = localStorage.getItem('google_token');
+      
+      if (!accessToken) {
+        console.error('No Google access token found');
+        alert('Please authenticate with Google Calendar.');
+        return;
+      }
+  
+      gapi.auth.setToken({
+        access_token: accessToken,
+      });
+  
       const response = await gapi.client.calendar.events.insert({
         calendarId: 'primary',
         resource: {
@@ -188,11 +208,14 @@ export class CalendarComponent implements OnInit {
           end: { dateTime: event.end },
         },
       });
-      console.log('Événement ajouté :', response);
+  
+      alert('Événement ajouté');
     } catch (error) {
       console.error('Erreur lors de l’ajout de l’événement :', error);
+      alert('Erreur lors de l’ajout de l’événement');
     }
   }
+  
   
 
 
@@ -361,8 +384,9 @@ export class CalendarComponent implements OnInit {
       .then((response) => response.json())
       .then((data) => {
         if (data.access_token) {
-          console.log('Token rafraîchi avec succès!');
-  
+
+
+          
           // Mettre à jour le token et la date d'expiration
           const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
           localStorage.setItem('google_token', data.access_token);
@@ -408,9 +432,8 @@ export class CalendarComponent implements OnInit {
           if (response && response[0]) {
             console.warn('Fetched Access Token:', response[0]);
   
-            // Mettre à jour le token dans localStorage
-            localStorage.setItem('google_token', response[0]);
-            const expirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
+            localStorage.setItem('google_token', response[0].AccessTokenGoogle);
+            const expirationTime = Date.now() + (58 * 60 * 1000); 
             localStorage.setItem('google_token_expiration', expirationTime.toString());
             this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
             this.isLoadingAccToken = false;

@@ -413,9 +413,8 @@ export class ClientsComponent implements OnInit {
           if (response && response[0]) {
             console.warn('Fetched Access Token:', response[0]);
   
-            // Mettre à jour le token dans localStorage
-            localStorage.setItem('google_token', response[0]);
-            const expirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
+            localStorage.setItem('google_token', response[0].AccessTokenGoogle);
+            const expirationTime = Date.now() + (58 * 60 * 1000);  
             localStorage.setItem('google_token_expiration', expirationTime.toString());
             this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
             this.isLoadingAccToken = false;
