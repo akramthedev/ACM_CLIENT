@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Renderer2, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, Renderer2, ElementRef, HostListener } from "@angular/core";
 import { AddClientComponent } from "./modal/add-client/add-client.component";
 import { AddCategoryComponent } from "./modal/add-category/add-category.component";
 import { PrintContactComponent } from "./modal/print-contact/print-contact.component";
@@ -39,6 +39,7 @@ export class ClientsComponent implements OnInit {
   User: keycloakUser = null;
   isLoading: boolean = true;
 
+  showPopUpNotify: boolean = false;
 
   isLoadingAccToken:boolean = false;
   isConnectedToGoogleCalendar: boolean = false;
@@ -78,7 +79,7 @@ export class ClientsComponent implements OnInit {
 
 
 
-  constructor(private title: Title, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService,private http: HttpClient, private toastr: ToastrService, private renderer: Renderer2, private authService: AuthService) {
+  constructor(private title: Title,private eRef: ElementRef, private router: Router, private clientService: ClientService, private loader: NgxSpinnerService,private http: HttpClient, private toastr: ToastrService, private renderer: Renderer2, private authService: AuthService) {
     this.title.setTitle("Clients | ACM");
     this.titre = this.title.getTitle();
 
@@ -100,6 +101,44 @@ export class ClientsComponent implements OnInit {
       });
   }
 
+
+
+  AddClientButCheckConnectionWithGoogleCalendarFirst(): void{
+    if(this.isConnectedToGoogleCalendar === true){
+      this.AddClient.openModal();
+    }
+    else{
+      this.showPopUpNotify = true;
+    }
+  }
+
+
+  NePasContinuerCommeMeme():void{
+    this.showPopUpNotify = false;
+  }
+
+
+
+  @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent): void {
+      const clickedInside = this.eRef.nativeElement.contains(event.target);
+      if (!clickedInside && this.showPopUpNotify) {
+        this.showPopUpNotify = false;
+      }
+    }
+
+
+  preventClose(event: MouseEvent): void {
+    event.stopPropagation();  
+  }
+
+
+  ContinuerCommeMeme():void{
+    this.showPopUpNotify = false;
+    setTimeout(()=>{
+      this.AddClient.openModal();
+    }, 300);
+  }
 
   updateIsNullValue(newValue: boolean) {
     this.isNullValueSubject.next(newValue);

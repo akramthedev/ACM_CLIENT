@@ -1,4 +1,68 @@
- 
+
+<div
+  [ngClass]="{ 'visible': showPopUpNotify }"
+  class="popup-overlay"
+  (click)="NePasContinuerCommeMeme()"
+>
+  <div
+    class="popup-modal"
+    (click)="preventClose($event)"
+    [ngClass]="{ 'visible': showPopUpNotify }"
+  >
+  <h3 style="margin-bottom: 30px;">
+    Vous n'êtes pas connecté à Google Calendar !
+  </h3>
+  <p>
+    Vos tâches ne seront pas synchronisées avec Google Calendar, mais elles le seront ici.
+  </p>
+  <br>
+  <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <button
+        (click)="NePasContinuerCommeMeme()"
+        style="
+          color:#4538d4;
+          background-color: #f1efff;
+          border: 1px solid #d0c9ff;
+          padding: 8px 16px;
+          width: 30%;
+          font-weight: 500;
+          border: 1px solid transparent !important;
+          border-radius: 7px;
+          cursor: pointer;
+        "
+      >
+        Fermer
+      </button>
+  
+      <button
+        (click)="ContinuerCommeMeme()"
+        style="
+          background: #7366fe;
+          color: white;
+          width: 67%;
+          font-weight: 500;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 7px;
+          cursor: pointer;
+        "
+      >
+        Continuer comme même
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
 <div class="loading-overlay" [class.show]="isLoading">
   <div class="loader"></div>
 </div>
@@ -27,15 +91,13 @@
                       <span>
                         {{ Clients.length }}
                       </span>
-                    </div>
+                    </div>  
                   </li>
 
                   <li class="nav-item mt-3">
-                    <button class="btn btn-primary w-100" type="button" (click)="AddClient.openModal()"><i class="me-2" data-feather="users"></i> Ajouter un client</button>
+                    <button class="btn btn-primary w-100 fsigbisdhgfsdiufiudsf" type="button" (click)="AddClientButCheckConnectionWithGoogleCalendarFirst()">+ Ajouter un nouveau client</button>
                   </li>
                   <br><br>
-                  <br>
-
                   <li class="nav-item mt-3">
                     <div class="main-title HElnc">
                       <span>
@@ -48,7 +110,7 @@
                   </li>
                   <br>
 
-                  
+
                   <li>
                     <div class="srfsdsdwg">
                       <div class="switch-container sfoidjisdfjidsfjdfs">
