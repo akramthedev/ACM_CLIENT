@@ -315,13 +315,13 @@ export class CalendarComponent implements OnInit {
       .subscribe({
         next: (res) => {
           console.log('Account created successfully:');
-          alert('La connexion avec Google Calendar est bien validée.');
-          console.log(res);
+          alert('✅ Connexion à Google Calendar réussie.');
+          window.location.reload();
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error creating account:', err);
-          alert("La connexion avec Google Calendar a échoué.");
+          alert("❌ Connexion à Google Calendar échoué.");
           this.isLoading = false;
         }
       });  
@@ -488,8 +488,8 @@ export class CalendarComponent implements OnInit {
     this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
       next: (response) => {
         console.log('Token supprimé avec succès de la base de données', response);
-        alert('Vous avez été déconnecté de Google Calendar.')
-
+        alert('Vous avez été déconnecté de Google Calendar.');
+        window.location.reload();
       },
       error: (error) => {
         console.error('Erreur lors de la suppression du token', error);

@@ -345,13 +345,13 @@ export class AddClientComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           console.log('Account created successfully:');
-          alert('La connexion avec Google Calendar est bien validée.');
-          console.log(res);
+          alert('✅ Connexion à Google Calendar réussie.');
+          window.location.reload();
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error creating account:', err);
-          alert("La connexion avec Google Calendar a échoué.");
+          alert("❌ Connexion à Google Calendar échoué.");
           this.isLoading = false;
         }
       });  
