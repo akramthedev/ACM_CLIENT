@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { Title } from '@angular/platform-browser';
-import { GoogleAuthService  } from "../../services/google-auth.service";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { keycloakUser } from "src/app/shared/model/models.model";
 import { BehaviorSubject } from 'rxjs';
@@ -31,14 +30,17 @@ export class CalendarComponent implements OnInit {
   selectedEvent: any = null; 
   showPopup: boolean = false;  
   isLoading: boolean = true;
-  isLoadingAccToken:boolean = false;
   isUpdating: boolean = false;
   isDeleteTask: boolean = false;
   showCompletedTasks: boolean = false;
+
+
+
   isConnectedToGoogleCalendar: boolean = false;
-
-
+  isLoadingAccToken:boolean = false;
   dataFetchedAccToken : any = null; 
+
+
 
 
   CLIENT_ID = '267508651605-2vqqep29h97uef9tt7ahis82dskjsm1r.apps.googleusercontent.com';
@@ -62,19 +64,19 @@ export class CalendarComponent implements OnInit {
 
   filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
 
-  allPersons: { id: string; nom: string; prenom: string }[] = [];  // Unique persons
-  allTasks: { id: string; nom: string }[] = [];    // Unique task types
+  allPersons: { id: string; nom: string; prenom: string }[] = [];   
+  allTasks: { id: string; nom: string }[] = [];     
   originalEvents: any[] = [];
   user: any = null;
   userCurrent: keycloakUser = null;
 
   isNullValue: boolean = true;
 
-  private isNullValueSubject = new BehaviorSubject<boolean>(this.isNullValue);
   
+  private isNullValueSubject = new BehaviorSubject<boolean>(this.isNullValue);
 
 
-  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient,private googleAuthService: GoogleAuthService, private authService: AuthService) {
+  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient, private authService: AuthService) {
     this.title.setTitle("Plan de Tâches | ACM");
     
 
@@ -106,6 +108,8 @@ export class CalendarComponent implements OnInit {
 
   }
 
+    
+  
     ngOnInit(): void {
         this.fetchTasks();
         this.loadGoogleApis();
@@ -115,22 +119,20 @@ export class CalendarComponent implements OnInit {
         });
     }
 
+    
     updateIsNullValue(newValue: boolean) {
         this.isNullValueSubject.next(newValue);
     }
 
 
 
-
   loadGoogleApis(): void {
-
     const gapiScript = document.createElement('script');
     gapiScript.src = 'https://apis.google.com/js/api.js';
     gapiScript.async = true;
     gapiScript.defer = true;
     gapiScript.onload = () => this.gapiLoaded();
     document.body.appendChild(gapiScript);
-
     const gisScript = document.createElement('script');
     gisScript.src = 'https://accounts.google.com/gsi/client';
     gisScript.async = true;
@@ -138,6 +140,9 @@ export class CalendarComponent implements OnInit {
     gisScript.onload = () => this.gisLoaded();
     document.body.appendChild(gisScript);
   }
+
+
+
 
   gapiLoaded(): void {
     gapi.load('client', async () => {
@@ -210,30 +215,21 @@ export class CalendarComponent implements OnInit {
         if (response.error) {
           console.error('Google authentication error:', response.error);
           this.isLoading = false;
+          alert('Une erreur est survenue lors de la synchronisation avec Google Calendar.')
           return;
         }
         else{
           console.warn(response);
-          
+          this.isLoading = false;
         }
       }
     });
 
     this.ClientIdOfGoogle = this.tokenClient.s.client_id;
-  
-    
-    // Make sure to call this only after finishing the request
     this.isLoading = false;
   }
   
   
-
-
-
-
-  
-
-
 
 
 
@@ -245,9 +241,6 @@ export class CalendarComponent implements OnInit {
       this.events = '';
     }
   }
-
- 
-
 
 
   
@@ -308,13 +301,9 @@ export class CalendarComponent implements OnInit {
           alert("La connexion avec Google Calendar a échoué.");
           this.isLoading = false;
         }
-      });
-  
- 
+      });  
+      this.isLoading = false;
   }
-
-  
- 
 
 
 
@@ -450,12 +439,14 @@ export class CalendarComponent implements OnInit {
 
  
   handleLogout(): void {
+    this.isLoadingAccToken = true
     localStorage.removeItem('google_token');
     localStorage.removeItem('google_token_expiration');
     localStorage.removeItem('google_refresh_token');
   
     this.isConnectedToGoogleCalendar = false;
     this.removeTokenFromDatabase();
+    this.isLoadingAccToken = false;
   }
   
 
@@ -554,6 +545,9 @@ export class CalendarComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching tasks:', error);
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 400);
       },
       complete: () => {
         console.log('Fetch tasks complete');
@@ -664,6 +658,7 @@ export class CalendarComponent implements OnInit {
     this.calendarComponent.getApi().addEventSource(filteredEvents); // Add filtered events
     this.calendarComponent.getApi().refetchEvents();
   }, 100);
+  this.isLoading = false;
 }
 
 

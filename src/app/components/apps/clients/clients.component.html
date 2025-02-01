@@ -17,36 +17,69 @@
           <div class="card bsdogbsodgbsdgbodsgousdgobosdggou">
             <div class="card-body">
               <div class="email-app-sidebar left-bookmark">
-                <div class="media">
-                  <div class="media-size-email"><img class="me-3 rounded-circle swduhuwhgohuswghosudgwhusd" src="assets/images/user/user.jpg" alt="" /></div>
-                  <div class="media-body">
-                    <h6 class="f-w-600">{{ User?.FullName }}</h6>
-                  </div>
-                </div>
                 <ul class="nav main-menu contact-options" role="tablist">
-                  <li class="nav-item mt-3">
-                    <button class="btn btn-primary w-100" type="button" (click)="AddClient.openModal()"><i class="me-2" data-feather="users"></i> Ajouter client</button>
-                  </li>
+                  
                   <li class="nav-item mt-3">
                     <div class="main-title HElnc">
                       <span>
-                        Total des Clients
+                        Total des Clients : 
                       </span>
                       <span>
                         {{ Clients.length }}
                       </span>
                     </div>
                   </li>
-                  <!-- <li>
-                    <button class="btn btn-category" type="button" (click)="AddCategory.openModal()"><span class="title"> + Add Category</span></button>
-                  </li> -->
-                  <!-- <li>
-                    <a class="show" id="pills-maroc-tab" data-bs-toggle="pill" href="#pills-maroc" role="tab" aria-controls="pills-maroc" aria-selected="false"><span class="title"> Installation maroc</span></a>
+
+                  <li class="nav-item mt-3">
+                    <button class="btn btn-primary w-100" type="button" (click)="AddClient.openModal()"><i class="me-2" data-feather="users"></i> Ajouter un client</button>
                   </li>
+                  <br><br>
+                  <br>
+
+                  <li class="nav-item mt-3">
+                    <div class="main-title HElnc">
+                      <span>
+                        Synchronisation : 
+                      </span>
+                      <span>
+                        &nbsp;
+                      </span>
+                    </div>
+                  </li>
+                  <br>
+
+                  
                   <li>
-                    <a class="show" id="pills-france-tab" data-bs-toggle="pill" href="#pills-france" role="tab" aria-controls="pills-france" aria-selected="false"><span class="title">Retour en france</span></a>
-                  </li> -->
-                  <!-- <li><a href="javascript:void(0)"><span class="title">Favorites</span></a></li> -->
+                    <div class="srfsdsdwg">
+                      <div class="switch-container sfoidjisdfjidsfjdfs">
+                        <div class="dni8H9b">
+                          <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
+                          <span>
+                            <em>
+                              {{ isConnectedToGoogleCalendar ? 'Connecté' : 'Déconnecté' }}
+                            </em>
+                          </span>
+                        </div>
+                        <button 
+                          id="authorize_button" 
+                          (click)="handleAuthClick()" 
+                          class="docnjjdl" 
+                          *ngIf="!isConnectedToGoogleCalendar" 
+                          [disabled]="isLoadingAccToken"
+                        >
+                          Connexion
+                        </button>
+                        <button 
+                          id="logout_button" 
+                          (click)="handleLogout()" 
+                          class="docnjjdl déconecion" 
+                          *ngIf="isConnectedToGoogleCalendar" 
+                          [disabled]="isLoadingAccToken">
+                          Déconnexion
+                        </button>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -16,14 +16,16 @@
 <div class="calendar-container">
   <div class="filtrageX">
     <div class="filtrageY">
-      <h4>Filtre personnalisé</h4>
+      <h4 class="FiPer">
+        Paramétrage
+      </h4>
 
         <div class="sfodshdgf"></div>
 
         
         
-        <h6>
-          Synchroniser
+        <h6 class="H6h_8">
+          Synchroniser Google Agenda
         </h6>
         
         
@@ -33,9 +35,8 @@
             <div class="dni8H9b">
               <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
               <span>
-                Google Agenda
                 <em>
-                  {{ isConnectedToGoogleCalendar ? '- connecté' : '' }}
+                  {{ isConnectedToGoogleCalendar ? 'Statut : Connecté' : 'Statut : Déconnecté' }}
                 </em>
               </span>
             </div>
@@ -51,7 +52,7 @@
             <button 
               id="logout_button" 
               (click)="handleLogout()" 
-              class="docnjjdl" 
+              class="docnjjdl déconecion" 
               *ngIf="isConnectedToGoogleCalendar" 
               [disabled]="isLoadingAccToken">
               Déconnexion
@@ -62,14 +63,14 @@
         
         
        
-        
+<!--         
         
         <div class="sfodshdgf2"></div>
         
         <button (click)="addTestEventToGoogleCalendar()">
           Ajouter un événement test
         </button>
-        
+         -->
           <div class="sfodshdgf2"></div>
           
         <h6>

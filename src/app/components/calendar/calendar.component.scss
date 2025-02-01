@@ -340,7 +340,7 @@ full-calendar {
 .filtrageY {
   overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-width: thin; /* Firefox scrollbar thickness */
-  scrollbar-color: #7366fe #fbfaff; /* Firefox scrollbar thumb & track color */
+  scrollbar-color: #c4c4c4 #fbfaff; /* Firefox scrollbar thumb & track color */
 }
 
 /* ✅ Fix: Correctly target both elements */
@@ -357,19 +357,19 @@ full-calendar {
 
 /* ✅ Thumb (Movable part of the scrollbar) */
 .filtrageY::-webkit-scrollbar-thumb{
-  background: #7366fe; /* Purple scrollbar */
+  background: #a3a3a3; /* Purple scrollbar */
   border-radius: 0px !important; /* Round edges for a smooth look */
   border: 2px solid #ffffff; /* Creates space around the scrollbar */
 }
 
 /* ✅ Hover effect on the thumb */
 .filtrageY::-webkit-scrollbar-thumb:hover {
-  background: #5a4edf; /* Darker purple when hovered */
+  background: #c4c4c4; /* Darker purple when hovered */
 }
 
 /* ✅ Scrollbar Corner (Where vertical and horizontal scrollbars meet) */
 .filtrageY::-webkit-scrollbar-corner {
-  background: #fbfbff; /* Matches track */
+  background: #c4c4c4; /* Matches track */
 }
 
 
@@ -546,22 +546,20 @@ input:checked + .slider:before {
 }
 
 .switch-container .docnjjdl{
-  background-color: #e8e8e8;
   padding: 0;
   transition: .2s all ease-in-out;
   color: rgb(60, 60, 60);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ffffff;
   outline: none;
   border-radius: 0.5rem;
-  font-size: 14px !important;
+  font-size: 13px !important;
   border-radius: 6px;
   cursor: pointer;
-  padding: 0 12px !important;
+  padding: 0 8px !important;
   width: auto !important;
-  height: 43px; 
+  height: 33px; 
 }
 
 .sfoidjisdfjidsfjdfs{
@@ -587,14 +585,35 @@ input:checked + .slider:before {
 }
 
 .filtrageY h4{
-  font-size: 17px !important;
+  font-size: 20px !important;
 }
 
 .dni8H9b span em{
-  color: gray;
+  color: rgb(162, 162, 162);
   font-style :italic;
 }
 
+
+
+
+.srfsdsdwg .switch-container  .docnjjdl{
+  border:1px solid  #b2acfb;
+  background-color: #f0effe;
+  color: #6053e7;
+}
+
 .srfsdsdwg .switch-container  .docnjjdl:hover{
-  background-color: #c9c9c9;
+  background-color: #d9d6fc;
+}
+
+.srfsdsdwg .switch-container  .déconecion:hover{
+  background-color: #d9d6fc;
+}
+
+.filtrageY .H6h_8{
+  margin-bottom: 1.2rem !important;
+}
+
+.calendar-container .filtrageX .filtrageY .FiPer{
+  font-size: 20px !important;
 }

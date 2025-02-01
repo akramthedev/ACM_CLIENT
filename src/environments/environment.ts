@@ -21,7 +21,7 @@ export const environment = {
     serverUrl: "https://acm-keycloak.azurewebsites.net",
     redirectUri: "http://localhost:4200",
     postLogoutRedirectUri: "http://localhost:4200/logout",
-    realm: "acm",
+    realm: "acm-1",
     clientId: "acm-client",
   },
   idleConfig: { idle: 1000 * 60 * 4, timeout: 60, ping: 10 },
