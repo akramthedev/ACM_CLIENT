@@ -1141,8 +1141,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
               if(this.isConnectedToGoogleCalendar === true){
                 
                 console.warn("----------------------------------")
-                console.warn(response);
+                console.warn(response.events);
                 console.warn("----------------------");
+                
                 
                 
 
