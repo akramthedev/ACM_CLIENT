@@ -19,7 +19,8 @@ export class MyAccountComponent implements OnInit {
     // console.log("user: ", user);
 
     this.authService.GetCurrentUser().then((user: any) => {
-      console.log("user: ", user);
+
+      
       this.user = user;
       if (
         (this.user.firstName == null || this.user.firstName == "") &&

@@ -26,7 +26,7 @@ full-calendar {
 
 .fc-toolbar-title {
     color: #007bff;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
   }
   
@@ -143,7 +143,7 @@ full-calendar {
  .calendar-container .calendarOptions .fc-event {
   background-color: transparent !important;
   color: white;
-  font-size: 14px;
+  font-size: 12px;
   padding: 4px;
 }
 
@@ -195,6 +195,7 @@ full-calendar {
   width: 100%;
   overflow-y: scroll !important;
   height: 100%;
+  overflow-x: hidden !important;
   padding: 0.4rem 0;
   padding-left: 1rem;
   background-color: white !important;
@@ -222,7 +223,7 @@ full-calendar {
 }
 
 .scrolling-list div label{
-  font-size: 15px !important;
+  font-size: 14px !important;
   font-weight: 400 !important;
   cursor: pointer;
   padding-top: 7px !important;
@@ -243,7 +244,7 @@ full-calendar {
 
 .filtrageY h6{
   color: #969696 !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
 }
 
 .sfodshdgf{
@@ -292,7 +293,7 @@ full-calendar {
 /* Add checkmark */
  input:checked::after {
   content: "✔";
-  font-size: 20px !important;
+  font-size: 19px !important;
   color: white;
   font-weight: bold;
   display: flex;
@@ -314,7 +315,7 @@ full-calendar {
 
 /* Label styling */
 .filter-label label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   cursor: pointer;
   height: auto;
@@ -452,7 +453,7 @@ full-calendar .fc-scrollgrid::-webkit-scrollbar-corner {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 0.88rem !important;
+  font-size: 13px !important;
   font-weight: 400 !important;
   color: rgb(175, 175, 175) !important;
 }
@@ -529,7 +530,7 @@ input:checked + .slider:before {
 }
 
 .srfsdsdwg span{
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 400;
 }
 
@@ -547,6 +548,7 @@ input:checked + .slider:before {
 .switch-container .docnjjdl{
   background-color: #e8e8e8;
   padding: 0;
+  transition: .2s all ease-in-out;
   color: rgb(60, 60, 60);
   display: flex;
   align-items: center;
@@ -554,7 +556,7 @@ input:checked + .slider:before {
   border: 1px solid #ffffff;
   outline: none;
   border-radius: 0.5rem;
-  font-size: 16px;
+  font-size: 14px !important;
   border-radius: 6px;
   cursor: pointer;
   padding: 0 12px !important;
@@ -582,4 +584,17 @@ input:checked + .slider:before {
 
 .switch-container .dni8H9b{
   display: flex;
+}
+
+.filtrageY h4{
+  font-size: 17px !important;
+}
+
+.dni8H9b span em{
+  color: gray;
+  font-style :italic;
+}
+
+.srfsdsdwg .switch-container  .docnjjdl:hover{
+  background-color: #c9c9c9;
 }

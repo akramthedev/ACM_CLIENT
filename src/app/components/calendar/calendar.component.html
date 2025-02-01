@@ -1,12 +1,4 @@
-<div id="g_id_onload"
-     data-client_id="267508651605-2vqqep29h97uef9tt7ahis82dskjsm1r.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
 
-<div class="g_id_signin"
-     data-type="standard">
-</div>
 
 
 
@@ -33,26 +25,53 @@
         <h6>
           Synchroniser
         </h6>
+        
+        
+        
         <div class="srfsdsdwg">
           <div class="switch-container sfoidjisdfjidsfjdfs">
             <div class="dni8H9b">
-              <img class="sfondsndfKKK"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
-              <span>Google Agenda</span>
+              <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
+              <span>
+                Google Agenda
+                <em>
+                  {{ isConnectedToGoogleCalendar ? '- connecté' : '' }}
+                </em>
+              </span>
             </div>
-            <button
-              (click)="signIn()" 
-              class="docnjjdl"
-            >
-            Connexion
+            <button 
+              id="authorize_button" 
+              (click)="handleAuthClick()" 
+              class="docnjjdl" 
+              *ngIf="!isConnectedToGoogleCalendar" 
+              [disabled]="isLoadingAccToken">
+              Connexion
+            </button>
+            
+            <button 
+              id="logout_button" 
+              (click)="handleLogout()" 
+              class="docnjjdl" 
+              *ngIf="isConnectedToGoogleCalendar" 
+              [disabled]="isLoadingAccToken">
+              Déconnexion
             </button>
           </div>
-
         </div>
         
         
         
+       
+        
+        
+        <div class="sfodshdgf2"></div>
+        
+        <button (click)="addTestEventToGoogleCalendar()">
+          Ajouter un événement test
+        </button>
+        
           <div class="sfodshdgf2"></div>
-      
+          
         <h6>
           Trier par statut
         </h6>
@@ -167,7 +186,7 @@
         N° Téléphone Client : 
       </strong>
       <span>
-        {{selectedEvent?.extendedProps?.ClientTelephone ? selectedEvent.extendedProps.ClientTelephone1 : '---'}}
+        {{ selectedEvent?.extendedProps?.ClientTelephone1 ? selectedEvent?.extendedProps?.ClientTelephone1 : '---' }}
       </span>
     </div>
 

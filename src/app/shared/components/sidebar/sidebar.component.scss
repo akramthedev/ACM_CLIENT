@@ -3,7 +3,7 @@
   height: 100vh;
   background: #ffffff;
   transition: width 0.5s ease;
-  padding: 20px;
+  padding: 20px 14px !important;
   position: fixed;
   left: 0;
   top: 0;
@@ -16,7 +16,7 @@
   
 
   .logo {
-    font-size: 22px;
+    font-size: 1.7rem !important;
     font-weight: bold;
     color: #7366ff;
     text-align: left;
@@ -33,17 +33,14 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      font-size: 17px;
+      font-size: 15px !important;
       color: #4a4a4a;
       transition: all 0.3s ease;
       border-radius: 8px;
       font-weight: 500;
       position: relative;
+      margin-bottom: 3px !important;
 
-      .icon {
-        margin-right: 12px;
-        font-size: 18px;
-      }
 
       &:hover {
         background: #dad6ff;
@@ -78,7 +75,7 @@
 
 .sidebar h2{
   color: #7366ff !important;
-  font-size: 1.777rem !important;
+  font-size: 1.7rem !important;
   font-weight: bold !important;
   cursor: pointer !important;
   display: flex;

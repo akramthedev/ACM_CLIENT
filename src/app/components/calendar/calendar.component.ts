@@ -9,14 +9,19 @@ import { environment } from "src/environments/environment";
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { Title } from '@angular/platform-browser';
 import { GoogleAuthService  } from "../../services/google-auth.service";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { keycloakUser } from "src/app/shared/model/models.model";
+import { BehaviorSubject } from 'rxjs';
+
+declare var google: any;
+declare var gapi: any;
+
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
-
-
 
 
 export class CalendarComponent implements OnInit {
@@ -26,9 +31,34 @@ export class CalendarComponent implements OnInit {
   selectedEvent: any = null; 
   showPopup: boolean = false;  
   isLoading: boolean = true;
+  isLoadingAccToken:boolean = false;
   isUpdating: boolean = false;
   isDeleteTask: boolean = false;
   showCompletedTasks: boolean = false;
+  isConnectedToGoogleCalendar: boolean = false;
+
+
+  dataFetchedAccToken : any = null; 
+
+
+  CLIENT_ID = '267508651605-2vqqep29h97uef9tt7ahis82dskjsm1r.apps.googleusercontent.com';
+  API_KEY = 'AIzaSyBhI34z9rSK7S-rfmngJ1nmb48zfb5nUz8';
+  DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+  SCOPES = 'https://www.googleapis.com/auth/calendar';
+
+
+
+
+  ClientIdOfCloack: any = null;
+  EmailKeyCloack: any = null;
+  ClientIdOfGoogle: any = null;
+  AccessTokenGoogle: any = null;
+
+
+  tokenClient: any;
+  gapiInited = false;
+  gisInited = false;
+  events: string = '';
 
   filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
 
@@ -36,11 +66,24 @@ export class CalendarComponent implements OnInit {
   allTasks: { id: string; nom: string }[] = [];    // Unique task types
   originalEvents: any[] = [];
   user: any = null;
+  userCurrent: keycloakUser = null;
+
+  isNullValue: boolean = true;
+
+  private isNullValueSubject = new BehaviorSubject<boolean>(this.isNullValue);
+  
 
 
-
-  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient,private googleAuthService: GoogleAuthService) {
+  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient,private googleAuthService: GoogleAuthService, private authService: AuthService) {
     this.title.setTitle("Plan de Tâches | ACM");
+    
+
+    this.authService.GetCurrentUser().then((userXX: any) => {
+      this.userCurrent = userXX; 
+      this.updateIsNullValue(false);
+    });
+
+    
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
@@ -59,33 +102,395 @@ export class CalendarComponent implements OnInit {
       },
       events: () => this.getFilteredEvents()
     };
-  }
 
-  ngOnInit(): void {
-
-    
-    this.fetchTasks();
-    this.user = this.googleAuthService.getUser();
 
   }
 
+    ngOnInit(): void {
+        this.fetchTasks();
+        this.loadGoogleApis();
+        this.isNullValueSubject.subscribe((value) => {
+            this.isNullValue = value;
+            this.fetchAccessToken();
+        });
+    }
+
+    updateIsNullValue(newValue: boolean) {
+        this.isNullValueSubject.next(newValue);
+    }
 
 
 
-  signIn(): void {
-    // Ici vous pouvez utiliser google.accounts.id.prompt() ou appeler la méthode d'initialisation
-    this.googleAuthService.loadGisScript(); // Cela va initialiser et déclencher One Tap
 
-    // Une fois l'utilisateur connecté, mettez à jour l'utilisateur dans le composant
-    setTimeout(() => {
-      this.user = this.googleAuthService.getUser(); // Récupérez l'utilisateur
-      console.log('Utilisateur connecté:', this.user);
-    }, 1000); // Attendre un moment pour s'assurer que l'utilisateur soit authentifié
+  loadGoogleApis(): void {
+
+    const gapiScript = document.createElement('script');
+    gapiScript.src = 'https://apis.google.com/js/api.js';
+    gapiScript.async = true;
+    gapiScript.defer = true;
+    gapiScript.onload = () => this.gapiLoaded();
+    document.body.appendChild(gapiScript);
+
+    const gisScript = document.createElement('script');
+    gisScript.src = 'https://accounts.google.com/gsi/client';
+    gisScript.async = true;
+    gisScript.defer = true;
+    gisScript.onload = () => this.gisLoaded();
+    document.body.appendChild(gisScript);
   }
+
+  gapiLoaded(): void {
+    gapi.load('client', async () => {
+      await gapi.client.init({
+        apiKey: this.API_KEY,
+        discoveryDocs: [this.DISCOVERY_DOC],
+      });
+      this.gapiInited = true;
+      this.maybeEnableButtons();
+    });
+  }
+
+
+
+  gisLoaded(): void {
+    this.tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: this.CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
+      callback: (resp: any) => {
+        this.AccessTokenGoogle = resp.access_token;
+        this.handleAuthResponse(resp)
+      },
+    });
+    this.gisInited = true;
+    this.maybeEnableButtons();
+  }
+
+  maybeEnableButtons(): void {
+    if (this.gapiInited && this.gisInited) {
+      document.getElementById('authorize_button')!.style.visibility = 'visible';
+    }
+  }
+
+
+
+  async addEventToGoogleCalendar(event: any) {
+    try {
+      const response = await gapi.client.calendar.events.insert({
+        calendarId: 'primary',
+        resource: {
+          summary: event.title, 
+          start: { dateTime: event.start },
+          end: { dateTime: event.end },
+        },
+      });
+      console.log('Événement ajouté :', response);
+    } catch (error) {
+      console.error('Erreur lors de l’ajout de l’événement :', error);
+    }
+  }
+  
+
+
+  
+
+
 
 
 
   
+
+  handleAuthClick(): void {
+    if (!this.tokenClient) return;
+  
+    this.isLoading = true;
+    this.tokenClient.requestAccessToken({
+      prompt: 'consent',
+      callback: (response: any) => {
+        // Check if there's an error in the response
+        if (response.error) {
+          console.error('Google authentication error:', response.error);
+          this.isLoading = false;
+          return;
+        }
+        else{
+          console.warn(response);
+          
+        }
+      }
+    });
+
+    this.ClientIdOfGoogle = this.tokenClient.s.client_id;
+  
+    
+    // Make sure to call this only after finishing the request
+    this.isLoading = false;
+  }
+  
+  
+
+
+
+
+  
+
+
+
+
+
+  handleSignoutClick(): void {
+    const token = gapi.client.getToken();
+    if (token !== null) {
+      google.accounts.oauth2.revoke(token.access_token);
+      gapi.client.setToken(null);
+      this.events = '';
+    }
+  }
+
+ 
+
+
+
+  
+  async handleAuthResponse(resp: any): Promise<void> {
+
+    if (resp.error) {
+      console.error(resp);
+      this.isConnectedToGoogleCalendar = false;
+      return;
+    }
+
+
+    this.AccessTokenGoogle = resp.access_token;
+    localStorage.setItem('google_token', resp.access_token);
+    const expiresIn = resp.expires_in;  
+    const expirationTime = Date.now() + expiresIn * 1000;
+    localStorage.setItem('google_token_expiration', expirationTime.toString());
+    this.isConnectedToGoogleCalendar = true;
+
+    console.warn("--------------------------------");
+    console.warn(this.userCurrent.id);
+    console.warn(this.userCurrent.email);
+    console.warn(this.ClientIdOfGoogle);
+    console.warn(this.AccessTokenGoogle);
+    console.warn("--------------------------------");
+
+    const authButton = document.getElementById('authorize_button');
+    
+    if (authButton) {
+      authButton.innerText = '';
+      authButton.style.color = 'white';
+      authButton.style.background = 'white';
+      authButton.style.pointerEvents = 'none';
+      authButton.style.cursor = 'default';
+    }
+
+
+
+    const requestBody = {
+      ClientIdOfCloack : this.userCurrent.id, 
+      EmailKeyCloack : this.userCurrent.email, 
+      AccessTokenGoogle : this.AccessTokenGoogle, 
+      ClientIdOfGoogle : this.ClientIdOfGoogle
+    };
+  
+    console.warn("Body Of Request : ");
+    console.warn(requestBody);
+    this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
+      .subscribe({
+        next: (res) => {
+          console.log('Account created successfully:');
+          alert('La connexion avec Google Calendar est bien validée.');
+          console.log(res);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error creating account:', err);
+          alert("La connexion avec Google Calendar a échoué.");
+          this.isLoading = false;
+        }
+      });
+  
+ 
+  }
+
+  
+ 
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+  checkTokenExpiration(): boolean {
+    const expirationTime = localStorage.getItem('google_token_expiration');
+    
+    if (expirationTime) {
+      const currentTime = Date.now();
+      const expiryDate = parseInt(expirationTime);
+
+      if (currentTime >= expiryDate) {
+        console.log('Token expiré, veuillez ré-authentifier.');
+        this.refreshToken();  // Rafraîchir le token si nécessaire
+        this.isConnectedToGoogleCalendar = false;
+        return false;
+      }
+    } else {
+      console.log('Aucun token trouvé, veuillez vous connecter.');
+      this.isConnectedToGoogleCalendar = false;
+      return false;
+    }
+    return true;
+  }
+
+
+
+
+  refreshToken(): void {
+    const refreshTokenX = localStorage.getItem('google_refresh_token');   
+  
+    if (!refreshTokenX) {
+      console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
+      alert("Veuillez vous reconnecter avec Google Calendar.");
+      return;
+    }
+  
+    const url = 'https://oauth2.googleapis.com/token';
+    const data = new URLSearchParams();
+    data.append('client_id', this.ClientIdOfGoogle);  
+    data.append('client_secret', this.AccessTokenGoogle);   
+    data.append('refresh_token', refreshTokenX);  
+    data.append('grant_type', 'refresh_token');  
+  
+    fetch(url, { method: 'POST', body: data })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.access_token) {
+          console.log('Token rafraîchi avec succès!');
+  
+          // Mettre à jour le token et la date d'expiration
+          const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
+          localStorage.setItem('google_token', data.access_token);
+          localStorage.setItem('google_token_expiration', newExpirationTime.toString());
+  
+          // Mettre à jour le refresh token si disponible
+          if (data.refresh_token) {
+            localStorage.setItem('google_refresh_token', data.refresh_token);
+          }
+          this.isConnectedToGoogleCalendar = true;
+
+        } else {
+          console.log('Impossible de rafraîchir le token:', data);
+          this.isConnectedToGoogleCalendar = false;
+        }
+      })
+      .catch((error) => {
+        console.error('Erreur lors du rafraîchissement du token:', error);
+        this.isConnectedToGoogleCalendar = false;
+      });
+  }
+  
+  
+
+
+
+
+
+
+  
+  
+
+
+
+  fetchAccessToken(): void {
+    if (!this.isNullValue) {
+      this.isLoadingAccToken = true;
+      const tokenInUppercase = this.userCurrent.id.toUpperCase();
+  
+      this.http.get(`${environment.url}/GetAccessTokenGoogleCalendar?ClientIdOfCloack=${tokenInUppercase}`).subscribe({
+        next: (response: any) => {
+          // Si le token est bien récupéré
+          if (response && response[0]) {
+            console.warn('Fetched Access Token:', response[0]);
+  
+            // Mettre à jour le token dans localStorage
+            localStorage.setItem('google_token', response[0]);
+            const expirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
+            localStorage.setItem('google_token_expiration', expirationTime.toString());
+            this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
+            this.isLoadingAccToken = false;
+          } else {
+            console.error('Erreur lors de la récupération du token');
+            this.isLoadingAccToken = false;
+          }
+        },
+        error: (error) => {
+          console.error('Erreur fetching access token:', error);
+          this.isLoadingAccToken = false;
+        },
+        complete: () => {
+          console.log('Token fetch complete');
+        }
+      });
+    } else {
+      console.warn("Utilisateur non authentifié, récupération du token impossible");
+    }
+  }
+
+  
+
+
+
+
+ 
+  handleLogout(): void {
+    localStorage.removeItem('google_token');
+    localStorage.removeItem('google_token_expiration');
+    localStorage.removeItem('google_refresh_token');
+  
+    this.isConnectedToGoogleCalendar = false;
+    this.removeTokenFromDatabase();
+  }
+  
+
+
+
+
+  removeTokenFromDatabase(): void {
+
+    let XXX = this.userCurrent.id.toUpperCase();
+
+    const body = {
+      ClientIdOfCloack: XXX, 
+    };
+
+  
+    this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
+      next: (response) => {
+        console.log('Token supprimé avec succès de la base de données', response);
+        alert('Vous avez été déconnecté de Google Calendar.')
+
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression du token', error);
+        alert('Une erreur est survenue lors de votre déconnexion.')
+      }
+    });
+  }
+  
+
+
+
+
+
+
+
 
   fetchTasks(): void {
     this.isLoading = true;
@@ -180,7 +585,6 @@ export class CalendarComponent implements OnInit {
         ClientId = ClientId[0]; // Take the first value
       }
   
-      console.log("🟢 Normalized ClientId:", ClientId);
   
       // ✅ Ensure unique clients
       if (ClientId && ClientNom && ClientPrenom && !uniqueClients.has(ClientId)) {
@@ -363,6 +767,19 @@ export class CalendarComponent implements OnInit {
     return date.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
   }
 
+
+
+  addTestEventToGoogleCalendar() {
+    const event = {
+      title: 'Nouvel Événement',
+      start: new Date().toISOString(),
+      end: new Date(Date.now() + 3600000).toISOString(),
+    };
+    this.addEventToGoogleCalendar(event);
+  }
+
+  
+  
 
   getEventPrefix(description: string | undefined): string {
     const eventMap: { [key: string]: string } = {
