@@ -1,7 +1,89 @@
- 
+
+<div
+  [ngClass]="{ 'visible': showPopUpDateSelection }"
+  class="popup-overlay"
+  (click)="FermerPopUpSelectDate()"
+>
+  <div
+    class="popup-modal popup-modal2"
+    (click)="preventClose($event)"
+    [ngClass]="{ 'visible': showPopUpDateSelection }"
+  >
+  <h3 style="margin-bottom: 30px;">
+    Séléctionner une date approximative
+  </h3>
+  <p>
+    Cette date marquera le deadline pour la soumission des documents.
+  </p>
+
+  <input 
+    type="date" 
+    [(ngModel)]="selectedDate" 
+    (change)="selectDateCLicked($event)" 
+    style="
+      width: 100%; 
+      padding: 10px; 
+      font-size: 16px; 
+      border: 1px solid #ccc; 
+      border-radius: 5px;"
+  />
+
+  <br>
+  <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <button
+        (click)="FermerPopUpSelectDate()"
+        style="
+          color:#4538d4;
+          background-color: #f1efff;
+          border: 1px solid #d0c9ff;
+          padding: 8px 16px;
+          width: 30%;
+          font-weight: 500;
+          border: 1px solid transparent !important;
+          border-radius: 7px;
+          cursor: pointer;
+        "
+      >
+        Fermer
+      </button>
+  
+      <button
+        (click)="SauvegarderEndDate()"
+        style="
+          background: #7366fe;
+          color: white;
+          width: 67%;
+          font-weight: 500;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 7px;
+          cursor: pointer;
+        "
+      >
+        Sauvegarder la date
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
 <div class="loading-overlay" [class.show]="isLoading1 || isLoading2 || isLoading3 || isLoading4 || isLoading5 || isLoading6">
   <div class="loader"></div>
 </div>
+
 
 
 <ng-template #addClient let-modal>
@@ -405,8 +487,27 @@
           </div>
         </div>
         <!-- #endregion Step 3 -->
+
+
+
+
+
         <!-- #region Step 4 -->
         <div *ngSwitchCase="4" class="row scrollable-block">
+          
+          <div class="josdofuhuooooo">
+            <button (click)="OpenpopUpOfTheDateSelector()" >
+              Choisir une date approximative
+            </button>
+          </div>
+          <div class="josdofuhuooooo josdofuhuooooo2">
+            <span>
+              {{ isDateRegistered ? 'Date sélectionnée : ' + selectedDate : 'Aucune date sélectionnée' }}
+            </span>
+            
+          </div>
+
+
           <div class="card-body default-accordion">
             <div ngbAccordion *ngIf="Prestations.length > 0">
               <!-- [collapsed]="false" -->
@@ -414,7 +515,7 @@
                 <h3 ngbAccordionHeader>
                   <button ngbAccordionButton class="bg-primary text-white">
                     <input class="checkbox_animated" type="checkbox" (click)="$event.stopPropagation()" [checked]="prestationStates[prestation.PrestationId]" (change)="toggleAllTaches(prestation.PrestationId, $event.target.checked)" />
-                    {{ prestation.Designation }}
+                    {{ prestation.Designation }}AA
                   </button>
                 </h3>
                 <div ngbAccordionCollapse>

@@ -18,6 +18,9 @@ import { HttpClient } from '@angular/common/http';
 
 
 
+
+
+
 declare var google: any;
 declare var gapi: any;
 
@@ -25,7 +28,7 @@ declare var gapi: any;
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 54 * 24 * 60 * 60 * 1000); // deadline
+  const futureDate = new Date(now.getTime() + 20 * 24 * 60 * 60 * 1000); // deadline
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -58,6 +61,9 @@ function getCurrentDateAndTime() {
   templateUrl: "./add-client.component.html",
   styleUrls: ["./add-client.component.scss"],
 })
+
+
+
 export class AddClientComponent implements OnInit, OnDestroy {
   @ViewChild("addClient", { static: false }) AddClient: TemplateRef<any>;
   @Output("btnSaveEmitter") btnSaveEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -65,7 +71,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
   showPrestations = false;
   selectedMission: string | null = null;
 
-
+  selectedDate: Date;
+  finalSavedDate: string;
+  isDateRegistered: Boolean = false;
 
   isLoading1: Boolean = false;
   isLoading2: Boolean = false;
@@ -75,7 +83,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   isLoading6: Boolean = false;
 
   isErrorGoogleCalendarSync: Boolean = false;
-
+  showPopUpDateSelection: Boolean = false;
   
   CLIENT_ID = '267508651605-2vqqep29h97uef9tt7ahis82dskjsm1r.apps.googleusercontent.com';
   API_KEY = 'AIzaSyBhI34z9rSK7S-rfmngJ1nmb48zfb5nUz8';
@@ -206,10 +214,76 @@ export class AddClientComponent implements OnInit, OnDestroy {
       const clickedInside = this.eRef.nativeElement.contains(event.target);
       if (!clickedInside && this.showPopUpNotify) {
         this.showPopUpNotify = false;
-    }
+        this.showPopUpDateSelection = false;
+      }
   }
   
   
+
+
+  selectDateCLicked(event: any) {
+    this.selectedDate = event.target.value;
+  }
+
+
+
+  
+
+
+
+  SauvegarderEndDate(): void {
+    if (!this.selectedDate) {
+      console.warn('No date selected.');
+      return;
+    }
+  
+    const dateObj = new Date(this.selectedDate);
+    
+    dateObj.setHours(8);
+    dateObj.setMinutes(45);
+    dateObj.setSeconds(0);
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');  
+    const day = String(dateObj.getDate()).padStart(2, '0');  
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+    const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+  
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn('Formatted Selected Date:', formattedDate);
+  
+    this.finalSavedDate = formattedDate;
+    this.isDateRegistered = true;
+    this.showPopUpDateSelection = false;
+
+  }
+
+  
+
+
+
+
+  FermerPopUpSelectDate():void{
+    this.showPopUpDateSelection = false;
+  }
+
+
+  OpenpopUpOfTheDateSelector():void{
+    this.showPopUpDateSelection = true;
+  }
+
+
   preventClose(event: MouseEvent): void {
     event.stopPropagation();  
   }
@@ -1022,7 +1096,16 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
     let desc = ``;
     let title = `${this.clientData.Nom} ${this.clientData.Prenom}`;
+    let dateENDoFxxx = "";
     
+    if(this.isDateRegistered === true){
+      dateENDoFxxx = this.finalSavedDate;
+    }
+    else{
+      dateENDoFxxx = getFutureDateTime()
+    }
+
+
     this.newClientTache = {
       ClientTacheId: uuidv4(),
       ClientMissionPrestationId: clientMissionPrestation.ClientMissionPrestationId,
@@ -1031,7 +1114,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Intitule : title ,
       Commentaire : desc ,
       Start_date : getCurrentDateAndTime(),
-      End_date : getFutureDateTime(), 
+      End_date : dateENDoFxxx, 
       Color : '#7265fd',
       IsReminder : false, 
       IsDone : false
@@ -1191,6 +1274,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.toastr.success("Client ajouté avec succès ! ");
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
+          this.isDateRegistered = false;
+          this.finalSavedDate = "";
           this.resetForm();
           setTimeout(() => {
             this.isLoading6 = false;

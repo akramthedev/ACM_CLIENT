@@ -8,11 +8,12 @@ import { AddCategoryComponent } from './modal/add-category/add-category.componen
 import { PrintContactComponent } from './modal/print-contact/print-contact.component';
 import {DetailclientComponent} from './detailclient/detailclient.component'
 
+
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    ClientsRoutingModule
+    ClientsRoutingModule,
   ],
   declarations: [ClientsComponent, AddClientComponent, AddCategoryComponent, PrintContactComponent,DetailclientComponent]
 })
