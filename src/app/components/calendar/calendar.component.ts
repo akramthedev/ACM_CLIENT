@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, ElementRef,ViewChild } from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
+import { ToastrService } from "ngx-toastr";
 import timeGridPlugin from '@fullcalendar/timegrid'; 
 import interactionPlugin from '@fullcalendar/interaction'; 
 import frLocale from '@fullcalendar/core/locales/fr'; 
@@ -76,7 +77,7 @@ export class CalendarComponent implements OnInit {
   private isNullValueSubject = new BehaviorSubject<boolean>(this.isNullValue);
 
 
-  constructor(private title: Title,private eRef: ElementRef, private http: HttpClient, private authService: AuthService) {
+  constructor(private title: Title,private eRef: ElementRef, private toastr: ToastrService, private http: HttpClient, private authService: AuthService) {
     this.title.setTitle("Planigramme | ACM");
     
 
@@ -238,7 +239,6 @@ export class CalendarComponent implements OnInit {
         if (response.error) {
           console.error('Google authentication error:', response.error);
           this.isLoading = false;
-          alert('Une erreur est survenue lors de la synchronisation avec Google Calendar.')
           return;
         }
         else{
@@ -267,6 +267,8 @@ export class CalendarComponent implements OnInit {
 
 
   
+  
+
   async handleAuthResponse(resp: any): Promise<void> {
 
     if (resp.error) {
@@ -279,16 +281,17 @@ export class CalendarComponent implements OnInit {
     this.AccessTokenGoogle = resp.access_token;
     localStorage.setItem('google_token', resp.access_token);
     const expiresIn = resp.expires_in;  
+   
     const expirationTime = Date.now() + expiresIn * 1000;
     localStorage.setItem('google_token_expiration', expirationTime.toString());
     this.isConnectedToGoogleCalendar = true;
 
-    console.warn("--------------------------------");
-    console.warn(this.userCurrent.id);
-    console.warn(this.userCurrent.email);
-    console.warn(this.ClientIdOfGoogle);
-    console.warn(this.AccessTokenGoogle);
-    console.warn("--------------------------------");
+    // console.warn("--------------------------------");
+    // console.warn(this.userCurrent.id);
+    // console.warn(this.userCurrent.email);
+    // console.warn(this.ClientIdOfGoogle);
+    // console.warn(this.AccessTokenGoogle);
+    // console.warn("--------------------------------");
 
     const authButton = document.getElementById('authorize_button');
     
@@ -314,14 +317,13 @@ export class CalendarComponent implements OnInit {
     this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
       .subscribe({
         next: (res) => {
-          console.log('Account created successfully:');
-          alert('✅ Connexion à Google Calendar réussie.');
+          this.toastr.success("Connexion à Google Calendar réussie.");
           window.location.reload();
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error creating account:', err);
-          alert("❌ Connexion à Google Calendar échoué.");
+          this.toastr.error("Connexion à Google Calendar échoué.");
           this.isLoading = false;
         }
       });  
@@ -338,8 +340,6 @@ export class CalendarComponent implements OnInit {
 
 
 
-
-
   checkTokenExpiration(): boolean {
     const expirationTime = localStorage.getItem('google_token_expiration');
     
@@ -349,7 +349,7 @@ export class CalendarComponent implements OnInit {
 
       if (currentTime >= expiryDate) {
         console.log('Token expiré, veuillez ré-authentifier.');
-        this.refreshToken();  // Rafraîchir le token si nécessaire
+        this.refreshToken();  
         this.isConnectedToGoogleCalendar = false;
         return false;
       }
@@ -363,13 +363,12 @@ export class CalendarComponent implements OnInit {
 
 
 
-
   refreshToken(): void {
     const refreshTokenX = localStorage.getItem('google_refresh_token');   
   
     if (!refreshTokenX) {
-      console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
-      alert("Veuillez vous reconnecter avec Google Calendar.");
+      this.handleLogout();
+      this.toastr.error("Veuillez vous reconnecter, votre session a expiré.");
       return;
     }
   
@@ -383,15 +382,51 @@ export class CalendarComponent implements OnInit {
     fetch(url, { method: 'POST', body: data })
       .then((response) => response.json())
       .then((data) => {
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
         if (data.access_token) {
-
-
-          
+          console.log('Token rafraîchi avec succès!');
+  
           // Mettre à jour le token et la date d'expiration
           const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
           localStorage.setItem('google_token', data.access_token);
           localStorage.setItem('google_token_expiration', newExpirationTime.toString());
   
+          alert(data.refresh_token.toString());
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
           // Mettre à jour le refresh token si disponible
           if (data.refresh_token) {
             localStorage.setItem('google_refresh_token', data.refresh_token);
@@ -400,25 +435,24 @@ export class CalendarComponent implements OnInit {
 
         } else {
           console.log('Impossible de rafraîchir le token:', data);
+          this.handleLogout();
+          this.toastr.error("Veuillez vous reconnecter à Google Calendar.");
           this.isConnectedToGoogleCalendar = false;
         }
       })
       .catch((error) => {
         console.error('Erreur lors du rafraîchissement du token:', error);
+        this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
         this.isConnectedToGoogleCalendar = false;
       });
   }
   
-  
-
-
 
 
 
 
   
   
-
 
 
   fetchAccessToken(): void {
@@ -433,7 +467,7 @@ export class CalendarComponent implements OnInit {
             console.warn('Fetched Access Token:', response[0]);
   
             localStorage.setItem('google_token', response[0].AccessTokenGoogle);
-            const expirationTime = Date.now() + (58 * 60 * 1000); 
+            const expirationTime = Date.now() + (58 * 60 * 1000);  
             localStorage.setItem('google_token_expiration', expirationTime.toString());
             this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
             this.isLoadingAccToken = false;
@@ -445,6 +479,7 @@ export class CalendarComponent implements OnInit {
         error: (error) => {
           console.error('Erreur fetching access token:', error);
           this.isLoadingAccToken = false;
+          this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
         },
         complete: () => {
           console.log('Token fetch complete');
@@ -455,11 +490,13 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  
 
 
 
 
+
+
+ 
  
   handleLogout(): void {
     this.isLoadingAccToken = true
@@ -470,7 +507,9 @@ export class CalendarComponent implements OnInit {
     this.isConnectedToGoogleCalendar = false;
     this.removeTokenFromDatabase();
     this.isLoadingAccToken = false;
+    this.toastr.success("Google Calendar n'est plus connecté à votre compte.");
   }
+  
   
 
 
@@ -488,7 +527,6 @@ export class CalendarComponent implements OnInit {
     this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
       next: (response) => {
         console.log('Token supprimé avec succès de la base de données', response);
-        alert('Vous avez été déconnecté de Google Calendar.');
         window.location.reload();
       },
       error: (error) => {

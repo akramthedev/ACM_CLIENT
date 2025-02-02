@@ -1332,6 +1332,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       console.log("Done");
     } catch (error) {
       console.log("Not Done");
+      this.toastr.error("Erreur lors de l’ajout de l’événement à Google Calendar.");
       this.isErrorGoogleCalendarSync = true;      
       console.error('Erreur lors de l’ajout de l’événement :', error);
     }

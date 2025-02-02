@@ -6,7 +6,7 @@ export const content: Routes = [
   { path: "", loadChildren: () => import("../../components/calendar/calendar-routing.module").then((m) => m.CalendarModule), },
   { path: "clients", loadChildren: () => import("../../components/apps/clients/clients.module").then((m) => m.ClientsModule), },
   { path: "taches", loadChildren: () => import("../../components/apps/taches/taches.module").then((m) => m.TachesModule), canActivate: [AuthGuard], },
-
+  { path: "settings", loadChildren: () => import("../../components/settings/settings-routing.module").then((m) => m.SettingsModule), canActivate: [AuthGuard], },
   { path: "dashboard", loadChildren: () => import("../../components/dashboard/dashboard.module").then((m) => m.DashboardModule), },
   { path: "widgets", loadChildren: () => import("../../components/widgets/widgets.module").then((m) => m.WidgetsModule), },
   { path: "ui-kits", loadChildren: () => import("../../components/ui-kits/ui-kits.module").then((m) => m.UiKitsModule), },

@@ -16,6 +16,10 @@ import { AuthService } from "src/app/shared/services/auth.service";
 import { keycloakUser } from "src/app/shared/model/models.model";
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
 
 declare var google: any;
 declare var gapi: any;
@@ -238,7 +242,6 @@ export class ClientsComponent implements OnInit {
         if (response.error) {
           console.error('Google authentication error:', response.error);
           this.isLoading = false;
-          alert('Une erreur est survenue lors de la synchronisation avec Google Calendar.')
           return;
         }
         else{
@@ -261,6 +264,113 @@ export class ClientsComponent implements OnInit {
       this.events = '';
     }
   }
+
+
+
+
+
+
+  AreClientsEmpty(){
+    if(this.Clients.length === 0 || this.Clients === null || this.Clients === undefined){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
+
+  
+  ImprimerListeClients(): void {
+    if (this.AreClientsEmpty()) {
+      return;
+    }
+  
+    console.warn(this.Clients);
+    const doc = new jsPDF('landscape');  // Set to landscape mode
+    doc.setFontSize(17);
+    doc.text('Liste des clients', doc.internal.pageSize.width / 2, 10, { align: 'center' });
+  
+    let ROWS = [];
+  
+    // Reduced columns to make the layout more compact
+    const columns = [
+      'Prénom',
+      'Nom',
+      'Téléphone',
+      'Email',
+      'Adresse', 
+      'Situation', 
+      'Age', 
+    ];
+  
+
+    for (let i = 0; i < this.Clients.length; i++) {
+      const defaultValues = {
+        Prenom: "---",
+        Nom: "---",
+        Telephone1: "---",
+        Email1: "---",
+        Adresse: "---",
+        SituationFamiliale: "---",
+        DateNaissance: "----",
+        // DateResidence: "---",
+      };
+    
+      let row = [];
+      for (const key in defaultValues) {
+        // If the key is DateNaissance, calculate the age
+        if (key === 'DateNaissance') {
+          const age = this.calculateAge(this.Clients[i][key]);
+          row.push(age);  // Use the calculated age instead of the birth date
+        } 
+        // if(key === "DateResidence"){
+        //   const dateX = this.formatDate(this.Clients[i][key]);
+        //   row.push(dateX);
+        // }
+        else {
+          row.push(this.Clients[i][key] || defaultValues[key]);
+        }
+      }
+      ROWS.push(row);
+    }
+  
+    // Personnalisation de la table avec autoTable
+    autoTable(doc, {
+      head: [columns],
+      body: ROWS,
+      startY: 20,
+      theme: 'grid', // Table style with borders
+      headStyles: {
+        fillColor: [138, 43, 226], // Header color
+        textColor: [255, 255, 255], // Text color in white
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      bodyStyles: {
+        fontSize: 10,
+        halign: 'center', // Center text in cells
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240], // Alternate row color
+      },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 30 },
+        2: { cellWidth: 33 },
+        3: { cellWidth: 55 },
+        4: { cellWidth: 72 },
+      },
+      margin: { top: 25 }, // Top margin
+    });
+  
+    // Save the PDF
+    doc.save('liste-clients.pdf');
+  }
+  
+
+
 
 
 
@@ -313,14 +423,13 @@ export class ClientsComponent implements OnInit {
     this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
       .subscribe({
         next: (res) => {
-          console.log('Account created successfully:');
-          alert('✅ Connexion à Google Calendar réussie.');
+          this.toastr.success("Connexion à Google Calendar réussie.");
           window.location.reload();
           this.isLoading = false;
         },
         error: (err) => {
           console.error('Error creating account:', err);
-          alert("❌ Connexion à Google Calendar échoué.");
+          this.toastr.error("Connexion à Google Calendar échoué.");
           this.isLoading = false;
         }
       });  
@@ -359,8 +468,8 @@ export class ClientsComponent implements OnInit {
     const refreshTokenX = localStorage.getItem('google_refresh_token');   
   
     if (!refreshTokenX) {
-      console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
-      alert("Veuillez vous reconnecter avec Google Calendar.");
+      this.handleLogout();
+      this.toastr.error("Veuillez vous reconnecter, votre session a expiré.");
       return;
     }
   
@@ -374,6 +483,21 @@ export class ClientsComponent implements OnInit {
     fetch(url, { method: 'POST', body: data })
       .then((response) => response.json())
       .then((data) => {
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
         if (data.access_token) {
           console.log('Token rafraîchi avec succès!');
   
@@ -382,6 +506,28 @@ export class ClientsComponent implements OnInit {
           localStorage.setItem('google_token', data.access_token);
           localStorage.setItem('google_token_expiration', newExpirationTime.toString());
   
+          alert(data.refresh_token.toString());
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
+          console.warn(data)
           // Mettre à jour le refresh token si disponible
           if (data.refresh_token) {
             localStorage.setItem('google_refresh_token', data.refresh_token);
@@ -390,11 +536,14 @@ export class ClientsComponent implements OnInit {
 
         } else {
           console.log('Impossible de rafraîchir le token:', data);
+          this.handleLogout();
+          this.toastr.error("Veuillez vous reconnecter à Google Calendar.");
           this.isConnectedToGoogleCalendar = false;
         }
       })
       .catch((error) => {
         console.error('Erreur lors du rafraîchissement du token:', error);
+        this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
         this.isConnectedToGoogleCalendar = false;
       });
   }
@@ -426,6 +575,7 @@ export class ClientsComponent implements OnInit {
         error: (error) => {
           console.error('Erreur fetching access token:', error);
           this.isLoadingAccToken = false;
+          this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
         },
         complete: () => {
           console.log('Token fetch complete');
@@ -451,6 +601,7 @@ export class ClientsComponent implements OnInit {
     this.isConnectedToGoogleCalendar = false;
     this.removeTokenFromDatabase();
     this.isLoadingAccToken = false;
+    this.toastr.success("Google Calendar n'est plus connecté à votre compte.");
   }
   
 
@@ -469,8 +620,6 @@ export class ClientsComponent implements OnInit {
     this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
       next: (response) => {
         console.log('Token supprimé avec succès de la base de données', response);
-        alert('Vous avez été déconnecté de Google Calendar.')
-        window.location.reload();
       },
       error: (error) => {
         console.error('Erreur lors de la suppression du token', error);
@@ -605,8 +754,44 @@ export class ClientsComponent implements OnInit {
   }
 
   
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+  
+    // Ensure the date is valid before formatting
+    if (isNaN(date.getTime())) {
+      return "---"; // Return empty string or a fallback if the date is invalid
+    }
+  
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+  
+    return `${day}/${month}/${year}`;
+  }
+  
+  
 
 
+  calculateAge(dateString) {
+    const birthDate = new Date(dateString);
+    
+    // Check if the date is valid
+    if (!birthDate) {
+      return "---";
+    }
+    
+    const currentDate = new Date();
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+    
+    // Adjust age if the birthday hasn't occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age;
+  }
+  
 
 
   

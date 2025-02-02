@@ -3,6 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Menu, NavService } from '../../services/nav.service';
 import { LayoutService } from '../../services/layout.service';
 import { environment } from 'src/environments/environment';
+import { AuthService } from "src/app/shared/services/auth.service";
+
 
 @Component({
   selector: 'app-sidebar',
@@ -21,7 +23,8 @@ export class SidebarComponent {
   constructor(
     private router: Router,
     public navServices: NavService,
-    public layout: LayoutService
+    public layout: LayoutService,
+    private authService: AuthService
   ) {
     // Subscribe to menu items and handle route changes
     this.navServices.items.subscribe((menuItems) => {
@@ -136,6 +139,11 @@ export class SidebarComponent {
     return this.iconSidebar ? 'sidebar collapsed' : 'sidebar';
   }
   
+
+
+  HandleLogOut():void{
+    this.authService.Logout();
+  }
 
   // Deactivate a menu item and its children
   deactivateMenu(item: Menu) {

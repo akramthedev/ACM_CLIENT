@@ -83,10 +83,10 @@
               <div class="email-app-sidebar left-bookmark">
                 <ul class="nav main-menu contact-options" role="tablist">
                   
-                  <li class="nav-item mt-3">
+                  <li class="nav-item nusdhfsdfsudghudghudghfu">
                     <div class="main-title HElnc">
                       <span>
-                        Nombre total de clients : 
+                        Total des clients : 
                       </span>
                       <span>
                         {{ Clients.length }}
@@ -94,8 +94,12 @@
                     </div>  
                   </li>
 
-                  <li class="nav-item mt-1">
+                  <li class="nav-item mt-1 fsgsdgosjfgnfsg888">
                     <button class="btn btn-primary w-100 fsigbisdhgfsdiufiudsf" type="button" (click)="AddClientButCheckConnectionWithGoogleCalendarFirst()">+ Ajouter un nouveau client</button>
+                  </li>
+
+                  <li class="nav-item mt-1">
+                    <button class="btn btn-primary w-100 fsigbisdhgfsdiufiudsf2" type="button" (click)="ImprimerListeClients()">Télécharger en PDF</button>
                   </li>
 
                   <div class="sfodshdgf2"></div>
@@ -153,7 +157,7 @@
       </div>
       
       <div class="col-xl-9 col-md-12 box-col-9 sfugusghsd">
-            <div class="col-xl-8 xl-50 col-md-7 client-detailsx" *ngIf="CurrentClient != null">
+            <div class="client-detailsx" *ngIf="CurrentClient != null">
               <div class="tab-content" id="v-pills-tabContent" [ngStyle]="{ display: IsEditingClient ? 'none' : '' }">
                 <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
                   <div class="profile-mail">
@@ -196,34 +200,34 @@
                       <h6 class="mb-3 jdsf">Information Générale</h6>
                       <ul>
                         <li>
-                          <span>Nom</span> <span class="font-primary first_name_0">{{ CurrentClient.Nom }}</span>
+                          <span>Nom : </span> <span class="font-primary first_name_0">{{ CurrentClient.Nom }}</span>
                         </li>
                         <li>
-                          <span>Prénom</span> <span class="font-primary last_name_0">{{ CurrentClient.Prenom }}</span>
+                          <span>Prénom : </span> <span class="font-primary last_name_0">{{ CurrentClient.Prenom }}</span>
                         </li>
                         <!-- <li>Gender <span class="font-primary">Male</span></li> -->
                         <li>
-                          <span>Date De Naissance</span> <span class="font-primary">{{ CurrentClient.DateNaissance ? CurrentClient.DateNaissance : "---" }} </span>
+                          <span>Age : </span> <span class="font-primary">{{ CurrentClient.DateNaissance ? calculateAge(CurrentClient.DateNaissance)+' ans' : "---" }} </span>
                         </li>
                         <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
                         <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
                         <li>
-                          <span>Téléphone 1</span>
+                          <span>Téléphone 1 : </span>
                           <span class="font-primary mobile_num_0">
                             {{ CurrentClient.Telephone1 ? formatPhoneNumber(CurrentClient.Telephone1) : "---" }}
                           </span>
                         </li>
                         <li>
-                          <span>Téléphone 2</span>
+                          <span>Téléphone 2 : </span>
                           <span class="font-primary mobile_num_0">
                             {{ CurrentClient.Telephone2 ? formatPhoneNumber(CurrentClient.Telephone2) : "---" }}
                           </span>
                         </li>
                         <li>
-                          <span>Email 1</span> <span class="font-primary email_add_0">{{ CurrentClient.Email1 != null && CurrentClient.Email1 != "" ? CurrentClient.Email1 : "---" }} </span>
+                          <span>Email 1 : </span> <span class="font-primary email_add_0">{{ CurrentClient.Email1 != null && CurrentClient.Email1 != "" ? CurrentClient.Email1 : "---" }} </span>
                         </li>
                         <li>
-                          <span>Email 2</span> <span class="font-primary email_add_0">{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? CurrentClient.Email2 : "---" }} </span>
+                          <span>Email 2 : </span> <span class="font-primary email_add_0">{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? CurrentClient.Email2 : "---" }} </span>
                         </li>
                         <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
                         <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->

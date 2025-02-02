@@ -15,10 +15,10 @@
 
 .client-detailsx{
     position: absolute !important;
-    top:  7px !important; /* Adjust as needed */
-    right: 0.78rem; /* Adjust as needed */
+    top:  0px !important; /* Adjust as needed */
+    right: 1.1rem !important; /* Adjust as needed */
     background-color: transparent !important; /* Optional: For a clear background */
-    z-index: 9;
+    z-index: 1;
     padding: 2rem 1rem;
     border-top-right-radius: 0.43rem;
     height: auto !important;
@@ -111,6 +111,7 @@
 .bsdogbsodgbsdgbodsgousdgobosdggou{
     border-top-right-radius: 0px  !important;
     border-bottom-right-radius: 0px !important;
+    
 }
 
 .sfdowuhuosdghsdughsd{
@@ -365,6 +366,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100% !important;
+    height: 40px !important;
+  }
+
+
+
+  .fsigbisdhgfsdiufiudsf2{
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
     height: 40px !important;
   }
 
@@ -426,11 +439,11 @@
     margin-bottom: 30px !important;
 }
 .sfodshdgf2{
-    height: 30px !important;
+    height: 23px !important;
     width: 90.167% !important;
     margin: 0 auto !important;
     border-bottom: 1px solid #d8d8d8 !important;
-    margin-bottom: 30px !important;
+    margin-bottom: 16px !important;
   }
 
   .nav-item864258268{
@@ -438,20 +451,16 @@
   }
 
 
-  .client-detailsx{
-    width: calc(100% - 230px) !important;
-    padding: 0.7rem 1.67rem;
-}
 
 
-
-
-.sdfihdfushduhsdfohofusd88{
+.container-fluid .sdfihdfushduhsdfohofusd88{
     padding: 0px !important;
-
+    width: calc(100% - 390px) !important;
+    max-width: 390px !important ;
     border-right: 1px solid rgb(229, 229, 229) !important;
-    width: 230px !important;
 }
+
+
 
 .sdfihdfushduhsdfohofusd88 .active{
     border: none !important;
@@ -491,3 +500,79 @@
 .huiuiuo888 input{
     font-size: 14px !important;
 }
+
+
+.fsgsdgosjfgnfsg888{
+    margin-bottom: .5rem;
+}
+
+.container-fluid .col-xl-3 .card-body .fsigbisdhgfsdiufiudsf2{
+    color: #6053e7 !important;
+    background-color: #eeedff !important;
+    transition: .2s all ease-in-out;
+    
+}
+
+
+.container-fluid .col-xl-3 .card-body .fsigbisdhgfsdiufiudsf2:hover{
+    background-color: #dad8ff !important;    
+}
+
+.souuhdsuodsuosuodsguodgsuoe{
+    cursor: not-allowed;
+    pointer-events:none!important;
+}
+
+.container-fluid.nusdhfsdfsudghudghudghfu{
+    margin-top: 0px !important;
+}
+
+
+
+
+.container-fluid .client-detailsx{
+    width: 445px !important;
+    padding: 0.7rem 1.67rem;
+    background-color: white !important;
+    right: 2rem !important
+}
+
+
+
+
+
+@media screen and (min-width: 1700px) {
+    .container-fluid .client-detailsx {
+        width: 540px !important;
+    }
+}
+
+/* Apply width of 666px for screens wider than 1800px */
+@media screen and (min-width: 1800px) {
+    .container-fluid .client-detailsx {
+        width: 666px !important;
+    }
+}
+
+/* Apply width of 777px for screens wider than 1900px */
+@media screen and (min-width: 1900px) {
+    .container-fluid .client-detailsx {
+        width: 666px !important;
+    }
+}
+
+/* Keep width of 777px for screens wider than 2200px */
+@media screen and (min-width: 2200px) {
+    .container-fluid .client-detailsx {
+        width: 666px !important;
+    }
+}
+
+/* Keep width of 666px for screens wider than 2300px and beyond */
+@media screen and (min-width: 2300px) {
+    .container-fluid .client-detailsx {
+        width: 666px !important;
+    }
+}
+
+

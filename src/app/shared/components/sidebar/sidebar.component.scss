@@ -27,10 +27,13 @@
   .menu {
     list-style: none;
     padding: 0;
+    position: relative;
+    height: 100% !important;
 
     li {
-      padding:12px 14px;
+      height: 43px !important;
       cursor: pointer;
+      overflow: hidden !important;
       display: flex;
       align-items: center;
       font-size: 15px !important;
@@ -40,11 +43,11 @@
       font-weight: 500;
       position: relative;
       padding-left: 19px !important;
-      margin-bottom: 2px !important;
+      margin-bottom: 5px !important;
 
 
       &:hover {
-        background: #dad6ff;
+        background: #e8e5ff;
         color: #4a4a4a;
       }
 
@@ -68,7 +71,19 @@
         background: #7366ff;
         color: white;
       }
+
+      .span{
+        overflow-y: hidden !important;
+      }
     }
+
+    .NIiu8668b{
+      position: absolute;
+      bottom: 0rem; 
+      z-index: 10;
+    }
+
+
   }
 }
 
@@ -124,3 +139,13 @@
 .logo.spaced {
   padding-left: 20px; /* Or adjust based on the amount of space you want */
 }
+
+
+.logo img{
+  height: 60px !important;
+  width: auto !important;
+  object-fit: cover !important;
+  z-index: 2;
+}
+
+
