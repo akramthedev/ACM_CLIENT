@@ -57,9 +57,9 @@ full-calendar {
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(3.5px) saturate(200%);
-  -webkit-backdrop-filter: blur(3.5px) saturate(200%);
-  background-color: rgba(17, 25, 40, 0.678);
+  backdrop-filter: blur(5px) saturate(200%);
+  -webkit-backdrop-filter: blur(5px) saturate(200%);
+  background-color: rgba(17, 25, 40, 0.400);
   z-index: 999;
   opacity: 0;
   visibility: hidden;   
@@ -169,15 +169,6 @@ full-calendar {
 }
 
 
-.statut-fin {
-  color: rgb(0, 147, 0) !important;
-  font-weight: bold !important;
-}
-
-.statut-encours {
-  color: #5a4edf !important;
-  font-weight: bold !important;
-}
 
 
 
@@ -243,12 +234,13 @@ full-calendar {
 
 
 .filtrageY h6{
-  color: #969696 !important;
-  font-size: 15px !important;
+  color: #505050 !important;
+  font-size: 17px !important;
+  font-weight: bold !important;
 }
 
 .sfodshdgf{
-  height: 20px !important;
+  height: 24px !important;
   width: 100%;
 }
 .sfodshdgf2{
@@ -263,8 +255,10 @@ full-calendar {
 .filter-item {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 96%;
+  margin: 0 auto !important;
   padding: 0 4px;
+  border-radius: 0.3rem !important;
 }
 
 /* Checkbox container for consistent size */
@@ -320,6 +314,7 @@ full-calendar {
   cursor: pointer;
   height: auto;
   text-align: left;
+  color: #565656 !important;
 }
 
 
@@ -435,7 +430,7 @@ full-calendar .fc-scrollgrid::-webkit-scrollbar-corner {
 
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.88s ease, visibility 0.4s ease;
+  transition: opacity 1.3s ease, visibility  1.3s ease;
 }
 
 .loading-overlay.show {
@@ -532,6 +527,7 @@ input:checked + .slider:before {
 .srfsdsdwg span{
   font-size: 14px !important;
   font-weight: 400;
+  color: #565656 !important;
 }
 
 
@@ -589,10 +585,18 @@ input:checked + .slider:before {
 }
 
 .dni8H9b span em{
-  color: rgb(162, 162, 162);
-  font-style :italic;
+  color: #565656 !important;
+  font-style:normal !important;
 }
 
+
+.nsdofnoqdfnqdof strong, .nsdofnoqdfnqdof span{
+  color: #565656 !important;
+}
+.sdifisdfiushdfiu888 h3{
+  color: #565656 !important;
+  font-weight: bold  !important;
+}
 
 
 
@@ -616,4 +620,28 @@ input:checked + .slider:before {
 
 .calendar-container .filtrageX .filtrageY .FiPer{
   font-size: 20px !important;
+}
+
+
+.filter-item{
+  transition: .2s all ease-in-out !important;
+  width: 96% !important;
+}
+.filter-item:hover{
+  background-color: #e4dfff;
+}
+
+.nsdofnoqdfnqdofnsdofnoqdfnqdof .statut-fin{
+  color: rgb(0, 147, 0) !important;
+  font-weight: bold !important;
+
+}
+.nsdofnoqdfnqdofnsdofnoqdfnqdof .statut-encours{
+  color: #5a4edf !important;
+  font-weight: bold !important;
+
+}
+
+.filter-label666 label{
+  width: 100% !important;
 }

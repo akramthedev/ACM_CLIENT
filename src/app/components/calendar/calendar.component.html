@@ -16,9 +16,6 @@
 <div class="calendar-container">
   <div class="filtrageX">
     <div class="filtrageY">
-      <h4 class="FiPer">
-        Paramétrage
-      </h4>
 
         <div class="sfodshdgf"></div>
 
@@ -99,7 +96,7 @@
             [checked]="filters.persons.includes(person.id)" 
             (change)="updateFilter('persons', person.id, $event.target.checked)" 
           />
-          <div class="filter-label">
+          <div class="filter-label filter-label666">
             <label [for]="'person-' + person.id">
               {{ person.prenom }} {{ person.nom }}
             </label>
@@ -149,12 +146,12 @@
   (click)="closePopup()"
 >
   <div
-    class="popup-modal"
+    class="popup-modal sdifisdfiushdfiu888"
     (click)="preventClose($event)"
     [ngClass]="{ 'visible': showPopup }"
   >
   <h3 style="margin-bottom: 30px;">
-    {{ selectedEvent?.title }}
+    Rappel&nbsp;&nbsp;{{ selectedEvent?.title }}
   </h3>
 
     <div class="nsdofnoqdfnqdof">
@@ -197,10 +194,10 @@
       </span>
     </div>
 
-    <div class="nsdofnoqdfnqdof ">
+    <div class="nsdofnoqdfnqdof  nsdofnoqdfnqdofnsdofnoqdfnqdof ">
       <strong>Statut Tâche : </strong>
       <span [ngClass]="selectedEvent?.extendedProps?.isDone ? 'statut-fin' : 'statut-encours'">
-        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours' }}
+        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours...' }}
       </span>
     </div>
 
@@ -287,9 +284,16 @@
           padding: 8px 16px;
           border-radius: 7px;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         "
       >
-      {{ isUpdating ? 'Mise à jour...' : 'Marquer comme fait' }}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+          <path d="M9 16.2L4.8 12l-1.4 1.4L9 19l12-12-1.4-1.4z" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        &nbsp;
+        {{ isUpdating ? 'Opération en cours...' : 'Marquer comme fait' }}
       </button>
     </div>
   </div>

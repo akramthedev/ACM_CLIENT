@@ -21,6 +21,7 @@
 .media .dofsndgnsdogjjdgjsdgwijsjdp span{
     font-size: 15px !important;
     font-weight: '500' !important;
+    color: #505050 !important;
 }
 
  
@@ -28,4 +29,21 @@
 .media .dofsndgnsdogjjdgjsdgwijsjdp .fa-angle-down{
     font-size: 22px !important;
 
+}
+
+.dofsndgnsdogjjdgjsdgwijsjdp span{
+    font-weight: bold !important;
+    color: #505050 !important;
+
+}
+
+.dofsndgnsdogjjdgjsdgwijsjdp{
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: left !important;
+}
+
+.onhover-show-div{
+    z-index: 999999999999999999999;
 }

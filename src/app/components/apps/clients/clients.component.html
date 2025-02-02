@@ -158,9 +158,14 @@
                 <div class="tab-pane contact-tab-0 tab-content-child fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
                   <div class="profile-mail">
                     <div class="media">
-                      <div class="position-relative d-inline-block">
+                      <div style="position: relative;" class="position-relative d-inline-block">
                         <img class="swduhuwhgohuswghosudgwhusd img-100 img-fluid m-r-20 rounded-circle update_img_0" [src]="CurrentClient.ImgSrc" alt="" />
-                        <i class="fa fa-pencil position-absolute" style="top: 10px; right: 10px; font-size: 20px; width: 28.5px; height: 28.5px; color: white; background-color: #5e52e8; padding: 5px; border-radius: 50%; cursor: pointer" (click)="triggerFileInput()"></i>
+                        <span style="position: absolute;top: 10px; right: 10px; font-size: 19px; width: 33px; height: 33px; color: white; background-color: #5e52e8; display: flex;align-items: center;justify-content: center; border-radius: 50%; cursor: pointer; outline: 5px solid white;" (click)="triggerFileInput()">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                          </svg>                          
+                        </span>
                         <input class="updateimg" type="file" name="img" (change)="onProfileImageChange($event)" accept="image/*" style="display: none" #fileInput />
                       </div>
 
@@ -198,19 +203,27 @@
                         </li>
                         <!-- <li>Gender <span class="font-primary">Male</span></li> -->
                         <li>
-                          <span>Date De Naissance</span> <span class="font-primary">{{ CurrentClient.DateNaissance | date : "dd/MM/yyyy" }} </span>
+                          <span>Date De Naissance</span> <span class="font-primary">{{ CurrentClient.DateNaissance ? CurrentClient.DateNaissance : "---" }} </span>
                         </li>
                         <!-- <li>Personality<span class="font-primary personality_0">Cool</span></li> -->
                         <!-- <li>City<span class="font-primary city_0">moline acres</span></li> -->
                         <li>
-                          <span>Téléphone</span>
+                          <span>Téléphone 1</span>
                           <span class="font-primary mobile_num_0">
-                            {{ formatPhoneNumber(CurrentClient.Telephone1) }}
-                            {{ CurrentClient.Telephone2 ? " / " + formatPhoneNumber(CurrentClient.Telephone2) : "" }}
+                            {{ CurrentClient.Telephone1 ? formatPhoneNumber(CurrentClient.Telephone1) : "---" }}
                           </span>
                         </li>
                         <li>
-                          <span>Email</span> <span class="font-primary email_add_0"> {{ CurrentClient.Email1 }}{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? " / " + CurrentClient.Email2 : "" }} </span>
+                          <span>Téléphone 2</span>
+                          <span class="font-primary mobile_num_0">
+                            {{ CurrentClient.Telephone2 ? formatPhoneNumber(CurrentClient.Telephone2) : "---" }}
+                          </span>
+                        </li>
+                        <li>
+                          <span>Email 1</span> <span class="font-primary email_add_0">{{ CurrentClient.Email1 != null && CurrentClient.Email1 != "" ? CurrentClient.Email1 : "---" }} </span>
+                        </li>
+                        <li>
+                          <span>Email 2</span> <span class="font-primary email_add_0">{{ CurrentClient.Email2 != null && CurrentClient.Email2 != "" ? CurrentClient.Email2 : "---" }} </span>
                         </li>
                         <!-- <li>Website<span class="font-primary url_add_0">www.test.com</span></li> -->
                         <!-- <li>Interest<span class="font-primary interest_0">photography</span></li> -->
@@ -223,7 +236,7 @@
               <!-- #region EditClient -->
               <div class="contact-editform ps-0" [ngStyle]="{ display: !IsEditingClient ? 'none' : '' }">
                 <div *ngIf="ClientToUpdate != null">
-                  <div class="row g-2">
+                  <div class="row g-2 huiuiuo888">
                     <div class="mt-0 mb-3 col-md-12">
                       <div class="row">
                         <div class="col-sm-6">

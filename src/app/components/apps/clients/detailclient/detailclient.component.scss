@@ -71,8 +71,7 @@ label {
 
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.88s ease, visibility 0.4s ease;
-}
+  transition: opacity 1s ease, visibility  1s ease;}
 
 .loading-overlay.show {
   opacity: 1;
@@ -95,4 +94,18 @@ label {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+.card-body ul li a{
+  color: #505050 !important; 
+
+}
+
+.ziodsfhdsfohsdoghsd{
+  color: #505050 !important; 
+  font-weight: bold !important;
 }

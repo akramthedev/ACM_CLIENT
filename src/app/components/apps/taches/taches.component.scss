@@ -203,8 +203,7 @@ button:hover {
 
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.88s ease, visibility 0.4s ease;
-}
+  transition: opacity 1.3s ease, visibility  1.3s ease;}
 
 .loading-overlay.show {
   opacity: 1;
@@ -228,4 +227,12 @@ button:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+
+
+.container-fluid .sjrghushfghsfoughosufhgdou table{
+  color: #565656 !important;
+
 }

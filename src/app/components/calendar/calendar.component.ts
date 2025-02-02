@@ -77,7 +77,7 @@ export class CalendarComponent implements OnInit {
 
 
   constructor(private title: Title,private eRef: ElementRef, private http: HttpClient, private authService: AuthService) {
-    this.title.setTitle("Plan de Tâches | ACM");
+    this.title.setTitle("Planigramme | ACM");
     
 
     this.authService.GetCurrentUser().then((userXX: any) => {

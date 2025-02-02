@@ -28,6 +28,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from 'src/environments/environment';
 // import { provideUserIdleConfig } from 'angular-user-idle';
 import { AuthService } from './shared/services/auth.service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 // keycloak
 export const initializeKeycloak = (keycloak: KeycloakService) => async () =>
@@ -111,6 +112,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       multi: true,
       deps: [KeycloakService],
     },
+    provideAnimationsAsync(),
 
     // provideUserIdleConfig({
     //   idle: environment.idleConfig.idle,

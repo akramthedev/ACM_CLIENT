@@ -4,7 +4,7 @@
 </div>
 
 
-<app-breadcrumb *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="[{ link: '/clients', libelle: 'Clients' }]" [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
+<app-breadcrumb class="ziodsfhdsfohsdoghsd" *ngIf="currentClient != null" [title]="currentClient?.Nom + ' ' + currentClient?.Prenom" [items]="[{ link: '/clients', libelle: 'Clients' }]" [active_item]="currentClient?.Nom + ' ' + currentClient?.Prenom"></app-breadcrumb>
 <div class="container-fluid" *ngIf="currentClient != null">
   <div class="edit-profile">
     <div class="row">
