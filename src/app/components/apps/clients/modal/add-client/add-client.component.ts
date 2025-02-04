@@ -571,7 +571,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
       next: (response) => {
         console.log('Token supprimé avec succès de la base de données', response);
-        alert('Vous avez été déconnecté de Google Calendar.')
 
       },
       error: (error) => {
@@ -1171,30 +1170,57 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
 
+
+
+
+
+  async insertEventsWithDelay(events) {
+    for (let i = 0; i < events.length; i++) {
+      console.warn(events[i]);
+      console.warn("-----------------");
+  
+      const startDateTime = new Date(events[i].EventTimeStart).toISOString();
+      const endDateTime = new Date(events[i].EventTimeEnd).toISOString();
+  
+      let eventXX = {
+        summary: events[i].EventName,
+        description: `Préparer les documents du client : ${events[i].EventName}`,
+        colorId: "1",
+        start: { dateTime: startDateTime, timeZone: "Africa/Casablanca" },
+        end: { dateTime: endDateTime, timeZone: "Africa/Casablanca" },
+        reminders: { useDefault: false, overrides: [{ method: "email", minutes: 45 }, { method: "popup", minutes: 30 }] },
+        visibility: "public",
+        status: "confirmed",
+        EventId: events[i].EventId
+      };
+  
+      try {
+        await this.addEventToGoogleCalendar(eventXX);
+        console.log(`Event ${i + 1} added successfully.`);
+      } catch (error) {
+        console.error(`Error adding event ${i + 1}:`, error);
+      }
+      const randomDelay = Math.floor(Math.random() * (450 - 300 + 1)) + 300;
+      await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+    }
+  }
+
+  
+
+
   onSave() {
 
-
-    
 
 
     if (this.isFormValid()) {
       this.isLoading6 = true;
 
-      console.log("Begin F");
+      this.fetchAccessToken();
+
+
       console.log(this.clientData.ClientTaches);
-      console.log("End F")
 
-      if (this.clientData.Telephone1 && this.clientData.Telephone1.trim() !== "") {
-        this.clientData.Telephone1 = `+212${this.clientData.Telephone1}`;
-      } else {
-        this.clientData.Telephone1 = ""; // Leave empty if not provided
-      }
-
-      if (this.clientData.Telephone2 && this.clientData.Telephone2.trim() !== "") {
-        this.clientData.Telephone2 = `+33${this.clientData.Telephone2}`;
-      } else {
-        this.clientData.Telephone2 = ""; // Leave empty if not provided
-      }
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
       }
@@ -1223,6 +1249,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
               if(this.isConnectedToGoogleCalendar === true){
                 
+
+
+
+
                 console.warn("----------------------------------")
                 console.warn(response.events);
                 console.warn("----------------------");
@@ -1232,32 +1262,14 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
                 if (response.events.length > 0) {
 
-                  function convertToGoogleDateTime(dateString) {
-                    return new Date(dateString).toISOString(); 
+                  
+
+                  if (response.events.length > 0) {
+                    
+                    this.insertEventsWithDelay(response.events);
                   }
 
-                  for (let i = 0; i < response.events.length; i++) {
-
-
-                    console.warn(response.events[i]);
-                    console.warn("-----------------");
-                    const startDateTime = convertToGoogleDateTime(response.events[i].EventTimeStart);
-                    const endDateTime = convertToGoogleDateTime(response.events[i].EventTimeEnd);
-                    
-                    let eventXX = {
-                      summary: response.events[i].EventName,
-                      description: `Préparer les documents du client : ${response.events[i].EventName}`,
-                      colorId: "1",
-                      start: { dateTime: startDateTime, timeZone: "Africa/Casablanca" },
-                      end: { dateTime: endDateTime, timeZone: "Africa/Casablanca" },
-                      reminders: { useDefault: false, overrides: [{ method: "email", minutes: 45 }, { method: "popup", minutes: 30 }] },
-                      visibility: "public",
-                      status: "confirmed",
-                      EventId : response.events[i].EventId
-                    };
-                    
-                    this.addEventToGoogleCalendar(eventXX);
-                  }
+                  
                 }
                 
                 else{
@@ -1276,6 +1288,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.btnSaveEmitter.emit(this.clientData);
           this.modalService.dismissAll();
           this.isDateRegistered = false;
+          this.selectedDate = new Date();
           this.finalSavedDate = "";
           this.resetForm();
           setTimeout(() => {
@@ -1334,12 +1347,88 @@ export class AddClientComponent implements OnInit, OnDestroy {
             }
         }
         },
-      });        
+      });  
+      
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      console.warn(response);
+      
       console.log("Done");
     } catch (error) {
       console.log("Not Done");
-      this.toastr.error("Erreur lors de l’ajout de l’événement à Google Calendar.");
       this.isErrorGoogleCalendarSync = true;      
+      if (error.result?.error?.message?.includes("invalid authentication credentials")) {
+        this.handleLogout();
+        this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
+      }
+      else{
+        this.toastr.error("Une erreur est survenue lors de l’ajout de l’événement à Google Calendar.");
+
+      }
       console.error('Erreur lors de l’ajout de l’événement :', error);
     }
   }

@@ -135,7 +135,12 @@
   width: 100px !important;
 }
 
-
+.logo{
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .logo.spaced {
   padding-left: 20px; /* Or adjust based on the amount of space you want */
@@ -150,3 +155,29 @@
 }
 
 
+
+
+.logo button{
+  position: absolute;
+  right: 0px;
+  height: 40px;
+  width: 40px;
+  border: 1px solid rgb(226, 232, 255);
+  border-radius: 0.4rem;
+  outline: none;
+  transition: .15s all ease-in-out;
+  background-color: #f3f2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0.3rem !important;
+}
+.logo button:hover{
+  background-color: #d8d3ff ;
+}
+
+.hideButtonAbsolute{
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+}

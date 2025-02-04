@@ -359,11 +359,11 @@ async deleteEventOnGoogleCalendar() {
             this.http.delete(deleteURL).subscribe({
               next: (response) => {
 
-                this.selectedEvent.setProp('backgroundColor', '#28a745'); 
-                this.selectedEvent.setExtendedProp('isDone', true);
-                this.isDeleteTask = false; 
-                
+                this.selectedEvent.setProp('visible', false);
+                this.selectedEvent.remove();
                 this.closePopup();
+                this.isDeleteTask = false; 
+
               },
               error: (error) => {
                 console.error('Erreur lors de la mise à jour:', error);
