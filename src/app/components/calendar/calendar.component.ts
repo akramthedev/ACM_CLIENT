@@ -281,29 +281,7 @@ async findGoogleEventIdByAppEventId(appEventId) {
           return null;
       }
 
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
-      console.log(appEventId)
+       
 
 
       let EventToReturn = null;
@@ -341,6 +319,7 @@ async findGoogleEventIdByAppEventId(appEventId) {
 
 async deleteEventOnGoogleCalendar() {
   try {
+    this.isDeleteTask = true;
     const accessToken = localStorage.getItem('google_token');
 
     if (!accessToken) {
@@ -351,55 +330,13 @@ async deleteEventOnGoogleCalendar() {
 
     gapi.client.setToken({ access_token: accessToken });
 
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
-    console.warn(this.selectedEvent._def.extendedProps.EventId);
+     
 
     const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent._def.extendedProps.EventId);
 
     
     console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-    console.log("TO delete => eventId : "+eventId);
-
+ 
 
     if (!eventId) {
       console.error("❌ Erreur: eventId est introuvable !");
@@ -412,12 +349,39 @@ async deleteEventOnGoogleCalendar() {
         calendarId: 'primary',
         eventId: eventId,  
       });
+ 
 
-      console.log("✅ Événement trouvé sur Google Calendar:", event);
+      
+          
+            const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+            const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
+          
+            this.http.delete(deleteURL).subscribe({
+              next: (response) => {
+
+                this.selectedEvent.setProp('backgroundColor', '#28a745'); 
+                this.selectedEvent.setExtendedProp('isDone', true);
+                this.isDeleteTask = false; 
+                
+                this.closePopup();
+              },
+              error: (error) => {
+                console.error('Erreur lors de la mise à jour:', error);
+              },
+              complete: () => {
+                this.isDeleteTask = false; 
+                this.fetchTasks();
+                this.toastr.success('Evenement supprimé avec succès.');
+              }
+              
+            });
+
+      
     } catch (checkError) {
-      console.error("❌ L'événement n'existe pas sur Google Calendar :", checkError);
       alert("L'événement n'existe pas sur Google Calendar.");
       return;
+    } finally{
+      this.isDeleteTask = false; 
     }
 
     await gapi.client.calendar.events.delete({
@@ -426,31 +390,9 @@ async deleteEventOnGoogleCalendar() {
     });
 
 
-     // deleteTask(): void {
-          //   if (!this.selectedEvent) return;
-          
-          //   this.isDeleteTask = true;  
-          
-          //   const taskId = this.selectedEvent.extendedProps.ClientTacheId; 
-          //   const deleteURL = `${environment.url}/DeleteTaskById/${taskId}`;
-          
-          //   this.http.delete(deleteURL).subscribe({
-          //     next: (response) => {
-          //       console.log('Tâche marquée comme faite:', response);
-          
-          //       this.selectedEvent.setProp('backgroundColor', '#28a745'); 
-          //       this.selectedEvent.setExtendedProp('isDone', true);
-                
-          //       this.closePopup();
-          //     },
-          //     error: (error) => {
-          //       console.error('Erreur lors de la mise à jour:', error);
-          //     },
-          //     complete: () => {
-          //       this.isDeleteTask = false;  
-          //     }
-          //   });
-          // }
+   
+            
+        
 
 
     this.toastr.success("L'événement a été supprimé avec succès.");
