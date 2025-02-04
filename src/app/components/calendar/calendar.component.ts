@@ -809,6 +809,28 @@ async deleteEventOnGoogleCalendar() {
     this.allPersons = personsList;
     this.allTasks = tasksList;
   
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.warn(this.allPersons);
+    console.log("--------------");
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+    console.warn(this.allTasks);
+
     console.log("🔵 Unique Clients Extracted: ", this.allPersons);
     console.log("🟢 Unique Tasks Extracted: ", this.allTasks);
   }
@@ -945,12 +967,13 @@ async deleteEventOnGoogleCalendar() {
 
 
 
-
-
   formatDate(dateString: string): string {
+    if (!dateString) {
+      return ''; // or some default value
+    }
     return dateString.replace(' ', 'T').split('.')[0];  
   }
-
+  
 
 
   
