@@ -1228,7 +1228,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
         this.submitAddClientMissionPrestation();
       }
       if (this.newClientTache) {
-        console.log("E");
         this.submitAddClientTache();
       }
       
@@ -1322,7 +1321,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       
       if (!accessToken) {
         console.error('No Google access token found');
-        alert('Please authenticate with Google Calendar.');
+        
+        this.refreshToken();
+
         return;
       }
   
@@ -1357,7 +1358,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       console.log("Not Done");
       this.isErrorGoogleCalendarSync = true;      
       if (error.result?.error?.message?.includes("invalid authentication credentials")) {
-        this.handleLogout();
+        this.refreshToken();
         this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
       }
       else{
