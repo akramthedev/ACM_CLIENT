@@ -47,3 +47,21 @@
 .onhover-show-div{
     z-index: 999999999999999999999;
 }
+
+
+.profile-dropdown li:hover{
+    background-color: rgb(242, 242, 242);
+}
+.profile-dropdown li{
+    transition: .15s all ease-in-out !important;
+    border-radius: 0.6rem !important;
+    height: 40px !important;
+    
+}
+.profile-dropdown{
+    border-radius: 0.666rem !important;
+    width: 180px !important;
+    padding: 0.6rem 0.6rem !important;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px !important;
+    right: 3rem !important;
+}

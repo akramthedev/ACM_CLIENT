@@ -31,7 +31,7 @@
     height: 100% !important;
 
     li {
-      height: 43px !important;
+      height: 51px !important;
       cursor: pointer;
       overflow: hidden !important;
       display: flex;
@@ -74,6 +74,7 @@
 
       .span{
         overflow-y: hidden !important;
+        overflow-x: hidden !important;
       }
     }
 

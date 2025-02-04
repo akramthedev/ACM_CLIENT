@@ -20,6 +20,10 @@ export class ClientService {
   }
   CreateClient(clientData: any): Observable<any> {
     console.log("CreateClient.clientData: ", clientData);
+    console.warn(clientData);
+    console.warn(clientData);
+ 
+    console.warn(clientData.ClientTache);
     let url = `${environment.url}/CreateClient?`;
     clientData.CabinetId = "0E06E5A4-6246-415D-B119-C47077180755";
     return this.http.post<any>(url, clientData);

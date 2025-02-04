@@ -1253,6 +1253,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
                       reminders: { useDefault: false, overrides: [{ method: "email", minutes: 45 }, { method: "popup", minutes: 30 }] },
                       visibility: "public",
                       status: "confirmed",
+                      EventId : response.events[i].EventId
                     };
                     
                     this.addEventToGoogleCalendar(eventXX);
@@ -1327,6 +1328,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
           reminders: event.reminders,
           visibility: event.visibility,
           status: event.status,
+          extendedProperties: {
+            private: {
+              appEventId: event.EventId
+            }
+        }
         },
       });        
       console.log("Done");
