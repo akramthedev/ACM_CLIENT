@@ -320,82 +320,113 @@ async findGoogleEventIdByAppEventId(appEventId) {
 async deleteEventOnGoogleCalendar() {
   try {
     this.isDeleteTask = true;
-    const accessToken = localStorage.getItem('google_token');
+    
 
-    if (!accessToken) {
-      console.error('❌ No Google access token found.');
-      this.toastr.error("Vous n'êtes pas connecté à Google Calendar pour exécuter cette opération.");
-      return;
-    }
+    if(this.isConnectedToGoogleCalendar){
+        const accessToken = localStorage.getItem('google_token');
 
-    gapi.client.setToken({ access_token: accessToken });
+        if (!accessToken) {
+          console.error('❌ No Google access token found.');
+          this.toastr.error("Vous n'êtes pas connecté à Google Calendar pour exécuter cette opération.");
+          return;
+        }
 
+        gapi.client.setToken({ access_token: accessToken });
+
+        
+
+        const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent._def.extendedProps.EventId);
+
+        
+        console.log("TO delete => eventId : "+eventId);
+    
+
+        if (!eventId) {
+          console.error("❌ Erreur: eventId est introuvable !");
+          alert("Impossible de supprimer l'événement car l'ID est introuvable.");
+          return;
+        }
+    
+        try {
+          const event = await gapi.client.calendar.events.get({
+            calendarId: 'primary',
+            eventId: eventId,  
+          });
      
+    
+          
+              
+                const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+                const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
+              
+                this.http.delete(deleteURL).subscribe({
+                  next: (response) => {
+    
+                    this.selectedEvent.setProp('visible', false);
+                    this.selectedEvent.remove();
+                    this.closePopup();
+                    this.isDeleteTask = false; 
+    
+                  },
+                  error: (error) => {
+                    console.error('Erreur lors de la mise à jour:', error);
+                  },
+                  complete: () => {
+                    this.isDeleteTask = false; 
+                    this.fetchTasks();
+                    this.toastr.success('Evenement supprimé avec succès.');
+                  }
+                  
+                });
+    
+          
+        } catch (checkError) {
+          alert("L'événement n'existe pas sur Google Calendar.");
+          return;
+        } finally{
+          this.isDeleteTask = false; 
+        }
+    
+        await gapi.client.calendar.events.delete({
+          calendarId: 'primary',
+          eventId: eventId,
+        });
+    
+    
+       
+    
+      }
+      else{
+        
+                const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+                const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
+                this.http.delete(deleteURL).subscribe({
+                  next: (response) => {
+    
+                    this.selectedEvent.setProp('visible', false);
+                    this.selectedEvent.remove();
+                    this.closePopup();
+                    this.isDeleteTask = false; 
+    
+                  },
+                  error: (error) => {
+                    console.error('Erreur lors de la mise à jour:', error);
+                  },
+                  complete: () => {
+                    this.isDeleteTask = false; 
+                    this.fetchTasks();
+                    this.toastr.success('Evenement supprimé avec succès.');
+                  }
+                  
+                });
 
-    const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent._def.extendedProps.EventId);
+      }
 
     
-    console.log("TO delete => eventId : "+eventId);
- 
-
-    if (!eventId) {
-      console.error("❌ Erreur: eventId est introuvable !");
-      alert("Impossible de supprimer l'événement car l'ID est introuvable.");
-      return;
-    }
-
-    try {
-      const event = await gapi.client.calendar.events.get({
-        calendarId: 'primary',
-        eventId: eventId,  
-      });
- 
-
-      
-          
-            const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
-            const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
-          
-            this.http.delete(deleteURL).subscribe({
-              next: (response) => {
-
-                this.selectedEvent.setProp('visible', false);
-                this.selectedEvent.remove();
-                this.closePopup();
-                this.isDeleteTask = false; 
-
-              },
-              error: (error) => {
-                console.error('Erreur lors de la mise à jour:', error);
-              },
-              complete: () => {
-                this.isDeleteTask = false; 
-                this.fetchTasks();
-                this.toastr.success('Evenement supprimé avec succès.');
-              }
-              
-            });
-
-      
-    } catch (checkError) {
-      alert("L'événement n'existe pas sur Google Calendar.");
-      return;
-    } finally{
-      this.isDeleteTask = false; 
-    }
-
-    await gapi.client.calendar.events.delete({
-      calendarId: 'primary',
-      eventId: eventId,
-    });
-
-
-   
             
         
 
 
-    this.toastr.success("L'événement a été supprimé avec succès.");
   } catch (error) {
     console.error("❌ Échec de la suppression :", error);
     this.toastr.error("Erreur lors de la suppression de l’événement sur Google Calendar.");

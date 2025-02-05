@@ -82,7 +82,8 @@ export class TachesComponent implements OnInit {
     this.clientService.GetAllClientTaches().subscribe(
       (response) => {
         console.warn("API Response:", response);
-      
+
+
         // Process each task in the response
         this.AllClientTaches = response.map((task) => ({
           ClientTacheIntitule: task.ClientNom || task.ClientPrenom 
@@ -93,7 +94,7 @@ export class TachesComponent implements OnInit {
           PrestationDesignation: task.PrestationDesignation || '---',
           MissionDesignation: task.MissionDesignation || '---',
           AgentNom: task.AgentNom && task.AgentNom.trim() !== '' ? task.AgentNom : '---',  
-          Status: task.IsDone === true || task.IsDone === 1 ? 'Finalisée' : 'En cours'
+          Status: task.Status
         }));
   
         console.log("Processed Tasks:", this.AllClientTaches);
