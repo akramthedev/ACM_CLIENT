@@ -44,6 +44,7 @@ export class ClientsComponent implements OnInit {
   isLoading: boolean = true;
 
   showPopUpNotify: boolean = false;
+  isLoadingTokenGoogleCalendar: Boolean = false;
 
   isLoadingAccToken:boolean = false;
   isConnectedToGoogleCalendar: boolean = false;
@@ -234,25 +235,25 @@ export class ClientsComponent implements OnInit {
   handleAuthClick(): void {
     if (!this.tokenClient) return;
   
-    this.isLoading = true;
+    this.isLoadingTokenGoogleCalendar = true;
     this.tokenClient.requestAccessToken({
       prompt: 'consent',
       callback: (response: any) => {
         // Check if there's an error in the response
         if (response.error) {
           console.error('Google authentication error:', response.error);
-          this.isLoading = false;
+          this.isLoadingTokenGoogleCalendar = false;
           return;
         }
         else{
           console.warn(response);
-          this.isLoading = false;
+          this.isLoadingTokenGoogleCalendar = false;
         }
       }
     });
 
     this.ClientIdOfGoogle = this.tokenClient.s.client_id;
-    this.isLoading = false;
+    this.isLoadingTokenGoogleCalendar = false;
   }
   
 

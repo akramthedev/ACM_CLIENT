@@ -77,6 +77,29 @@
 
 
 
+<div
+  [ngClass]="{ 'visible': ShouldReConnect }"
+  class="popup-overlay"
+  (click)="FermerPopUpShouldReconnect()"
+>
+  <div
+    class="popup-modal popup-modal2"
+    (click)="preventClose($event)"
+    [ngClass]="{ 'visible': ShouldReConnect }"
+  >
+    <h3 style="margin-bottom: 30px;">
+      Votre session Google Calendar a expiré ! 
+    </h3>
+    <p>
+      Veuillez vous reconnecter à Google Agenda, les taches du client créé n'ont pas été sauvegardé sur Google Agenda. 
+    </p>
+  </div>
+</div>
+
+
+
+
+
 
 
 

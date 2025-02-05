@@ -74,6 +74,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   selectedDate: Date;
   finalSavedDate: string;
   isDateRegistered: Boolean = false;
+  isLoadingTokenGoogleCalendar: Boolean = false;
 
   isLoading1: Boolean = false;
   isLoading2: Boolean = false;
@@ -81,6 +82,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
   isLoading4: Boolean = false;
   isLoading5: Boolean = false;
   isLoading6: Boolean = false;
+
+  ShouldReConnect:Boolean = false;
 
   isErrorGoogleCalendarSync: Boolean = false;
   showPopUpDateSelection: Boolean = false;
@@ -279,6 +282,12 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
 
 
+  
+  FermerPopUpShouldReconnect():void{
+    this.ShouldReConnect = false;
+  }
+
+
   OpenpopUpOfTheDateSelector():void{
     this.showPopUpDateSelection = true;
   }
@@ -346,26 +355,26 @@ export class AddClientComponent implements OnInit, OnDestroy {
   handleAuthClick(): void {
     if (!this.tokenClient) return;
   
-    this.isLoading = true;
+    this.isLoadingTokenGoogleCalendar = true;
     this.tokenClient.requestAccessToken({
       prompt: 'consent',
       callback: (response: any) => {
         // Check if there's an error in the response
         if (response.error) {
           console.error('Google authentication error:', response.error);
-          this.isLoading = false;
+          this.isLoadingTokenGoogleCalendar = false;
           alert('Une erreur est survenue lors de la synchronisation avec Google Calendar.')
           return;
         }
         else{
           console.warn(response);
-          this.isLoading = false;
+          this.isLoadingTokenGoogleCalendar = false;
         }
       }
     });
 
     this.ClientIdOfGoogle = this.tokenClient.s.client_id;
-    this.isLoading = false;
+    this.isLoadingTokenGoogleCalendar = false;
   }
   
 
@@ -444,7 +453,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
       if (currentTime >= expiryDate) {
         console.log('Token expiré, veuillez ré-authentifier.');
-        this.refreshToken();  // Rafraîchir le token si nécessaire
+        this.refreshToken();  
         this.isConnectedToGoogleCalendar = false;
         return false;
       }
@@ -464,8 +473,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
   
     if (!refreshTokenX) {
       console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
-      alert("Veuillez vous reconnecter avec Google Calendar.");
-      return;
+      this.handleLogout();
+      this.ShouldReConnect = true;
+      return;    
     }
   
     const url = 'https://oauth2.googleapis.com/token';
@@ -1321,9 +1331,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       
       if (!accessToken) {
         console.error('No Google access token found');
-        
         this.refreshToken();
-
         return;
       }
   
