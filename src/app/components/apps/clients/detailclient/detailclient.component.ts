@@ -2040,25 +2040,10 @@ export class DetailclientComponent {
       type: null,
       noDataMessage: "Aucune tache affecter",
       columns: [
-        { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Intitule", header: "Personne désignée", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        {
-          field: "Status",
-          header: "Statut",
-          dataType: "string",
-          visible: true,
-          inputOptions: {
-            type: "select",
-            required: true,
-            selectValue: "key",
-            selectLibelle: "libelle",
-            selectData: [
-              { key: "En cours", libelle: "En cours" },
-              { key: "Finalisée", libelle: "Finalisée" },
-            ],
-          },
-        },
+        { field: "IntituleTaskOriginal", header: "Tache Mere", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         {
           field: "AgentResposable",
           header: "Agent",
@@ -2077,6 +2062,23 @@ export class DetailclientComponent {
             ],
           },
         },
+        {
+          field: "Status",
+          header: "Statut",
+          dataType: "string",
+          visible: true,
+          inputOptions: {
+            type: "select",
+            required: true,
+            selectValue: "key",
+            selectLibelle: "libelle",
+            selectData: [
+              { key: "En cours", libelle: "En cours" },
+              { key: "Finalisée", libelle: "Finalisée" },
+            ],
+          },
+        },
+        
         { field: "action", header: "Action", visible: true, dataType: null },
       ],
     },
@@ -2156,7 +2158,14 @@ export class DetailclientComponent {
         // get task data
         let p = this.currentClient.ClientTaches.find((x) => x.ClientTacheId == id);
         this.dialogTask.title = "Modifer la Tache";
-        this.dialogTask.Inputs = this.tablesTasks.find((x) => x.title == "Taches").columns.filter((x) => x.field != "action" && x.field != "PrestationDesignation");
+
+
+        this.dialogTask.Inputs = this.tablesTasks
+          .find((x) => x.title == "Taches")
+          .columns.filter((x) => x.field !== "action" && x.field !== "PrestationDesignation" && x.field !== "IntituleTaskOriginal");
+
+
+
         this.dialogTask.data = structuredClone(p);
         console.log("la valeur de Agent", this.dialogTask.data.AgentResposable);
         if (this.dialogTask.data.AgentResposable) {
