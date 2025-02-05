@@ -2040,7 +2040,7 @@ export class DetailclientComponent {
       type: null,
       noDataMessage: "Aucune tache affecter",
       columns: [
-        { field: "Intitule", header: "Personne désignée", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
+        { field: "Intitule", header: "Client", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "IntituleTaskOriginal", header: "Tache Mere", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
@@ -2162,7 +2162,7 @@ export class DetailclientComponent {
 
         this.dialogTask.Inputs = this.tablesTasks
           .find((x) => x.title == "Taches")
-          .columns.filter((x) => x.field !== "action" && x.field !== "PrestationDesignation" && x.field !== "IntituleTaskOriginal");
+          .columns.filter((x) => x.field !== "action" && x.field !== "PrestationDesignation" && x.field !== "IntituleTaskOriginal" && x.field !== "Intitule");
 
 
 
