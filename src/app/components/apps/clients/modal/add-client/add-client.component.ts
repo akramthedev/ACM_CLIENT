@@ -284,6 +284,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   
   FermerPopUpShouldReconnect():void{
+    this.handleLogout();
     this.ShouldReConnect = false;
   }
 

@@ -1617,7 +1617,56 @@ export class DetailclientComponent {
 
             //get ClientTache
             this.clientService.GetClientTachesSimple(clientId).subscribe((responseClientTache) => {
-              console.log("responseClientTacheSimple : ", responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
+              console.warn(responseClientTache);
               this.ClientTaches = responseClientTache;
             });
             //get ClientMissionPrestationss
@@ -2043,7 +2092,6 @@ export class DetailclientComponent {
         { field: "Intitule", header: "Tâche", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "Numero_Ordre", header: "Numéro Ordre", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
         { field: "PrestationDesignation", header: "Prestation", dataType: "string", visible: true, inputOptions: { type: "text", required: false } },
-        { field: "Commentaire", header: "Commentaire", dataType: "string", visible: false, inputOptions: { type: "text", required: false } },
         {
           field: "Status",
           header: "Statut",
@@ -2055,9 +2103,8 @@ export class DetailclientComponent {
             selectValue: "key",
             selectLibelle: "libelle",
             selectData: [
-              { key: "En attente", libelle: "En attente" },
               { key: "En cours", libelle: "En cours" },
-              { key: "Terminé", libelle: "Terminé" },
+              { key: "Finalisée", libelle: "Finalisée" },
             ],
           },
         },
