@@ -232,7 +232,7 @@ export class ClientService {
   }
   UpdateClientTache(data: any): Observable<any> {
     console.log("UpdateClientTache.data: ", data);
-    let url = `${environment.url}/UpdateClientTache?`;
+    let url = `${environment.url}/UpdateClientTache`;
     return this.http.put<any>(url, data);
   }
   DeleteClientTache(ClientTacheId: string) {

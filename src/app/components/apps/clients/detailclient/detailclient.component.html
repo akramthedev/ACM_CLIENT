@@ -1308,9 +1308,8 @@
 
                           <!-- Affichage du statut avec badge -->
                           <span *ngIf="column.field === 'Status'">
-                            <span *ngIf="task.Status === 'En attente'" class="badge badge-light-danger">{{ task.Status }}</span>
                             <span *ngIf="task.Status === 'En cours'" class="badge badge-light-primary">{{ task.Status }}</span>
-                            <span *ngIf="task.Status === 'Terminé'" class="badge badge-light-success">{{ task.Status }}</span>
+                            <span *ngIf="task.Status === 'Finalisée'" class="badge badge-light-success">{{ task.Status }}</span>
                           </span>
 
                           <!-- Autres types de données -->
