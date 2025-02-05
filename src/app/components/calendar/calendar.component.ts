@@ -342,8 +342,31 @@ async deleteEventOnGoogleCalendar() {
     
 
         if (!eventId) {
-          console.error("❌ Erreur: eventId est introuvable !");
-          alert("Impossible de supprimer l'événement car l'ID est introuvable.");
+          console.error("❌ Erreur: eventId est introuvable sur Google Calendar !");
+
+          const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+          const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
+        
+          this.http.delete(deleteURL).subscribe({
+            next: (response) => {
+
+              this.selectedEvent.setProp('visible', false);
+              this.selectedEvent.remove();
+              this.closePopup();
+              this.isDeleteTask = false; 
+
+            },
+            error: (error) => {
+              console.error('Erreur lors de la mise à jour:', error);
+            },
+            complete: () => {
+              this.isDeleteTask = false; 
+              this.fetchTasks();
+              this.toastr.success('Evenement supprimé avec succès.');
+            }
+            
+          });
+          this.isDeleteTask = false; 
           return;
         }
     
