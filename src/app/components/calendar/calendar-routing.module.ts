@@ -5,18 +5,18 @@ import { CalendarComponent } from './calendar.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-
 const routes: Routes = [
   { path: '', component: CalendarComponent }
 ];
 
 @NgModule({
-  declarations: [CalendarComponent], // Declare the CalendarComponent
+  declarations: [CalendarComponent], 
   imports: [
     FormsModule,
-    CommonModule, // Required for Angular directives
-    RouterModule.forChild(routes), // Add routing
-    FullCalendarModule // Import FullCalendarModule
-  ]
+    CommonModule, 
+    RouterModule.forChild(routes), 
+    FullCalendarModule  
+  ],
+  exports: [CalendarComponent]   
 })
 export class CalendarModule {}

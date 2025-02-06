@@ -1,3 +1,4 @@
+
 .calendar-container {
   display: flex;
   justify-content: space-between; /* Center horizontally */
@@ -645,3 +646,20 @@ input:checked + .slider:before {
 .filter-label666 label{
   width: 100% !important;
 }
+
+
+
+
+.custom-tooltip {
+  position: absolute !important;
+  background-color: #333 !important;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+  

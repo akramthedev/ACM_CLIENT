@@ -284,6 +284,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   
   FermerPopUpShouldReconnect():void{
+    this.isConnectedToGoogleCalendar = false;
     this.handleLogout();
     this.ShouldReConnect = false;
   }
@@ -475,6 +476,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     if (!refreshTokenX) {
       console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
       this.handleLogout();
+      this.isConnectedToGoogleCalendar = false;
       this.ShouldReConnect = true;
       return;    
     }

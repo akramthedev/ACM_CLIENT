@@ -13,6 +13,8 @@ import { AuthService } from "src/app/shared/services/auth.service";
 import { keycloakUser } from "src/app/shared/model/models.model";
 import { BehaviorSubject } from 'rxjs';
 
+
+
 declare var google: any;
 declare var gapi: any;
 
@@ -86,7 +88,21 @@ export class CalendarComponent implements OnInit {
       this.updateIsNullValue(false);
     });
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
@@ -96,15 +112,27 @@ export class CalendarComponent implements OnInit {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       },
-      editable: false, // turn it ot true to use drop and drag
+      editable: false, // turn it to true to use drag and drop
       selectable: true,
-      // eventDrop: this.handleEventDrop.bind(this),
-      eventClick: this.handleEventClick.bind(this), 
+      eventClick: this.handleEventClick.bind(this),
       eventDidMount: (info) => {
+        console.log("Event mounted: ", info.event); // Check if event is being triggered
         info.el.style.cursor = 'pointer';
+        
+        const tooltipContent = `
+          <strong>${info.event.title}</strong><br>
+          Client: ${info.event.extendedProps.ClientNom} ${info.event.extendedProps.ClientPrenom}<br>
+          Mission: ${info.event.extendedProps.MissionDesignation}<br>
+          Tâche: ${info.event.extendedProps.TacheIntitule}
+        `;
+      
+        // Add the appTooltip attribute with dynamic content
+        info.el.setAttribute('appTooltip', tooltipContent);
       },
-      events: () => this.getFilteredEvents()
+      
+      events: () => this.getFilteredEvents(),
     };
+    
 
 
   }
@@ -863,27 +891,7 @@ async deleteEventOnGoogleCalendar() {
     this.allPersons = personsList;
     this.allTasks = tasksList;
   
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.warn(this.allPersons);
-    console.log("--------------");
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
-    console.warn(this.allTasks);
+ 
 
     console.log("🔵 Unique Clients Extracted: ", this.allPersons);
     console.log("🟢 Unique Tasks Extracted: ", this.allTasks);
