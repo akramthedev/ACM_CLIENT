@@ -2,7 +2,6 @@
 <div
   [ngClass]="{ 'visible': showPopUpDateSelection }"
   class="popup-overlay"
-  (click)="FermerPopUpSelectDate()"
 >
   <div
     class="popup-modal popup-modal2"
@@ -525,7 +524,7 @@
           </div>
           <div class="josdofuhuooooo josdofuhuooooo2">
             <span>
-              {{ isDateRegistered ? 'Date sélectionnée : ' + selectedDate : 'Aucune date sélectionnée' }}
+              {{ finalSavedDate ? 'Date sélectionnée : ' + formatDateTime(finalSavedDate) : 'Aucune date sélectionnée' }}
             </span>
             
           </div>

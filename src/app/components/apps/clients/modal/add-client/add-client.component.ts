@@ -72,8 +72,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   selectedMission: string | null = null;
 
   selectedDate: Date;
-  finalSavedDate: string;
-  isDateRegistered: Boolean = false;
+  finalSavedDate: any = null;
   isLoadingTokenGoogleCalendar: Boolean = false;
 
   isLoading1: Boolean = false;
@@ -158,25 +157,21 @@ export class AddClientComponent implements OnInit, OnDestroy {
     });
   }
   telInputObject(obj) {
-    console.log(obj);
     obj.setCountry("in");
   }
   onSelectionChange(event: any, MissionId: any) {
     const value = event.target.value;
     this.selectedMission = value; // Enregistrer la mission sélectionnée
     this.startAddClientMission(MissionId);
-    console.log(MissionId, " ", value);
     // this.showPrestations = value === "Installation au Maroc";
     this.showPrestations = value === "Installation au Maroc" || value === "Retour en France";
     this.clientService.getPrestationsDynamique(MissionId).subscribe(
       (response) => {
-        console.log("response getPrestations: ", response);
         setTimeout(()=>{
           this.isLoading1 = false;
         }, 300)
         let i = 0;
         this.Prestations = response;
-        console.log("this.PrestationsDynamique affecter a this.Prestations : ", this.Prestations);
       },
       (error) => {
         console.error("Error fetching Prestation Dynamique: ", error);
@@ -224,8 +219,12 @@ export class AddClientComponent implements OnInit, OnDestroy {
   
 
 
+
+
   selectDateCLicked(event: any) {
+    console.warn("---------------------------------");
     this.selectedDate = event.target.value;
+    console.warn("1  | Selected Date : ", event.target.value);
   }
 
 
@@ -235,8 +234,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
   SauvegarderEndDate(): void {
-    if (!this.selectedDate) {
-      console.warn('No date selected.');
+    if (this.selectedDate === null || this.selectedDate === undefined) {
+      console.warn("2  | No date has been selected...");
       return;
     }
   
@@ -255,20 +254,21 @@ export class AddClientComponent implements OnInit, OnDestroy {
   
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
-    console.warn('Formatted Selected Date:', formattedDate);
+    console.warn("3  | Formated Date : "+formattedDate);
   
     this.finalSavedDate = formattedDate;
-    this.isDateRegistered = true;
     this.showPopUpDateSelection = false;
+
+
+    if (this.clientData.ClientTaches && this.clientData.ClientTaches.length > 0) {
+      console.warn('Upadting EndDate Of Previously added events...');
+      this.clientData.ClientTaches.forEach((task) => {
+        console.log("Before => "+task.End_date);
+        task.End_date = formattedDate;
+        console.log("After => "+task.End_date);
+        console.warn("--------------");
+      });
+    }
 
   }
 
@@ -278,8 +278,30 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
   FermerPopUpSelectDate():void{
+    this.selectedDate = null;
+     console.warn("0  | Closing Pop Up Selection Date...")
+    console.warn(".5 | selectedDate : "+this.selectedDate);
     this.showPopUpDateSelection = false;
   }
+
+
+
+
+  formatDateTime(dateTimeString: string): string {
+    if (!dateTimeString) return ''; // Handle empty case
+  
+    const dateObj = new Date(dateTimeString);
+    if (isNaN(dateObj.getTime())) return ''; // Handle invalid date case
+  
+    const hours = dateObj.getHours().toString().padStart(2, '0');
+    const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+    const year = dateObj.getFullYear();
+  
+    return `${hours}:${minutes} • ${day}/${month}/${year}`;
+  }
+  
 
 
   
@@ -369,7 +391,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
           return;
         }
         else{
-          console.warn(response);
           this.isLoadingTokenGoogleCalendar = false;
         }
       }
@@ -398,12 +419,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     localStorage.setItem('google_token_expiration', expirationTime.toString());
     this.isConnectedToGoogleCalendar = true;
 
-    console.warn("--------------------------------");
-    console.warn(this.userCurrent.id);
-    console.warn(this.userCurrent.email);
-    console.warn(this.ClientIdOfGoogle);
-    console.warn(this.AccessTokenGoogle);
-    console.warn("--------------------------------");
 
     const authButton = document.getElementById('authorize_button');
     
@@ -424,12 +439,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       ClientIdOfGoogle : this.ClientIdOfGoogle
     };
   
-    console.warn("Body Of Request : ");
-    console.warn(requestBody);
     this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
       .subscribe({
         next: (res) => {
-          console.log('Account created successfully:');
           alert('✅ Connexion à Google Calendar réussie.');
           window.location.reload();
           this.isLoading = false;
@@ -454,13 +466,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
       const expiryDate = parseInt(expirationTime);
 
       if (currentTime >= expiryDate) {
-        console.log('Token expiré, veuillez ré-authentifier.');
         this.refreshToken();  
         this.isConnectedToGoogleCalendar = false;
         return false;
       }
     } else {
-      console.log('Aucun token trouvé, veuillez vous connecter.');
       this.isConnectedToGoogleCalendar = false;
       return false;
     }
@@ -474,7 +484,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     const refreshTokenX = localStorage.getItem('google_refresh_token');   
   
     if (!refreshTokenX) {
-      console.log('Aucun refresh token trouvé, veuillez vous reconnecter.');
       this.handleLogout();
       this.isConnectedToGoogleCalendar = false;
       this.ShouldReConnect = true;
@@ -492,7 +501,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       .then((response) => response.json())
       .then((data) => {
         if (data.access_token) {
-          console.log('Token rafraîchi avec succès!');
   
           // Mettre à jour le token et la date d'expiration
           const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
@@ -506,7 +514,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.isConnectedToGoogleCalendar = true;
 
         } else {
-          console.log('Impossible de rafraîchir le token:', data);
           this.isConnectedToGoogleCalendar = false;
         }
       })
@@ -528,7 +535,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
         next: (response: any) => {
           // Si le token est bien récupéré
           if (response && response[0]) {
-            console.warn('Fetched Access Token:', response[0]);
   
             localStorage.setItem('google_token', response[0].AccessTokenGoogle);
             const expirationTime = Date.now() + (58 * 60 * 1000); 
@@ -545,11 +551,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
           this.isLoadingAccToken = false;
         },
         complete: () => {
-          console.log('Token fetch complete');
         }
       });
     } else {
-      console.warn("Utilisateur non authentifié, récupération du token impossible");
     }
   }
 
@@ -583,7 +587,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
   
     this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
       next: (response) => {
-        console.log('Token supprimé avec succès de la base de données', response);
 
       },
       error: (error) => {
@@ -606,7 +609,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   toggleAllTaches(prestationId: any, isChecked: boolean) {
     this.prestationStates[prestationId] = isChecked;
-    console.log("PrestationId : ", prestationId);
     this.updateClientMissionPrestation(prestationId, isChecked);
     this.Taches.forEach((tache) => {
       if (tache.PrestationId === prestationId) {
@@ -653,15 +655,12 @@ export class AddClientComponent implements OnInit, OnDestroy {
         };
 
         this.clientData.ClientMissionPrestation.push(newPrestation);
-        console.log("Added new prestation: ", newPrestation);
       }
     } else {
       // Remove prestation
       this.clientData.ClientMissionPrestation = this.clientData.ClientMissionPrestation.filter((prestation) => prestation.PrestationId !== prestationId);
-      console.log("Removed prestation with PrestationId: ", prestationId);
     }
 
-    console.log("Updated ClientMissionPrestation: ", this.clientData.ClientMissionPrestation);
   }
   updateClientTache(tacheId: any, isChecked: boolean, prestationId: any) {
     const clientMissionPrestation = this.clientData.ClientMissionPrestation.find((prestation) => prestation.PrestationId === prestationId);
@@ -674,7 +673,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       };
 
       this.clientData.ClientMissionPrestation.push(newPrestation);
-      console.log("Added new prestation for tache: ", newPrestation);
     }
 
     if (isChecked) {
@@ -688,10 +686,8 @@ export class AddClientComponent implements OnInit, OnDestroy {
     } else {
       // Remove task
       this.clientData.ClientTaches = this.clientData.ClientTaches.filter((tache) => tache.TacheId !== tacheId);
-      console.log("Removed tache with TacheId: ", tacheId);
     }
 
-    console.log("Updated ClientTache: ", this.clientData.ClientTaches);
   }
 
 
@@ -700,13 +696,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.isLoading2 = true;
     this.clientService.getServices().subscribe(
       (response) => {
-        console.log("response getServices: ", response);
         setTimeout(()=>{
           this.isLoading2 = false;
         }, 300)
         let i = 0;
         this.Services = response;
-        console.log("this.Services : ", this.Services);
       },
       (error) => {
         console.error("Error fetching Services: ", error);
@@ -720,13 +714,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.isLoading3 = true;
     this.clientService.getMissions().subscribe(
       (response) => {
-        console.log("response getMissions: ", response);
         setTimeout(()=>{
           this.isLoading3 = false;
         }, 300)
         let i = 0;
         this.Missions = response;
-        console.log("this.Missions : ", this.Missions);
       },
       (error) => {
         console.error("Error fetching Missions: ", error);
@@ -740,13 +732,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.isLoading4 = true;
     this.clientService.getPrestations().subscribe(
       (response) => {
-        console.log("response getPrestations: ", response);
         setTimeout(()=>{
           this.isLoading4 = false;
         }, 300)
         let i = 0;
         this.Prestations = response;
-        console.log("this.Prestations : ", this.Prestations);
       },
       (error) => {
         console.error("Error fetching Prestation: ", error);
@@ -760,13 +750,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.isLoading5 = true;
     this.clientService.getTaches().subscribe(
       (response) => {
-        console.log("response getTaches: ", response);
         setTimeout(()=>{
           this.isLoading5 = false;
         }, 300)
         let i = 0;
         this.Taches = response;
-        console.log("this.Taches : ", this.Taches);
       },
       (error) => {
         console.error("Error fetching Taches: ", error);
@@ -804,7 +792,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
   }
   openModal() {
-    console.log("openModal: ");
     if (isPlatformBrowser(this.platformId)) {
       this.resetForm();
       // Réinitialiser les variables
@@ -818,7 +805,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.clientData.ClientMission = [];
       this.clientData.ClientMissionPrestation = [];
       this.clientData.ClientTaches = [];
-      console.log("this.clientData: ", this.clientData);
 
       this.modalService
         .open(this.AddClient, {
@@ -834,7 +820,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
           },
           (reason) => {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-            console.log(this.closeResult);
           }
         );
     }
@@ -842,13 +827,10 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
-      console.log("getDismissReason: ", reason);
       return "by pressing ESC";
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      console.log(reason);
       return "by clicking on a backdrop";
     } else {
-      console.log(reason);
       return `with: ${reason}`;
     }
   }
@@ -973,7 +955,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       QuestComp: null,
     };
 
-    console.log("Start add conjoint : ", this.newConjoint);
   }
 
   submitAddConjoint() {
@@ -1090,14 +1071,17 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.toastr.warning("Veuillez verifier submitClient du ClientMissionPrestation");
       return;
     }
-    console.log(this.newClientMissionPrestation);
     this.clientData.ClientMissionPrestation.push(this.newClientMissionPrestation);
-    console.log("Submit AddClientMissionPrestation (ClientData.ClientMissionPrestation)", this.clientData);
     this.newClientMissionPrestation = null;
   }
   cancelAddClientMissionPrestation() {
     this.newClientMissionPrestation = null;
   }
+
+
+
+
+
 
   startAddClientTache(TacheId, prestationId) {
     const clientMissionPrestation = this.clientData.ClientMissionPrestation.find((prestation) => prestation.PrestationId === prestationId);
@@ -1110,13 +1094,17 @@ export class AddClientComponent implements OnInit, OnDestroy {
     let title = `${this.clientData.Nom} ${this.clientData.Prenom}`;
     let dateENDoFxxx = "";
     
-    if(this.isDateRegistered === true){
+    console.warn("4  | Entering Checkpoint of Final Saved Date...");
+
+    if(this.finalSavedDate !== null && this.finalSavedDate !== "" && this.finalSavedDate !== undefined){
+      console.warn("5  | System used saved date, not the function...");
       dateENDoFxxx = this.finalSavedDate;
     }
     else{
-      dateENDoFxxx = getFutureDateTime()
+      console.warn("5  | System used function to generate a new End Date of the Task...");
+      dateENDoFxxx = getFutureDateTime();
     }
-
+    console.warn("7  | Checkpoint Done");
 
     this.newClientTache = {
       ClientTacheId: uuidv4(),
@@ -1131,6 +1119,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       IsReminder : false, 
       IsDone : false
     };
+
+   
+
   }
 
 
@@ -1144,23 +1135,14 @@ export class AddClientComponent implements OnInit, OnDestroy {
       return;
     }
     else{
-      console.warn("------------------");
-      console.log('A')
-      console.log(this.newClientTache);
-      console.warn("------------------");
     }
 
     const existingTache = this.clientData.ClientTaches.find((tache) => tache.TacheId === this.newClientTache.TacheId);
     if (!existingTache) {
       this.clientData.ClientTaches.push(this.newClientTache);
-      console.log("B Test");
-      console.log(this.clientData.ClientTaches);
     } else {
-      console.log("C");
     }
 
-    console.log("D");
-    console.log(this.newClientTache);
     
     this.newClientTache = null;
     
@@ -1189,8 +1171,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   async insertEventsWithDelay(events) {
     for (let i = 0; i < events.length; i++) {
-      console.warn(events[i]);
-      console.warn("-----------------");
   
       const startDateTime = new Date(events[i].EventTimeStart).toISOString();
       const endDateTime = new Date(events[i].EventTimeEnd).toISOString();
@@ -1209,7 +1189,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
   
       try {
         await this.addEventToGoogleCalendar(eventXX);
-        console.log(`Event ${i + 1} added successfully.`);
       } catch (error) {
         console.error(`Error adding event ${i + 1}:`, error);
       }
@@ -1232,7 +1211,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       this.fetchAccessToken();
 
 
-      console.log(this.clientData.ClientTaches);
 
       if (this.clientData.HasConjoint && this.newConjoint) {
         this.submitAddConjoint();
@@ -1265,9 +1243,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
 
-                console.warn("----------------------------------")
-                console.warn(response.events);
-                console.warn("----------------------");
                 
                 
                 
@@ -1298,10 +1273,20 @@ export class AddClientComponent implements OnInit, OnDestroy {
           }
           this.toastr.success("Client ajouté avec succès ! ");
           this.btnSaveEmitter.emit(this.clientData);
+
+          console.warn("8  | Clearing Storage...");
+          
           this.modalService.dismissAll();
-          this.isDateRegistered = false;
-          this.selectedDate = new Date();
-          this.finalSavedDate = "";
+          this.selectedDate = null;
+          this.finalSavedDate = null;
+
+          console.warn("9  | Displaying Storage After Clearing It...");
+          console.warn("10 | Selected Date : "+this.selectedDate);
+          console.warn("11 | Final Saved Date : "+this.finalSavedDate);
+
+          console.warn("---------------------------------");
+
+          
           this.resetForm();
           setTimeout(() => {
             this.isLoading6 = false;
@@ -1361,12 +1346,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
         },
       });  
       
-      console.warn(response);
 
       
-      console.log("Done");
     } catch (error) {
-      console.log("Not Done");
       this.isErrorGoogleCalendarSync = true;      
       if (error.result?.error?.message?.includes("invalid authentication credentials")) {
         this.refreshToken();
@@ -1386,7 +1368,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
   onSaveDiss() {
     if (this.isFormValid()) {
-      console.log("addClient.OnSaveDiss: ", this.clientData);
       this.btnSaveEmitter.emit(this.clientData);
       this.modalService.dismissAll();
       this.resetForm();
@@ -1438,7 +1419,11 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.newClientMission = null;
     this.newClientMissionPrestation = null;
     this.newClientTache = null;
-    // Réinitialiser les données client
+
+
+  
+
+
     this.clientData = {
       CabinetId: null,
       ClientId: null,
@@ -1463,6 +1448,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
       Conjoint: [],
       Proches: [],
     };
+
+
+
     this.ssnForm.reset();
   }
 }
