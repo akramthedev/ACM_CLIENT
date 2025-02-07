@@ -195,7 +195,7 @@
   
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1.3s ease, visibility  1.3s ease;  }
+    transition: opacity .4s ease, visibility  .4s ease;  }
   
   .loading-overlay.show {
     opacity: 1;
@@ -409,7 +409,7 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)scale(0.9);
     background: white;
     padding: 25px 35px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

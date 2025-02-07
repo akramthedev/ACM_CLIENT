@@ -300,11 +300,11 @@ full-calendar {
   width: 100%;
 }
 .sfodshdgf2{
-  height: 18px !important;
-  width: 90.167% !important;
+  height: 32px !important;
+  width: 90% !important;
   margin: 0 auto !important;
   border-bottom: 1px solid #d8d8d8 !important;
-  margin-bottom: 18px !important;
+  margin-bottom: 32px !important;
   position: relative !important;
 }
 
@@ -487,7 +487,7 @@ full-calendar .fc-scrollgrid::-webkit-scrollbar-corner {
 
   opacity: 0;
   visibility: hidden;
-  transition: opacity 1.3s ease, visibility  1.3s ease;
+  transition: opacity .4s ease, visibility  .4s ease;
 }
 
 .loading-overlay.show {
@@ -817,7 +817,7 @@ input:checked + .slider:before {
 
 .SpaniSh88{
   position: absolute;
-  top: 0;
+  top: 1rem !important;
   left: 50%;
   transform: translate(-50%);
   background-color: white !important;
