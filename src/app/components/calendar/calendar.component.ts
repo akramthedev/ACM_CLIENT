@@ -1202,7 +1202,6 @@ async deleteEventOnGoogleCalendar() {
   
   handleEventClick(eventInfo: any): void {
     this.selectedEvent = eventInfo.event; 
-    console.log(this.selectedEvent.extendedProps);
     this.showPopup = true; 
   }
 
@@ -1217,17 +1216,76 @@ async deleteEventOnGoogleCalendar() {
     this.isReplanifierClicked = false;
   }
 
+
+
+
+
+  formatDateForDB = (dateString: Date): string => {
+    const date = new Date(dateString);
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day} 08:${minutes}:${seconds}.${milliseconds}`;
+};
+
+
+
+
+
   SauvegarderDateReplanification(): void  {
   
-    this.isSauvegarding = true;
+    if(this.selectedDate !== null && this.selectedEvent !== null){
+      this.isSauvegarding = true;
 
-    setTimeout(()=>{
+
+      let dateFormatedBeforeStoringIt = this.formatDateForDB(this.selectedDate);
+
+    
+
+      const payload = {
+        NewDate: dateFormatedBeforeStoringIt,
+        NewDateNonFormated : this.selectedDate, 
+        EventId: this.selectedEvent.extendedProps.EventId,
+      };
+      
+      this.http.post(`${environment.url}/UpdateSingleEvent`, payload).subscribe({
+        next: (response) => {
+          console.log('Sauvegarde réussie');
+          console.warn('Full Response:', response); 
+
+          let responseX = response ;
+        
+          if (responseX && responseX.EventTimeStart && responseX.EventTimeEnd) {
+            this.selectedEvent.extendedProps.EventStart = responseX.EventTimeStart;
+            this.selectedEvent.extendedProps.EventEnd = responseX.EventTimeEnd;
+          } else {
+            console.error("Les champs EventTimeStart ou EventTimeEnd sont manquants dans la réponse.");
+          }
+        
+          this.isSauvegarding = false;
+          this.closePopupOfReplanifier();
+          this.closePopup();
+        },
+        error: (error) => {
+          console.error('Erreur lors de la sauvegarde', error);
+          this.isSauvegarding = false;
+          this.toastr.error("Une erreur est survenue lors de la replanification.")
+        },
+      });
       this.isSauvegarding = false;
-    }, 1000);
+    }
   }
 
+
+
+
   formatDateOnly(dateString: string | Date | undefined): string {
-    if (!dateString) return '---'; // Gestion des valeurs nulles ou indéfinies
+    if (!dateString) return '---'; 
 
     const date = new Date(dateString);
     return date.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });

@@ -83,7 +83,7 @@ full-calendar {
   height: 100%;
   backdrop-filter: blur(8px) saturate(200%);
   -webkit-backdrop-filter: blur(8px) saturate(200%);
-  background-color: rgba(17, 25, 40, 0.666);
+  background-color: rgba(17, 25, 40, 0.200);
   z-index: 999999;
   opacity: 0;
   visibility: hidden;   
@@ -706,7 +706,7 @@ input:checked + .slider:before {
 
 .custom-tooltip {
   position: absolute !important;
-  background-color: #333 !important;
+  background-color: #565656 !important;
   color: white;
   padding: 8px;
   border-radius: 4px;
