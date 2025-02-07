@@ -74,6 +74,8 @@ export class CalendarComponent implements OnInit {
 
   isReplanifierClicked: boolean = false;
 
+  isSauvegarding: boolean = false;
+
   tokenClient: any;
   gapiInited = false;
   gisInited = false;
@@ -1215,6 +1217,14 @@ async deleteEventOnGoogleCalendar() {
     this.isReplanifierClicked = false;
   }
 
+  SauvegarderDateReplanification(): void  {
+  
+    this.isSauvegarding = true;
+
+    setTimeout(()=>{
+      this.isSauvegarding = false;
+    }, 1000);
+  }
 
   formatDateOnly(dateString: string | Date | undefined): string {
     if (!dateString) return '---'; // Gestion des valeurs nulles ou indéfinies
