@@ -1256,20 +1256,24 @@ async deleteEventOnGoogleCalendar() {
       this.http.post(`${environment.url}/UpdateSingleEvent`, payload).subscribe({
         next: (response) => {
           console.log('Sauvegarde réussie');
-          console.warn('Full Response:', response); 
 
-          let responseX = response ;
         
-          if (responseX && responseX.EventTimeStart && responseX.EventTimeEnd) {
-            this.selectedEvent.extendedProps.EventStart = responseX.EventTimeStart;
-            this.selectedEvent.extendedProps.EventEnd = responseX.EventTimeEnd;
-          } else {
-            console.error("Les champs EventTimeStart ou EventTimeEnd sont manquants dans la réponse.");
-          }
+
+          let StartDateY = new Date(dateFormatedBeforeStoringIt);
+          StartDateY.setHours(StartDateY.getHours() + 5);
+          let EndDateY = `${StartDateY.getFullYear()}-${(StartDateY.getMonth() + 1).toString().padStart(2, '0')}-${StartDateY.getDate().toString().padStart(2, '0')} 08:${StartDateY.getMinutes().toString().padStart(2, '0')}:${StartDateY.getSeconds().toString().padStart(2, '0')}.${StartDateY.getMilliseconds()}`;
+
         
           this.isSauvegarding = false;
+
           this.closePopupOfReplanifier();
-          this.closePopup();
+
+          setTimeout(()=>{
+            this.closePopup();
+            this.fetchTasks();
+          }, 333);
+
+
         },
         error: (error) => {
           console.error('Erreur lors de la sauvegarde', error);

@@ -209,6 +209,7 @@ full-calendar {
   align-items: center !important;
   justify-content: space-between !important;
   margin-bottom: 12px !important;
+  position: relative !important;
 }
 
 .nsdofnoqdfnqdof span{
@@ -304,6 +305,7 @@ full-calendar {
   margin: 0 auto !important;
   border-bottom: 1px solid #d8d8d8 !important;
   margin-bottom: 18px !important;
+  position: relative !important;
 }
 
 
@@ -811,4 +813,15 @@ input:checked + .slider:before {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.SpaniSh88{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: white !important;
+  padding: 6px 30px;
+  border-radius: 1rem !important;
+  color: rgb(154, 154, 154);
 }
