@@ -28,7 +28,7 @@ declare var gapi: any;
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 20 * 24 * 60 * 60 * 1000); // deadline
+  const futureDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // deadline 30 days
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based

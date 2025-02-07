@@ -43,6 +43,19 @@ export class CalendarComponent implements OnInit {
   isLoadingAccToken:boolean = false;
   dataFetchedAccToken : any = null; 
 
+  currentMonth: number = new Date().getMonth();
+  currentYear: number = new Date().getFullYear();
+  selectedDate: Date | null = null;
+
+  months: string[] = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  ];
+
+
+  weekDays: string[] = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+
+  calendarDays: { date: number, currentMonth: boolean, selected: boolean }[] = [];
 
 
 
@@ -59,6 +72,7 @@ export class CalendarComponent implements OnInit {
   ClientIdOfGoogle: any = null;
   AccessTokenGoogle: any = null;
 
+  isReplanifierClicked: boolean = false;
 
   tokenClient: any;
   gapiInited = false;
@@ -89,16 +103,9 @@ export class CalendarComponent implements OnInit {
     });
 
 
+    this.generateCalendar();
 
-
-
-
-
-
-
-
-
-
+ 
 
 
 
@@ -146,7 +153,172 @@ export class CalendarComponent implements OnInit {
             this.isNullValue = value;
             this.fetchAccessToken();
         });
+
+        
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+    generateCalendar() {
+      // Use currentMonth and currentYear to generate the calendar
+      const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
+      const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+      const numberOfDaysInMonth = lastDayOfMonth.getDate();
+    
+      // Empty the current calendar before regenerating it
+      this.calendarDays = [];
+    
+      // Generate days for the selected month (from currentMonth and currentYear)
+      for (let i = 1; i <= numberOfDaysInMonth; i++) {
+        const dayObj = {
+          date: i,
+          currentMonth: true,
+          selected: false
+        };
+        this.calendarDays.push(dayObj);
+      }
+    
+      // After generating the calendar, reapply the selected date if necessary
+      this.reapplySelectedDate();
+    }
+
+
+
+ 
+    
+    selectDate(day: any) {
+      if (!day.currentMonth) return;
+    
+      this.calendarDays.forEach(d => d.selected = false);  // Reset selected date
+      day.selected = true;
+      
+      // Update selectedDate based on the selected day
+      this.selectedDate = new Date(this.currentYear, this.currentMonth, day.date);
+    
+      // Update the calendar with the selected date
+      this.generateCalendar();
+    }
+    
+   
+
+
+
+
+   
+    
+
+
+    nextMonth() {
+      if (this.currentMonth === 11) {
+        this.currentMonth = 0;
+        this.currentYear++;
+      } else {
+        this.currentMonth++;
+      }
+      this.generateCalendar();
+      this.reapplySelectedDate();
+    }
+    
+    previousMonth() {
+      if (this.currentMonth === 0) {
+        this.currentMonth = 11;
+        this.currentYear--;
+      } else {
+        this.currentMonth--;
+      }
+      this.generateCalendar();
+      this.reapplySelectedDate();
+    }
+
+
+
+    
+    reapplySelectedDate() {
+      if (this.selectedDate) {
+        
+         this.setDefaultDate(this.selectedDate);
+      }
+    }
+    
+
+
+    ReplanifierClicked(): void {
+      this.isReplanifierClicked = true;
+    
+      let selectedEndDate = this.selectedEvent.extendedProps.EventStart;
+      let defaultDate = new Date(selectedEndDate); // Convert ISO string to Date
+    
+      // Set the current month and year based on the selected event's date
+      this.currentMonth = defaultDate.getMonth();
+      this.currentYear = defaultDate.getFullYear();
+    
+      // Set the selected date for the calendar
+      this.selectedDate = defaultDate;
+    
+      // Generate the calendar for the selected event's month
+      this.generateCalendar();
+    }
+    
+
+
+   setDefaultDate(date: Date) {
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+
+    // Loop through the calendarDays to find the correct day in the updated month
+    this.calendarDays.forEach(dayObj => {
+      if (dayObj.date === day && dayObj.currentMonth && month === this.currentMonth && year === this.currentYear) {
+        dayObj.selected = true;
+      } else {
+        dayObj.selected = false;  // Optional: Reset other days
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     updateIsNullValue(newValue: boolean) {
@@ -470,27 +642,12 @@ async deleteEventOnGoogleCalendar() {
                   }
                   
                 });
-
       }
-
-    
-            
-        
-
-
   } catch (error) {
     console.error("❌ Échec de la suppression :", error);
     this.toastr.error("Erreur lors de la suppression de l’événement sur Google Calendar.");
   }
 }
-
-
-
-
-   
-
-  
-  
 
 
 
@@ -823,7 +980,9 @@ async deleteEventOnGoogleCalendar() {
             color: task.color,
             EventIsDone: task.EventIsDone,
             EventIsReminder: task.EventIsReminder,
-            EventId: task.EventId
+            EventId: task.EventId, 
+            EventStart : task.EventStart,
+            EventEnd : task.EventEnd
           }
         }));
   
@@ -1050,6 +1209,10 @@ async deleteEventOnGoogleCalendar() {
     setTimeout(()=>{
       this.selectedEvent = null;
     }, 500);
+  }
+
+  closePopupOfReplanifier(): void {
+    this.isReplanifierClicked = false;
   }
 
 
