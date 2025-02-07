@@ -52,6 +52,7 @@ export class ClientsComponent implements OnInit {
 
   
   CLIENT_ID = '267508651605-2vqqep29h97uef9tt7ahis82dskjsm1r.apps.googleusercontent.com';
+  CLIENT_SECRET = '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';
   API_KEY = 'AIzaSyBhI34z9rSK7S-rfmngJ1nmb48zfb5nUz8';
   DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
   SCOPES = 'https://www.googleapis.com/auth/calendar';
@@ -67,6 +68,26 @@ export class ClientsComponent implements OnInit {
   gapiInited = false;
   gisInited = false;
   events: string = '';
+
+  private tokenCheckInterval: any;
+  private readonly CHECK_INTERVAL    =  90000; //  1min 30s
+  private readonly EXPIRATION_BUFFER = 300000; //  5 min 
+  private isRefreshing = false;
+
+
+
+
+
+  startTokenCheckLoop(): void {
+    if (!this.tokenCheckInterval) {
+      this.tokenCheckInterval = setInterval(() => {
+        this.checkTokenExpiration();
+      }, this.CHECK_INTERVAL);
+      
+      this.checkTokenExpiration();
+    }
+  }
+  
 
   filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
   allPersons: { id: string; nom: string; prenom: string }[] = [];  
@@ -97,6 +118,8 @@ export class ClientsComponent implements OnInit {
 
 
   ngOnInit(): void {
+      this.checkTokenExpiration();
+      this.startTokenCheckLoop();
       this.getClients();
       this.LoadTous();
       this.loadGoogleApis();
@@ -189,6 +212,8 @@ export class ClientsComponent implements OnInit {
         this.AccessTokenGoogle = resp.access_token;
         this.handleAuthResponse(resp)
       },
+      prompt: '', 
+      access_type: 'offline'
     });
     this.gisInited = true;
     this.maybeEnableButtons();
@@ -200,6 +225,9 @@ export class ClientsComponent implements OnInit {
       document.getElementById('authorize_button')!.style.visibility = 'visible';
     }
   }
+
+
+
 
   async addEventToGoogleCalendar(event: any) {
     try {
@@ -239,7 +267,6 @@ export class ClientsComponent implements OnInit {
     this.tokenClient.requestAccessToken({
       prompt: 'consent',
       callback: (response: any) => {
-        // Check if there's an error in the response
         if (response.error) {
           console.error('Google authentication error:', response.error);
           this.isLoadingTokenGoogleCalendar = false;
@@ -266,6 +293,26 @@ export class ClientsComponent implements OnInit {
     }
   }
 
+ async checkIfTokenExpiredOrNot(event: any) {
+    if(this.isConnectedToGoogleCalendar){
+      try {
+      
+        const accessToken = localStorage.getItem('google_token');
+        
+        if (!accessToken) {
+          this.refreshToken();
+          return;
+        }
+        else{
+          // check its expiring if yes we execute : this.handleLogout();
+        }
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  
 
 
 
@@ -375,33 +422,28 @@ export class ClientsComponent implements OnInit {
 
 
 
-
-
   async handleAuthResponse(resp: any): Promise<void> {
-
     if (resp.error) {
       console.error(resp);
       this.isConnectedToGoogleCalendar = false;
       return;
     }
-
-
+  
     this.AccessTokenGoogle = resp.access_token;
     localStorage.setItem('google_token', resp.access_token);
+    localStorage.setItem('google_refresh_token', resp.refresh_token); 
     const expiresIn = resp.expires_in;  
     const expirationTime = Date.now() + expiresIn * 1000;
     localStorage.setItem('google_token_expiration', expirationTime.toString());
-    this.isConnectedToGoogleCalendar = true;
-
+    
     console.warn("--------------------------------");
     console.warn(this.userCurrent.id);
     console.warn(this.userCurrent.email);
     console.warn(this.ClientIdOfGoogle);
     console.warn(this.AccessTokenGoogle);
     console.warn("--------------------------------");
-
-    const authButton = document.getElementById('authorize_button');
-    
+  
+    const authButton = document.getElementById('authorize_button');    
     if (authButton) {
       authButton.innerText = '';
       authButton.style.color = 'white';
@@ -409,18 +451,14 @@ export class ClientsComponent implements OnInit {
       authButton.style.pointerEvents = 'none';
       authButton.style.cursor = 'default';
     }
-
-
-
-    const requestBody = {
-      ClientIdOfCloack : this.userCurrent.id, 
-      EmailKeyCloack : this.userCurrent.email, 
-      AccessTokenGoogle : this.AccessTokenGoogle, 
-      ClientIdOfGoogle : this.ClientIdOfGoogle
-    };
   
-    console.warn("Body Of Request : ");
-    console.warn(requestBody);
+    const requestBody = {
+      ClientIdOfCloack: this.userCurrent.id, 
+      EmailKeyCloack: this.userCurrent.email, 
+      AccessTokenGoogle: this.AccessTokenGoogle, 
+      ClientIdOfGoogle: this.ClientIdOfGoogle
+    };
+    
     this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
       .subscribe({
         next: (res) => {
@@ -434,121 +472,86 @@ export class ClientsComponent implements OnInit {
           this.isLoading = false;
         }
       });  
-      this.isLoading = false;
+  
+    this.isConnectedToGoogleCalendar = true;
+    this.startTokenCheckLoop();  
+    this.isLoading = false;
   }
 
 
 
+ 
 
-  
+
   checkTokenExpiration(): boolean {
     const expirationTime = localStorage.getItem('google_token_expiration');
+
     
     if (expirationTime) {
       const currentTime = Date.now();
       const expiryDate = parseInt(expirationTime);
-
-      if (currentTime >= expiryDate) {
-        console.log('Token expiré, veuillez ré-authentifier.');
-        this.refreshToken();  // Rafraîchir le token si nécessaire
-        this.isConnectedToGoogleCalendar = false;
+  
+      if (currentTime >= expiryDate - this.EXPIRATION_BUFFER) {  
+        this.refreshToken();
         return false;
       }
-    } else {
-      console.log('Aucun token trouvé, veuillez vous connecter.');
-      this.isConnectedToGoogleCalendar = false;
-      return false;
+      return true;
     }
-    return true;
+    
+    console.log('No token found, please login');
+    this.isConnectedToGoogleCalendar = false;
+    return false;
   }
 
 
 
 
-  refreshToken(): void {
-    const refreshTokenX = localStorage.getItem('google_refresh_token');   
-  
-    if (!refreshTokenX) {
-      this.handleLogout();
-      this.toastr.error("Veuillez vous reconnecter, votre session a expiré.");
-      return;
-    }
-  
-    const url = 'https://oauth2.googleapis.com/token';
-    const data = new URLSearchParams();
-    data.append('client_id', this.ClientIdOfGoogle);  
-    data.append('client_secret', this.AccessTokenGoogle);   
-    data.append('refresh_token', refreshTokenX);  
-    data.append('grant_type', 'refresh_token');  
-  
-    fetch(url, { method: 'POST', body: data })
-      .then((response) => response.json())
-      .then((data) => {
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-        if (data.access_token) {
-          console.log('Token rafraîchi avec succès!');
-  
-          // Mettre à jour le token et la date d'expiration
-          const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
-          localStorage.setItem('google_token', data.access_token);
-          localStorage.setItem('google_token_expiration', newExpirationTime.toString());
-  
-          alert(data.refresh_token.toString());
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          console.warn(data)
-          // Mettre à jour le refresh token si disponible
-          if (data.refresh_token) {
-            localStorage.setItem('google_refresh_token', data.refresh_token);
+refreshToken(): void {
+
+    if (this.isRefreshing) return;
+    this.isRefreshing = true;
+
+      const refreshTokenX = localStorage.getItem('google_refresh_token');
+      
+      if (!refreshTokenX) {
+        this.handleLogout();
+        this.toastr.error("Please reconnect, session expired.");
+        return;
+      }
+
+      const url = 'https://oauth2.googleapis.com/token';
+      const data = new URLSearchParams();
+      data.append('client_id', this.CLIENT_ID); 
+      data.append('client_secret', this.CLIENT_SECRET);  
+      data.append('refresh_token', refreshTokenX);
+      data.append('grant_type', 'refresh_token');
+
+      fetch(url, { method: 'POST', body: data })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.access_token) {
+            const expiresIn = data.expires_in || 3500; 
+            const newExpirationTime = Date.now() + (expiresIn * 1000);
+            
+            localStorage.setItem('google_token', data.access_token);
+            localStorage.setItem('google_token_expiration', newExpirationTime.toString());
+        
+            if (data.refresh_token) {
+              localStorage.setItem('google_refresh_token', data.refresh_token);
+            }
+        
+            this.isConnectedToGoogleCalendar = true;
+          } else {
+            this.handleLogout();
           }
-          this.isConnectedToGoogleCalendar = true;
-
-        } else {
-          console.log('Impossible de rafraîchir le token:', data);
+        })
+        .catch((error) => {
+          console.error('Refresh error:', error);
           this.handleLogout();
-          this.toastr.error("Veuillez vous reconnecter à Google Calendar.");
-          this.isConnectedToGoogleCalendar = false;
-        }
-      })
-      .catch((error) => {
-        console.error('Erreur lors du rafraîchissement du token:', error);
-        this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
-        this.isConnectedToGoogleCalendar = false;
-      });
-  }
-  
+        }).finally(() => {
+          this.isRefreshing = false;
+        });
+}
   
 
   
@@ -564,7 +567,8 @@ export class ClientsComponent implements OnInit {
             console.warn('Fetched Access Token:', response[0]);
   
             localStorage.setItem('google_token', response[0].AccessTokenGoogle);
-            const expirationTime = Date.now() + (58 * 60 * 1000);  
+            const expiresIn = response[0]?.expires_in || 3500; 
+            const expirationTime = Date.now() + expiresIn * 1000;
             localStorage.setItem('google_token_expiration', expirationTime.toString());
             this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
             this.isLoadingAccToken = false;
@@ -594,7 +598,14 @@ export class ClientsComponent implements OnInit {
 
  
   handleLogout(): void {
-    this.isLoadingAccToken = true
+
+    if (this.tokenCheckInterval) {
+      clearInterval(this.tokenCheckInterval);
+      this.tokenCheckInterval = null;
+    }
+
+
+    this.isLoadingAccToken = true;
     localStorage.removeItem('google_token');
     localStorage.removeItem('google_token_expiration');
     localStorage.removeItem('google_refresh_token');

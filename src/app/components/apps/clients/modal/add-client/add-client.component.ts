@@ -1311,6 +1311,13 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
 
+
+
+
+
+
+  
+
   
 
   async addEventToGoogleCalendar(event: any) {
