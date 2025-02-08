@@ -70,7 +70,7 @@ export class ClientsComponent implements OnInit {
   events: string = '';
 
   private tokenCheckInterval: any;
-  private readonly CHECK_INTERVAL    =  90000; //  1min 30s
+  private readonly CHECK_INTERVAL    =  66000; //  1min 30s
   private readonly EXPIRATION_BUFFER = 300000; //  5 min 
   private isRefreshing = false;
 

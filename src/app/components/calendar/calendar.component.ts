@@ -125,7 +125,6 @@ export class CalendarComponent implements OnInit {
       selectable: true,
       eventClick: this.handleEventClick.bind(this),
       eventDidMount: (info) => {
-        console.log("Event mounted: ", info.event); // Check if event is being triggered
         info.el.style.cursor = 'pointer';
         
         const tooltipContent = `
@@ -537,7 +536,7 @@ async deleteEventOnGoogleCalendar() {
 
         
 
-        const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent._def.extendedProps.EventId);
+        const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent.extendedProps.EventId);
 
         
         console.log("TO delete => eventId : "+eventId);
@@ -546,7 +545,7 @@ async deleteEventOnGoogleCalendar() {
         if (!eventId) {
           console.error("❌ Erreur: eventId est introuvable sur Google Calendar !");
 
-          const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+          const EVENTIDTODELETEINDATABASE = this.selectedEvent.extendedProps.EventId; 
           const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
         
           this.http.delete(deleteURL).subscribe({
@@ -581,7 +580,7 @@ async deleteEventOnGoogleCalendar() {
     
           
               
-                const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+                const EVENTIDTODELETEINDATABASE = this.selectedEvent.extendedProps.EventId; 
                 const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
               
                 this.http.delete(deleteURL).subscribe({
@@ -623,7 +622,7 @@ async deleteEventOnGoogleCalendar() {
       }
       else{
         
-                const EVENTIDTODELETEINDATABASE = this.selectedEvent._def.extendedProps.EventId; 
+                const EVENTIDTODELETEINDATABASE = this.selectedEvent.extendedProps.EventId; 
                 const deleteURL = `${environment.url}/DeleteEventById/${EVENTIDTODELETEINDATABASE}`;
                 this.http.delete(deleteURL).subscribe({
                   next: (response) => {
@@ -1237,52 +1236,166 @@ async deleteEventOnGoogleCalendar() {
 
 
 
-  SauvegarderDateReplanification(): void  {
+
+
+ formatDateForGoogleWithoutTimezoneAdjustment(dateInput: any): string {
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
   
-    if(this.selectedDate !== null && this.selectedEvent !== null){
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
+  const offsetMinutes = date.getTimezoneOffset(); 
+
+  date.setMinutes(date.getMinutes() - offsetMinutes);
+
+  return date.toISOString(); 
+}
+
+
+
+
+setTimeToEightThirty(dateInput: any): string {
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
+  // Set the time to 8:30 AM
+  date.setHours(9);
+  date.setMinutes(30);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+
+  
+  return date.toISOString(); 
+}
+
+setTimeToEightThirty2(dateInput: any): string {
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
+  // Set the time to 8:30 AM
+  date.setHours(16);
+  date.setMinutes(30);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+
+  
+  return date.toISOString(); 
+}
+
+
+
+
+  async SauvegarderDateReplanification() {
+
       this.isSauvegarding = true;
 
+      if(this.isConnectedToGoogleCalendar){
+        if(this.selectedDate !== null && this.selectedEvent !== null){
 
-      let dateFormatedBeforeStoringIt = this.formatDateForDB(this.selectedDate);
+          const accessToken = localStorage.getItem('google_token');
 
-    
+          if (!accessToken) {
+            console.error('❌ No Google access token found.');
+          }
+          else{
+            gapi.client.setToken({ access_token: accessToken });
 
-      const payload = {
-        NewDate: dateFormatedBeforeStoringIt,
-        NewDateNonFormated : this.selectedDate, 
-        EventId: this.selectedEvent.extendedProps.EventId,
-      };
+            const eventId = await this.findGoogleEventIdByAppEventId(this.selectedEvent.extendedProps.EventId);
+            
+            if (!eventId) {
+              console.error("❌ Erreur: eventId est introuvable sur Google Calendar !");
+            }
+            else{
+              try {
+                
+                let googleFormatWanted = this.formatDateForGoogleWithoutTimezoneAdjustment(this.selectedDate);
+                let startDateCustomized = this.setTimeToEightThirty(googleFormatWanted);
+                let endDateCustomized = this.setTimeToEightThirty2(googleFormatWanted);
+
+
+                console.log("startDateCustomized : "+startDateCustomized);
+                console.log("endDateCustomized : "+endDateCustomized);
+
+
+                const updatedEvent = {
+                  start: {
+                    dateTime: startDateCustomized,  
+                    timeZone: 'UTC'  
+                  },
+                  end: {
+                    dateTime: endDateCustomized,
+                    timeZone: 'UTC' 
+                  }
+                };
+
+                await gapi.client.calendar.events.patch({
+                  calendarId: 'primary',
+                  eventId: eventId,
+                  resource: updatedEvent,
+                });
       
-      this.http.post(`${environment.url}/UpdateSingleEvent`, payload).subscribe({
-        next: (response) => {
-          console.log('Sauvegarde réussie');
+              } catch (checkError) {
+                console.error(checkError);
+              } 
+            }
+          }
+        }
+      }
+      if(this.selectedDate !== null && this.selectedEvent !== null){
+  
+  
+        let dateFormatedBeforeStoringIt = this.formatDateForDB(this.selectedDate);
+        let googleFormatWanted = this.formatDateForGoogleWithoutTimezoneAdjustment(this.selectedDate);
+        let afterfixdate = this.setTimeToEightThirty(googleFormatWanted);
 
+  
+        const payload = {
+          NewDate: dateFormatedBeforeStoringIt,
+          NewDateNonFormated : this.selectedDate, 
+          EventId: this.selectedEvent.extendedProps.EventId,
+        };
         
+        this.http.post(`${environment.url}/UpdateSingleEvent`, payload).subscribe({
+          next: (response) => {
+            console.log('Sauvegarde réussie');
+  
+          
+  
+            let StartDateY = new Date(dateFormatedBeforeStoringIt);
+            StartDateY.setHours(StartDateY.getHours() + 5);
+            let EndDateY = `${StartDateY.getFullYear()}-${(StartDateY.getMonth() + 1).toString().padStart(2, '0')}-${StartDateY.getDate().toString().padStart(2, '0')} 08:${StartDateY.getMinutes().toString().padStart(2, '0')}:${StartDateY.getSeconds().toString().padStart(2, '0')}.${StartDateY.getMilliseconds()}`;
+  
+          
+            this.isSauvegarding = false;
+  
+            this.closePopupOfReplanifier();
+            setTimeout(()=>{
+              this.closePopup();
+              this.fetchTasks();
+            }, 333);
+  
+  
+          },
+          error: (error) => {
+            console.error('Erreur lors de la sauvegarde', error);
+            this.isSauvegarding = false;
+            this.toastr.error("Une erreur est survenue lors de la replanification.")
+          },
+        });
+        this.isSauvegarding = false;
+      }
 
-          let StartDateY = new Date(dateFormatedBeforeStoringIt);
-          StartDateY.setHours(StartDateY.getHours() + 5);
-          let EndDateY = `${StartDateY.getFullYear()}-${(StartDateY.getMonth() + 1).toString().padStart(2, '0')}-${StartDateY.getDate().toString().padStart(2, '0')} 08:${StartDateY.getMinutes().toString().padStart(2, '0')}:${StartDateY.getSeconds().toString().padStart(2, '0')}.${StartDateY.getMilliseconds()}`;
-
-        
-          this.isSauvegarding = false;
-
-          this.closePopupOfReplanifier();
-
-          setTimeout(()=>{
-            this.closePopup();
-            this.fetchTasks();
-          }, 333);
-
-
-        },
-        error: (error) => {
-          console.error('Erreur lors de la sauvegarde', error);
-          this.isSauvegarding = false;
-          this.toastr.error("Une erreur est survenue lors de la replanification.")
-        },
-      });
       this.isSauvegarding = false;
-    }
+
   }
 
 

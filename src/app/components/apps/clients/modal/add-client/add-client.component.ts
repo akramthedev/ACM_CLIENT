@@ -309,6 +309,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
     this.isConnectedToGoogleCalendar = false;
     this.handleLogout();
     this.ShouldReConnect = false;
+    window.location.reload();
   }
 
 
@@ -476,7 +477,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     }
     return true;
   }
-
 
 
 
@@ -1366,6 +1366,9 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
       }
       console.error('Erreur lors de l’ajout de l’événement :', error);
+      this.isConnectedToGoogleCalendar = false;
+      this.handleLogout();
+
     }
   }
   
