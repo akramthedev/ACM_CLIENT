@@ -3,6 +3,8 @@ import { Router } from "@angular/router";
 import { keycloakUser } from "src/app/shared/model/models.model";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { environment } from "src/environments/environment";
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: "app-my-account",
@@ -14,7 +16,8 @@ export class MyAccountComponent implements OnInit {
   public profileImg: "assets/images/dashboard/profile.jpg";
 
   user: keycloakUser = null;
-  constructor(public router: Router, private authService: AuthService) {
+  isLoadingDelete: boolean = false;
+  constructor(public router: Router, private authService: AuthService,private http: HttpClient) {
     // let user = JSON.parse(localStorage.getItem("user"))
     // console.log("user: ", user);
 
@@ -50,8 +53,46 @@ export class MyAccountComponent implements OnInit {
 
   ngOnInit() {}
 
-  logoutFunc() {
+
+
+
+
+
+
+
+
+  
+
+
+  async removeTokenFromDatabase() {
+
+    let IDofUserToDelete = this.user.id.toUpperCase();
+
+    const body = {
+      ClientIdOfCloack: IDofUserToDelete, 
+    };
+
+  
+    this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
+      next: (response) => {
+        console.log('Token supprimé avec succès de la base de données', response);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression du token', error);
+      }
+    });
+  }
+
+
+
+  async logoutFunc() {
+    this.isLoadingDelete = true;
+    await this.removeTokenFromDatabase();
+    localStorage.removeItem('google_token');
+    localStorage.removeItem('google_token_expiration');
+    localStorage.removeItem('google_refresh_token');
     this.authService.Logout();
+    this.isLoadingDelete = false;
   }
 
   userProfile() {
