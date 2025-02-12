@@ -3,13 +3,63 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: calc(100% - 100px);
+        height: calc(100vh - 200px);
         overflow-y: hidden;
         width: 100%;
-        padding-top: 6rem;
+        flex-direction: column;
     "
 >
-    <span>
-        In progress...
-    </span>
+    <button 
+        id="authorize_button"
+        (click)="handleAuthClick()" 
+        class="docnjjdl" 
+        *ngIf="!isConnectedToGoogleCalendar" 
+        [disabled]="isLoadingAccToken || !gapiInited"
+    >
+        Connexion
+    </button>
+
+    <button 
+        id=""
+        (click)="handleLogout()" 
+        class="docnjjdl" 
+        *ngIf="isConnectedToGoogleCalendar" 
+        [disabled]="isLoadingAccToken"
+    >
+        Déconnexion
+    </button>
+    <br>
+    <br>
+
+    <div style="
+        width: 350px;
+        height: 66px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+    ">
+        <span>
+            Does token exist
+        </span>
+        <span>
+            {{ isConnectedToGoogleCalendar ? "Yes" : "No" }}
+        </span>
+    </div>
+    <div style="
+        width: 350px;
+        height: 66px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+    ">
+        <span>
+            Expiration Date 
+        </span>
+        <span>
+            {{expirationGoogleToken}}
+        </span>
+    </div>
+
 </div>
