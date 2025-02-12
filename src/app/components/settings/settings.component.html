@@ -1,3 +1,25 @@
+
+
+<div
+  [ngClass]="{ 'visible': shouldReconnect }"
+  class="popup-overlay"
+  (click)="closeShouldReconnect()"
+>
+  <div
+    class="popup-modal popup-modal2"
+    [ngClass]="{ 'visible': shouldReconnect }"
+  >
+    <h3 style="margin-bottom: 30px;">
+      Votre session Google Calendar a expiré ! 
+    </h3>
+    <p>
+     Veuillez vous ré-authentifier en cliquant sur le bouton : Connexion  
+    </p>
+  </div>
+</div>
+
+
+
 <div
     style="
         display: flex;
