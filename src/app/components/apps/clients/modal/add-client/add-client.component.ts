@@ -17,13 +17,8 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 
-
-
-
-
 declare var google: any;
 declare var gapi: any;
-
 
 
 function getFutureDateTime() {
