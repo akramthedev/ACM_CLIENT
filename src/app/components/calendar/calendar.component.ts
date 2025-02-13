@@ -67,8 +67,9 @@ export class CalendarComponent implements OnInit {
 
 
 
-
-
+        unsynchronizedTasks: any = null;
+        NumberOfUnsyncTasks: any = null;
+        allEventsOfGoogleCalendar: any = null;
   calendarOptions: CalendarOptions;
   selectedEvent: any = null; 
   showPopup: boolean = false;  
@@ -133,17 +134,18 @@ export class CalendarComponent implements OnInit {
   }
 
     
-  
+    
     ngOnInit(): void {
-        this.loadGoogleApis();
-        this.fetchTasks();
-        this.isNullValueSubject.subscribe((value) => {
-          this.isNullValue = value;
-          if (!this.isNullValue) {
-            this.fetchAccessToken();
-          }
-        });
+      this.loadGoogleApis();
+      this.isNullValueSubject.subscribe((value) => {
+        this.isNullValue = value;
+        if (!this.isNullValue) {
+          this.fetchAccessToken();
+        }
+      });
+      this.fetchTasks();
     }
+    
 
 
     generateCalendar() {
@@ -329,9 +331,9 @@ export class CalendarComponent implements OnInit {
     document.body.appendChild(gisScript);
   }
 
-
-  gapiLoaded(): void {
-      gapi.load('client', async () => {
+  async gapiLoaded() {
+    try {
+      await gapi.load('client', async () => {
         await gapi.client.init({
           apiKey: environment.API_KEY,
           discoveryDocs: [this.DISCOVERY_DOC],
@@ -344,10 +346,14 @@ export class CalendarComponent implements OnInit {
         }
   
         this.gapiInited = true;
-      });
-    }
+        console.warn("gapi client initialized");
   
-
+        await this.getAllGoogleCalendarEvents();
+      });
+    } catch (error) {
+      console.error("❌ Error initializing gapi client:", error);
+    }
+  }
 
 
     gisLoaded(): void {
@@ -487,6 +493,34 @@ export class CalendarComponent implements OnInit {
     }
 
 
+
+    SynchroniserLesTachesNonSynchronise(): void {
+      if (!this.unsynchronizedTasks || this.unsynchronizedTasks.length === 0) {
+        alert('Aucune tâche à synchroniser.');
+        return;
+      }
+    
+      this.isLoading = true;  
+    
+      let syncCount = 0;
+    
+      this.unsynchronizedTasks.forEach(async (task, index) => {
+        try {
+          await this.addEventToGoogleCalendar(task);
+          syncCount++;
+    
+          if (syncCount === this.unsynchronizedTasks.length) {
+            alert(`${syncCount} tâches synchronisées avec succès !`);
+            this.fetchTasks();  
+          }
+        } catch (error) {
+          console.error(`Erreur lors de la synchronisation de la tâche ${task.title}:`, error);
+        }
+      });
+    
+      this.isLoading = false;  
+    }
+    
 
 
 
@@ -802,7 +836,6 @@ export class CalendarComponent implements OnInit {
       
       if (!accessToken) {
         console.error('No Google access token found');
-        alert('Please authenticate with Google Calendar.');
         return;
       }
   
@@ -828,6 +861,10 @@ export class CalendarComponent implements OnInit {
   
    
 
+
+
+
+
   async getGoogleCalendarEvents() {
     try {
 
@@ -835,7 +872,6 @@ export class CalendarComponent implements OnInit {
           
           if (!accessToken) {
             console.error('No Google access token found');
-            alert('Please authenticate with Google Calendar.');
             return;
           }
       
@@ -1060,7 +1096,8 @@ async deleteEventOnGoogleCalendar() {
  
 
 
-  fetchTasks(): void {
+   fetchTasks() {
+
     this.isLoading = true;
   
     this.http.get(`${environment.url}/GetClientTachesAllOfThem`).subscribe({
@@ -1116,7 +1153,31 @@ async deleteEventOnGoogleCalendar() {
         this.filters.tasks = this.allTasks.map(task => task.id);
   
         this.calendarOptions.events = this.getFilteredEvents();
-  
+        
+        this.unsynchronizedTasks = [];
+        this.NumberOfUnsyncTasks = 0;
+
+        let counter = 0;
+    
+        console.log('A')
+
+          this.originalEvents.forEach((task) => {
+            const appEventId = task.extendedProps.EventId.toString();
+            const isSynchronized = this.allEventsOfGoogleCalendar.some((event) =>
+              event.extendedProperties?.private?.appEventId?.toString() === appEventId
+            );
+            if (!isSynchronized) {
+              this.unsynchronizedTasks.push(task);
+              counter++;
+            }
+          });
+
+        this.NumberOfUnsyncTasks = counter;
+
+        console.log(this.unsynchronizedTasks);
+        console.log('C')
+
+
         setTimeout(() => {
           this.calendarComponent.getApi().refetchEvents();
         }, 100);
@@ -1137,7 +1198,55 @@ async deleteEventOnGoogleCalendar() {
 
   
 
+
   
+
+
+
+  async getAllGoogleCalendarEvents() {
+    try {
+      if (!this.gapiInited) {
+        console.error("gapi client is not initialized");
+        return;
+      }
+  
+      this.isLoading = true;
+      const accessToken = localStorage.getItem('google_token');
+  
+      if (!accessToken) {
+        console.error('No Google access token found');
+        return;
+      }
+  
+      gapi.client.setToken({
+        access_token: accessToken,
+      });
+  
+      const response = await gapi.client.calendar.events.list({
+        calendarId: 'primary',
+        timeMin: new Date().toISOString(),
+        showDeleted: false,
+        singleEvents: true,
+        orderBy: 'startTime',
+      });
+  
+      const events = response.result.items || [];
+
+      this.allEventsOfGoogleCalendar = events;
+      console.warn("Google Calendar Events:", events);
+      this.isLoading = false;
+  
+    } catch (error) {
+      this.allEventsOfGoogleCalendar = [];
+      console.error("❌ Error fetching Google Calendar events:", error);
+      this.isLoading = false;
+    }
+  }
+
+  
+
+
+
 
 
 

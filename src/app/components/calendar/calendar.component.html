@@ -39,22 +39,13 @@
         <div class="sfodshdgf"></div>
 
         <h6 class="H6h_8">
-          Synchroniser Google Agenda
-        </h6>
-
-        <div class="srfsdsdwg">
-          <div class="switch-container sfoidjisdfjidsfjdfs">
-            <div class="dni8H9b">
-              <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
-              <span>
-                <em>
-                  {{ isConnectedToGoogleCalendar ? 'Statut : Connecté' : 'Statut : Déconnecté' }}
-                </em>
-              </span>
-            </div>
-             
+          <div class="dni8H9b">
+            <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
           </div>
-        </div>
+          &nbsp;Google Agenda
+        </h6>
+            
+        
         <div class="srfsdsdwg srfsdsdwg222">
           <button 
             id="authorize_button" 
@@ -62,19 +53,36 @@
             class="docnjjdl" 
             *ngIf="!isConnectedToGoogleCalendar" 
             [disabled]="isLoadingAccToken">
-            Se connecter
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#7366fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>                              
+            &nbsp;Connecter Google Agenda
           </button>
-          
           <button 
             id="logout_button" 
             (click)="handleLogout()" 
             class="docnjjdl déconecion" 
             *ngIf="isConnectedToGoogleCalendar" 
             [disabled]="isLoadingAccToken">
-            Se déconnecter
+            Déconnecter Google Agenda
           </button>
         </div>
+
+        <div class="srfsdsdwg srfsdsdwg222">
+          <button 
+            id="logout_button" 
+            (click)="SynchroniserLesTachesNonSynchronise()" 
+            class="docnjjdl déconecion2" 
+            *ngIf="isConnectedToGoogleCalendar" 
+            [disabled]="isLoadingAccToken">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+            </svg>            
+            &nbsp;Synchroniser {{NumberOfUnsyncTasks}} tâches
+          </button>
+        </div>
+
          
+
+
         <div class="sfodshdgf2"></div>
        
           
