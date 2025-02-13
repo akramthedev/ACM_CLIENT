@@ -52,26 +52,28 @@
                 </em>
               </span>
             </div>
-            <button 
-              id="authorize_button" 
-              (click)="handleAuthClick()" 
-              class="docnjjdl" 
-              *ngIf="!isConnectedToGoogleCalendar" 
-              [disabled]="isLoadingAccToken">
-              Connexion
-            </button>
-            
-            <button 
-              id="logout_button" 
-              (click)="handleLogout()" 
-              class="docnjjdl déconecion" 
-              *ngIf="isConnectedToGoogleCalendar" 
-              [disabled]="isLoadingAccToken">
-              Déconnexion
-            </button>
+             
           </div>
         </div>
-        
+        <div class="srfsdsdwg srfsdsdwg222">
+          <button 
+            id="authorize_button" 
+            (click)="handleAuthClick()" 
+            class="docnjjdl" 
+            *ngIf="!isConnectedToGoogleCalendar" 
+            [disabled]="isLoadingAccToken">
+            Se connecter
+          </button>
+          
+          <button 
+            id="logout_button" 
+            (click)="handleLogout()" 
+            class="docnjjdl déconecion" 
+            *ngIf="isConnectedToGoogleCalendar" 
+            [disabled]="isLoadingAccToken">
+            Se déconnecter
+          </button>
+        </div>
          
         <div class="sfodshdgf2"></div>
        
