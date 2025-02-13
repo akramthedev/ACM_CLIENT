@@ -289,6 +289,24 @@ full-calendar {
 }
 
 
+
+ 
+
+.popup-modal span, .popup-modal p, .popup-modal h3{
+  text-align: center !important;
+}
+
+.popup-modal2 p{
+  margin-bottom: 10px ;
+}
+
+.popup-modal2 input{
+  margin-bottom: 40px ;
+}
+
+
+
+
 .filtrageY h6{
   color: #505050 !important;
   font-size: 17px !important;
@@ -824,4 +842,9 @@ input:checked + .slider:before {
   padding: 6px 30px;
   border-radius: 1rem !important;
   color: rgb(154, 154, 154);
+}
+
+
+.wvdsfwdsfsdfsfsfdsdfsf{
+  z-index: 999999999999999999999999999999;
 }

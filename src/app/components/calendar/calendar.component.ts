@@ -30,11 +30,6 @@ declare var gapi: any;
 export class CalendarComponent implements OnInit {
 
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-  
-
-
-
-        // variables of Google Calendar Connection
 
         isConnectedToGoogleCalendar: boolean = false;
         isLoadingAccToken: boolean = false;
@@ -444,7 +439,7 @@ export class CalendarComponent implements OnInit {
       const expiresInSeconds = resp.expires_in;  
       const expirationTime = Date.now() + expiresInSeconds * 1000;  
       // minus 10 minutes because it can be sometimes a delay or the loop not working or others unknown bugs 
-      const adjustedExpirationTime = expirationTime - (59 * 60 * 1000);  // for test put : - 
+      const adjustedExpirationTime = expirationTime - (5 * 60 * 1000);  // for test put : - 
     
       // Store the token and expiration time in localStorage
       localStorage.setItem('google_token', this.AccessTokenGoogle);
@@ -475,8 +470,9 @@ export class CalendarComponent implements OnInit {
         },
       });
     }
-  
-  
+
+
+ 
 
     handleLogout(): void {
       this.isLoadingAccToken = true;
@@ -507,7 +503,6 @@ export class CalendarComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erreur lors de la suppression du token', error);
-          alert('Une erreur est survenue lors de votre déconnexion.')
         }
       });
     }
@@ -532,7 +527,6 @@ export class CalendarComponent implements OnInit {
       return true;
     }
   
-
 
     startTokenCheckLoop(): void {
       // Clear any existing interval
@@ -602,8 +596,10 @@ export class CalendarComponent implements OnInit {
 
 
 
-    refreshToken(): void {
+
     
+    refreshToken(): void {
+
       const REFRESH__TOKEN = localStorage.getItem('google_refresh_token');
   
       if (!REFRESH__TOKEN) {
@@ -616,9 +612,7 @@ export class CalendarComponent implements OnInit {
       data.append('client_id', this.CLIENT_ID); 
       data.append('client_secret', this.CLIENT_SECRET);
       data.append('grant_type', 'refresh_token');
-      if(REFRESH__TOKEN){
-        data.append('refresh_token', REFRESH__TOKEN);
-      }
+      data.append('refresh_token', REFRESH__TOKEN);
     
       fetch(url, { method: 'POST', body: data })
         .then((response) => response.json())
@@ -633,16 +627,27 @@ export class CalendarComponent implements OnInit {
             localStorage.setItem('google_token', data.access_token);
             localStorage.setItem('google_token_expiration', adjustedExpirationTime.toString());
   
-            // we need to update the backend : 
-            // we need to update the backend : 
-            // we need to update the backend : 
+            const requestBody = {
+              ClientIdOfCloack: this.userCurrent?.id,
+              EmailKeyCloack: this.userCurrent?.email,
+              AccessTokenGoogle: this.AccessTokenGoogle,
+              ClientIdOfGoogle: this.ClientIdOfGoogle,
+              ExpiresIn: adjustedExpirationTime.toString()   
+            };
+          
+            this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody).subscribe({
+              next: () => {
+                 alert("Updated The Token In Backend")
+              },
+              error: (err) => {
+                console.error('Error creating account:', err);
+                alert("Error Updating The Token In Backend")                 
+              },
+            });
+
   
             this.isConnectedToGoogleCalendar = true;
-    
-            // Restart the token check loop
             this.startTokenCheckLoop();
-    
-            // Notify the user
           } else {
             console.error('Impossible de rafraîchir le token:', data);
             //this.handleLogout();

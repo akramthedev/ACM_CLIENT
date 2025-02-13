@@ -23,7 +23,7 @@ declare var gapi: any;
 
 function getFutureDateTime() {
   const now = new Date();
-  const futureDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // deadline 30 days
+  const futureDate = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000); // deadline 30 days
 
   const year = futureDate.getFullYear();
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
@@ -299,15 +299,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
   }
   
 
-
-  
-  FermerPopUpShouldReconnect():void{
-    this.isConnectedToGoogleCalendar = false;
-    this.handleLogout();
-    this.ShouldReConnect = false;
-    window.location.reload();
-  }
-
+ 
 
   OpenpopUpOfTheDateSelector():void{
     this.showPopUpDateSelection = true;
@@ -360,8 +352,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
       scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
       callback: (resp: any) => {
         this.AccessTokenGoogle = resp.access_token;
-        this.handleAuthResponse(resp)
-      },
+       },
     });
     this.gisInited = true;
   }
@@ -371,229 +362,46 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
  
+ 
+   
+ 
 
-  
-  handleAuthClick(): void {
-    if (!this.tokenClient) return;
-  
-    this.isLoadingTokenGoogleCalendar = true;
-    this.tokenClient.requestAccessToken({
-      prompt: 'consent',
-      callback: (response: any) => {
-        // Check if there's an error in the response
-        if (response.error) {
-          console.error('Google authentication error:', response.error);
-          this.isLoadingTokenGoogleCalendar = false;
-          alert('Une erreur est survenue lors de la synchronisation avec Google Calendar.')
-          return;
-        }
-        else{
-          this.isLoadingTokenGoogleCalendar = false;
-        }
-      }
-    });
+      fetchAccessToken(): void {
+        if (!this.isNullValue  ) {
+          this.isLoadingAccToken = true;
+      
+          const tokenX = localStorage.getItem('google_token');
 
-    this.ClientIdOfGoogle = this.tokenClient.s.client_id;
-    this.isLoadingTokenGoogleCalendar = false;
-  }
-  
-
-
-  
-  async handleAuthResponse(resp: any): Promise<void> {
-
-    if (resp.error) {
-      console.error(resp);
-      this.isConnectedToGoogleCalendar = false;
-      return;
-    }
-
-
-    this.AccessTokenGoogle = resp.access_token;
-    localStorage.setItem('google_token', resp.access_token);
-    const expiresIn = resp.expires_in;  
-    const expirationTime = Date.now() + expiresIn * 1000;
-    localStorage.setItem('google_token_expiration', expirationTime.toString());
-    this.isConnectedToGoogleCalendar = true;
-
-
-    const authButton = document.getElementById('authorize_button');
-    
-    if (authButton) {
-      authButton.innerText = '';
-      authButton.style.color = 'white';
-      authButton.style.background = 'white';
-      authButton.style.pointerEvents = 'none';
-      authButton.style.cursor = 'default';
-    }
-
-
-
-    const requestBody = {
-      ClientIdOfCloack : this.userCurrent.id, 
-      EmailKeyCloack : this.userCurrent.email, 
-      AccessTokenGoogle : this.AccessTokenGoogle, 
-      ClientIdOfGoogle : this.ClientIdOfGoogle
-    };
-  
-    this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody)
-      .subscribe({
-        next: (res) => {
-          alert('✅ Connexion à Google Calendar réussie.');
-          window.location.reload();
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error creating account:', err);
-          alert("❌ Connexion à Google Calendar échoué.");
-          this.isLoading = false;
-        }
-      });  
-      this.isLoading = false;
-  }
-
-
-
-  
-  checkTokenExpiration(): boolean {
-    const expirationTime = localStorage.getItem('google_token_expiration');
-    
-    if (expirationTime) {
-      const currentTime = Date.now();
-      const expiryDate = parseInt(expirationTime);
-
-      if (currentTime >= expiryDate) {
-        this.refreshToken();  
-        this.isConnectedToGoogleCalendar = false;
-        return false;
-      }
-    } else {
-      this.isConnectedToGoogleCalendar = false;
-      return false;
-    }
-    return true;
-  }
-
-
-
-  refreshToken(): void {
-    const refreshTokenX = localStorage.getItem('google_refresh_token');   
-  
-    if (!refreshTokenX) {
-      this.handleLogout();
-      this.isConnectedToGoogleCalendar = false;
-      this.ShouldReConnect = true;
-      return;    
-    }
-  
-    const url = 'https://oauth2.googleapis.com/token';
-    const data = new URLSearchParams();
-    data.append('client_id', this.ClientIdOfGoogle);  
-    data.append('client_secret', this.AccessTokenGoogle);   
-    data.append('refresh_token', refreshTokenX);  
-    data.append('grant_type', 'refresh_token');  
-  
-    fetch(url, { method: 'POST', body: data })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.access_token) {
-  
-          // Mettre à jour le token et la date d'expiration
-          const newExpirationTime = Date.now() + (58 * 60 * 1000); // 1 heure de validité
-          localStorage.setItem('google_token', data.access_token);
-          localStorage.setItem('google_token_expiration', newExpirationTime.toString());
-  
-          // Mettre à jour le refresh token si disponible
-          if (data.refresh_token) {
-            localStorage.setItem('google_refresh_token', data.refresh_token);
+          if(tokenX){
+            const expD = localStorage.getItem('google_token_expiration');
+            this.isConnectedToGoogleCalendar = this.checkTokenExpiration(Number(expD));                
+            this.isLoadingAccToken = false;
           }
-          this.isConnectedToGoogleCalendar = true;
+          else{
+            this.isConnectedToGoogleCalendar = false;                
+            this.isLoadingAccToken = false;
+          }
 
         } else {
-          this.isConnectedToGoogleCalendar = false;
+          console.log("Utilisateur non authentifié, récupération du token impossible");
         }
-      })
-      .catch((error) => {
-        console.error('Erreur lors du rafraîchissement du token:', error);
-        this.isConnectedToGoogleCalendar = false;
-      });
-  }
-  
-
-
-
-  fetchAccessToken(): void {
-    if (!this.isNullValue) {
-      this.isLoadingAccToken = true;
-      const tokenInUppercase = this.userCurrent.id.toUpperCase();
-  
-      this.http.get(`${environment.url}/GetAccessTokenGoogleCalendar?ClientIdOfCloack=${tokenInUppercase}`).subscribe({
-        next: (response: any) => {
-          // Si le token est bien récupéré
-          if (response && response[0]) {
-  
-            localStorage.setItem('google_token', response[0].AccessTokenGoogle);
-            const expirationTime = Date.now() + (58 * 60 * 1000); 
-            localStorage.setItem('google_token_expiration', expirationTime.toString());
-            this.isConnectedToGoogleCalendar = this.checkTokenExpiration();
-            this.isLoadingAccToken = false;
-          } else {
-            console.error('Erreur lors de la récupération du token');
-            this.isLoadingAccToken = false;
-          }
-        },
-        error: (error) => {
-          console.error('Erreur fetching access token:', error);
-          this.isLoadingAccToken = false;
-        },
-        complete: () => {
-        }
-      });
-    } else {
-    }
-  }
-
-
-
-  
- 
-  handleLogout(): void {
-    this.isLoadingAccToken = true
-    localStorage.removeItem('google_token');
-    localStorage.removeItem('google_token_expiration');
-    localStorage.removeItem('google_refresh_token');
-  
-    this.isConnectedToGoogleCalendar = false;
-    this.removeTokenFromDatabase();
-    this.isLoadingAccToken = false;
-  }
-  
-
-
-
-
-  removeTokenFromDatabase(): void {
-
-    let XXX = this.userCurrent.id.toUpperCase();
-
-    const body = {
-      ClientIdOfCloack: XXX, 
-    };
-
-  
-    this.http.post(`${environment.url}/DeleteGoogleToken`, body).subscribe({
-      next: (response) => {
-
-      },
-      error: (error) => {
-        console.error('Erreur lors de la suppression du token', error);
-        alert('Une erreur est survenue lors de votre déconnexion.')
       }
-    });
-  }
 
 
-
+   
+ 
+      checkTokenExpiration(expirationTime: number): boolean {
+        const currentTime = Date.now();
+        if (currentTime >= expirationTime) {
+          console.log('Token expiré, veuillez ré-authentifier.');
+           this.isConnectedToGoogleCalendar = false;
+          return false;
+        }
+        return true;
+      }
+    
+    
+    
 
 
 
@@ -1198,8 +1006,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
 
 
   onSave() {
-
-
+ 
 
     if (this.isFormValid()) {
       this.isLoading6 = true;
@@ -1223,30 +1030,13 @@ export class AddClientComponent implements OnInit, OnDestroy {
         (response) => {
           if (response) {
             this.AllEventsOfTheUser = response;
-
-            if(this.isNullValue === true){
-               this.loadGoogleApis();
-              this.isNullValueSubject.subscribe((value) => {
-                  this.isNullValue = value;
-                  this.fetchAccessToken();
-              });
-            }
+ 
           
 
               if(this.isConnectedToGoogleCalendar === true){
-                
-
-
-
-
-                
-                
-                
-
+                 
                 if (response.events.length > 0) {
-
-                  
-
+ 
                   if (response.events.length > 0) {
                     
                     this.insertEventsWithDelay(response.events);
@@ -1322,7 +1112,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       
       if (!accessToken) {
         console.error('No Google access token found');
-        this.refreshToken();
         return;
       }
   
@@ -1330,7 +1119,7 @@ export class AddClientComponent implements OnInit, OnDestroy {
         access_token: accessToken,
       });
   
-      const response = await gapi.client.calendar.events.insert({
+      await gapi.client.calendar.events.insert({
         calendarId: 'primary',
         resource: {
           summary: event.summary,
@@ -1354,7 +1143,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
     } catch (error) {
       this.isErrorGoogleCalendarSync = true;      
       if (error.result?.error?.message?.includes("invalid authentication credentials")) {
-        this.refreshToken();
         this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
       }
       else{
@@ -1363,8 +1151,6 @@ export class AddClientComponent implements OnInit, OnDestroy {
       }
       console.error('Erreur lors de l’ajout de l’événement :', error);
       this.isConnectedToGoogleCalendar = false;
-      this.handleLogout();
-
     }
   }
   
