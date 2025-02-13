@@ -1,5 +1,12 @@
 
 
+
+<div class="loading-overlay" [class.show]="isLoading  || isLoadingAccToken">
+    <div class="loader"></div>
+  </div>
+
+  
+
 <div
   [ngClass]="{ 'visible': shouldReconnect }"
   class="popup-overlay wvdsfwdsfsdfsfsfdsdfsf"
@@ -25,63 +32,138 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: calc(100vh - 200px);
+        height: calc(100vh - 100px);
         overflow-y: hidden;
         width: 100%;
         flex-direction: column;
+        overflow-y: hidden !important;
     "
 >
-    <button 
-        id="authorize_button"
-        (click)="handleAuthClick()" 
-        class="docnjjdl" 
-        *ngIf="!isConnectedToGoogleCalendar" 
-        [disabled]="isLoadingAccToken || !gapiInited"
-    >
-        Connexion
-    </button>
 
-    <button 
-        id=""
-        (click)="handleLogout()" 
-        class="docnjjdl" 
-        *ngIf="isConnectedToGoogleCalendar" 
-        [disabled]="isLoadingAccToken"
-    >
-        Déconnexion
-    </button>
-    <br>
-    <br>
+
+
+
+
+        
+        <div 
+            style="
+                width: 505px;
+                height: auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-direction: row;
+                margin-bottom: 48px;
+            "
+            >
+            <div style="
+                font-weight: bold;
+                font-size: 26px;
+                display: flex;
+                align-items: center;
+                justify-content: left;
+            ">
+                <img class="sfondsndfKKK" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png" alt="google" />
+                &nbsp;&nbsp;Synchronisation Google Agenda
+            </div>
+            <span *ngIf="!userInfo">
+                &nbsp;
+            </span>
+        </div>
+
+
+
 
     <div style="
-        width: 350px;
-        height: 66px;
+        width: 505px;
+        height:51px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
     ">
-        <span>
-            Does token exist
+        <span style="
+            font-weight: bold;
+
+        ">
+            Action : 
         </span>
-        <span>
-            {{ isConnectedToGoogleCalendar ? "Yes" : "No" }}
+        <button 
+            id="authorize_button"
+            (click)="handleAuthClick()" 
+            class="docnjjdl" 
+            *ngIf="!isConnectedToGoogleCalendar" 
+            [disabled]="isLoadingAccToken || !gapiInited"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#7366fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>                              
+            &nbsp;Connecter Google Agenda
+        </button>
+
+        <button 
+            id=""
+            (click)="handleLogout()" 
+            class="docnjjdl" 
+            *ngIf="isConnectedToGoogleCalendar" 
+            [disabled]="isLoadingAccToken"
+        >
+        Déconnecter Google Agenda
+        </button>
+    </div>
+
+
+
+    
+    <div 
+        style="
+            width: 505px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+        "
+    >
+        <span style="
+        font-weight: bold;
+
+    ">
+            E-mail de synchronisation :
+        </span>
+        <span *ngIf="userInfo">
+            {{ userInfo.email }}
+        </span>
+        <span *ngIf="!userInfo">
+            ---
         </span>
     </div>
+
+
+
+
+   
     <div style="
-        width: 350px;
-        height: 66px;
+        width: 505px;
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
     ">
-        <span>
-            Expiration Date 
+        <span style="
+        font-weight: bold;
+
+    ">
+            Date d'expiration :
         </span>
         <span>
             {{expirationGoogleToken}}
         </span>
     </div>
+
+
+
+
+
+      
 
 </div>

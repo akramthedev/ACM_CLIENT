@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ToastrService } from "ngx-toastr";
 import { environment } from "../../../environments/environment";
@@ -18,6 +18,7 @@ declare var gapi: any;
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
+
 export class SettingsComponent implements OnInit {
 
   isConnectedToGoogleCalendar: boolean = false;
@@ -40,15 +41,15 @@ export class SettingsComponent implements OnInit {
   userCurrent: keycloakUser | null = null;
   isNullValue: boolean = true;
   isLoading: boolean = false;
-  expirationGoogleToken: string = 'No';
+  expirationGoogleToken: string = '---';
   private isNullValueSubject = new BehaviorSubject<boolean>(this.isNullValue);
   private tokenCheckInterval: any = null;
   shouldReconnect: boolean = false;
+  userInfo: any = null;
 
 
   constructor(
     private title: Title,
-    private eRef: ElementRef,
     private toastr: ToastrService,
     private http: HttpClient,
     private authService: AuthService
@@ -61,12 +62,13 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadGoogleApis();
-    this.isNullValueSubject.subscribe((value) => {
+    this.isNullValueSubject.subscribe(async (value) => {
       this.isNullValue = value;
       if (!this.isNullValue) {
-        this.fetchAccessToken();
+        await this.fetchAccessToken();
+        await this.getUserInfo();
       }
     });
   }
@@ -77,7 +79,7 @@ export class SettingsComponent implements OnInit {
 
 
 
-  fetchAccessToken(): void {
+  async fetchAccessToken() {
     if (!this.isNullValue && this.userCurrent?.id) {
       this.isLoadingAccToken = true;
       const tokenInUppercase = this.userCurrent.id.toUpperCase();
@@ -194,6 +196,41 @@ export class SettingsComponent implements OnInit {
 
 
 
+
+
+
+  async getUserInfo() {
+
+
+    let xTokenx = localStorage.getItem('google_token');
+    console.log("Token récupéré :", xTokenx);
+
+    if (!xTokenx) {
+      console.error("Aucun token d'accès disponible !");
+      return;
+    }
+  
+    this.http.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${xTokenx}`, {
+      headers: {
+        Authorization: `Bearer ${xTokenx}`
+      }
+    }).subscribe({
+      next: (userInfo: any) => {
+        console.warn("Infos utilisateur Google :", userInfo);
+        this.userInfo = userInfo; 
+      },
+      error: (error) => {
+        console.error("Erreur lors de la récupération des infos utilisateur :", error);
+      }
+    });
+  }
+  
+  
+
+
+
+
+
   formatExpirationDate(timestamp: number): string {
     // Debugging: Log the timestamp and validate it
     console.log('Timestamp:', timestamp);
@@ -224,7 +261,7 @@ export class SettingsComponent implements OnInit {
     const minutes = String(date.getMinutes()).padStart(2, '0');
   
     // Format the date and time
-    return `${hours}:${minutes} - ${day}/${month}/${year}`;
+    return `${hours}:${minutes}  -  ${day}/${month}/${year}`;
   }
   
 
@@ -244,12 +281,7 @@ export class SettingsComponent implements OnInit {
 
 
     console.warn(resp);
-    console.log();
-    console.warn(resp);
-    console.log();
-    console.warn(resp);
-    console.log();
-    console.warn(resp);
+   
 
     if (resp.refresh_token) {
       localStorage.setItem('google_refresh_token', resp.refresh_token);
@@ -284,7 +316,8 @@ export class SettingsComponent implements OnInit {
     // Send the request to your backend
     this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody).subscribe({
       next: () => {
-        this.toastr.success("Connexion à Google Calendar réussie.");
+        window.location.reload();
+
       },
       error: (err) => {
         console.error('Error creating account:', err);
@@ -419,41 +452,15 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
   refreshToken(): void {
-    
+
     const REFRESH__TOKEN = localStorage.getItem('google_refresh_token');
 
     if (!REFRESH__TOKEN) {
-      //this.handleLogout();
       this.shouldReconnect = true;
       return;
     }
@@ -462,45 +469,43 @@ export class SettingsComponent implements OnInit {
     const data = new URLSearchParams();
     data.append('client_id', this.CLIENT_ID); 
     data.append('client_secret', this.CLIENT_SECRET);
-    data.append('refresh_token', REFRESH__TOKEN);
     data.append('grant_type', 'refresh_token');
+    data.append('refresh_token', REFRESH__TOKEN);
   
     fetch(url, { method: 'POST', body: data })
       .then((response) => response.json())
       .then((data) => {
         if (data.access_token) {
-          console.log('Token rafraîchi avec succès!');
-
-      
-          
+   
           this.toastr.success("Votre session Google Calendar a été rafraîchi avec succès!");
-          // Calculate the new expiration time
+
           const expiresInSeconds = data.expires_in;  
           const newExpirationTime = Date.now() + expiresInSeconds * 1000; 
           const adjustedExpirationTime = newExpirationTime - (5 * 60 * 1000);
           localStorage.setItem('google_token', data.access_token);
           localStorage.setItem('google_token_expiration', adjustedExpirationTime.toString());
 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
+          const requestBody = {
+            ClientIdOfCloack: this.userCurrent?.id,
+            EmailKeyCloack: this.userCurrent?.email,
+            AccessTokenGoogle: this.AccessTokenGoogle,
+            ClientIdOfGoogle: this.ClientIdOfGoogle,
+            ExpiresIn: adjustedExpirationTime.toString()   
+          };
+        
+          this.http.post(`${environment.url}/CreateGoogleCalendarAccount`, requestBody).subscribe({
+            next: () => {
+               alert("Updated The Token In Backend")
+            },
+            error: (err) => {
+              console.error('Error creating account:', err);
+              alert("Error Updating The Token In Backend")                 
+            },
+          });
 
 
           this.isConnectedToGoogleCalendar = true;
-  
-          // Restart the token check loop
           this.startTokenCheckLoop();
-  
-          // Notify the user
         } else {
           console.error('Impossible de rafraîchir le token:', data);
           //this.handleLogout();
@@ -514,9 +519,6 @@ export class SettingsComponent implements OnInit {
         this.shouldReconnect = true;
       });
   }
-
-
-
 
 
 }

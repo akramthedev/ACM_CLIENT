@@ -328,6 +328,8 @@ export class CalendarComponent implements OnInit {
         await this.getAllGoogleCalendarEvents();
 
         await this.fetchTasks();
+            this.isLoading = false;
+
       });
     } catch (error) {
       this.isLoading = false;
@@ -424,7 +426,6 @@ export class CalendarComponent implements OnInit {
       // Calculate the expiration time
       const expiresInSeconds = resp.expires_in;  
       const expirationTime = Date.now() + expiresInSeconds * 1000;  
-      // minus 10 minutes because it can be sometimes a delay or the loop not working or others unknown bugs 
       const adjustedExpirationTime = expirationTime - (5 * 60 * 1000);  // for test put : - 
     
       // Store the token and expiration time in localStorage
@@ -1159,6 +1160,8 @@ async deleteEventOnGoogleCalendar() {
 
     this.isLoading = true;
   
+    console.warn(this.allEventsOfGoogleCalendar);
+
     this.http.get(`${environment.url}/GetClientTachesAllOfThem`).subscribe({
       next: (response: any) => {
    
@@ -1203,8 +1206,14 @@ async deleteEventOnGoogleCalendar() {
             EventId: task.EventId, 
             EventStart : task.EventStart,
             EventEnd : task.EventEnd,
-            isSync: !this.allEventsOfGoogleCalendar.some(
-              (unsyncTask) => unsyncTask.extendedProperties.private.appEventId.toString()  === task.EventId.toString()
+            isSync: !(
+              this.allEventsOfGoogleCalendar &&
+              this.allEventsOfGoogleCalendar.length > 0 &&
+              this.allEventsOfGoogleCalendar.some(
+                (unsyncTask) =>
+                  unsyncTask.extendedProperties.private.appEventId.toString() ===
+                  task.EventId.toString()
+              )
             ),
           }
         }));
@@ -1226,6 +1235,9 @@ async deleteEventOnGoogleCalendar() {
     
         console.log('A'),    
 
+        console.warn(this.allEventsOfGoogleCalendar);
+
+        if(this.allEventsOfGoogleCalendar && this.allEventsOfGoogleCalendar.length !== 0){
           this.originalEvents.forEach((task) => {
             const appEventId = task.extendedProps.EventId.toString();
             const isSynchronized = this.allEventsOfGoogleCalendar.some((event) =>
@@ -1236,6 +1248,7 @@ async deleteEventOnGoogleCalendar() {
               counter++;
             }
           });
+        }
 
         this.NumberOfUnsyncTasks = counter;
 
@@ -1273,8 +1286,7 @@ async deleteEventOnGoogleCalendar() {
         return;
       }
   
-      this.isLoading = true;
-      const accessToken = localStorage.getItem('google_token');
+       const accessToken = localStorage.getItem('google_token');
   
       if (!accessToken) {
         console.error('No Google access token found');
@@ -1295,15 +1307,16 @@ async deleteEventOnGoogleCalendar() {
   
       const events = response.result.items || [];
 
+      console.log("Response getAllGoogleCalEvents : ");
+      console.log(response);
+
       this.allEventsOfGoogleCalendar = events;
       console.warn("Google Calendar Events:", events);
-      this.isLoading = false;
-  
+   
     } catch (error) {
       this.allEventsOfGoogleCalendar = [];
       console.error("❌ Error fetching Google Calendar events:", error);
-      this.isLoading = false;
-    }
+     }
   }
 
   
@@ -1481,7 +1494,7 @@ async deleteEventOnGoogleCalendar() {
 
   formatDate(dateString: string): string {
     if (!dateString) {
-      return ''; // or some default value
+      return '';  
     }
     return dateString.replace(' ', 'T').split('.')[0];  
   }

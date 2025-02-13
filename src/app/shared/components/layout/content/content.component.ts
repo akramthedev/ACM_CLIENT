@@ -32,7 +32,7 @@ export class ContentComponent implements OnInit, AfterViewInit {
 
 
       this.isSpecialPage =   
-        currentUrl === '/' || currentUrl === '/clients';
+        currentUrl === '/' || currentUrl === '/clients' || currentUrl === '/settings';
     });
   }
 
