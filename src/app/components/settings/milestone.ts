@@ -392,7 +392,7 @@ export class SettingsComponent implements OnInit {
         // Stop the loop if the user is no longer connected
         this.stopTokenCheckLoop();
       }
-    }, 5000); // Check every 10 seconds
+    }, 3000); // Check every 10 seconds
   }
   
   stopTokenCheckLoop(): void {

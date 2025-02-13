@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ToastrService } from "ngx-toastr";
 import { environment } from "../../../environments/environment";
@@ -48,7 +48,6 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private title: Title,
-    private eRef: ElementRef,
     private toastr: ToastrService,
     private http: HttpClient,
     private authService: AuthService
@@ -244,12 +243,7 @@ export class SettingsComponent implements OnInit {
 
 
     console.warn(resp);
-    console.log();
-    console.warn(resp);
-    console.log();
-    console.warn(resp);
-    console.log();
-    console.warn(resp);
+   
 
     if (resp.refresh_token) {
       localStorage.setItem('google_refresh_token', resp.refresh_token);
@@ -392,7 +386,7 @@ export class SettingsComponent implements OnInit {
         // Stop the loop if the user is no longer connected
         this.stopTokenCheckLoop();
       }
-    }, 5000); // Check every 10 seconds
+    }, 3000); // Check every 10 seconds
   }
   
   stopTokenCheckLoop(): void {
@@ -418,31 +412,6 @@ export class SettingsComponent implements OnInit {
       return true;
     }
   }
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -514,9 +483,6 @@ export class SettingsComponent implements OnInit {
         this.shouldReconnect = true;
       });
   }
-
-
-
 
 
 }

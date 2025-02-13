@@ -21,7 +21,6 @@ export class AppComponent {
     map(v => v[1]),
   );
 
-  destroyRef
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -31,11 +30,6 @@ export class AppComponent {
     private toastr: ToastrService,
   ) {
 
-    // console.log("app comp ready !!!")
-    // if (isPlatformBrowser(this.platformId)) {
-    //   translate.setDefaultLang('en');
-    //   translate.addLangs(['en', 'de', 'es', 'fr', 'pt', 'cn', 'ae']);
-    // }
   }
 
   ngOnInit(): void {
