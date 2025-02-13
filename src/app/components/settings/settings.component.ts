@@ -261,7 +261,7 @@ export class SettingsComponent implements OnInit {
     const expiresInSeconds = resp.expires_in;  
     const expirationTime = Date.now() + expiresInSeconds * 1000;  
     // minus 10 minutes because it can be sometimes a delay or the loop not working or others unknown bugs 
-    const adjustedExpirationTime = expirationTime - (59 * 60 * 1000);  // for test put : - 
+    const adjustedExpirationTime = expirationTime - (5 * 60 * 1000);  // for test put : - 
   
     // Store the token and expiration time in localStorage
     localStorage.setItem('google_token', this.AccessTokenGoogle);
@@ -453,7 +453,7 @@ export class SettingsComponent implements OnInit {
     const REFRESH__TOKEN = localStorage.getItem('google_refresh_token');
 
     if (!REFRESH__TOKEN) {
-      this.handleLogout();
+      //this.handleLogout();
       this.shouldReconnect = true;
       return;
     }
@@ -471,23 +471,15 @@ export class SettingsComponent implements OnInit {
         if (data.access_token) {
           console.log('Token rafraîchi avec succès!');
 
-          console.warn(data);
-          console.log("--------------")
-          console.warn(data);
-          console.log("--------------")
-          console.warn(data);
-          console.log("--------------")
-          console.warn(data);
-          console.log("--------------")
-          console.warn(data);
+      
           
           this.toastr.success("Votre session Google Calendar a été rafraîchi avec succès!");
           // Calculate the new expiration time
           const expiresInSeconds = data.expires_in;  
           const newExpirationTime = Date.now() + expiresInSeconds * 1000; 
-  
+          const adjustedExpirationTime = newExpirationTime - (5 * 60 * 1000);
           localStorage.setItem('google_token', data.access_token);
-          localStorage.setItem('google_token_expiration', newExpirationTime.toString());
+          localStorage.setItem('google_token_expiration', adjustedExpirationTime.toString());
 
           //we need to update the backend also 
           //we need to update the backend also 
@@ -511,14 +503,14 @@ export class SettingsComponent implements OnInit {
           // Notify the user
         } else {
           console.error('Impossible de rafraîchir le token:', data);
-          this.handleLogout();
+          //this.handleLogout();
           this.shouldReconnect = true;
         }
       })
       .catch((error) => {
         console.error('Erreur lors du rafraîchissement du token:', error);
         this.toastr.error("Une erreur est survenue au niveau de Google Calendar.");
-        this.handleLogout();
+        //this.handleLogout();
         this.shouldReconnect = true;
       });
   }
