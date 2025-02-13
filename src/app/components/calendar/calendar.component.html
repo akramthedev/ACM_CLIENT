@@ -3,12 +3,31 @@
 
 
 
-
-<div class="loading-overlay" [class.show]="isLoading || isDeleteTask">
+<div class="loading-overlay" [class.show]="isLoading || isDeleteTask || isLoadingAccToken">
   <div class="loader"></div>
 </div>
 
 
+
+
+
+<div
+  [ngClass]="{ 'visible': shouldReconnect }"
+  class="popup-overlay"
+  (click)="closeShouldReconnect()"
+>
+  <div
+    class="popup-modal popup-modal2"
+    [ngClass]="{ 'visible': shouldReconnect }"
+  >
+    <h3 style="margin-bottom: 30px;">
+      Votre session Google Calendar a expiré ! 
+    </h3>
+    <p>
+     Veuillez vous ré-authentifier en cliquant sur le bouton : Connexion  
+    </p>
+  </div>
+</div>
 
 
 
@@ -19,13 +38,10 @@
 
         <div class="sfodshdgf"></div>
 
-        
-        
         <h6 class="H6h_8">
           Synchroniser Google Agenda
         </h6>
-        
-         
+
         <div class="srfsdsdwg">
           <div class="switch-container sfoidjisdfjidsfjdfs">
             <div class="dni8H9b">

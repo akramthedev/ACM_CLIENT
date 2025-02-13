@@ -18,6 +18,7 @@ declare var gapi: any;
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
+
 export class SettingsComponent implements OnInit {
 
   isConnectedToGoogleCalendar: boolean = false;
@@ -443,26 +444,16 @@ export class SettingsComponent implements OnInit {
       
           
           this.toastr.success("Votre session Google Calendar a été rafraîchi avec succès!");
-          // Calculate the new expiration time
+
           const expiresInSeconds = data.expires_in;  
           const newExpirationTime = Date.now() + expiresInSeconds * 1000; 
           const adjustedExpirationTime = newExpirationTime - (5 * 60 * 1000);
           localStorage.setItem('google_token', data.access_token);
           localStorage.setItem('google_token_expiration', adjustedExpirationTime.toString());
 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-          //we need to update the backend also 
-
+          // we need to update the backend : 
+          // we need to update the backend : 
+          // we need to update the backend : 
 
           this.isConnectedToGoogleCalendar = true;
   
