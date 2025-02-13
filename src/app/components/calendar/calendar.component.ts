@@ -1208,7 +1208,7 @@ async deleteEventOnGoogleCalendar() {
             EventEnd : task.EventEnd,
             isSync: !(
               this.allEventsOfGoogleCalendar &&
-              this.allEventsOfGoogleCalendar.length > 0 &&
+              this.allEventsOfGoogleCalendar.length >= 0 &&
               this.allEventsOfGoogleCalendar.some(
                 (unsyncTask) =>
                   unsyncTask.extendedProperties.private.appEventId.toString() ===
@@ -1237,7 +1237,7 @@ async deleteEventOnGoogleCalendar() {
 
         console.warn(this.allEventsOfGoogleCalendar);
 
-        if(this.allEventsOfGoogleCalendar && this.allEventsOfGoogleCalendar.length !== 0){
+        if(this.allEventsOfGoogleCalendar){
           this.originalEvents.forEach((task) => {
             const appEventId = task.extendedProps.EventId.toString();
             const isSynchronized = this.allEventsOfGoogleCalendar.some((event) =>
