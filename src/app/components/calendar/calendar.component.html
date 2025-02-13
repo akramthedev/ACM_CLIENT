@@ -66,13 +66,13 @@
           </button>
         </div>
 
-        <div class="srfsdsdwg srfsdsdwg222">
+        <div class="srfsdsdwg srfsdsdwg222" *ngIf="isConnectedToGoogleCalendar && NumberOfUnsyncTasks && NumberOfUnsyncTasks > 0">
           <button 
             id="logout_button" 
             (click)="SynchroniserLesTachesNonSynchronise()" 
             class="docnjjdl déconecion2" 
             *ngIf="isConnectedToGoogleCalendar" 
-            [disabled]="isLoadingAccToken">
+            [disabled]="isLoadingAccToken || isLoading || !NumberOfUnsyncTasks">
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
             </svg>            
@@ -297,7 +297,13 @@
         </svg>
       </button>
   
-    
+      <button 
+        *ngIf="selectedEvent?.extendedProps?.isSync === true" 
+        (click)="SynchroniserUneSeuleTache()" style="z-index: 3;background: #fff3e1;color: white;font-weight: 500;border: none; height: 40px;width: 40px;cursor: pointer;display: flex;align-items: center;justify-content: center; position: absolute; top: 0rem; right: 111px; border-radius: 50%;">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 24 24">
+          <path stroke="#e98f10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+        </svg>            
+      </button>
 
     <button (click)="deleteEventOnGoogleCalendar()" style="z-index: 3;background: #ffeeee;color: white;font-weight: 500;border: none; height: 40px;width: 40px;cursor: pointer;display: flex;align-items: center;justify-content: center; position: absolute; top: 0rem; right: 0rem; border-radius: 50%;">
       <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#d80b0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2 mr-2 h-4 w-4"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
@@ -358,7 +364,16 @@
     <div class="nsdofnoqdfnqdof  nsdofnoqdfnqdofnsdofnoqdfnqdof ">
       <strong>Statut : </strong>
       <span [ngClass]="selectedEvent?.extendedProps?.isDone ? 'statut-fin' : 'statut-encours'">
-        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours...' }}
+        {{ selectedEvent?.extendedProps?.isDone ? 'Finalisée' : 'En cours' }}
+      </span>
+    </div>
+
+
+
+    <div *ngIf="isConnectedToGoogleCalendar" class="nsdofnoqdfnqdof  nsdofnoqdfnqdofnsdofnoqdfnqdof ">
+      <strong>État de synchronisation : </strong>
+      <span [ngClass]="selectedEvent?.extendedProps?.isSync ? 'statut-encours' : 'statut-fin'">
+        {{ selectedEvent?.extendedProps?.isSync ? 'Non synchronisé' : 'Synchronisé' }}
       </span>
     </div>
 

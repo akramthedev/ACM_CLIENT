@@ -70,23 +70,31 @@ export class CalendarComponent implements OnInit {
         unsynchronizedTasks: any = null;
         NumberOfUnsyncTasks: any = null;
         allEventsOfGoogleCalendar: any = null;
-  calendarOptions: CalendarOptions;
-  selectedEvent: any = null; 
-  showPopup: boolean = false;  
-  events: string = '';
-  currentMonth: number = new Date().getMonth();
-  currentYear: number = new Date().getFullYear();
-  selectedDate: Date | null = null;
-  months: string[] = [
-    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-  ];
-  weekDays: string[] = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-  calendarDays: { date: number, currentMonth: boolean, selected: boolean }[] = [];
-  filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
-  allPersons: { id: string; nom: string; prenom: string }[] = [];   
-  allTasks: { id: string; nom: string }[] = [];     
-  originalEvents: any[] = [];
+
+
+
+
+
+
+
+        
+        calendarOptions: CalendarOptions;
+        selectedEvent: any = null; 
+        showPopup: boolean = false;  
+        events: string = '';
+        currentMonth: number = new Date().getMonth();
+        currentYear: number = new Date().getFullYear();
+        selectedDate: Date | null = null;
+        months: string[] = [
+          "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+          "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        ];
+        weekDays: string[] = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+        calendarDays: { date: number, currentMonth: boolean, selected: boolean }[] = [];
+        filters: { persons: string[]; tasks: string[] } = { persons: [], tasks: [] };
+        allPersons: { id: string; nom: string; prenom: string }[] = [];   
+        allTasks: { id: string; nom: string }[] = [];     
+        originalEvents: any[] = [];
 
   
 
@@ -143,7 +151,6 @@ export class CalendarComponent implements OnInit {
           this.fetchAccessToken();
         }
       });
-      this.fetchTasks();
     }
     
 
@@ -273,40 +280,6 @@ export class CalendarComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  
     
   updateIsNullValue(newValue: boolean) {
@@ -316,6 +289,8 @@ export class CalendarComponent implements OnInit {
 
 
   loadGoogleApis(): void {
+    this.isLoading = true;
+
     const gapiScript = document.createElement('script');
     gapiScript.src = 'https://apis.google.com/js/api.js';
     gapiScript.async = true;
@@ -329,6 +304,8 @@ export class CalendarComponent implements OnInit {
     gisScript.defer = true;
     gisScript.onload = () => this.gisLoaded();
     document.body.appendChild(gisScript);
+
+    this.isLoading = false;
   }
 
   async gapiLoaded() {
@@ -349,8 +326,11 @@ export class CalendarComponent implements OnInit {
         console.warn("gapi client initialized");
   
         await this.getAllGoogleCalendarEvents();
+
+        await this.fetchTasks();
       });
     } catch (error) {
+      this.isLoading = false;
       console.error("❌ Error initializing gapi client:", error);
     }
   }
@@ -477,7 +457,7 @@ export class CalendarComponent implements OnInit {
       });
     }
 
-
+        
  
 
     handleLogout(): void {
@@ -494,7 +474,46 @@ export class CalendarComponent implements OnInit {
 
 
 
-    SynchroniserLesTachesNonSynchronise(): void {
+    async SynchroniserUneSeuleTache() {
+      let IDtoSEARCHfor = this.selectedEvent.extendedProps.EventId;
+      this.isLoading = true;  
+    
+      let taskToSync = null;
+    
+      // Find the task in unsynchronizedTasks array
+      taskToSync = this.unsynchronizedTasks.find((task) => task.extendedProps.EventId.toString() === IDtoSEARCHfor.toString());
+    
+      // Check if the task was found
+      if (taskToSync) {
+        let TASKS = [];
+        TASKS.push(taskToSync); // Add the found task to TASKS array
+        await this.insertEventsWithDelay(TASKS); // Synchronize the task
+
+        const taskIndex = this.unsynchronizedTasks.indexOf(taskToSync);
+        if (taskIndex > -1) {
+          this.unsynchronizedTasks.splice(taskIndex, 1); 
+        }
+        this.NumberOfUnsyncTasks = this.NumberOfUnsyncTasks - 1;
+        
+        this.selectedEvent.setExtendedProp('isSync', true);
+
+      } else {
+        console.log('Task not found in unsynchronized tasks');
+      }
+    
+      
+
+      this.isLoading = false;  
+      this.showPopup = false;
+
+
+    }
+
+    
+
+
+
+    async SynchroniserLesTachesNonSynchronise() {
       if (!this.unsynchronizedTasks || this.unsynchronizedTasks.length === 0) {
         alert('Aucune tâche à synchroniser.');
         return;
@@ -502,23 +521,15 @@ export class CalendarComponent implements OnInit {
     
       this.isLoading = true;  
     
-      let syncCount = 0;
+
+      await this.insertEventsWithDelay(this.unsynchronizedTasks);
     
-      this.unsynchronizedTasks.forEach(async (task, index) => {
-        try {
-          await this.addEventToGoogleCalendar(task);
-          syncCount++;
-    
-          if (syncCount === this.unsynchronizedTasks.length) {
-            alert(`${syncCount} tâches synchronisées avec succès !`);
-            this.fetchTasks();  
-          }
-        } catch (error) {
-          console.error(`Erreur lors de la synchronisation de la tâche ${task.title}:`, error);
-        }
-      });
-    
+      this.NumberOfUnsyncTasks = null;
+      this.unsynchronizedTasks = null;
+
       this.isLoading = false;  
+
+      this.toastr.success('Toutes vos tâches on été synchronisé avec succès.')
     }
     
 
@@ -825,40 +836,88 @@ export class CalendarComponent implements OnInit {
 
 
 
+    async insertEventsWithDelay(events) {
 
 
+      for (let i = 0; i < events.length; i++) {
+    
+        console.warn(events[i]);
+        console.log("------------------");
 
-
-  async addEventToGoogleCalendar(event: any) {
-    try {
-      // Get the Google access token from localStorage or another source
-      const accessToken = localStorage.getItem('google_token');
-      
-      if (!accessToken) {
-        console.error('No Google access token found');
-        return;
+        const startDateTime = new Date(events[i].extendedProps.EventStart);
+        const endDateTime = new Date(events[i].extendedProps.EventEnd);
+    
+        let eventXX = {
+          summary: events[i].extendedProps.EventName,
+          description: `Préparer les documents du client : ${events[i].extendedProps.EventName}`,
+          colorId: "1",
+          start: { dateTime: startDateTime, timeZone: "Africa/Casablanca" },
+          end: { dateTime: endDateTime, timeZone: "Africa/Casablanca" },
+          reminders: { useDefault: false, overrides: [{ method: "email", minutes: 45 }, { method: "popup", minutes: 30 }] },
+          visibility: "public",
+          status: "confirmed",
+          EventId: events[i].extendedProps.EventId
+        };
+    
+        try {
+          await this.addEventToGoogleCalendar(eventXX);
+        } catch (error) {
+          console.error(`Error adding event ${i + 1}:`, error);
+        }
+        const randomDelay = Math.floor(Math.random() * (450 - 300 + 1)) + 300;
+        await new Promise(resolve => setTimeout(resolve, randomDelay));
+  
       }
-  
-      gapi.auth.setToken({
-        access_token: accessToken,
-      });
-  
-      const response = await gapi.client.calendar.events.insert({
-        calendarId: 'primary',
-        resource: {
-          summary: event.title, 
-          start: { dateTime: event.start },
-          end: { dateTime: event.end },
-        },
-      });
-  
-      alert('Événement ajouté');
-    } catch (error) {
-      console.error('Erreur lors de l’ajout de l’événement :', error);
-      alert('Erreur lors de l’ajout de l’événement');
     }
-  }
+
+
+
+    async addEventToGoogleCalendar(event: any) {
+      try {
+        const accessToken = localStorage.getItem('google_token');
+        
+        if (!accessToken) {
+          console.error('No Google access token found');
+          return;
+        }
+    
+        gapi.auth.setToken({
+          access_token: accessToken,
+        });
+    
+        await gapi.client.calendar.events.insert({
+          calendarId: 'primary',
+          resource: {
+            summary: event.summary,
+            description: event.description,
+            colorId: event.colorId,
+            start: event.start,
+            end: event.end,
+            reminders: event.reminders,
+            visibility: event.visibility,
+            status: event.status,
+            extendedProperties: {
+              private: {
+                appEventId: event.EventId
+              }
+          }
+          },
+        });  
+        
   
+        
+      } catch (error) {
+        if (error.result?.error?.message?.includes("invalid authentication credentials")) {
+          this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
+        }
+        else{
+          this.toastr.error("Une erreur est survenue lors de l’ajout de l’événement à Google Calendar.");
+  
+        }
+        console.error('Erreur lors de l’ajout de l’événement :', error);
+        this.isConnectedToGoogleCalendar = false;
+      }
+    }
    
 
 
@@ -1096,7 +1155,7 @@ async deleteEventOnGoogleCalendar() {
  
 
 
-   fetchTasks() {
+   async fetchTasks() {
 
     this.isLoading = true;
   
@@ -1143,10 +1202,16 @@ async deleteEventOnGoogleCalendar() {
             EventIsReminder: task.EventIsReminder,
             EventId: task.EventId, 
             EventStart : task.EventStart,
-            EventEnd : task.EventEnd
+            EventEnd : task.EventEnd,
+            isSync: !this.allEventsOfGoogleCalendar.some(
+              (unsyncTask) => unsyncTask.extendedProperties.private.appEventId.toString()  === task.EventId.toString()
+            ),
           }
         }));
   
+        console.warn(this.originalEvents);
+         
+
         this.extractFilterOptions();
   
         this.filters.persons = this.allPersons.map(person => person.id);
@@ -1159,7 +1224,7 @@ async deleteEventOnGoogleCalendar() {
 
         let counter = 0;
     
-        console.log('A')
+        console.log('A'),    
 
           this.originalEvents.forEach((task) => {
             const appEventId = task.extendedProps.EventId.toString();
@@ -1174,8 +1239,6 @@ async deleteEventOnGoogleCalendar() {
 
         this.NumberOfUnsyncTasks = counter;
 
-        console.log(this.unsynchronizedTasks);
-        console.log('C')
 
 
         setTimeout(() => {
