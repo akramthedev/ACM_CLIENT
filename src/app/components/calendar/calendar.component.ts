@@ -529,28 +529,37 @@ export class CalendarComponent implements OnInit {
     
 
     async deleteEventFromGoogleCalendar(eventId, retries = 3) {
+
+      console.log(eventId);
       try {
         const accessToken = localStorage.getItem('google_token');
         
         if (!accessToken) {
-          console.error('No Google access token found');
+          this.toastr.error("Vous n'êtes pas connecté à Google Calendar pour exécuter cette opération.");
           return;
         }
-    
-        gapi.auth.setToken({
-          access_token: accessToken,
-        });
-    
-        await gapi.client.calendar.events.delete({
-          calendarId: 'primary',
-          eventId: eventId,
-        });
-    
-        console.log(`Event ${eventId} deleted successfully.`);
+   
+     
+        gapi.client.setToken({ access_token: accessToken });
+        const eventIdFROMGOOGLE = await this.findGoogleEventIdByAppEventId(eventId);
+        console.log("TO delete => eventId : "+eventIdFROMGOOGLE);
+
+        if (!eventIdFROMGOOGLE) {
+          console.error("❌ Erreur: eventId est introuvable sur Google Calendar !");
+          return;
+        }
+        else{
+          await gapi.client.calendar.events.delete({
+            calendarId: 'primary',
+            eventId: eventIdFROMGOOGLE,
+          });
+        }
+
+
       } catch (error) {
         if (retries > 0) {
           console.log(`Retrying deletion of event ${eventId}... (${retries} retries left)`);
-          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+          await new Promise(resolve => setTimeout(resolve, 880)); // Wait 1 second before retrying
           return this.deleteEventFromGoogleCalendar(eventId, retries - 1);
         } else {
           console.error('Error deleting event:', error);
@@ -562,10 +571,15 @@ export class CalendarComponent implements OnInit {
 
 
     async INITIALIZATION__Google_calendar(){
+
       this.isReinitializing = true;
+      this.isReInit = false;
+
 
       if (!this.originalEvents || this.originalEvents.length === 0) {
-        console.log('No events to delete.');
+        this.toastr.error('Aucun évenement existant pour synchroniser.');
+        this.isReInit = false;
+        this.isReinitializing = false;
         return;
       }
 
@@ -581,6 +595,10 @@ export class CalendarComponent implements OnInit {
         }
     
         try {
+          console.warn('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+          console.warn(eventId);
+          console.warn('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+          
           await this.deleteEventFromGoogleCalendar(eventId);
         } catch (error) {
           console.error(`Error deleting event ${eventId}:`, error);
@@ -594,7 +612,6 @@ export class CalendarComponent implements OnInit {
       console.log('All events have been deleted.');
 
       this.isReinitializing = false;
-      this.isReInit = false;
     }
 
 
