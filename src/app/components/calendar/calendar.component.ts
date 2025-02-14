@@ -13,9 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from "../../shared/services/auth.service";
 import { keycloakUser } from "../../shared/model/models.model";
 import { Title } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
-
-
+ 
 declare var google: any;
 declare var gapi: any;
 
@@ -60,7 +58,7 @@ export class CalendarComponent implements OnInit {
         showCompletedTasks: boolean = false;
         ClientIdOfCloack: any = null;
         EmailKeyCloack: any = null;
-
+        isLoadingSynchronizationOfTasks: any = null;
 
 
 
@@ -70,7 +68,8 @@ export class CalendarComponent implements OnInit {
         unsynchronizedTasks: any = null;
         NumberOfUnsyncTasks: any = null;
         allEventsOfGoogleCalendar: any = null;
-
+        progress: number = 0;  
+        progressMax: number = 0;
 
 
 
@@ -456,6 +455,10 @@ export class CalendarComponent implements OnInit {
           this.toastr.error("Connexion à Google Calendar échoué.");
         },
       });
+
+
+      window.location.reload();
+      
     }
 
         
@@ -520,15 +523,16 @@ export class CalendarComponent implements OnInit {
         return;
       }
     
-      this.isLoading = true;  
-    
+      this.progressMax = this.unsynchronizedTasks.length;
+      this.progress = 0;
+      this.isLoadingSynchronizationOfTasks = true;  
 
       await this.insertEventsWithDelay(this.unsynchronizedTasks);
     
       this.NumberOfUnsyncTasks = null;
       this.unsynchronizedTasks = null;
 
-      this.isLoading = false;  
+      this.isLoadingSynchronizationOfTasks = false;  
 
       this.toastr.success('Toutes vos tâches on été synchronisé avec succès.')
     }
@@ -783,20 +787,7 @@ export class CalendarComponent implements OnInit {
     }
 
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
+ 
 
 
 
@@ -835,16 +826,50 @@ export class CalendarComponent implements OnInit {
 
 
 
+    async checkEventExists(eventId) {
+      try {
+        const accessToken = localStorage.getItem('google_token');
+        
+        if (!accessToken) {
+          console.error('No Google access token found');
+          return false;
+        }
+    
+        gapi.auth.setToken({
+          access_token: accessToken,
+        });
+    
+        const response = await gapi.client.calendar.events.list({
+          calendarId: 'primary',
+          privateExtendedProperty: `appEventId=${eventId}`,
+        });
+    
+        return response.result.items.length > 0;
+      } catch (error) {
+        console.error('Error checking event existence:', error);
+        return false;
+      }
+    }
+
+   
+    
+
+    markEventAsSynchronized(eventId: string) {
+      this.unsynchronizedTasks = this.unsynchronizedTasks.filter(task => task.extendedProps.EventId !== eventId);
+      this.progress++;  
+    }
 
 
     async insertEventsWithDelay(events) {
-
-
       for (let i = 0; i < events.length; i++) {
+        const eventId = events[i].extendedProps.EventId;
+        const eventExists = await this.checkEventExists(eventId);
     
-        console.warn(events[i]);
-        console.log("------------------");
-
+        if (eventExists) {
+          console.log(`Event ${eventId} already exists in Google Calendar. Skipping...`);
+          continue;
+        }
+    
         const startDateTime = new Date(events[i].extendedProps.EventStart);
         const endDateTime = new Date(events[i].extendedProps.EventEnd);
     
@@ -854,26 +879,32 @@ export class CalendarComponent implements OnInit {
           colorId: "1",
           start: { dateTime: startDateTime, timeZone: "Africa/Casablanca" },
           end: { dateTime: endDateTime, timeZone: "Africa/Casablanca" },
-          reminders: { useDefault: false, overrides: [{ method: "email", minutes: 45 }, { method: "popup", minutes: 30 }] },
+          reminders: { useDefault: false, overrides: [{ method: "email", minutes: 57 }, { method: "popup", minutes: 40 }] },
           visibility: "public",
           status: "confirmed",
-          EventId: events[i].extendedProps.EventId
+          EventId: eventId
         };
     
         try {
           await this.addEventToGoogleCalendar(eventXX);
+          this.markEventAsSynchronized(eventId);
         } catch (error) {
           console.error(`Error adding event ${i + 1}:`, error);
         }
+    
         const randomDelay = Math.floor(Math.random() * (450 - 300 + 1)) + 300;
         await new Promise(resolve => setTimeout(resolve, randomDelay));
-  
       }
     }
 
 
 
-    async addEventToGoogleCalendar(event: any) {
+
+
+
+
+
+    async addEventToGoogleCalendar(event, retries = 3) {
       try {
         const accessToken = localStorage.getItem('google_token');
         
@@ -901,25 +932,25 @@ export class CalendarComponent implements OnInit {
               private: {
                 appEventId: event.EventId
               }
-          }
+            }
           },
         });  
-        
-  
-        
       } catch (error) {
-        if (error.result?.error?.message?.includes("invalid authentication credentials")) {
-          this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
+        if (retries > 0) {
+          console.log(`Retrying event ${event.EventId}... (${retries} retries left)`);
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+          return this.addEventToGoogleCalendar(event, retries - 1);
+        } else {
+          if (error.result?.error?.message?.includes("invalid authentication credentials")) {
+            this.toastr.error("Une erreur est survenue : ces évenements n'ont pas été sauvegardé dans Google Calendar.");
+          } else {
+            this.toastr.error("Une erreur est survenue lors de l’ajout de l’événement à Google Calendar.");
+          }
+          console.error('Erreur lors de l’ajout de l’événement :', error);
+          this.isConnectedToGoogleCalendar = false;
         }
-        else{
-          this.toastr.error("Une erreur est survenue lors de l’ajout de l’événement à Google Calendar.");
-  
-        }
-        console.error('Erreur lors de l’ajout de l’événement :', error);
-        this.isConnectedToGoogleCalendar = false;
       }
     }
-   
 
 
 
