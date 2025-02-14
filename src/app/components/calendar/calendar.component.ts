@@ -59,11 +59,12 @@ export class CalendarComponent implements OnInit {
         ClientIdOfCloack: any = null;
         EmailKeyCloack: any = null;
         isLoadingSynchronizationOfTasks: any = null;
+      
 
 
 
-
-
+        isReInit: boolean = false;
+        isReinitializing: boolean = false;
 
         unsynchronizedTasks: any = null;
         NumberOfUnsyncTasks: any = null;
@@ -504,16 +505,128 @@ export class CalendarComponent implements OnInit {
       } else {
         console.log('Task not found in unsynchronized tasks');
       }
-    
-      
-
       this.isLoading = false;  
       this.showPopup = false;
-
-
     }
 
     
+
+    ReSynchroniserTousLeGoogleCalendar(){
+      this.isReInit = true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    async deleteEventFromGoogleCalendar(eventId, retries = 3) {
+      try {
+        const accessToken = localStorage.getItem('google_token');
+        
+        if (!accessToken) {
+          console.error('No Google access token found');
+          return;
+        }
+    
+        gapi.auth.setToken({
+          access_token: accessToken,
+        });
+    
+        await gapi.client.calendar.events.delete({
+          calendarId: 'primary',
+          eventId: eventId,
+        });
+    
+        console.log(`Event ${eventId} deleted successfully.`);
+      } catch (error) {
+        if (retries > 0) {
+          console.log(`Retrying deletion of event ${eventId}... (${retries} retries left)`);
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+          return this.deleteEventFromGoogleCalendar(eventId, retries - 1);
+        } else {
+          console.error('Error deleting event:', error);
+          this.toastr.error("Une erreur est survenue lors de la suppression de l’événement de Google Calendar.");
+        }
+      }
+    }
+
+
+
+    async INITIALIZATION__Google_calendar(){
+      this.isReinitializing = true;
+
+      if (!this.originalEvents || this.originalEvents.length === 0) {
+        console.log('No events to delete.');
+        return;
+      }
+
+      this.progressMax = this.originalEvents.length;
+      this.progress = 0;
+    
+      for (let i = 0; i < this.originalEvents.length; i++) {
+        const eventId = this.originalEvents[i].extendedProps.EventId;
+    
+        if (!eventId) {
+          console.error('Event ID not found for event at index', i);
+          continue;
+        }
+    
+        try {
+          await this.deleteEventFromGoogleCalendar(eventId);
+        } catch (error) {
+          console.error(`Error deleting event ${eventId}:`, error);
+        }
+    
+        // Optional: Add a delay between deletions to avoid rate limiting
+        const randomDelay = Math.floor(Math.random() * (450 - 300 + 1)) + 300;
+        await new Promise(resolve => setTimeout(resolve, randomDelay));
+      }
+    
+      console.log('All events have been deleted.');
+
+      this.isReinitializing = false;
+      this.isReInit = false;
+    }
+
+
+    closeisReInit(){
+      this.isReInit = false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
